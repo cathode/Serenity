@@ -1,0 +1,34 @@
+AccentA.TextColor.Value = "114 124 163"
+AccentB.TextColor.Value = "159 184 205"
+AccentC.TextColor.Value = "210 218 122"
+AccentD.TextColor.Value = "250 218 122"
+AccentE.TextColor.Value = "184 132 114"
+AccentF.TextColor.Value = "145 115 106"
+ContentA
+{
+	TextColor.Value = "0 0 0"
+	BackgroundColor.Value = "251 251 251"
+}
+ContentB
+{
+	TextColor.Value = "70 70 83"
+	BackgroundColor.Value = "231 243 246"
+}
+HeadingA.Border
+{
+	Top
+	{
+		BorderType = Dotted
+		Width.Value = 1
+	}
+	Left
+	{
+		BorderType = Dotted
+		Width.Value = 1
+	}
+}
+HeadingA.Padding
+{
+	Top.Value = 8
+	Left.Value = 16
+}

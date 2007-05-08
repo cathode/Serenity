@@ -1,0 +1,5 @@
+[Environment]
+DefaultModule = system
+DefaultResourceClass = static
+DefaultResourceName = default.html
+Theme = system
