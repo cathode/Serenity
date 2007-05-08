@@ -38,14 +38,7 @@ namespace Serenity.Web.Drivers
         {
             this.CurrentContext.ProtocolType = "HTTP";
             this.CurrentContext.ProtocolVersion = new Version(1, 1);
-            CommonCapabilities c = this.CurrentContext.Request.Capabilities;
-            c.SupportsAuthentication = false;
-            c.SupportsChunkedTransfer = false;
-            c.SupportsContentControl = true;
-            c.SupportsFields = true;
-            c.SupportsHeaders = true;
-            c.SupportsPeerInfo = true;
-            c = this.CurrentContext.Response.Capabilities;
+            CommonContext c = this.CurrentContext;
             c.SupportsAuthentication = false;
             c.SupportsChunkedTransfer = false;
             c.SupportsContentControl = true;
@@ -213,11 +206,11 @@ namespace Serenity.Web.Drivers
         /// <param name="source"></param>
         /// <param name="unused"></param>
         /// <returns></returns>
-        public override void ConstructRequest(Byte[] source, out Byte[] unused)
+        public override void ConstructRequest(byte[] source, out byte[] unused)
         {
             if ((source == null) || (source.Length == 0))
             {
-                unused = new Byte[0];
+                unused = new byte[0];
                 return;
             }
             string Input = Encoding.ASCII.GetString(source);
@@ -379,7 +372,7 @@ namespace Serenity.Web.Drivers
 
                     case HttpAdapterSteps.FieldsParsed:
                         this.Recycle();
-                        unused = new Byte[0];
+                        unused = new byte[0];
                         this.currentStep = HttpAdapterSteps.PreParse;
                         //Console.WriteLine("Returning from parsing method");
                         return;
@@ -391,7 +384,7 @@ namespace Serenity.Web.Drivers
         /// </summary>
         /// <param name="source"></param>
         /// <param name="unused"></param>
-        public override void ConstructResponse(Byte[] source, out Byte[] unused)
+        public override void ConstructResponse(byte[] source, out byte[] unused)
         {
             throw new Exception("The method or operation is not implemented.");
         }
@@ -400,7 +393,7 @@ namespace Serenity.Web.Drivers
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Byte[] DestructRequest(CommonContext context)
+        public override byte[] DestructRequest(CommonContext context)
         {
             throw new Exception("The method or operation is not implemented.");
         }
@@ -410,13 +403,13 @@ namespace Serenity.Web.Drivers
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Byte[] DestructResponse(CommonContext context)
+        public override byte[] DestructResponse(CommonContext context)
         {
             CommonRequest Request = context.Request;
             CommonResponse Response = context.Response;
             StringBuilder outputText = new StringBuilder();
             outputText.Append("HTTP/1.1 " + Response.Status.ToString() + "\r\n");
-            Byte[] contentBuffer;
+            byte[] contentBuffer;
             if (Request.Headers.Contains("Accept-Encoding"))
             {
                 contentBuffer = this.CompressContent(context);

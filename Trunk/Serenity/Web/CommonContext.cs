@@ -28,42 +28,31 @@ namespace Serenity.Web
         {
             this.request = new CommonRequest(this);
             this.response = new CommonResponse(this);
-            this.origin = origin;
+            this.driver = origin;
         }
         #endregion
         #region Fields - Private
-        private bool quickClose = true;
         private string protocolType;
         private Version protocolVersion;
         private CommonRequest request;
         private CommonResponse response;
-        private WebDriver origin;
+        private WebDriver driver;
+        private bool supportsAuthentication;
+        private bool supportsChunkedTransfer;
+        private bool supportsContentControl;
+        private bool supportsFields;
+        private bool supportsHeaders;
+        private bool supportsPeerInfo;
         #endregion
         #region Properties - Public
-        
-        /// <summary>
-        /// Gets or sets a boolean value which determines if the connection which transmits the current CommonContext
-        /// should be terminated after the transmission finishes.
-        /// </summary>
-        public bool QuickClose
-        {
-            get
-            {
-                return this.quickClose;
-            }
-            set
-            {
-                this.quickClose = value;
-            }
-        }
         /// <summary>
         /// Gets the WebDriver from which the current CommonContext originated from.
         /// </summary>
-        public WebDriver Origin
+        public WebDriver Driver
         {
             get
             {
-                return this.origin;
+                return this.driver;
             }
         }
         /// <summary>
@@ -112,6 +101,92 @@ namespace Serenity.Web
             get
             {
                 return this.response;
+            }
+        }
+        /// <summary>
+        /// Gets a boolean value which indicates if authentication is supported.
+        /// </summary>
+        public bool SupportsAuthentication
+        {
+            get
+            {
+                return this.supportsAuthentication;
+            }
+            internal set
+            {
+                this.supportsAuthentication = value;
+            }
+        }
+        /// <summary>
+        /// Gets a boolean value which indicates if the transmission can be sent
+        /// in pieces smaller than the entire transmission.
+        /// </summary>
+        public bool SupportsChunkedTransfer
+        {
+            get
+            {
+                return this.supportsChunkedTransfer;
+            }
+            set
+            {
+                this.supportsChunkedTransfer = value;
+            }
+        }
+        /// <summary>
+        /// Gets a value which indicates if the sent or recieved content can be controlled,
+        /// e.g. the encoding, mimetype, etc.
+        /// </summary>
+        public bool SupportsContentControl
+        {
+            get
+            {
+                return this.supportsContentControl;
+            }
+            set
+            {
+                this.supportsContentControl = value;
+            }
+        }
+        /// <summary>
+        /// Gets a value which indicates if arbitrary named fields are supported.
+        /// </summary>
+        public bool SupportsFields
+        {
+            get
+            {
+                return this.supportsFields;
+            }
+            internal set
+            {
+                this.supportsFields = value;
+            }
+        }
+        /// <summary>
+        /// Gets a boolean value which indicates if arbitrary sets of headers are supported.
+        /// </summary>
+        public bool SupportsHeaders
+        {
+            get
+            {
+                return this.supportsHeaders;
+            }
+            set
+            {
+                this.supportsHeaders = value;
+            }
+        }
+        /// <summary>
+        /// Gets a value which indicates if obtaining information about the peer is supported.
+        /// </summary>
+        public bool SupportsPeerInfo
+        {
+            get
+            {
+                return this.supportsPeerInfo;
+            }
+            set
+            {
+                this.supportsPeerInfo = value;
             }
         }
         #endregion

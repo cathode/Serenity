@@ -90,13 +90,7 @@ namespace Serenity
                 SerenityEnvironment.Instances.Length,
                 SerenityModule.Instances.Length,
                 Theme.Instances.Length), LogMessageLevel.Info);
-            WebDriverSettings InitSettings = new WebDriverSettings();
-            InitSettings.ListenPort = 80;
-            InitSettings.RecieveTimeout = 200;
-            InitSettings.RecieveInterval = 10;
-            InitSettings.RecieveIntervalIdle = InitSettings.RecieveInterval * 4;
-            InitSettings.RecieveTimeoutIdle = InitSettings.RecieveTimeout * 8;
-            InitSettings.TimeToIdle = InitSettings.RecieveIntervalIdle * 2;
+            WebDriverSettings InitSettings = WebDriverSettings.Create(80, 10, 2000);
             InitSettings.FallbackPorts = new ushort[] { 8080, 8081 };
 
             WebManager.AddDriver(new HttpDriver(new ContextHandler()));

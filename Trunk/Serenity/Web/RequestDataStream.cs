@@ -23,7 +23,7 @@ namespace Serenity.Web
     public sealed class RequestDataStream : Stream
     {
         #region Constructors - Internal
-        internal RequestDataStream(string Name, Byte[] Contents)
+        internal RequestDataStream(string Name, byte[] Contents)
         {
             this._Name = Name;
             if (Contents != null)
@@ -32,12 +32,12 @@ namespace Serenity.Web
             }
             else
             {
-                this._Contents = new Byte[0];
+                this._Contents = new byte[0];
             }
         }
         #endregion
         #region Fields - Private
-        private Byte[] _Contents;
+        private byte[] _Contents;
         private string _Name;
         private long _Position = 0;
         #endregion
@@ -59,7 +59,7 @@ namespace Serenity.Web
         /// <param name="Offset">The zero-based index in Buffer at which to begin storing the read bytes.</param>
         /// <param name="Count">The maximum of bytes to read from the current stream.</param>
         /// <returns></returns>
-        public override int Read(Byte[] Buffer, int Offset, int Count)
+        public override int Read(byte[] Buffer, int Offset, int Count)
         {
             int ReadCount = 0;
             int Index = Offset;
@@ -76,10 +76,10 @@ namespace Serenity.Web
         /// Reads the entire stream, starting at the beginning.
         /// </summary>
         /// <returns></returns>
-        public Byte[] ReadAll()
+        public byte[] ReadAll()
         {
             this._Position = this._Contents.Length - 1;
-            Byte[] Result = new Byte[this._Contents.Length];
+            byte[] Result = new byte[this._Contents.Length];
             this._Contents.CopyTo(Result, 0);
             return Result;
         }
@@ -119,7 +119,7 @@ namespace Serenity.Web
         /// <returns></returns>
         public string ReadText(int Count, Encoding ReadEncoding)
         {
-            Byte[] Data = new Byte[Count];
+            byte[] Data = new byte[Count];
             this.Read(Data, 0, Count);
             return ReadEncoding.GetString(Data);
         }
@@ -127,9 +127,9 @@ namespace Serenity.Web
         /// Reads all the remaining bytes and returns them as an array.
         /// </summary>
         /// <returns></returns>
-        public Byte[] ReadToEnd()
+        public byte[] ReadToEnd()
         {
-            Byte[] Result = new Byte[this.Length - this.Position];
+            byte[] Result = new byte[this.Length - this.Position];
             for (int I = (int)this.Position, N = 0; I < this.Length; I++, N++)
             {
                 Result[N] = this._Contents[I];
@@ -198,7 +198,7 @@ namespace Serenity.Web
         /// <exception cref="NotSupportedException">
         /// Cannot modify a RequestDataStream.
         /// </exception>
-        public override void Write(Byte[] buffer, int offset, int count)
+        public override void Write(byte[] buffer, int offset, int count)
         {
             throw new NotSupportedException("Cannot modify a RequestDataStream.");
         }

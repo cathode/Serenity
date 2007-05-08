@@ -28,21 +28,17 @@ namespace Serenity.Web
         #region Constructors - Internal
         internal CommonResponse(CommonContext Owner)
         {
-            this.sendBuffer = new Byte[0];
+            this.sendBuffer = new byte[0];
             this.headers = new HeaderCollection();
             this.owningContext = Owner;
             this.mimeType = "text/plain";
-            this.capabilities = new CommonCapabilities();
             this.useCompression = false;
         }
         #endregion
         #region Fields - Private
-        private CommonCapabilities capabilities;
         private Socket clientSocket;
-        private Byte[] sendBuffer;
+        private byte[] sendBuffer;
         private string mimeType;
-        private ushort statusCode;
-        private string statusText;
         private HeaderCollection headers;
         private CommonContext owningContext;
         private bool useCompression;
@@ -62,14 +58,14 @@ namespace Serenity.Web
         /// <returns>The number of bytes flushed, or -1 if an error occurred.</returns>
         public int Flush()
         {
-            return 0;
+            return -1;
         }
         /// <summary>
         /// Writes a sequence of bytes to the internal write Buffer.
         /// </summary>
         /// <param name="Content">The array of bytes to write.</param>
         /// <returns>The number of bytes written, or -1 if an error occurred.</returns>
-        public int Write(Byte[] Content)
+        public int Write(byte[] Content)
         {
             if (Content != null)
             {
@@ -77,14 +73,14 @@ namespace Serenity.Web
                 {
                     if (this.sendBuffer.Length > 0)
                     {
-                        Byte[] NewBuffer = new Byte[this.sendBuffer.Length + Content.Length];
+                        byte[] NewBuffer = new byte[this.sendBuffer.Length + Content.Length];
                         this.sendBuffer.CopyTo(NewBuffer, 0);
                         Content.CopyTo(NewBuffer, this.sendBuffer.Length - 1);
                         this.sendBuffer = NewBuffer;
                     }
                     else
                     {
-                        this.sendBuffer = new Byte[Content.Length];
+                        this.sendBuffer = new byte[Content.Length];
                         Content.CopyTo(this.sendBuffer, 0);
                     }
                     return Content.Length;
@@ -99,26 +95,12 @@ namespace Serenity.Web
                 return -1;
             }
         }
-        public int Write(string Content)
+        public int Write(string value)
         {
-            return this.Write(Encoding.UTF8.GetBytes(Content));
+            return this.Write(Encoding.UTF8.GetBytes(value));
         }
 
         #region Properties - Public
-        /// <summary>
-        /// Gets or sets a CommonCapabilities object describing what the current CommonResponse is able to do.
-        /// </summary>
-        public CommonCapabilities Capabilities
-        {
-            get
-            {
-                return this.capabilities;
-            }
-            set
-            {
-                this.capabilities = value;
-            }
-        }
         public string MimeType
         {
             get
@@ -136,31 +118,7 @@ namespace Serenity.Web
                 }
             }
         }
-        [Obsolete]
-        public ushort StatusCode
-        {
-            get
-            {
-                return this.statusCode;
-            }
-            set
-            {
-                this.statusCode = value;
-            }
-        }
-        [Obsolete]
-        public string StatusText
-        {
-            get
-            {
-                return this.statusText;
-            }
-            set
-            {
-                this.statusText = value;
-            }
-        }
-        internal Byte[] SendBuffer
+        internal byte[] SendBuffer
         {
             get
             {
@@ -180,17 +138,6 @@ namespace Serenity.Web
             get
             {
                 return this.owningContext;
-            }
-        }
-
-        /// <summary>
-        /// Gets the WebDriver from which the current CommonContext originated from.
-        /// </summary>
-        public WebDriver Origin
-        {
-            get
-            {
-                return this.owningContext.Origin;
             }
         }
         public bool UseCompression

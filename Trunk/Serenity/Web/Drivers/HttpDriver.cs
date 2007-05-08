@@ -53,7 +53,7 @@ namespace Serenity.Web.Drivers
                     {
                         if (AcceptedSocket.Available > 0)
                         {
-                            Byte[] Temp = new Byte[AcceptedSocket.Available];
+                            byte[] Temp = new byte[AcceptedSocket.Available];
                             AcceptedSocket.Receive(Temp);
                             RequestBytes.AddRange(Temp);
                             SleepTime = 0;
@@ -70,7 +70,7 @@ namespace Serenity.Web.Drivers
                                 return;
                             }
                         }
-                        Byte[] Unused;
+                        byte[] Unused;
                         Adapter.ConstructRequest(RequestBytes.ToArray(), out Unused);
                         RequestBytes = new List<Byte>(Unused);
                         if (Adapter.Available > 0)

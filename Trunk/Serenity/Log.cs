@@ -99,7 +99,7 @@ namespace Serenity
             }
             if (Log.file == true)
             {
-                Byte[] WriteContent = Encoding.UTF8.GetBytes(Output.ToString());
+                byte[] WriteContent = Encoding.UTF8.GetBytes(Output.ToString());
                 Log.mutex.WaitOne();
                 using (FileStream OutputStream = File.Open(SPath.LogFile, FileMode.Append))
                 {

@@ -128,7 +128,7 @@ namespace Serenity
         {
             return this.Preload((int)this.Length);
         }
-        public override int Read(Byte[] buffer, int offset, int count)
+        public override int Read(byte[] buffer, int offset, int count)
         {
             if (this.cache.Count > 0)
             {
@@ -146,7 +146,7 @@ namespace Serenity
             throw new NotSupportedException();
         }
 
-        public override void Write(Byte[] buffer, int offset, int count)
+        public override void Write(byte[] buffer, int offset, int count)
         {
             throw new NotSupportedException();
         }

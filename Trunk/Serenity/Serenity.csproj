@@ -131,10 +131,9 @@
     <Compile Include="TryResult.cs" />
     <Compile Include="Themes\Color.cs" />
     <Compile Include="Themes\Theme.cs" />
-    <Compile Include="Web\CommonCapabilities.cs" />
     <Compile Include="Web\CommonContext.cs" />
-    <Compile Include="Web\Drivers\BinaryAdapter.cs" />
-    <Compile Include="Web\Drivers\BinaryDriver.cs" />
+    <None Include="Web\Drivers\BinaryAdapter.cs" />
+    <None Include="Web\Drivers\BinaryDriver.cs" />
     <Compile Include="Web\StatusCode.cs" />
     <Compile Include="Web\Drivers\DriverInfo.cs" />
     <Compile Include="Web\Drivers\WebManager.cs" />

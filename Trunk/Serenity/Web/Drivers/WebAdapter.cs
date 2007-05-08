@@ -38,18 +38,6 @@ namespace Serenity.Web.Drivers
         #endregion
         #region Methods - Protected
         /// <summary>
-        /// Obsolete. Finalizes the CommonContext being constructed and adds it to
-        /// the queue of available completed CommonContexts.
-        /// </summary>
-        /// <remarks>
-        /// This method will be removed in Serenity 0.5.0.0.
-        /// </remarks>
-        [Obsolete]
-        protected void Archive()
-        {
-            this.Recycle();
-        }
-        /// <summary>
         /// Finalizes the CommonContext being constructed and adds it to
         /// the queue of available completed CommonContexts.
         /// </summary>
@@ -69,27 +57,27 @@ namespace Serenity.Web.Drivers
         /// </summary>
         /// <param name="source">The bytes used as input.</param>
         /// <param name="unused">Any bytes that were unable to be processed or were unnecessary.</param>
-        public abstract void ConstructRequest(Byte[] source, out Byte[] unused);
+        public abstract void ConstructRequest(byte[] source, out byte[] unused);
         /// <summary>
         /// When overridden in a derived class, translates the input Byte array to one or more CommonResponse objects.
         /// </summary>
         /// <param name="source">The bytes used as input.</param>
         /// <param name="unused">Any bytes that were unable to be processed or were unnecessary.</param>
-        public abstract void ConstructResponse(Byte[] source, out Byte[] unused);
+        public abstract void ConstructResponse(byte[] source, out byte[] unused);
         /// <summary>
         /// When overridden in a derived class,
         /// translates the CommonResponse of context to an array of bytes.
         /// </summary>
         /// <param name="context">The CommonContext to translate.</param>
         /// <returns>An array of bytes representing the CommonResponse of context.</returns>
-        public abstract Byte[] DestructResponse(CommonContext context);
+        public abstract byte[] DestructResponse(CommonContext context);
         /// <summary>
         /// When overridden in a derived class,
         /// translates the CommonRequest of context to an array of bytes.
         /// </summary>
         /// <param name="context">The CommonContext to translate.</param>
         /// <returns>An array of bytes representing the CommonRequest of context.</returns>
-        public abstract Byte[] DestructRequest(CommonContext context);
+        public abstract byte[] DestructRequest(CommonContext context);
         /// <summary>
         /// If there are available contexts in the postprocess queue, gets the next available CommonContext.
         /// If there are none available, returns null.

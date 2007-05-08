@@ -23,329 +23,302 @@ namespace Serenity.Web
 {
     public sealed class CommonRequest
     {
+        #region Constructors - Internal
         internal CommonRequest(CommonContext Owner)
         {
-            this._RequestTraceIdentifier = Guid.NewGuid();
-            this._Owner = Owner;
-            this._Capabilities = new CommonCapabilities();
+            this.requestTraceIdentifier = Guid.NewGuid();
+            this.context = Owner;
         }
-        private CommonCapabilities _Capabilities;
-        /// <summary>
-        /// Gets or sets a CommonCapabilities object describing what the current CommonRequest is able to do.
-        /// </summary>
-        public CommonCapabilities Capabilities
-        {
-            get
-            {
-                return this._Capabilities;
-            }
-            set
-            {
-                this._Capabilities = value;
-            }
-        }
+        #endregion
+        #region Fields - Private
+        private int clientCertificateError;
+        private Encoding contentEncoding;
+        private int contentLength;
+        private string contentType;
+        private CommonContext context;
+        private CookieCollection cookies;
+        private bool hasEntityBody;
+        private HeaderCollection headers = new HeaderCollection();
+        private Stream inputStream;
+        private bool isAuthenticated;
+        private bool isLocal;
+        private bool isSecureConnection;
+        private bool keepAlive;
+        private IPEndPoint localEndPoint;
+        private string method;
+        private RequestDataCollection requestData = new RequestDataCollection();
+        private string rawUrl;
+        private IPEndPoint remoteEndPoint;
+        private Guid requestTraceIdentifier;
+        private Uri url;
+        private Uri referrer;
+        private string userAgent;
+        private string userHostName;
+        private string[] userLanguages;
+        private string userPrimaryLanguage;
+        #endregion
+        #region Properties - Public
         public int ClientCertificateError
         {
             get
             {
-                return this._ClientCertificateError;
+                return this.clientCertificateError;
             }
             internal set
             {
-                this._ClientCertificateError = value;
+                this.clientCertificateError = value;
             }
         }
         public Encoding ContentEncoding
         {
             get
             {
-                return this._ContentEncoding;
+                return this.contentEncoding;
             }
             set
             {
-                this._ContentEncoding = value;
+                this.contentEncoding = value;
             }
         }
         public int ContentLength
         {
             get
             {
-                return this._ContentLength;
+                return this.contentLength;
             }
             set
             {
-                this._ContentLength = value;
+                this.contentLength = value;
             }
         }
         public string ContentType
         {
             get
             {
-                return this._ContentType;
+                return this.contentType;
             }
             set
             {
-                this._ContentType = value;
+                this.contentType = value;
             }
         }
         public CookieCollection Cookies
         {
             get
             {
-                return this._Cookies;
+                return this.cookies;
             }
             internal set
             {
-                this._Cookies = value;
+                this.cookies = value;
             }
         }
         public bool HasEntityBody
         {
             get
             {
-                return this._HasEntityBody;
+                return this.hasEntityBody;
             }
             set
             {
-                this._HasEntityBody = value;
+                this.hasEntityBody = value;
             }
         }
         public HeaderCollection Headers
         {
             get
             {
-                return this._Headers;
+                return this.headers;
             }
             internal set
             {
-                this._Headers = value;
+                this.headers = value;
             }
         }
         public Stream InputStream
         {
             get
             {
-                return this._InputStream;
+                return this.inputStream;
             }
             internal set
             {
-                this._InputStream = value;
+                this.inputStream = value;
             }
         }
         public bool IsAuthenticated
         {
             get
             {
-                return this._IsAuthenticated;
+                return this.isAuthenticated;
             }
             internal set
             {
-                this._IsAuthenticated = value;
+                this.isAuthenticated = value;
             }
         }
         public bool IsLocal
         {
             get
             {
-                return this._IsLocal;
+                return this.isLocal;
             }
             internal set
             {
-                this._IsLocal = value;
+                this.isLocal = value;
             }
         }
         public bool IsSecureConnection
         {
             get
             {
-                return this._IsSecureConnection;
+                return this.isSecureConnection;
             }
             internal set
             {
-                this._IsSecureConnection = value;
+                this.isSecureConnection = value;
             }
         }
         public bool KeepAlive
         {
             get
             {
-                return this._KeepAlive;
+                return this.keepAlive;
             }
             internal set
             {
-                this._KeepAlive = value;
+                this.keepAlive = value;
             }
         }
         public IPEndPoint LocalEndPoint
         {
             get
             {
-                return this._LocalEndPoint;
+                return this.localEndPoint;
             }
             internal set
             {
-                this._LocalEndPoint = value;
+                this.localEndPoint = value;
             }
         }
         public string Method
         {
             get
             {
-                return this._Method;
+                return this.method;
             }
             internal set
             {
-                this._Method = value;
+                this.method = value;
             }
         }
-
         public RequestDataCollection RequestData
         {
             get
             {
-                return _RequestData;
+                return requestData;
             }
             internal set
             {
-                _RequestData = value;
+                requestData = value;
             }
         }
         public string RawUrl
         {
             get
             {
-                return this._RawUrl;
+                return this.rawUrl;
             }
             internal set
             {
-                this._RawUrl = value;
+                this.rawUrl = value;
             }
         }
         public IPEndPoint RemoteEndPoint
         {
             get
             {
-                return this._RemoteEndPoint;
+                return this.remoteEndPoint;
             }
             internal set
             {
-                this._RemoteEndPoint = value;
+                this.remoteEndPoint = value;
             }
         }
         public Guid RequestTraceIdentifier
         {
             get
             {
-                return this._RequestTraceIdentifier;
+                return this.requestTraceIdentifier;
             }
         }
         public Uri Url
         {
             get
             {
-                return _Url;
+                return url;
             }
             set
             {
-                _Url = value;
+                url = value;
             }
         }
         public Uri Referrer
         {
             get
             {
-                return _Referrer;
+                return referrer;
             }
             set
             {
-                _Referrer = value;
+                referrer = value;
             }
         }
         public string UserAgent
         {
             get
             {
-                return _UserAgent;
+                return userAgent;
             }
             set
             {
-                _UserAgent = value;
+                userAgent = value;
             }
         }
         public string UserHostName
         {
             get
             {
-                return _UserHostName;
+                return userHostName;
             }
             internal set
             {
-                _UserHostName = value;
+                userHostName = value;
             }
         }
         public string[] UserLanguages
         {
             get
             {
-                return _UserLanguages;
+                return userLanguages;
             }
             set
             {
-                _UserLanguages = value;
+                userLanguages = value;
             }
         }
         public string UserPrimaryLanguage
         {
             get
             {
-                return _UserPrimaryLanguage;
+                return userPrimaryLanguage;
             }
             set
             {
-                _UserPrimaryLanguage = value;
+                userPrimaryLanguage = value;
             }
         }
-        private int _ClientCertificateError;
-        private Encoding _ContentEncoding;
-        private int _ContentLength;
-        private string _ContentType;
-        private CookieCollection _Cookies;
-        private bool _HasEntityBody;
-        private HeaderCollection _Headers = new HeaderCollection();
-        private Stream _InputStream;
-        private bool _IsAuthenticated;
-        private bool _IsLocal;
-        private bool _IsSecureConnection;
-        private bool _KeepAlive;
-        private IPEndPoint _LocalEndPoint;
-        private string _Method;
-        private RequestDataCollection _RequestData = new RequestDataCollection();
-        private string _RawUrl;
-        private IPEndPoint _RemoteEndPoint;
-        private Guid _RequestTraceIdentifier;
-        private Uri _Url;
-        private Uri _Referrer;
-        private string _UserAgent;
-        private string _UserHostName;
-        private string[] _UserLanguages;
-        private string _UserPrimaryLanguage;
-        /// <summary>
-        /// Gets the WebDriver from which the current CommonContext originated from.
-        /// </summary>
-        public WebDriver Origin
-        {
-            get
-            {
-                return this._Owner.Origin;
-            }
-        }
-        public CommonContext Owner
-        {
-            get
-            {
-                return this._Owner;
-            }
-        }
-        private CommonContext _Owner;
+        #endregion
+
     }
 }

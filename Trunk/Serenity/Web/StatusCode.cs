@@ -39,18 +39,6 @@ namespace Serenity.Web
         /// </summary>
         public readonly string Message;
         #endregion
-        #region Operators - Public
-        /// <summary>
-        /// Converts a ResponseCode to a string representation.
-        /// </summary>
-        /// <param name="responseCode"></param>
-        /// <returns></returns>
-        [Obsolete]
-        public static implicit operator string(StatusCode responseCode)
-        {
-            return responseCode.Code.ToString() + " " + responseCode.Message;
-        }
-        #endregion
         #region Properties - Public
         /// <summary>
         /// Gets a status code indicating an HTTP 100 Continue response.

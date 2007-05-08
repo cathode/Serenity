@@ -42,7 +42,7 @@ namespace Serenity.Web.Drivers
         /// </summary>
         Stopping = 3,
         /// <summary>
-        /// Indicates that the WebDriver is attempting to begin runing normally.
+        /// Indicates that the WebDriver is attempting to start listening for connections.
         /// It is not yet listening for connections, or other initialization tasks have not completed yet.
         /// </summary>
         Starting = 4,
@@ -52,7 +52,8 @@ namespace Serenity.Web.Drivers
         /// </summary>
         Started = 5,
         /// <summary>
-        /// Indicates that the WebDriver is currently active.
+        /// Indicates that the WebDriver is currently active. At least one request has been recieved and may
+        /// already be responded to, or is being responded to currently.
         /// </summary>
         Running = 6
     }
@@ -71,7 +72,7 @@ namespace Serenity.Web.Drivers
         {
             this.contextHandler = contextHandler;
             this.isInitialized = false;
-            this.state = WebDriverState.Stopped;
+            this.state = WebDriverState.Created;
         }
         #endregion
         #region Fields - Private
@@ -96,16 +97,6 @@ namespace Serenity.Web.Drivers
         #endregion
         #region Methods - Protected
         /// <summary>
-        /// Causes the ContextCallback event to be fired for the current WebDriver.
-        /// </summary>
-        /// <param name="context">The CommonContext object to populate the event with.</param>
-        protected void InvokeContextCallback(CommonContext context)
-        {
-            this.contextHandler.HandleContext(context);
-        }
-        #endregion
-        #region Methods - Protected - Abstract
-        /// <summary>
         /// Contains the code that is executed when the current WebDriver is initialized (before handling clients).
         /// </summary>
         protected abstract void DriverInitialize();
@@ -124,8 +115,21 @@ namespace Serenity.Web.Drivers
         /// A call to this method may not immediately result in a Stopped state of the current WebDriver.
         /// </remarks>
         protected abstract void DriverStop();
+        /// <summary>
+        /// Causes the ContextCallback event to be fired for the current WebDriver.
+        /// </summary>
+        /// <param name="context">The CommonContext object to populate the event with.</param>
+        protected void InvokeContextCallback(CommonContext context)
+        {
+            this.contextHandler.HandleContext(context);
+        }
         #endregion
         #region Methods - Public
+        /// <summary>
+        /// When overridden in a derived class, gets a new instance of the WebAdapter used to
+        /// process the data of requests that are sent or recieved for the current WebDriver.
+        /// </summary>
+        public abstract WebAdapter CreateAdapter();
         /// <summary>
         /// Publicly used method to perform pre-start initialization tasks.
         /// </summary>
@@ -150,8 +154,15 @@ namespace Serenity.Web.Drivers
         /// </summary>
         public void Start()
         {
-            this.state = WebDriverState.Starting;
-            this.DriverStart();
+            if (this.state == WebDriverState.Initialized)
+            {
+                this.state = WebDriverState.Starting;
+                this.DriverStart();
+            }
+            else
+            {
+                throw new InvalidOperationException("Cannot start a WebDriver that has already been started, or has not been initialized yet.");
+            }
         }
         /// <summary>
         /// Stops the WebDriver.
@@ -162,14 +173,6 @@ namespace Serenity.Web.Drivers
             this.DriverStop();
             this.state = WebDriverState.Stopped;
         }
-        #endregion
-        #region Methods - Public - Abstract
-        /// <summary>
-        /// When overridden in a derived class, gets a new instance of the WebAdapter used to
-        /// process the data of requests that are sent or recieved for the current WebDriver.
-        /// </summary>
-        public abstract WebAdapter CreateAdapter();
-
         #endregion
         #region Properties - Public
         /// <summary>

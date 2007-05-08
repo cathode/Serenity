@@ -40,11 +40,6 @@ namespace Serenity
         [NonSerialized]
         private readonly DomainSettingValue<T> parent;
         private T value;
-        [Obsolete]
-        public static implicit operator T(DomainSettingValue<T> settingValue)
-        {
-            return settingValue.Value;
-        }
 
         public bool IsDefined
         {

@@ -24,9 +24,9 @@ namespace Serenity
         /// </summary>
         /// <param name="input">The hex input as a char array.</param>
         /// <returns>An array of bytes representing the hex input.</returns>
-        public static Byte[] Convert(params char[] input)
+        public static byte[] Convert(params char[] input)
         {
-            Byte[] output = new Byte[input.Length / 2];
+            byte[] output = new byte[input.Length / 2];
             int n = 0;
             for (int i = 0; i < input.Length / 2; i++)
             {
@@ -41,11 +41,11 @@ namespace Serenity
         /// </summary>
         /// <param name="input">The hex input as a string.</param>
         /// <returns>An array of bytes representing the hex input.</returns>
-        public static Byte[] Convert(string input)
+        public static byte[] Convert(string input)
         {
             return HexEncoding.Convert(input.ToCharArray());
         }
-        public static string Convert(params Byte[] input)
+        public static string Convert(params byte[] input)
         {
             StringBuilder result = new StringBuilder();
             foreach (Byte b in input)

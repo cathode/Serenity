@@ -18,17 +18,21 @@ namespace Serenity.Web
 {
     public sealed class Header
     {
-        private string name;
-        private bool complex = false;
-        private List<string> secondaryValues;
-        private string primaryValue;
-
+        #region Constructors - Public
         public Header(string name, string primaryValue)
         {
             this.name = name;
             this.primaryValue = primaryValue;
             this.secondaryValues = new List<string>();
         }
+        #endregion
+        #region Fields - Private
+        private readonly string name;
+        private bool complex = false;
+        private List<string> secondaryValues;
+        private string primaryValue;
+        #endregion
+        #region Indexers - Public
         /// <summary>
         /// Gets the header value at the specified index.
         /// </summary>
@@ -44,6 +48,8 @@ namespace Serenity.Web
                 return this.secondaryValues[index];
             }
         }
+        #endregion
+        #region Methods - Internal
         /// <summary>
         /// Adds the primary key and all secondary keys of the specified header to the secondary keys of the current header.
         /// </summary>
@@ -53,6 +59,8 @@ namespace Serenity.Web
             this.Add(header.PrimaryValue);
             this.AddRange(header.SecondaryValues);
         }
+        #endregion
+        #region Methods - Public
         /// <summary>
         /// Adds a secondary value to the current Header.
         /// </summary>
@@ -74,6 +82,8 @@ namespace Serenity.Web
             this.complex = true;
             this.secondaryValues.AddRange(values);
         }
+        #endregion
+        #region Properties - Public
         /// <summary>
         /// Gets a boolean value that indicates whether the current Header
         /// has multiple values (secondary values).
@@ -119,6 +129,6 @@ namespace Serenity.Web
                 this.primaryValue = value;
             }
         }
+        #endregion
     }
-
 }

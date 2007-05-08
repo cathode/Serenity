@@ -96,7 +96,7 @@ namespace Serenity.Themes
         {
             get
             {
-                return HexEncoding.Convert(new Byte[] { this.red, this.green, this.blue });
+                return HexEncoding.Convert(new byte[] { this.red, this.green, this.blue });
             }
             set
             {
@@ -117,7 +117,7 @@ namespace Serenity.Themes
                 }
                 else if (Parts.Length == 1)
                 {
-                    Byte[] Values = HexEncoding.Convert(value);
+                    byte[] Values = HexEncoding.Convert(value);
                     if (Values.Length == 3)
                     {
                         this.red = Values[0];

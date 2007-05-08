@@ -69,7 +69,7 @@ namespace Serenity.Themes
         #endregion
         #region Fields - Private
         private Style[] styles;
-        private Byte[] stylesheetContent;
+        private byte[] stylesheetContent;
         #endregion
         #region Methods - Public
         public void Clear()
@@ -524,7 +524,7 @@ namespace Serenity.Themes
                 return this.styles[(int)StyleType.LinkExternal];
             }
         }
-        public Byte[] StylesheetContent
+        public byte[] StylesheetContent
         {
             get
             {

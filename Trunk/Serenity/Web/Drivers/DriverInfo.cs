@@ -26,6 +26,13 @@ namespace Serenity.Web.Drivers
             this._Type = "unknown";
             this._UriSchema = "unknown";
         }
+        internal DriverInfo(string Class, string Type, string UriSchema, Version SupportedVersion)
+        {
+            this._Class = Class;
+            this._Type = Type;
+            this._UriSchema = UriSchema;
+            this._SupportedVersion = SupportedVersion;
+        }
         #endregion
         #region Fields - Private
         private string _Class;
@@ -34,13 +41,7 @@ namespace Serenity.Web.Drivers
         private Version _SupportedVersion;
         #endregion
         #region Methods - Internal
-        internal DriverInfo(string Class, string Type, string UriSchema, Version SupportedVersion)
-        {
-            this._Class = Class;
-            this._Type = Type;
-            this._UriSchema = UriSchema;
-            this._SupportedVersion = SupportedVersion;
-        }
+        
         #endregion
         #region Properties - Public
         public string Class

@@ -60,14 +60,6 @@ namespace Serenity
         }
         #endregion
         #region Properties - Public
-        [Obsolete]
-        public Exception Reason
-        {
-            get
-            {
-                return this.Exception;
-            }
-        }
         /// <summary>
         /// Gets a System.Exception which contains information about why the operation failed.
         /// </summary>
@@ -89,14 +81,6 @@ namespace Serenity
                 }
             }
         }
-        [Obsolete]
-        public T Result
-        {
-            get
-            {
-                return this.Value;
-            }
-        }
         /// <summary>
         /// Gets the result of the operation which returned the current
         /// TryResult&lt;T&gt;, or null if the operation did not succeed.
@@ -113,14 +97,6 @@ namespace Serenity
                 {
                     return default(T);
                 }
-            }
-        }
-        [Obsolete]
-        public bool Success
-        {
-            get
-            {
-                return this.IsSuccessful;
             }
         }
         /// <summary>
