@@ -88,136 +88,136 @@
     <Content Include="Environments\system\static\index.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\arrow_down.png">
+    <Content Include="Environments\system\static\Iconss\arrow_down.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\arrow_up.png">
+    <Content Include="Environments\system\static\Iconss\arrow_up.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\folder.png">
+    <Content Include="Environments\system\static\Iconss\folder.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white.png">
+    <Content Include="Environments\system\static\Iconss\page_white.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_acrobat.png">
+    <Content Include="Environments\system\static\Iconss\page_white_acrobat.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_actionscript.png">
+    <Content Include="Environments\system\static\Iconss\page_white_actionscript.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_c.png">
+    <Content Include="Environments\system\static\Iconss\page_white_c.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_cd.png">
+    <Content Include="Environments\system\static\Iconss\page_white_cd.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_code.png">
+    <Content Include="Environments\system\static\Iconss\page_white_code.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_code_red.png">
+    <Content Include="Environments\system\static\Iconss\page_white_code_red.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_coldfusion.png">
+    <Content Include="Environments\system\static\Iconss\page_white_coldfusion.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_compressed.png">
+    <Content Include="Environments\system\static\Iconss\page_white_compressed.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_cplusplus.png">
+    <Content Include="Environments\system\static\Iconss\page_white_cplusplus.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_csharp.png">
+    <Content Include="Environments\system\static\Iconss\page_white_csharp.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_cup.png">
+    <Content Include="Environments\system\static\Iconss\page_white_cup.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_database.png">
+    <Content Include="Environments\system\static\Iconss\page_white_database.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_delete.png">
+    <Content Include="Environments\system\static\Iconss\page_white_delete.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_dvd.png">
+    <Content Include="Environments\system\static\Iconss\page_white_dvd.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_excel.png">
+    <Content Include="Environments\system\static\Iconss\page_white_excel.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_flash.png">
+    <Content Include="Environments\system\static\Iconss\page_white_flash.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_freehand.png">
+    <Content Include="Environments\system\static\Iconss\page_white_freehand.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_gear.png">
+    <Content Include="Environments\system\static\Iconss\page_white_gear.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_h.png">
+    <Content Include="Environments\system\static\Iconss\page_white_h.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_key.png">
+    <Content Include="Environments\system\static\Iconss\page_white_key.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_lightning.png">
+    <Content Include="Environments\system\static\Iconss\page_white_lightning.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_link.png">
+    <Content Include="Environments\system\static\Iconss\page_white_link.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_office.png">
+    <Content Include="Environments\system\static\Iconss\page_white_office.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_paint.png">
+    <Content Include="Environments\system\static\Iconss\page_white_paint.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_paintbrush.png">
+    <Content Include="Environments\system\static\Iconss\page_white_paintbrush.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_paste.png">
+    <Content Include="Environments\system\static\Iconss\page_white_paste.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_php.png">
+    <Content Include="Environments\system\static\Iconss\page_white_php.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_picture.png">
+    <Content Include="Environments\system\static\Iconss\page_white_picture.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_powerpoint.png">
+    <Content Include="Environments\system\static\Iconss\page_white_powerpoint.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_ruby.png">
+    <Content Include="Environments\system\static\Iconss\page_white_ruby.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_stack.png">
+    <Content Include="Environments\system\static\Iconss\page_white_stack.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_star.png">
+    <Content Include="Environments\system\static\Iconss\page_white_star.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_swoosh.png">
+    <Content Include="Environments\system\static\Iconss\page_white_swoosh.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_text.png">
+    <Content Include="Environments\system\static\Iconss\page_white_text.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_tux.png">
+    <Content Include="Environments\system\static\Iconss\page_white_tux.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_vector.png">
+    <Content Include="Environments\system\static\Iconss\page_white_vector.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_visualstudio.png">
+    <Content Include="Environments\system\static\Iconss\page_white_visualstudio.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_word.png">
+    <Content Include="Environments\system\static\Iconss\page_white_word.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_wrench.png">
+    <Content Include="Environments\system\static\Iconss\page_white_wrench.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Environments\system\static\Icons\page_white_zip.png">
+    <Content Include="Environments\system\static\Iconss\page_white_zip.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Themes\system\Theme" />
