@@ -3,15 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serenity", "Serenity\Serenity.csproj", "{2013CDED-1043-4FF6-A080-9B3C9BD7B140}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insight", "Insight\Insight.csproj", "{7A53B1EF-3221-40E3-854D-C739F56D34C9}"
-	ProjectSection(ProjectDependencies) = postProject
-		{2013CDED-1043-4FF6-A080-9B3C9BD7B140} = {2013CDED-1043-4FF6-A080-9B3C9BD7B140}
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{36484189-0ED9-48F5-988D-B1398F934F61}"
-	ProjectSection(ProjectDependencies) = postProject
-		{7A53B1EF-3221-40E3-854D-C739F56D34C9} = {7A53B1EF-3221-40E3-854D-C739F56D34C9}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +15,6 @@ Global
 		{2013CDED-1043-4FF6-A080-9B3C9BD7B140}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2013CDED-1043-4FF6-A080-9B3C9BD7B140}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2013CDED-1043-4FF6-A080-9B3C9BD7B140}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7A53B1EF-3221-40E3-854D-C739F56D34C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7A53B1EF-3221-40E3-854D-C739F56D34C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7A53B1EF-3221-40E3-854D-C739F56D34C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7A53B1EF-3221-40E3-854D-C739F56D34C9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{36484189-0ED9-48F5-988D-B1398F934F61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{36484189-0ED9-48F5-988D-B1398F934F61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36484189-0ED9-48F5-988D-B1398F934F61}.Release|Any CPU.ActiveCfg = Release|Any CPU
