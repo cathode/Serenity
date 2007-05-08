@@ -151,7 +151,7 @@ namespace Serenity
         {
             get
             {
-                return SPath.Combine(SPath.GetEnvironmentDirectory(this.Key), "Static");
+                return SPath.Combine(SPath.GetEnvironmentDirectory(this.Key), "static");
             }
         }
         public Theme Theme

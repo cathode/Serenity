@@ -1,6 +1,6 @@
 /*
 Serenity - The next evolution of web server technology
-Serenity/ResourceClasses/StaticResourceClass.cs
+Serenity/ResourceClasses/staticResourceClass.cs
 Copyright © 2006-2007 Serenity Project (http://SerenityProject.net/)
 
 This file is protected by the terms and conditions of the
@@ -21,9 +21,9 @@ using Serenity.Xml.Html;
 
 namespace Serenity.ResourceClasses
 {
-    internal sealed class StaticResourceClass : ResourceClass
+    internal sealed class staticResourceClass : ResourceClass
     {
-        public StaticResourceClass() : base("static")
+        public staticResourceClass() : base("static")
         {
 
         }
@@ -82,7 +82,7 @@ namespace Serenity.ResourceClasses
                     Doc.BodyElement.Class = Theme.CurrentInstance.ContentA.Class;
 
                     Doc.AddStylesheet(Theme.CurrentInstance.StylesheetUrl);
-                    Doc.AddStylesheet("/system/static/Directory.css");
+                    Doc.AddStylesheet("/system/static/directory.css");
                     Doc.Title = "Index of " + resourceName;
                     HtmlElement Div = Doc.BodyElement.AppendDivision("Index of " + resourceName, Theme.CurrentInstance.HeadingA);
                     string[] SubDirs = Directory.GetDirectories(resourcePath);
@@ -100,7 +100,7 @@ namespace Serenity.ResourceClasses
 
                             HtmlElement E = Row.AppendTableCell();
                             E.AddClass("Icon");
-                            E.AppendImage("/System/Static/Icons/folder.png");
+                            E.AppendImage("/System/static/Icons/folder.png");
 
                             E = Row.AppendTableCell();
                             string[] Parts = resourceName.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
@@ -119,7 +119,7 @@ namespace Serenity.ResourceClasses
 
                             HtmlElement E = Row.AppendTableCell();
                             E.AddClass("Icon");
-                            E.AppendImage("/System/Static/Icons/folder.png");
+                            E.AppendImage("/System/static/Icons/folder.png");
 
                             E = Row.AppendTableCell();
                             E.AppendAnchor(Path.GetFileName(DirPath) + "/", Path.GetFileName(DirPath), Theme.CurrentInstance.Link);
@@ -187,7 +187,7 @@ namespace Serenity.ResourceClasses
 
                             HtmlElement cell = row.AppendTableCell();
                             cell.Class = "Icon";
-                            cell.AppendImage("/System/Static/Icons/" + icon + ".png");
+                            cell.AppendImage("/System/static/Icons/" + icon + ".png");
 
                             cell = row.AppendTableCell();
                             cell.AppendAnchor(Path.GetFileName(FilePath), Path.GetFileName(FilePath), Theme.CurrentInstance.Link);
