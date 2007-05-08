@@ -1,7 +1,7 @@
 /*
 Serenity - The next evolution of web server technology
 
-Copyright © 2006-2007 Serenity Project (http://serenityproject.net/)
+Copyright © 2006-2007 Serenity Project (http://SerenityProject.net/)
 
 This file is protected by the terms and conditions of the
 Microsoft Community License (Ms-CL), a copy of which should
@@ -57,7 +57,7 @@ namespace Serenity
 
             Theme.SystemInstance = theme;
 
-            SerenityModule.SystemInstance = SerenityModule.LoadModuleFile("serenity.dll", SerenityInfo.SystemName);
+            SerenityModule.SystemInstance = SerenityModule.LoadModuleFile("Serenity.dll", SerenityInfo.SystemName);
 
             SerenityEnvironment.LoadAllEnvironments();
             if (SerenityEnvironment.ContainsInstance(SerenityInfo.SystemName) == true)
@@ -66,6 +66,8 @@ namespace Serenity
             }
 
             SerenityModule.TryLoadAllModules();
+
+            /*
             if ((Settings.Default.ActiveThemes != null) && (Settings.Default.ActiveThemes.Count == 0))
             {
                 foreach (string name in Settings.Default.ActiveThemes)
@@ -82,6 +84,7 @@ namespace Serenity
                 }
                 Theme.DefaultInstance = Theme.GetInstance(Settings.Default.DefaultTheme);
             }
+            */
 
             Log.Write(string.Format("Loaded: {0} environments, {1} modules, {2} themes.",
                 SerenityEnvironment.Instances.Length,

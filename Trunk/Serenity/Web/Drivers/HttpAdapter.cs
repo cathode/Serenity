@@ -1,7 +1,7 @@
 /*
 Serenity - The next evolution of web server technology
 
-Copyright © 2006-2007 Serenity Project (http://serenityproject.net/)
+Copyright © 2006-2007 Serenity Project (http://SerenityProject.net/)
 
 This file is protected by the terms and conditions of the
 Microsoft Community License (Ms-CL), a copy of which should
@@ -378,7 +378,7 @@ namespace Serenity.Web.Drivers
                         break;
 
                     case HttpAdapterSteps.FieldsParsed:
-                        this.Archive();
+                        this.Recycle();
                         unused = new Byte[0];
                         this.currentStep = HttpAdapterSteps.PreParse;
                         //Console.WriteLine("Returning from parsing method");
