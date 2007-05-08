@@ -141,6 +141,7 @@ namespace Serenity.Web.Drivers
             this.listenPort = Settings.ListenPort;
             this.DriverInitialize();
             this.isInitialized = true;
+            this.state = WebDriverState.Initialized;
         }
         /// <summary>
         /// Starts the current WebDriver on a new thread.

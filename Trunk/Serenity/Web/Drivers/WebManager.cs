@@ -116,7 +116,7 @@ namespace Serenity.Web.Drivers
             {
                 lock (driver)
                 {
-                    if ((driver.State > WebDriverState.Initialized) && (driver.State < WebDriverState.Starting))
+                    if ((driver.State >= WebDriverState.Initialized) && (driver.State < WebDriverState.Starting))
                     {
                         initializedDrivers.Add(driver);
                     }
