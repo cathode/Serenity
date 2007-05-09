@@ -31,7 +31,8 @@ namespace Server
             Console.WriteLine("Sensors...online.");
             Console.WriteLine("Weapons...online.");
             Console.WriteLine("All systems nominal.\r\n");
-            Log.LogToConsole = true;
+            Log.LogToConsole = false;
+            Log.LogToFile = false;
 
             Log.Write("Beginning File Verification", LogMessageLevel.Info);
 

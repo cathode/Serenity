@@ -21,33 +21,35 @@ namespace Serenity.Web.Drivers
     /// </summary>
     public class WebDriverSettings
     {
-        
         #region Fields - Private
         private ushort[] fallbackPorts;
         private ushort listenPort;
         private int recieveInterval;
-        private int recieveIntervalIdle;
         private int recieveTimeout;
-        private int recieveTimeoutIdle;
-        private int timeToIdle;
+        #endregion
+        #region Fields - Public
+        public const int DefaultRecieveInterval = 10;
+        public const int DefaultRecieveTimeout = WebDriverSettings.DefaultRecieveInterval * WebDriverSettings.IntervalTimeoutFactor;
+        public const int IntervalTimeoutFactor = 1000;
+        public const int MinimumRecieveInterval = 0;
+        public const int MinimumRecieveTimeout = 1;
         #endregion
         #region Methods - Public
         /// <summary>
         /// Creates and returns a new WebDriverSettings object, calculating optimal values based on the supplied values.
         /// </summary>
         /// <param name="listenPort">The primary port to listen on.</param>
-        /// <param name="recieveInterval">The number of milliseconds between attempts to recieve from the client.</param>
         /// <param name="recieveTimeout">The number of milliseconds to wait before closing the connection and declaring it timed-out.</param>
-        /// <returns></returns>
-        public static WebDriverSettings Create(ushort listenPort, int recieveInterval, int recieveTimeout)
+        /// <returns>The new WebDriverSettings.</returns>
+        /// <remarks>
+        /// The RecieveInterval property is assigned as one one-thousandth of the supplied recieveTimeout, or 1, whichever is larger.
+        /// </remarks>
+        public static WebDriverSettings Create(ushort listenPort, int recieveTimeout)
         {
             WebDriverSettings setttings = new WebDriverSettings();
             setttings.listenPort = listenPort;
-            setttings.recieveInterval = recieveInterval;
-            setttings.recieveIntervalIdle = recieveInterval * 4;
-            setttings.recieveTimeout = recieveTimeout;
-            setttings.recieveTimeoutIdle = recieveTimeout * 8;
-            setttings.timeToIdle = setttings.recieveTimeoutIdle * 2;
+            setttings.RecieveInterval = recieveTimeout / WebDriverSettings.IntervalTimeoutFactor;
+            setttings.RecieveTimeout = recieveTimeout;
 
             return setttings;
         }
@@ -90,70 +92,25 @@ namespace Serenity.Web.Drivers
         {
             get
             {
-                return recieveInterval;
+                return this.recieveInterval;
             }
             set
             {
-                recieveInterval = value;
+                this.recieveInterval = Math.Max(value, WebDriverSettings.MinimumRecieveInterval);
             }
         }
         /// <summary>
-        /// Gets or sets the number of milliseconds to wait between each data availability
-        /// check of the client socket, when in idle mode.
-        /// </summary>
-        public int RecieveIntervalIdle
-        {
-            get
-            {
-                return recieveIntervalIdle;
-            }
-            set
-            {
-                recieveIntervalIdle = value;
-            }
-        }
-        /// <summary>
-        /// Gets or sets the number of milliseconds to wait before the connection should close
-        /// due to timeout.
+        /// Gets or sets the number of milliseconds to wait before the connection should close due to timeout.
         /// </summary>
         public int RecieveTimeout
         {
             get
             {
-                return recieveTimeout;
+                return this.recieveTimeout;
             }
             set
             {
-                recieveTimeout = value;
-            }
-        }
-        /// <summary>
-        /// Gets or sets the number of milliseconds to wait before the connection should close
-        /// due to timeout, when in idle mode.
-        /// </summary>
-        public int RecieveTimeoutIdle
-        {
-            get
-            {
-                return recieveTimeoutIdle;
-            }
-            set
-            {
-                recieveTimeoutIdle = value;
-            }
-        }
-        /// <summary>
-        /// Gets or sets the number of milliseconds before the WebDriver goes into idle mode.
-        /// </summary>
-        public int TimeToIdle
-        {
-            get
-            {
-                return timeToIdle;
-            }
-            set
-            {
-                timeToIdle = value;
+                this.recieveTimeout = Math.Max(value, WebDriverSettings.MinimumRecieveTimeout);
             }
         }
         #endregion

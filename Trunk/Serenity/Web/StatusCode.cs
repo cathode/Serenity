@@ -39,6 +39,12 @@ namespace Serenity.Web
         /// </summary>
         public readonly string Message;
         #endregion
+        #region Methods - Public
+        public override string ToString()
+        {
+            return this.Code.ToString() + " " + this.Message;
+        }
+        #endregion
         #region Properties - Public
         /// <summary>
         /// Gets a status code indicating an HTTP 100 Continue response.

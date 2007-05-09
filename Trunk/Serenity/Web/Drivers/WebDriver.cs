@@ -172,7 +172,6 @@ namespace Serenity.Web.Drivers
         {
             this.state = WebDriverState.Stopping;
             this.DriverStop();
-            this.state = WebDriverState.Stopped;
         }
         #endregion
         #region Properties - Public

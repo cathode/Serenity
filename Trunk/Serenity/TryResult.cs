@@ -47,7 +47,7 @@ namespace Serenity
         /// <summary>
         /// Creates and returns a successful TryResult&lt;T&gt;
         /// </summary>
-        /// <param name="result">The successful result of the operation.</param>
+        /// <param name="value">The successful result of the operation.</param>
         /// <returns>A TryResult&lt;T&gt; representing the successful result of the operation.</returns>
         public static TryResult<T> SuccessResult(T value)
         {

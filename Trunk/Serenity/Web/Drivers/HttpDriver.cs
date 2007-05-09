@@ -46,9 +46,13 @@ namespace Serenity.Web.Drivers
                 using (Socket socket = (Socket)socketObject)
                 {
                     int sleepTime = 0;
+                    
                     List<Byte> recieveBuffer = new List<Byte>(socket.Available);
-                    CommonContext CC = null;
-                    WebAdapter Adapter = this.CreateAdapter();
+                    CommonContext context = null;
+                    WebAdapter adapter = this.CreateAdapter();
+
+                    WebDriverSettings settings = this.Settings;
+
                     while (socket.Connected == true)
                     {
                         if (socket.Available > 0)
@@ -60,36 +64,28 @@ namespace Serenity.Web.Drivers
                         }
                         else
                         {
-                            if (sleepTime < this.Settings.TimeToIdle)
+                            if (sleepTime <= settings.RecieveTimeout)
                             {
-                                Thread.Sleep(this.RecieveInterval);
-                                sleepTime += this.RecieveInterval;
+                                Thread.Sleep(settings.RecieveInterval);
+                                sleepTime += settings.RecieveInterval;
                             }
                             else
                             {
-                                if (sleepTime < this.Settings.RecieveTimeoutIdle)
-                                {
-                                    Thread.Sleep(this.Settings.RecieveIntervalIdle);
-                                    sleepTime += this.Settings.RecieveIntervalIdle;
-                                }
-                                else
-                                {
-                                    socket.Close();
-                                    return;
-                                }
+                                socket.Close();
+                                return;
                             }
                         }
-                        byte[] Unused;
-                        Adapter.ConstructRequest(recieveBuffer.ToArray(), out Unused);
-                        recieveBuffer = new List<Byte>(Unused);
-                        if (Adapter.Available > 0)
+                        byte[] unused;
+                        adapter.ConstructRequest(recieveBuffer.ToArray(), out unused);
+                        recieveBuffer = new List<Byte>(unused);
+                        if (adapter.Available > 0)
                         {
-                            CC = Adapter.NextContext();
-                            this.InvokeContextCallback(CC);
+                            context = adapter.NextContext();
+                            this.InvokeContextCallback(context);
                             if (socket.Connected == true)
                             {
-                                socket.Send(Adapter.DestructResponse(CC));
-                                if (!CC.Request.KeepAlive)
+                                socket.Send(adapter.DestructResponse(context));
+                                if (!context.Request.KeepAlive)
                                 {
                                     socket.Close();
                                     return;
@@ -124,6 +120,8 @@ namespace Serenity.Web.Drivers
                     this.usedListenPort = this.ListenPort;
                     ListenSocket.Bind(new IPEndPoint(IPAddress.Any, this.usedListenPort));
                     Log.Write("Listening on port " + this.usedListenPort.ToString(), LogMessageLevel.Info);
+#warning Remove this code!
+                    Console.WriteLine("Listening on port {0}", this.usedListenPort);
                 }
                 catch
                 {
@@ -134,6 +132,9 @@ namespace Serenity.Web.Drivers
                             this.usedListenPort = this.Settings.FallbackPorts[I];
                             ListenSocket.Bind(new IPEndPoint(IPAddress.Any, this.usedListenPort));
                             Log.Write("Listening on port " + this.usedListenPort.ToString(), LogMessageLevel.Info);
+
+#warning Remove this code!
+                            Console.WriteLine("Listening on port {0}", this.usedListenPort);
                             break;
                         }
                         catch
