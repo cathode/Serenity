@@ -86,11 +86,11 @@ namespace Serenity
         {
             if (FileTypeRegistry.entries.ContainsKey(extension) == true)
             {
-                return FileTypeRegistry.entries[extension].Compress;
+                return FileTypeRegistry.entries[extension].UseCompression;
             }
             else
             {
-                return FileTypeRegistry.DefaultEntry.Compress;
+                return FileTypeRegistry.DefaultEntry.UseCompression;
             }
 
         }

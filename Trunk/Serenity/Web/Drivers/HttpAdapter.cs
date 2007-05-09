@@ -69,6 +69,7 @@ namespace Serenity.Web.Drivers
             }
             else
             {
+                //WS: We need to check the headers that the client has sent to determine what type of compression to use.
                 Header compressionHeader = request.Headers["Accept-Encoding"];
 
                 if (compressionHeader.PrimaryValue.Contains("gzip") == true)
@@ -80,7 +81,7 @@ namespace Serenity.Web.Drivers
                     useDeflate = true;
                 }
 
-                if ((useGzip == false) && (useDeflate == false) && (compressionHeader.Complex == true))
+                if (!useGzip && !useDeflate && compressionHeader.Complex)
                 {
                     foreach (string secondaryValue in compressionHeader.SecondaryValues)
                     {
@@ -140,6 +141,7 @@ namespace Serenity.Web.Drivers
                 {
                     contentBuffer = response.SendBuffer;
                 }
+
                 if (contentBuffer.Length > response.SendBuffer.Length)
                 {
                     contentBuffer = response.SendBuffer;
@@ -197,6 +199,10 @@ namespace Serenity.Web.Drivers
                 }
             }
         }
+        private void ProcessMultipartEncodedRequestData(string input)
+        {
+
+        }
         #endregion
         #region Methods - Public
         /// <summary>
@@ -213,24 +219,24 @@ namespace Serenity.Web.Drivers
                 unused = new byte[0];
                 return;
             }
-            string Input = Encoding.ASCII.GetString(source);
-            this.buffer = Input;
-            while (true)
+            string input = Encoding.ASCII.GetString(source);
+            this.buffer = input;
+            int indexOf = 0;
+            while (indexOf != -1)
             {
-                int IndexOf = 0;
                 switch (this.currentStep)
                 {
                     case HttpAdapterSteps.PreParse:
-                        IndexOf = this.buffer.IndexOf("\r\n");
-                        if (IndexOf != -1)
+                        indexOf = this.buffer.IndexOf("\r\n");
+                        if (indexOf != -1)
                         {
-                            if (IndexOf == 0)
+                            if (indexOf == 0)
                             {
                                 this.currentStep = HttpAdapterSteps.HeadersParsed;
                                 break;
                             }
-                            string Line = this.buffer.Substring(0, IndexOf);
-                            this.buffer = this.buffer.Substring(IndexOf + 2);
+                            string Line = this.buffer.Substring(0, indexOf);
+                            this.buffer = this.buffer.Substring(indexOf + 2);
 
                             string[] MethodParts = Line.Split(' ');
                             //First line must be "<METHOD> <URI> HTTP/<VERSION>" which translates to 3 elements
@@ -240,12 +246,28 @@ namespace Serenity.Web.Drivers
                                 //Get down to business.
                                 switch (MethodParts[0])
                                 {
+                                        //WS: Normal HTTP methods:
                                     case "HEAD":
+                                    case "GET":
                                     case "POST":
+                                    case "PUT":
+                                    case "DELETE":
+                                    case "TRACE":
+                                    case "OPTIONS":
+                                    case "CONNECT":
+                                        //WS: WebDAV extension methods:
+                                    case "PROPFIND":
+                                    case "PROPPATCH":
+                                    case "MKCOL":
+                                    case "COPY":
+                                    case "MOVE":
+                                    case "LOCK":
+                                    case "UNLOCK":
                                         this.CurrentContext.Request.Method = MethodParts[0];
                                         break;
 
                                     default:
+                                        //WS: We need to generate an error here if the method is not supported.
                                         this.CurrentContext.Request.Method = "GET";
                                         break;
                                 }
@@ -257,7 +279,9 @@ namespace Serenity.Web.Drivers
                                     case "HTTP/1.0":
                                         this.CurrentContext.ProtocolVersion = new Version(1, 0);
                                         break;
+                                        
                                     default:
+                                        //WS: This should probably be changed to send an error to the client.
                                         this.CurrentContext.ProtocolVersion = new Version(1, 1);
                                         break;
                                 }
@@ -281,11 +305,11 @@ namespace Serenity.Web.Drivers
                         break;
 
                     case HttpAdapterSteps.MethodParsed:
-                        IndexOf = this.buffer.IndexOf("\r\n");
-                        while (IndexOf != -1)
+                        indexOf = this.buffer.IndexOf("\r\n");
+                        while (indexOf != -1)
                         {
-                            string Line = this.buffer.Substring(0, IndexOf);
-                            this.buffer = this.buffer.Substring(IndexOf + 2);
+                            string Line = this.buffer.Substring(0, indexOf);
+                            this.buffer = this.buffer.Substring(indexOf + 2);
                             if (Line.Length > 0)
                             {
                                 int N = Line.IndexOf(':');
@@ -337,7 +361,7 @@ namespace Serenity.Web.Drivers
                                 //The line is empty
                                 this.currentStep = HttpAdapterSteps.HeadersParsed;
                             }
-                            IndexOf = this.buffer.IndexOf("\r\n");
+                            indexOf = this.buffer.IndexOf("\r\n");
                         }
                         this.currentStep = HttpAdapterSteps.HeadersParsed;
                         break;
@@ -378,6 +402,8 @@ namespace Serenity.Web.Drivers
                         return;
                 }
             }
+            unused = new byte[source.Length];
+            source.CopyTo(unused, 0);
         }
         /// <summary>
         /// Converts an array of bytes to a CommonResponse, or part of a CommonResponse.

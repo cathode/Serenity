@@ -82,7 +82,7 @@ namespace Serenity.ResourceClasses
                     Doc.BodyElement.Class = Theme.CurrentInstance.ContentA.Class;
 
                     Doc.AddStylesheet(Theme.CurrentInstance.StylesheetUrl);
-                    Doc.AddStylesheet("/system/static/directory.css");
+                    Doc.AddStylesheet("/system/static/index.css");
                     Doc.Title = "Index of " + resourceName;
                     HtmlElement Div = Doc.BodyElement.AppendDivision("Index of " + resourceName, Theme.CurrentInstance.HeadingA);
                     string[] SubDirs = Directory.GetDirectories(resourcePath);
@@ -100,7 +100,7 @@ namespace Serenity.ResourceClasses
 
                             HtmlElement E = Row.AppendTableCell();
                             E.AddClass("Icon");
-                            E.AppendImage("/System/static/Icons/folder.png");
+                            E.AppendImage("/System/static/icons/folder.png");
 
                             E = Row.AppendTableCell();
                             string[] Parts = resourceName.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
@@ -119,7 +119,7 @@ namespace Serenity.ResourceClasses
 
                             HtmlElement E = Row.AppendTableCell();
                             E.AddClass("Icon");
-                            E.AppendImage("/System/static/Icons/folder.png");
+                            E.AppendImage("/System/static/icons/folder.png");
 
                             E = Row.AppendTableCell();
                             E.AppendAnchor(Path.GetFileName(DirPath) + "/", Path.GetFileName(DirPath), Theme.CurrentInstance.Link);

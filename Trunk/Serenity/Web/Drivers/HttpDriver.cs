@@ -39,56 +39,68 @@ namespace Serenity.Web.Drivers
         private int usedListenPort;
         #endregion
         #region Methods - Private
-        private void HandleAcceptedSocket(object AcceptedObject)
+        private void HandleAcceptedSocket(object socketObject)
         {
-            if (AcceptedObject is Socket)
+            if (socketObject is Socket)
             {
-                using (Socket AcceptedSocket = (Socket)AcceptedObject)
+                using (Socket socket = (Socket)socketObject)
                 {
-                    int SleepTime = 0;
-                    List<Byte> RequestBytes = new List<Byte>(AcceptedSocket.Available);
+                    int sleepTime = 0;
+                    List<Byte> recieveBuffer = new List<Byte>(socket.Available);
                     CommonContext CC = null;
                     WebAdapter Adapter = this.CreateAdapter();
-                    while (AcceptedSocket.Connected == true)
+                    while (socket.Connected == true)
                     {
-                        if (AcceptedSocket.Available > 0)
+                        if (socket.Available > 0)
                         {
-                            byte[] Temp = new byte[AcceptedSocket.Available];
-                            AcceptedSocket.Receive(Temp);
-                            RequestBytes.AddRange(Temp);
-                            SleepTime = 0;
+                            byte[] Temp = new byte[socket.Available];
+                            socket.Receive(Temp);
+                            recieveBuffer.AddRange(Temp);
+                            sleepTime = 0;
                         }
                         else
                         {
-                            if (SleepTime < this.RecieveTimeout)
+                            if (sleepTime < this.Settings.TimeToIdle)
                             {
                                 Thread.Sleep(this.RecieveInterval);
-                                SleepTime += this.RecieveInterval;
+                                sleepTime += this.RecieveInterval;
                             }
                             else
                             {
-                                return;
+                                if (sleepTime < this.Settings.RecieveTimeoutIdle)
+                                {
+                                    Thread.Sleep(this.Settings.RecieveIntervalIdle);
+                                    sleepTime += this.Settings.RecieveIntervalIdle;
+                                }
+                                else
+                                {
+                                    socket.Close();
+                                    return;
+                                }
                             }
                         }
                         byte[] Unused;
-                        Adapter.ConstructRequest(RequestBytes.ToArray(), out Unused);
-                        RequestBytes = new List<Byte>(Unused);
+                        Adapter.ConstructRequest(recieveBuffer.ToArray(), out Unused);
+                        recieveBuffer = new List<Byte>(Unused);
                         if (Adapter.Available > 0)
                         {
                             CC = Adapter.NextContext();
                             this.InvokeContextCallback(CC);
-                            if (AcceptedSocket.Connected == true)
+                            if (socket.Connected == true)
                             {
-                                AcceptedSocket.Send(Adapter.DestructResponse(CC));
-                                AcceptedSocket.Close();
+                                socket.Send(Adapter.DestructResponse(CC));
+                                if (!CC.Request.KeepAlive)
+                                {
+                                    socket.Close();
+                                    return;
+                                }
                             }
-                            return;
                         }
                     }
                     if ((this.State == WebDriverState.Stopping) || (this.State == WebDriverState.Stopped))
                     {
-                        AcceptedSocket.Shutdown(SocketShutdown.Both);
-                        AcceptedSocket.Close(100);
+                        socket.Shutdown(SocketShutdown.Both);
+                        socket.Close(100);
                     }
                 }
             }
@@ -103,8 +115,6 @@ namespace Serenity.Web.Drivers
         {
 
         }
-        #endregion
-        #region Methods - Public
         protected override void DriverStart()
         {
             using (Socket ListenSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP))
@@ -148,10 +158,7 @@ namespace Serenity.Web.Drivers
                 }
             }
         }
-        public override WebAdapter CreateAdapter()
-        {
-            return new HttpAdapter(this);
-        }
+        
         protected override void DriverStop()
         {
             using (Socket cleanupSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP))
@@ -167,6 +174,12 @@ namespace Serenity.Web.Drivers
                 }
             }
             this.State = WebDriverState.Stopped;
+        }
+        #endregion
+        #region Methods - Public
+        public override WebAdapter CreateAdapter()
+        {
+            return new HttpAdapter(this);
         }
         #endregion
     }

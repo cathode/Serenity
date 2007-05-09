@@ -18,14 +18,41 @@ namespace Serenity
 {
     public struct FileTypeEntry
     {
+        #region Constructors - Internal
         internal FileTypeEntry(string description, string mimeType, bool compress)
         {
-            this.Compress = compress;
-            this.Description = description;
-            this.MimeType = mimeType;
+            this.useCompression = compress;
+            this.description = description;
+            this.mimeType = mimeType;
         }
-        public readonly string Description;
-        public readonly string MimeType;
-        public readonly bool Compress;
+        #endregion
+        #region Fields - Private
+        private readonly string description;
+        private readonly string mimeType;
+        private readonly bool useCompression;
+        #endregion
+        #region Properties - Public
+        public string Description
+        {
+            get
+            {
+                return description;
+            }
+        }
+        public string MimeType
+        {
+            get
+            {
+                return mimeType;
+            }
+        }
+        public bool UseCompression
+        {
+            get
+            {
+                return useCompression;
+            }
+        }
+        #endregion
     }
 }
