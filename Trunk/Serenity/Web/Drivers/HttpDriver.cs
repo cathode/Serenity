@@ -120,8 +120,6 @@ namespace Serenity.Web.Drivers
                     this.usedListenPort = this.ListenPort;
                     ListenSocket.Bind(new IPEndPoint(IPAddress.Any, this.usedListenPort));
                     Log.Write("Listening on port " + this.usedListenPort.ToString(), LogMessageLevel.Info);
-#warning Remove this code!
-                    Console.WriteLine("Listening on port {0}", this.usedListenPort);
                 }
                 catch
                 {
@@ -132,9 +130,6 @@ namespace Serenity.Web.Drivers
                             this.usedListenPort = this.Settings.FallbackPorts[I];
                             ListenSocket.Bind(new IPEndPoint(IPAddress.Any, this.usedListenPort));
                             Log.Write("Listening on port " + this.usedListenPort.ToString(), LogMessageLevel.Info);
-
-#warning Remove this code!
-                            Console.WriteLine("Listening on port {0}", this.usedListenPort);
                             break;
                         }
                         catch

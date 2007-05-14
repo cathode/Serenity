@@ -420,6 +420,9 @@ namespace Serenity.Xml
                 return this.nodes.First.Value;
             }
         }
+        /// <summary>
+        /// Gets a boolean value which indicates if the current XmlNodeCollection contains any items.
+        /// </summary>
         public bool IsEmpty
         {
             get

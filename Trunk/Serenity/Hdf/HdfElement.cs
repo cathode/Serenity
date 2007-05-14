@@ -35,9 +35,9 @@ namespace Serenity.Hdf
         }
         internal HdfElement(string name, HdfDataset dataset, HdfElement parent)
         {
-            this.Name = HdfPath.GetName(name);
-            this.Dataset = dataset;
-            this.Parent = parent;
+            this.name = HdfPath.GetName(name);
+            this.dataset = dataset;
+            this.parent = parent;
         }
         #endregion
         #region Fields - Private
@@ -104,6 +104,19 @@ namespace Serenity.Hdf
             }
         }
         /// <summary>
+        /// Enumerates over the hierarchy of elements starting with the current HdfElement and ending with the root element of the entire tree.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<HdfElement> EnumerateTree()
+        {
+            HdfElement element = this;
+            while (element != null)
+            {
+                yield return element;
+                element = element.Parent;
+            }
+        }
+        /// <summary>
         /// Gets an enumerator that enumerates over child elements of the current HdfElement.
         /// </summary>
         /// <returns></returns>
@@ -122,6 +135,18 @@ namespace Serenity.Hdf
             internal set
             {
                 this.dataset = value;
+            }
+        }
+        public virtual int Depth
+        {
+            get
+            {
+                int i = -2;
+                foreach (HdfElement element in this.EnumerateTree())
+                {
+                    i++;
+                }
+                return (i < 0) ? 0 : i;
             }
         }
         /// <summary>
@@ -184,11 +209,9 @@ namespace Serenity.Hdf
             get
             {
                 string path = "";
-                HdfElement parent = this.Parent;
-                while (parent != null)
+                foreach (HdfElement element in this.EnumerateTree())
                 {
-                    path = HdfPath.Combine(parent.Name, path);
-                    parent = parent.Parent;
+                    path = HdfPath.Combine(element.Name, path);
                 }
                 return path;
             }

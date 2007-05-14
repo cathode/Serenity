@@ -9,8 +9,41 @@ namespace Server.OperatingModes
 {
     internal static class DebugMode
     {
+        private static void Fib(int n)
+        {
+            ulong a = 0;
+            ulong b = 1;
+            ulong c = 0;
+
+            if (n != 1)
+            {
+                for (int i = 1; i <= n; i++)
+                {
+                    Console.WriteLine(a);
+                    c = a + b;
+                    a = b;
+                    b = c;
+                }
+                
+            }
+        }
         internal static void Run()
         {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                HdfDataset dataset = new HdfDataset();
+                dataset.Add(dataset.CreateElement("name", "value"));
+                dataset["name"].Add(dataset.CreateElement("child"));
+                dataset["name"]["child"].Add(dataset.CreateElement("subchild", "value"));
+
+                HdfWriterSettings settings = new HdfWriterSettings();
+                settings.Format = HdfFormat.Nested;
+                HdfWriter writer = new HdfWriter(settings);
+                writer.Write(stream, dataset);
+
+                Console.Write(Encoding.UTF8.GetString(stream.ToArray()));
+                Console.ReadLine();
+            }
             using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(@"title = test
 groups
 {
@@ -46,6 +79,8 @@ groups
             {
                 HdfReader reader = new HdfReader();
                 HdfDataset dataset = reader.Read(stream);
+
+                
 
                 string first = HdfPath.Combine("groups.Directories", "columns", "0");
                 string second = HdfPath.GetImmediateParent(first);

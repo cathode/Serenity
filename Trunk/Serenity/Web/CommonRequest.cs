@@ -26,7 +26,6 @@ namespace Serenity.Web
         #region Constructors - Internal
         internal CommonRequest(CommonContext Owner)
         {
-            this.requestTraceIdentifier = Guid.NewGuid();
             this.context = Owner;
         }
         #endregion
@@ -49,7 +48,6 @@ namespace Serenity.Web
         private RequestDataCollection requestData = new RequestDataCollection();
         private string rawUrl;
         private IPEndPoint remoteEndPoint;
-        private Guid requestTraceIdentifier;
         private Uri url;
         private Uri referrer;
         private string userAgent;
@@ -212,17 +210,6 @@ namespace Serenity.Web
                 this.method = value;
             }
         }
-        public RequestDataCollection RequestData
-        {
-            get
-            {
-                return requestData;
-            }
-            internal set
-            {
-                requestData = value;
-            }
-        }
         public string RawUrl
         {
             get
@@ -232,35 +219,6 @@ namespace Serenity.Web
             internal set
             {
                 this.rawUrl = value;
-            }
-        }
-        public IPEndPoint RemoteEndPoint
-        {
-            get
-            {
-                return this.remoteEndPoint;
-            }
-            internal set
-            {
-                this.remoteEndPoint = value;
-            }
-        }
-        public Guid RequestTraceIdentifier
-        {
-            get
-            {
-                return this.requestTraceIdentifier;
-            }
-        }
-        public Uri Url
-        {
-            get
-            {
-                return url;
-            }
-            set
-            {
-                url = value;
             }
         }
         public Uri Referrer
@@ -274,6 +232,40 @@ namespace Serenity.Web
                 referrer = value;
             }
         }
+        public IPEndPoint RemoteEndPoint
+        {
+            get
+            {
+                return this.remoteEndPoint;
+            }
+            internal set
+            {
+                this.remoteEndPoint = value;
+            }
+        }
+        public RequestDataCollection RequestData
+        {
+            get
+            {
+                return requestData;
+            }
+            internal set
+            {
+                requestData = value;
+            }
+        }
+        public Uri Url
+        {
+            get
+            {
+                return url;
+            }
+            set
+            {
+                url = value;
+            }
+        }
+        
         public string UserAgent
         {
             get

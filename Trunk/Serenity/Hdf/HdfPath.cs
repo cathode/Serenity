@@ -40,6 +40,11 @@ namespace Serenity.Hdf
         /// <returns></returns>
         public static string Combine(string target, params string[] paths)
         {
+            if (target == null)
+            {
+                target = "";
+            }
+
             StringBuilder builder = new StringBuilder(target.Length + paths.Length);
 
             if (target.Contains(HdfPath.Separator.ToString()))

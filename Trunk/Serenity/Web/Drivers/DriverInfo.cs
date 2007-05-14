@@ -16,76 +16,76 @@ using System.Text;
 
 namespace Serenity.Web.Drivers
 {
+    /// <summary>
+    /// Provides an type that WebDrivers can use to expose information about themselves.
+    /// </summary>
     public sealed class DriverInfo
     {
         #region Constructors - Internal
         internal DriverInfo()
         {
-            this._Class = "unknown";
-            this._SupportedVersion = new Version();
-            this._Type = "unknown";
-            this._UriSchema = "unknown";
+            this.className = "unknown";
+            this.version = new Version();
+            this.type = "unknown";
+            this.uriSchema = "unknown";
         }
-        internal DriverInfo(string Class, string Type, string UriSchema, Version SupportedVersion)
+        internal DriverInfo(string className, string typeName, string uriSchema, Version version)
         {
-            this._Class = Class;
-            this._Type = Type;
-            this._UriSchema = UriSchema;
-            this._SupportedVersion = SupportedVersion;
+            this.className = className;
+            this.type = typeName;
+            this.uriSchema = uriSchema;
+            this.version = version;
         }
         #endregion
         #region Fields - Private
-        private string _Class;
-        private string _Type;
-        private string _UriSchema;
-        private Version _SupportedVersion;
-        #endregion
-        #region Methods - Internal
-        
+        private string className;
+        private string type;
+        private string uriSchema;
+        private Version version;
         #endregion
         #region Properties - Public
-        public string Class
+        public string ClassName
         {
             get
             {
-                return this._Class;
+                return this.className;
             }
             internal set
             {
-                this._Class = value;
+                this.className = value;
             }
         }
-        public string Type
+        public string TypeName
         {
             get
             {
-                return this._Type;
+                return this.type;
             }
             internal set
             {
-                this._Type = value;
+                this.type = value;
             }
         }
         public string UriSchema
         {
             get
             {
-                return this._UriSchema;
+                return this.uriSchema;
             }
             internal set
             {
-                this._UriSchema = value;
+                this.uriSchema = value;
             }
         }
-        public Version SupportedVersion
+        public Version Version
         {
             get
             {
-                return this._SupportedVersion;
+                return this.version;
             }
             internal set
             {
-                this._SupportedVersion = value;
+                this.version = value;
             }
         }
         #endregion

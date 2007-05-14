@@ -65,46 +65,56 @@ namespace Serenity.Hdf
                     for (int i = 0; i < contents.Length; i++)
                     {
                         c = contents[i];
-
-                        switch (c)
+                        if (parsingName)
                         {
-                            case '=':
-                                if (!parsingValue)
-                                {
-                                    parsingName = false;
-                                    parsingValue = true;
-                                }
-                                break;
 
-                            case '{':
-                                level++;
-                                break;
-                            case '}':
-                                level--;
-                                break;
-
-                            default:
-                                if (!parsingName && !parsingValue)
-                                {
-                                    parsingName = true;
-                                }
-
-                                if (parsingName)
-                                {
-                                    if (char.IsWhiteSpace(c))
+                        }
+                        else if (parsingValue)
+                        {
+                            switch (c)
+                            {
+                                case '=':
+                                    if (!parsingValue)
                                     {
                                         parsingName = false;
+                                        parsingValue = true;
                                     }
-                                    else
+                                    break;
+
+                                case '{':
+                                    level++;
+                                    break;
+                                case '}':
+                                    level--;
+                                    break;
+
+                                default:
+                                    if (!parsingName && !parsingValue)
                                     {
-                                        currentName += c;
+                                        parsingName = true;
                                     }
-                                }
-                                else if (parsingValue)
-                                {
-                                    currentValue += c;
-                                }
-                                break;
+
+                                    if (parsingName)
+                                    {
+                                        if (char.IsWhiteSpace(c))
+                                        {
+                                            parsingName = false;
+                                        }
+                                        else
+                                        {
+                                            currentName += c;
+                                        }
+                                    }
+                                    else if (parsingValue)
+                                    {
+                                        currentValue += c;
+                                    }
+                                    break;
+                            }
+                        }
+                        else
+                        {
+
                         }
                     }
                 }

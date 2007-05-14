@@ -29,18 +29,82 @@ namespace Serenity.Hdf
         }
         public HdfWriter(HdfWriterSettings settings)
         {
+            this.settings = settings;
+        }
+        #endregion
+        #region Fields - Private
+        private readonly HdfWriterSettings settings;
+        #endregion
+        #region Methods - Private
+        private void WriteElement(Stream stream, HdfElement element)
+        {
+            switch (this.settings.Format)
+            {
+                default:
+                case HdfFormat.Simple:
+                    if (element.HasValue)
+                    {
+                        this.WriteString(stream, element.Path + " = " + element.Value + "\r\n");
+                    }
+                    if (element.HasChildren)
+                    {
+                        foreach (HdfElement item in element)
+                        {
+                            this.WriteElement(stream, item);
+                        }
+                    }
+                    break;
 
+                case HdfFormat.Nested:
+                    int depth = element.Depth;
+                    if (element.HasValue)
+                    {
+                        this.WriteString(stream, element.Name.PadLeft(element.Name.Length + depth, '\t') + " = " + element.Value + "\r\n");
+                    }
+                    else if (element.HasChildren)
+                    {
+                        this.WriteString(stream, element.Name.PadLeft(element.Name.Length + depth, '\t') + "\r\n");
+                    }
+                    if (element.HasChildren)
+                    {
+                        string s = "{\r\n";
+                        this.WriteString(stream, s.PadLeft(s.Length + depth, '\t'));
+
+                        foreach (HdfElement item in element)
+                        {
+                            this.WriteElement(stream, item);
+                        }
+                        s = "}\r\n";
+                        this.WriteString(stream, s.PadLeft(s.Length + depth, '\t'));
+                    }
+                    break;
+            }
+        }
+        private void WriteString(Stream stream, string value)
+        {
+            byte[] buffer = this.settings.Encoding.GetBytes(value);
+            stream.Write(buffer, 0, buffer.Length);
         }
         #endregion
         #region Methods - Public
         public override void Write(Stream stream, HdfDataset obj)
         {
-            
+            if (stream.CanWrite)
+            {
+                foreach (HdfElement element in obj)
+                {
+                    this.WriteElement(stream, element);
+                }
+            }
+            else
+            {
+                throw new NotSupportedException("The supplied stream does not support writing, which is a required capability");
+            }
         }
 
         public override void Dispose()
         {
-            throw new Exception("The method or operation is not implemented.");
+            
         }
         #endregion
     }

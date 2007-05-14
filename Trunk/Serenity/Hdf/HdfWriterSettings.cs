@@ -16,8 +16,42 @@ using System.Text;
 
 namespace Serenity.Hdf
 {
-    public struct HdfWriterSettings
+    public enum HdfFormat
     {
-        public bool Complex;
+        Simple,
+        Nested,
+        Hybrid,
+        OptimizedHybrid,
+    }
+    public sealed class HdfWriterSettings
+    {
+        #region Fields - Private
+        private Encoding encoding = Encoding.UTF8;
+        private HdfFormat format = HdfFormat.Simple;
+        #endregion
+        #region Properties - Public
+        public Encoding Encoding
+        {
+            get
+            {
+                return this.encoding;
+            }
+            set
+            {
+                this.encoding = value;
+            }
+        }
+        public HdfFormat Format
+        {
+            get
+            {
+                return this.format;
+            }
+            set
+            {
+                this.format = value;
+            }
+        }
+        #endregion
     }
 }

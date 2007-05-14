@@ -28,9 +28,8 @@ namespace Serenity.Web.Drivers
         private int recieveTimeout;
         #endregion
         #region Fields - Public
-        public const int DefaultRecieveInterval = 10;
-        public const int DefaultRecieveTimeout = WebDriverSettings.DefaultRecieveInterval * WebDriverSettings.IntervalTimeoutFactor;
-        public const int IntervalTimeoutFactor = 1000;
+        public const int DefaultRecieveInterval = 0;
+        public const int DefaultRecieveTimeout = 10000;
         public const int MinimumRecieveInterval = 0;
         public const int MinimumRecieveTimeout = 1;
         #endregion
@@ -48,8 +47,8 @@ namespace Serenity.Web.Drivers
         {
             WebDriverSettings setttings = new WebDriverSettings();
             setttings.listenPort = listenPort;
-            setttings.RecieveInterval = recieveTimeout / WebDriverSettings.IntervalTimeoutFactor;
-            setttings.RecieveTimeout = recieveTimeout;
+            setttings.RecieveInterval = WebDriverSettings.DefaultRecieveInterval;
+            setttings.RecieveTimeout = (recieveTimeout < WebDriverSettings.MinimumRecieveTimeout) ? WebDriverSettings.MinimumRecieveTimeout : recieveTimeout;
 
             return setttings;
         }

@@ -40,7 +40,13 @@ namespace Serenity.Hdf
         {
             return new HdfElement(name, this);
         }
+        public HdfElement CreateElement(string name, string value)
+        {
+            HdfElement element = new HdfElement(name, this);
+            element.Value = value;
 
+            return element;
+        }
         #endregion
         #region Properties - Public
         /// <summary>

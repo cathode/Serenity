@@ -91,6 +91,7 @@ namespace Serenity
                 SerenityModule.Instances.Length,
                 Theme.Instances.Length), LogMessageLevel.Info);
             WebDriverSettings InitSettings = WebDriverSettings.Create(80, 1000);
+            InitSettings.RecieveInterval = 0;
             InitSettings.FallbackPorts = new ushort[] { 8080, 8081 };
 
             WebManager.AddDriver(new HttpDriver(new ContextHandler()));
