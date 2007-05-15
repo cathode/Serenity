@@ -21,6 +21,9 @@ using Serenity.Web.Drivers;
 
 namespace Serenity.Web
 {
+    /// <summary>
+    /// Represents a request for a specific resource on a server.
+    /// </summary>
     public sealed class CommonRequest
     {
         #region Constructors - Internal
