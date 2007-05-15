@@ -86,6 +86,9 @@
     <Compile Include="IO\Writer.cs" />
     <Compile Include="Pages\DomainsPage.cs" />
     <Compile Include="Pages\DefaultPage.cs" />
+    <Compile Include="MasterPage.cs" />
+    <Compile Include="Page.cs" />
+    <Compile Include="PageFactory.cs" />
     <Compile Include="Pages\SInfoPage.cs" />
     <Compile Include="Pages\ThemeDemoPage.cs" />
     <Compile Include="Presentation\IndexRenderer.cs" />
