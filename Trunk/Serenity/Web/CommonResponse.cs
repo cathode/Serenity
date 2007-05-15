@@ -65,25 +65,25 @@ namespace Serenity.Web
         /// </summary>
         /// <param name="Content">The array of bytes to write.</param>
         /// <returns>The number of bytes written, or -1 if an error occurred.</returns>
-        public int Write(byte[] Content)
+        public int Write(byte[] value)
         {
-            if (Content != null)
+            if (value != null)
             {
-                if (Content.Length > 0)
+                if (value.Length > 0)
                 {
                     if (this.sendBuffer.Length > 0)
                     {
-                        byte[] NewBuffer = new byte[this.sendBuffer.Length + Content.Length];
+                        byte[] NewBuffer = new byte[this.sendBuffer.Length + value.Length];
                         this.sendBuffer.CopyTo(NewBuffer, 0);
-                        Content.CopyTo(NewBuffer, this.sendBuffer.Length - 1);
+                        value.CopyTo(NewBuffer, this.sendBuffer.Length - 1);
                         this.sendBuffer = NewBuffer;
                     }
                     else
                     {
-                        this.sendBuffer = new byte[Content.Length];
-                        Content.CopyTo(this.sendBuffer, 0);
+                        this.sendBuffer = new byte[value.Length];
+                        value.CopyTo(this.sendBuffer, 0);
                     }
-                    return Content.Length;
+                    return value.Length;
                 }
                 else
                 {
@@ -99,7 +99,15 @@ namespace Serenity.Web
         {
             return this.Write(Encoding.UTF8.GetBytes(value));
         }
-
+        #region Properties - Internal
+        internal byte[] SendBuffer
+        {
+            get
+            {
+                return this.sendBuffer;
+            }
+        }
+        #endregion
         #region Properties - Public
         public string MimeType
         {
@@ -118,13 +126,7 @@ namespace Serenity.Web
                 }
             }
         }
-        internal byte[] SendBuffer
-        {
-            get
-            {
-                return this.sendBuffer;
-            }
-        }
+        
         public HeaderCollection Headers
         {
             get
@@ -140,6 +142,10 @@ namespace Serenity.Web
                 return this.owningContext;
             }
         }
+        /// <summary>
+        /// Gets or sets a value used to determine if the data sent back
+        /// to the client with the response should be compressed or not.
+        /// </summary>
         public bool UseCompression
         {
             get
