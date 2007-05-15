@@ -67,7 +67,7 @@ namespace Serenity.Hdf
                         c = contents[i];
                         if (parsingName)
                         {
-
+                            
                         }
                         else if (parsingValue)
                         {

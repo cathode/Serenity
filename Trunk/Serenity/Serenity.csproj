@@ -147,7 +147,7 @@
     <Compile Include="Web\Drivers\HttpAdapter.cs" />
     <Compile Include="Web\Drivers\HttpDriver.cs" />
     <Compile Include="Web\Drivers\WebDriver.cs" />
-    <None Include="Web\Doctype.cs" />
+    <None Include="Xml\Html\Doctype.cs" />
     <Compile Include="Web\Drivers\WebDriverSettings.cs" />
     <None Include="Users\User.cs" />
     <Compile Include="..\SolutionInfo.cs">

@@ -14,7 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Serenity.Web
+namespace Serenity.Xml.Html
 {
     /// <summary>
     /// Provides object-oriented access to a Document Type Declaration
