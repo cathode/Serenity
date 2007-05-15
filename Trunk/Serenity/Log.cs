@@ -67,13 +67,13 @@ namespace Serenity
         /// </summary>
         /// <param name="MessageText">A string containing a description of the message.</param>
         /// <param name="Level">A LogMessageLevel object describing the severity of the message.</param>
-        public static void Write(string MessageText, LogMessageLevel Level)
+        public static void Write(string message, LogMessageLevel level)
         {
-            MessageText = Log.Sanitize(MessageText);
+            message = Log.Sanitize(message);
             DateTime When = DateTime.UtcNow;
 
             string AssemblyFile;
-            if (Level > LogMessageLevel.Warning)
+            if (level > LogMessageLevel.Warning)
             {
                 AssemblyFile = Path.GetFileName(Assembly.GetCallingAssembly().Location);
             }
@@ -85,17 +85,17 @@ namespace Serenity
             StringBuilder Output = new StringBuilder();
             Output.AppendFormat("{0}\t{1}\t{2}\t{3}\r\n",
                 When.ToString("s"),
-                (Byte)Level,
+                (Byte)level,
                 AssemblyFile,
-                MessageText);
+                message);
 
             if (Log.console == true)
             {
                 Console.WriteLine("[{0}] {1} ({2}) {3}",
                     When.ToString("s"),
-                    Level.ToString(),
+                    level.ToString(),
                     AssemblyFile,
-                    MessageText);
+                    message);
             }
             if (Log.file == true)
             {
@@ -110,10 +110,10 @@ namespace Serenity
                 Log.mutex.ReleaseMutex();
             }
         }
-        private static string Sanitize(string Input)
+        private static string Sanitize(string value)
         {
-            string Output = Input;
-            if (Input.IndexOfAny(new char[] { '\r', '\n', '\t' }) != -1)
+            string Output = value;
+            if (value.IndexOfAny(new char[] { '\r', '\n', '\t' }) != -1)
             {
                 Output = Output.Replace("\r", "\\r");
                 Output = Output.Replace("\n", "\\n");
