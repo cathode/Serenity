@@ -67,8 +67,8 @@
   <ItemGroup>
     <Compile Include="Attributes\Module.cs" />
     <Compile Include="Attributes\Page.cs" />
-    <Compile Include="Cache\CacheManager.cs" />
-    <Compile Include="Cache\CachedStream.cs" />
+    <None Include="Cache\CacheManager.cs" />
+    <None Include="Cache\CachedStream.cs" />
     <Compile Include="DomainSettingValue.cs" />
     <None Include="Data\Database.cs" />
     <Compile Include="FileTypeEntry.cs" />
