@@ -18,18 +18,26 @@ using Serenity.Web;
 
 namespace Serenity
 {
+    /// <summary>
+    /// Represents a master page, which allows Pages to offload shared work.
+    /// </summary>
     public abstract class MasterPage
     {
         #region Methods - Public
+        /// <summary>
+        /// Invoked when a request is recieved, but before the Page handles the request.
+        /// </summary>
+        /// <param name="context"></param>
         public virtual void PreRequest(CommonContext context)
         {
         }
+        /// <summary>
+        /// Invoked when a request is recieved, but after the Page has handled the request.
+        /// </summary>
+        /// <param name="context"></param>
         public virtual void PostRequest(CommonContext context)
         {
         }
-        #endregion
-        #region Properties - Public
-
         #endregion
     }
 }
