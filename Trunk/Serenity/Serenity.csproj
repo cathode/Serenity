@@ -84,13 +84,13 @@
     <Compile Include="ContextHandler.cs" />
     <Compile Include="IO\Reader.cs" />
     <Compile Include="IO\Writer.cs" />
-    <Compile Include="Pages\DomainsPage.cs" />
-    <Compile Include="Pages\DefaultPage.cs" />
+    <None Include="Pages\DomainsPage.cs" />
+    <None Include="Pages\DefaultPage.cs" />
     <Compile Include="MasterPage.cs" />
     <Compile Include="Page.cs" />
     <Compile Include="PageFactory.cs" />
-    <Compile Include="Pages\SInfoPage.cs" />
-    <Compile Include="Pages\ThemeDemoPage.cs" />
+    <None Include="Pages\SInfoPage.cs" />
+    <None Include="Pages\ThemeDemoPage.cs" />
     <Compile Include="Presentation\IndexRenderer.cs" />
     <Compile Include="Presentation\Templates\CsTemplate.cs" />
     <Compile Include="Presentation\Templates\CsTemplateReader.cs" />
@@ -105,12 +105,8 @@
     <Compile Include="ResourceClasses\ThemeResourceClass.cs" />
     <Compile Include="ResourceClass.cs" />
     <Compile Include="FileTypeRegistry.cs" />
+    <Compile Include="GlobalSettings.cs" />
     <Compile Include="SPath.cs" />
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
     <Compile Include="SerenityModule.cs" />
     <Compile Include="SerenityPage.cs" />
     <Compile Include="Log.cs" />
@@ -175,12 +171,7 @@
     <None Include="..\WShelley.public.snk">
       <Link>WShelley.public.snk</Link>
     </None>
-    <None Include="app.config" />
     <None Include="Presentation\IndexTemplate.cst" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />

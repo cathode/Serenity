@@ -25,7 +25,7 @@ namespace Serenity
     /// </summary>
     public sealed class DomainSettings : Multiton<string, DomainSettings>
     {
-        #region Constructors - Public
+        #region Constructors - Private
         static DomainSettings()
         {
             if (Directory.Exists(SPath.DomainsFolder) == false)
@@ -33,45 +33,15 @@ namespace Serenity
                 Directory.CreateDirectory(SPath.DomainsFolder);
             }
             DomainSettings.SystemInstance = new DomainSettings("");
-            if (Settings.Default.ActiveEnvironments != null)
-            {
-                DomainSettings.SystemInstance.ActiveEnvironments.Value = new string[Settings.Default.ActiveEnvironments.Count];
-                Settings.Default.ActiveEnvironments.CopyTo(DomainSettings.SystemInstance.ActiveEnvironments.Value, 0);
-            }
-            if (Settings.Default.ActiveModules != null)
-            {
-                DomainSettings.SystemInstance.ActiveModules.Value = new string[Settings.Default.ActiveModules.Count];
-                Settings.Default.ActiveModules.CopyTo(DomainSettings.SystemInstance.ActiveModules.Value, 0);
-            }
-            if (Settings.Default.ActiveThemes != null)
-            {
-                DomainSettings.SystemInstance.ActiveThemes.Value = new string[Settings.Default.ActiveThemes.Count];
-                Settings.Default.ActiveThemes.CopyTo(DomainSettings.SystemInstance.ActiveThemes.Value, 0);
-            }
 
-            DomainSettings.SystemInstance.DefaultEnvironment.Value = Settings.Default.DefaultEnvironment;
-            DomainSettings.SystemInstance.DefaultModule.Value = Settings.Default.DefaultModule;
-            DomainSettings.SystemInstance.DefaultTheme.Value = Settings.Default.DefaultTheme;
-            DomainSettings.SystemInstance.DefaultResourceClass.Value = Settings.Default.DefaultResourceClass;
-            DomainSettings.SystemInstance.DefaultResourceName.Value = Settings.Default.DefaultResourceName;
-
-            if (Settings.Default.InactiveEnvrionments != null)
-            {
-                DomainSettings.SystemInstance.InactiveEnvironments.Value = new string[Settings.Default.InactiveEnvrionments.Count];
-                Settings.Default.InactiveEnvrionments.CopyTo(DomainSettings.SystemInstance.InactiveEnvironments.Value, 0);
-            }
-            if (Settings.Default.InactiveModules != null)
-            {
-                DomainSettings.SystemInstance.InactiveModules.Value = new string[Settings.Default.InactiveModules.Count];
-                Settings.Default.InactiveModules.CopyTo(DomainSettings.SystemInstance.InactiveModules.Value, 0);
-            }
-            if (Settings.Default.InactiveThemes != null)
-            {
-                DomainSettings.SystemInstance.InactiveThemes.Value = new string[Settings.Default.InactiveThemes.Count];
-                Settings.Default.InactiveThemes.CopyTo(DomainSettings.SystemInstance.InactiveThemes.Value, 0);
-            }
-
+            DomainSettings.SystemInstance.DefaultEnvironment.Value = GlobalSettings.DefaultEnvironment;
+            DomainSettings.SystemInstance.DefaultModule.Value = GlobalSettings.DefaultModule;
+            DomainSettings.SystemInstance.DefaultTheme.Value = GlobalSettings.DefaultTheme;
+            DomainSettings.SystemInstance.DefaultResourceClass.Value = GlobalSettings.DefaultResourceClass;
+            DomainSettings.SystemInstance.DefaultResourceName.Value = GlobalSettings.DefaultResourceName;
         }
+        #endregion
+        #region Constructors - Public
         /// <summary>
         /// Initializes a new instance of the DomainSettings class.
         /// </summary>
@@ -92,9 +62,6 @@ namespace Serenity
                 this.DefaultResourceClass = new DomainSettingValue<string>();
                 this.DefaultResourceName = new DomainSettingValue<string>();
                 this.DefaultTheme = new DomainSettingValue<string>();
-                this.InactiveEnvironments = new DomainSettingValue<string[]>();
-                this.InactiveModules = new DomainSettingValue<string[]>();
-                this.InactiveThemes = new DomainSettingValue<string[]>();
                 this.OmitEnvironment = new DomainSettingValue<bool>();
                 this.OmitResourceClass = new DomainSettingValue<bool>();
             }
@@ -109,9 +76,6 @@ namespace Serenity
                 this.DefaultResourceClass = new DomainSettingValue<string>(this.parent.DefaultResourceClass);
                 this.DefaultResourceName = new DomainSettingValue<string>(this.parent.DefaultResourceName);
                 this.DefaultTheme = new DomainSettingValue<string>(this.parent.DefaultTheme);
-                this.InactiveEnvironments = new DomainSettingValue<string[]>(this.parent.InactiveEnvironments);
-                this.InactiveModules = new DomainSettingValue<string[]>(this.parent.InactiveModules);
-                this.InactiveThemes = new DomainSettingValue<string[]>(this.parent.InactiveThemes);
                 this.OmitEnvironment = new DomainSettingValue<bool>(this.parent.OmitEnvironment);
                 this.OmitResourceClass = new DomainSettingValue<bool>(this.parent.OmitResourceClass);
             }

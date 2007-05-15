@@ -170,7 +170,7 @@ namespace Serenity
             }
             if (pages.Count == 0)
             {
-                return null;
+                return new SerenityModule(name);
             }
             else
             {

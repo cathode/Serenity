@@ -57,7 +57,7 @@ namespace Serenity
 
             Theme.SystemInstance = theme;
 
-            SerenityModule.SystemInstance = SerenityModule.LoadModuleFile("Serenity.dll", SerenityInfo.SystemName);
+            SerenityModule.SystemInstance = SerenityModule.LoadModuleFile("serenity.dll", SerenityInfo.SystemName);
 
             SerenityEnvironment.LoadAllEnvironments();
             if (SerenityEnvironment.ContainsInstance(SerenityInfo.SystemName) == true)

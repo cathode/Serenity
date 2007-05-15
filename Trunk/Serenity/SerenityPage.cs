@@ -21,6 +21,7 @@ namespace Serenity
     /// <summary>
     /// Represents a dynamic page which generates content on the fly.
     /// </summary>
+    [Obsolete]
     public abstract class SerenityPage 
     {
         #region Methods - Public
