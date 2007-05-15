@@ -23,7 +23,6 @@ namespace Serenity
     /// <summary>
     /// Represents a collection of settings that are specific to a domain name.
     /// </summary>
-    [Serializable]
     public sealed class DomainSettings : Multiton<string, DomainSettings>
     {
         #region Constructors - Public
@@ -73,6 +72,10 @@ namespace Serenity
             }
 
         }
+        /// <summary>
+        /// Initializes a new instance of the DomainSettings class.
+        /// </summary>
+        /// <param name="name"></param>
         public DomainSettings(string name) : base(name)
         {
             DomainSettings parent = DomainSettings.GetParent(name);
