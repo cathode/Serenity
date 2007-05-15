@@ -55,6 +55,7 @@ namespace Serenity
     /// </summary>
     public static class Log
     {
+        #region Constructors - Private
         static Log()
         {
             if (Directory.Exists(SPath.LogsFolder) == false)
@@ -62,6 +63,27 @@ namespace Serenity
                 Directory.CreateDirectory(SPath.LogsFolder);
             }
         }
+        #endregion
+        #region Fields - Private
+        private static bool console = false;
+        private static bool file = true;
+        private static Mutex mutex = new Mutex();
+        #endregion
+        #region Methods - Private
+        private static string Sanitize(string value)
+        {
+            string Output = value;
+            if (value.IndexOfAny(new char[] { '\r', '\n', '\t' }) != -1)
+            {
+                Output = Output.Replace("\r", "\\r");
+                Output = Output.Replace("\n", "\\n");
+                Output = Output.Replace("\t", "\\t");
+            }
+
+            return Output;
+        }
+        #endregion
+        #region Methods - Public
         /// <summary>
         /// Logs a message.
         /// </summary>
@@ -110,18 +132,8 @@ namespace Serenity
                 Log.mutex.ReleaseMutex();
             }
         }
-        private static string Sanitize(string value)
-        {
-            string Output = value;
-            if (value.IndexOfAny(new char[] { '\r', '\n', '\t' }) != -1)
-            {
-                Output = Output.Replace("\r", "\\r");
-                Output = Output.Replace("\n", "\\n");
-                Output = Output.Replace("\t", "\\t");
-            }
-
-            return Output;
-        }
+        #endregion
+        #region Properties - Public
         /// <summary>
         /// Gets or sets a boolean value which determines whether log messages
         /// will be written to the console (true), or not (false).
@@ -158,8 +170,6 @@ namespace Serenity
                 Log.file = value;
             }
         }
-        private static bool console = false;
-        private static bool file = true;
-        private static Mutex mutex = new Mutex();
+        #endregion
     }
 }
