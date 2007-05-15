@@ -16,7 +16,7 @@ using System.Text;
 
 using Serenity.Web;
 
-namespace Serenity.Pages
+namespace Serenity
 {
     /// <summary>
     /// Provides the base class for dynamic resources.
@@ -24,6 +24,11 @@ namespace Serenity.Pages
     public abstract class Page
     {
         #region Methods - Public
+        public abstract Page CreateInstance();
+        public virtual MasterPage CreateMasterPageInstance()
+        {
+            return null;
+        }
         /// <summary>
         /// When overridden in a derived class, performs actions when the module is loaded into the server,
         /// usually when the server first starts up.
@@ -48,9 +53,23 @@ namespace Serenity.Pages
         }
         #endregion
         #region Properties - Public
+        public virtual bool HasMasterPage
+        {
+            get
+            {
+                return (this.CreateMasterPageInstance() == null) ? false : true;
+            }
+        }
         public abstract string Name
         {
             get;
+        }
+        public virtual string SystemName
+        {
+            get
+            {
+                return this.Name.ToLower();
+            }
         }
         public virtual string Title
         {

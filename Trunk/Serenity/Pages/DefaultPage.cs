@@ -22,39 +22,32 @@ using Serenity.Xml.Html;
 
 namespace Serenity.Pages
 {
-    [Serenity.Attributes.PageName("Default")]
-    internal class DefaultPage : SerenityPage
+    internal class DefaultPage : Page
     {
-        public override void OnInitialization()
-        {
-            
-        }
         public override void OnRequest(CommonContext Context)
         {
             HtmlDocument Doc = new HtmlDocument();
             HtmlElement P = Doc.BodyElement.AppendParagraph();
-            P.AppendText("Welcome to Serenity administrative index.");
+            P.AppendText("Welcome to the Serenity default page.");
             P.AppendBreak();
             P.AppendAnchor("http://serenityproject.net/", "Project Homepage");
             Context.Response.Write(Doc.SaveMarkup());
             Context.Response.MimeType = "text/html";
         }
-        public override void OnShutdown()
+        public override Page CreateInstance()
         {
-            
+            return new DefaultPage();
         }
-        [Obsolete]
-        protected override string NameHelper
+        public override MasterPage CreateMasterPageInstance()
+        {
+            return new SystemMaster();
+        }
+        public override string Name
         {
             get
             {
                 return "Default";
             }
-        }
-
-        public override SerenityPage CreateSafeInstanceHelper()
-        {
-            return new DefaultPage();
         }
     }
 }

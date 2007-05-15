@@ -16,13 +16,20 @@ using System.Text;
 
 using Serenity.Web;
 
-namespace Serenity.Pages
+namespace Serenity
 {
-    public abstract class MasterPage : Page
+    public abstract class MasterPage
     {
         #region Methods - Public
-        public abstract void PreRequest(CommonContext context);
-        public abstract void PostRequest(CommonContext context);
+        public virtual void PreRequest(CommonContext context)
+        {
+        }
+        public virtual void PostRequest(CommonContext context)
+        {
+        }
+        #endregion
+        #region Properties - Public
+
         #endregion
     }
 }

@@ -85,12 +85,10 @@
     <Compile Include="IO\Reader.cs" />
     <Compile Include="IO\Writer.cs" />
     <None Include="Pages\DomainsPage.cs" />
-    <None Include="Pages\DefaultPage.cs" />
+    <Compile Include="Pages\DefaultPage.cs" />
     <Compile Include="MasterPage.cs" />
     <Compile Include="Page.cs" />
-    <Compile Include="PageFactory.cs" />
-    <None Include="Pages\SInfoPage.cs" />
-    <None Include="Pages\ThemeDemoPage.cs" />
+    <Compile Include="Pages\SystemMaster.cs" />
     <Compile Include="Presentation\IndexRenderer.cs" />
     <Compile Include="Presentation\Templates\CsTemplate.cs" />
     <Compile Include="Presentation\Templates\CsTemplateReader.cs" />

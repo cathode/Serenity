@@ -34,16 +34,16 @@ namespace Serenity
         public SerenityModule(string name)
             : base(name.ToLower())
         {
-            this.pages = new List<SerenityPage>();
+            this.pages = new List<Page>();
         }
         #endregion
         #region Fields - Private
         private string title;
-        private SerenityPage defaultPage;
-        private List<SerenityPage> pages;
+        private Page defaultPage;
+        private List<Page> pages;
         #endregion
         #region Methods - Public
-        public void AddPage(SerenityPage page)
+        public void AddPage(Page page)
         {
             if (this.GetPage(page.Name) == null)
             {
@@ -54,19 +54,19 @@ namespace Serenity
         /// Adds a collection of pages to the current Module.
         /// </summary>
         /// <param name="pages"></param>
-        public void AddPages(IEnumerable<SerenityPage> pages)
+        public void AddPages(IEnumerable<Page> pages)
         {
-            foreach (SerenityPage page in pages)
+            foreach (Page page in pages)
             {
                 this.AddPage(page);
             }
         }
-       
-        public SerenityPage GetPage(string name)
+
+        public Page GetPage(string name)
         {
             if (string.IsNullOrEmpty(name) == false)
             {
-                foreach (SerenityPage P in this.pages)
+                foreach (Page P in this.pages)
                 {
                     if (P.Name == name)
                     {
@@ -132,7 +132,7 @@ namespace Serenity
         public static SerenityModule LoadModuleFile(string path, string name)
         {
             string title = "Untitled";
-            SerenityPage defaultPage = null;
+            Page defaultPage = null;
 
             Assembly moduleAsm = Assembly.LoadFile(Path.GetFullPath(path));
 
@@ -150,16 +150,16 @@ namespace Serenity
                 if (attrib is ModuleDefaultPageAttribute)
                 {
                     ModuleDefaultPageAttribute defaultPageAttribute = (ModuleDefaultPageAttribute)attrib;
-                    defaultPage = (SerenityPage)defaultPageAttribute.PageType.Assembly.CreateInstance(defaultPageAttribute.PageType.FullName);
+                    defaultPage = (Page)defaultPageAttribute.PageType.Assembly.CreateInstance(defaultPageAttribute.PageType.FullName);
                     break;
                 }
             }
-            LinkedList<SerenityPage> pages = new LinkedList<SerenityPage>();
+            LinkedList<Page> pages = new LinkedList<Page>();
             foreach (Type type in moduleAsm.GetTypes())
             {
-                if (type.IsSubclassOf(typeof(SerenityPage)) == true)
+                if (type.IsSubclassOf(typeof(Page)) == true)
                 {
-                    SerenityPage page = (SerenityPage)moduleAsm.CreateInstance(type.FullName);
+                    Page page = (Page)moduleAsm.CreateInstance(type.FullName);
 
                     pages.AddLast(page);
                 }
@@ -239,7 +239,7 @@ namespace Serenity
         }
         #endregion
         #region Properties - Public
-        public SerenityPage DefaultPage
+        public Page DefaultPage
         {
             get
             {
@@ -250,7 +250,7 @@ namespace Serenity
                 this.defaultPage = value;
             }
         }
-        public SerenityPage[] Pages
+        public Page[] Pages
         {
             get
             {
