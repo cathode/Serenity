@@ -22,8 +22,8 @@ using Serenity.Xml.Html;
 
 namespace Serenity.Pages
 {
-    [Serenity.Attributes.PageName("Index")]
-    internal class IndexPage : SerenityPage
+    [Serenity.Attributes.PageName("Default")]
+    internal class DefaultPage : SerenityPage
     {
         public override void OnInitialization()
         {
@@ -33,10 +33,9 @@ namespace Serenity.Pages
         {
             HtmlDocument Doc = new HtmlDocument();
             HtmlElement P = Doc.BodyElement.AppendParagraph();
-            P.AppendText("Welcome to Tranquility index.");
+            P.AppendText("Welcome to Serenity administrative index.");
             P.AppendBreak();
-            P.AppendText("Tranquility is the administration interface for Serenity.");
-            P.AppendAnchor("http://codeplex.com/Serenity", "Codeplex");
+            P.AppendAnchor("http://serenityproject.net/", "Project Homepage");
             Context.Response.Write(Doc.SaveMarkup());
             Context.Response.MimeType = "text/html";
         }
@@ -49,13 +48,13 @@ namespace Serenity.Pages
         {
             get
             {
-                return "Index";
+                return "Default";
             }
         }
 
         public override SerenityPage CreateSafeInstanceHelper()
         {
-            return new IndexPage();
+            return new DefaultPage();
         }
     }
 }

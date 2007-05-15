@@ -21,4 +21,4 @@ using Serenity.Attributes;
 [assembly: ComVisible(false)]
 
 [assembly: ModuleTitle("System")]
-[assembly: ModuleDefaultPage(typeof(Serenity.Pages.IndexPage))]
+[assembly: ModuleDefaultPage(typeof(Serenity.Pages.DefaultPage))]
