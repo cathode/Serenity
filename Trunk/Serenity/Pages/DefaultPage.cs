@@ -43,7 +43,7 @@ namespace Serenity.Pages
         {
             
         }
-
+        [Obsolete]
         protected override string NameHelper
         {
             get

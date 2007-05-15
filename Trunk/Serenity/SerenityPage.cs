@@ -29,6 +29,13 @@ namespace Serenity
         public abstract void OnRequest(CommonContext context);
         public abstract void OnShutdown();
         #endregion
+        #region Properties - Protected
+        [Obsolete]
+        protected abstract string NameHelper
+        {
+            get;
+        }
+        #endregion
         #region Properties - Public
         public string Name
         {
@@ -37,10 +44,7 @@ namespace Serenity
                 return this.NameHelper.ToLower();
             }
         }
-        protected abstract string NameHelper
-        {
-            get;
-        }
+        
         public virtual string Title
         {
             get
