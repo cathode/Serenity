@@ -26,11 +26,26 @@ namespace Server
     {
         internal static void Main(string[] args)
         {
-            //WS: For all the MechWarrior 3 fans out there :D
-            Console.WriteLine("Reactor...online.");
-            Console.WriteLine("Sensors...online.");
-            Console.WriteLine("Weapons...online.");
-            Console.WriteLine("All systems nominal.\r\n");
+            foreach (string arg in args)
+            {
+                switch (arg)
+                {
+                    case "-g":
+                    case "--global":
+                        SPath.DefaultScope = ResolutionScope.Global;
+                        SPath.ForceDefaultScope = true;
+                        break;
+
+                    case "-l":
+                    case "--local":
+                        SPath.DefaultScope = ResolutionScope.Local;
+                        SPath.ForceDefaultScope = true;
+
+                    default:
+                        break;
+                }
+            }
+
             Log.LogToConsole = true;
             Log.LogToFile = true;
 

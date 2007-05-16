@@ -24,8 +24,6 @@ namespace Serenity
     public abstract class Page
     {
         #region Methods - Public
-
-        
         /// <summary>
         /// When overridden in a derived class, performs actions when the module is loaded into the server,
         /// usually when the server first starts up.

@@ -48,6 +48,9 @@ namespace Serenity
             SPath.specialFiles = new Dictionary<SpecialFile, string>();
             SPath.specialFilesGlobal = new Dictionary<SpecialFile, string>();
 
+            SPath.defaultScope = ResolutionScope.Local;
+            SPath.forceDefaultScope = false;
+
             string root = Path.GetFullPath(SPath.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), SerenityInfo.Company, SerenityInfo.Name));
 
             SPath.specialFolders[SpecialFolder.Configuration] = Path.GetFullPath(SPath.Combine(root, "Configuration"));
@@ -80,6 +83,8 @@ namespace Serenity
         private static Dictionary<SpecialFolder, string> specialFoldersGlobal;
         private static Dictionary<SpecialFile, string> specialFiles;
         private static Dictionary<SpecialFile, string> specialFilesGlobal;
+        private static ResolutionScope defaultScope;
+        private static bool forceDefaultScope;
         #endregion
         #region Methods - Public
         public static string Combine(params string[] paths)
@@ -144,10 +149,14 @@ namespace Serenity
         }
         public static string ResolveSpecialPath(SpecialFile specialFile)
         {
-            return SPath.ResolveSpecialPath(specialFile, ResolutionScope.Local);
+            return SPath.ResolveSpecialPath(specialFile, SPath.defaultScope);
         }
         public static string ResolveSpecialPath(SpecialFile specialFile, ResolutionScope scope)
         {
+            if (SPath.forceDefaultScope)
+            {
+                scope = SPath.defaultScope;
+            }
             switch (scope)
             {
                 case ResolutionScope.Global:
@@ -198,6 +207,18 @@ namespace Serenity
         }
         #endregion
         #region Properties - Public
+        public static ResolutionScope DefaultScope
+        {
+            get
+            {
+                return SPath.defaultScope;
+            }
+            set
+            {
+                SPath.defaultScope = value;
+            }
+        }
+        
         /// <summary>
         /// Gets an absolute path to the directory where domain settings are stored.
         /// </summary>
@@ -205,7 +226,7 @@ namespace Serenity
         {
             get
             {
-                return SPath.specialFolders[SpecialFolder.Domains];
+                return SPath.ResolveSpecialPath(SpecialFolder.Domains);
             }
         }
         /// <summary>
@@ -225,7 +246,7 @@ namespace Serenity
         {
             get
             {
-                return SPath.specialFolders[SpecialFolder.Environments];
+                return SPath.ResolveSpecialPath(SpecialFolder.Environments);
             }
         }
         public static string EnvironmentsFolderGlobal
@@ -235,6 +256,17 @@ namespace Serenity
                 return SPath.ResolveSpecialPath(SpecialFolder.Environments, ResolutionScope.Global);
             }
         }
+        public static bool ForceDefaultScope
+        {
+            get
+            {
+                return SPath.forceDefaultScope;
+            }
+            set
+            {
+                SPath.forceDefaultScope = value;
+            }
+        }
         /// <summary>
         /// Gets an absolute path to the directory where log files are stored.
         /// </summary>
@@ -242,7 +274,7 @@ namespace Serenity
         {
             get
             {
-                return SPath.specialFolders[SpecialFolder.Logs];
+                return SPath.ResolveSpecialPath(SpecialFolder.Logs);
             }
         }
         /// <summary>
@@ -252,7 +284,7 @@ namespace Serenity
         {
             get
             {
-                return SPath.specialFiles[SpecialFile.Log];
+                return SPath.ResolveSpecialPath(SpecialFile.Log);
             }
         }
         /// <summary>
@@ -262,7 +294,7 @@ namespace Serenity
         {
             get
             {
-                return SPath.specialFolders[SpecialFolder.Modules];
+                return SPath.ResolveSpecialPath(SpecialFolder.Modules);
             }
         }
         /// <summary>
@@ -272,7 +304,17 @@ namespace Serenity
         {
             get
             {
-                return SPath.specialFolders[SpecialFolder.Root];
+                return SPath.ResolveSpecialPath(SpecialFolder.Root);
+            }
+        }
+        /// <summary>
+        /// Gets the absolute path to the global root directory where data is stored.
+        /// </summary>
+        public static string RootFolderGlobal
+        {
+            get
+            {
+                return SPath.ResolveSpecialPath(SpecialFolder.Root, ResolutionScope.Global);
             }
         }
         /// <summary>
@@ -282,7 +324,7 @@ namespace Serenity
         {
             get
             {
-                return SPath.specialFolders[SpecialFolder.Themes];
+                return SPath.ResolveSpecialPath(SpecialFolder.Themes);
             }
         }
         #endregion        
