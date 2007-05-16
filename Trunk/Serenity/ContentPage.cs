@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Serenity
 {
+    /// <summary>
+    /// Represents a page that generates dynamic content.
+    /// </summary>
     public abstract class ContentPage : Page
     {
         public abstract ContentPage CreateInstance();
