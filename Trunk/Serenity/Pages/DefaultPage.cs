@@ -22,7 +22,7 @@ using Serenity.Xml.Html;
 
 namespace Serenity.Pages
 {
-    internal class DefaultPage : Page
+    internal class DefaultPage : ContentPage
     {
         public override void OnRequest(CommonContext Context)
         {
@@ -34,7 +34,7 @@ namespace Serenity.Pages
             Context.Response.Write(Doc.SaveMarkup());
             Context.Response.MimeType = "text/html";
         }
-        public override Page CreateInstance()
+        public override ContentPage CreateInstance()
         {
             return new DefaultPage();
         }

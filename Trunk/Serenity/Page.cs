@@ -24,11 +24,8 @@ namespace Serenity
     public abstract class Page
     {
         #region Methods - Public
-        public abstract Page CreateInstance();
-        public virtual MasterPage CreateMasterPageInstance()
-        {
-            return null;
-        }
+
+        
         /// <summary>
         /// When overridden in a derived class, performs actions when the module is loaded into the server,
         /// usually when the server first starts up.
@@ -53,44 +50,13 @@ namespace Serenity
         }
         #endregion
         #region Properties - Public
-        /// <summary>
-        /// Gets a boolean value which indicates if the current Page uses a MasterPage.
-        /// </summary>
-        public virtual bool HasMasterPage
-        {
-            get
-            {
-                return (this.CreateMasterPageInstance() == null) ? false : true;
-            }
-        }
+        
         /// <summary>
         /// When overridden in a derived class, gets the name of the current Page.
         /// </summary>
         public abstract string Name
         {
             get;
-        }
-        /// <summary>
-        /// Gets the system name of the current Page. That is, the name used internally
-        /// by other components.
-        /// </summary>
-        public virtual string SystemName
-        {
-            get
-            {
-                return this.Name.ToLower();
-            }
-        }
-        /// <summary>
-        /// Gets the title of the current Page. The title should be suitable for use in
-        /// a the body of a response, or for displaying to the client in some other manner.
-        /// </summary>
-        public virtual string Title
-        {
-            get
-            {
-                return this.Name;
-            }
         }
         #endregion
     }

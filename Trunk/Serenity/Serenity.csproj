@@ -69,6 +69,7 @@
     <Compile Include="Attributes\Page.cs" />
     <None Include="Cache\CacheManager.cs" />
     <None Include="Cache\CachedStream.cs" />
+    <Compile Include="ContentPage.cs" />
     <Compile Include="DomainSettingValue.cs" />
     <None Include="Data\Database.cs" />
     <Compile Include="FileTypeEntry.cs" />
@@ -106,7 +107,6 @@
     <Compile Include="GlobalSettings.cs" />
     <Compile Include="SPath.cs" />
     <Compile Include="SerenityModule.cs" />
-    <Compile Include="SerenityPage.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerenityEnvironment.cs" />

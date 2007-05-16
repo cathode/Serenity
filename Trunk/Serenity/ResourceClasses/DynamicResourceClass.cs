@@ -25,7 +25,7 @@ namespace Serenity.ResourceClasses
         }
         public override void HandleContext(CommonContext context)
         {
-            Page page;
+            ContentPage page;
             if (context.Request.Url.Segments.Length > 1)
             {
                 int n = 3;
@@ -48,7 +48,7 @@ namespace Serenity.ResourceClasses
            
             if (page != null)
             {
-                Page newPage = page.CreateInstance();
+                ContentPage newPage = page.CreateInstance();
                 newPage.OnRequest(context);
             }
             else
