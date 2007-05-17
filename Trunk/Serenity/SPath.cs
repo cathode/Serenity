@@ -18,14 +18,41 @@ using System.Text;
 
 namespace Serenity
 {
+    /// <summary>
+    /// Represents one of the "special" folders that Serenity uses.
+    /// </summary>
     public enum SpecialFolder
     {
+        /// <summary>
+        /// Represents the root folder (where all the other data is kept).
+        /// </summary>
+        /// <remarks>
+        /// When scope resolution is global, this directory also contains the Serenity binaries.
+        /// </remarks>
         Root,
+        /// <summary>
+        /// The configuration folder (where server-wide configuration settings are stored)
+        /// </summary>
         Configuration,
+        /// <summary>
+        /// The folder where domain settings are stored.
+        /// </summary>
         Domains,
+        /// <summary>
+        /// The folder where environment data is stored.
+        /// </summary>
         Environments,
+        /// <summary>
+        /// The folder where module data is stored.
+        /// </summary>
         Modules,
+        /// <summary>
+        /// The folder where theme data is stored.
+        /// </summary>
         Themes,
+        /// <summary>
+        /// The folder where log files are stored.
+        /// </summary>
         Logs,
     }
     public enum SpecialFile
@@ -136,6 +163,10 @@ namespace Serenity
         }
         public static string ResolveSpecialPath(SpecialFolder specialFolder, ResolutionScope scope)
         {
+            if (SPath.forceDefaultScope)
+            {
+                scope = SPath.defaultScope;
+            }
             switch (scope)
             {
                 case ResolutionScope.Global:
