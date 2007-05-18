@@ -40,6 +40,7 @@ namespace Server
                     case "--local":
                         SPath.DefaultScope = ResolutionScope.Local;
                         SPath.ForceDefaultScope = true;
+                        break;
 
                     default:
                         break;

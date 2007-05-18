@@ -299,16 +299,6 @@ namespace Serenity
             }
         }
         /// <summary>
-        /// Gets an absolute path to the directory where log files are stored.
-        /// </summary>
-        public static string LogsFolder
-        {
-            get
-            {
-                return SPath.ResolveSpecialPath(SpecialFolder.Logs);
-            }
-        }
-        /// <summary>
         /// Gets an absolute path to the primary log file.
         /// </summary>
         public static string LogFile
@@ -318,6 +308,31 @@ namespace Serenity
                 return SPath.ResolveSpecialPath(SpecialFile.Log);
             }
         }
+        public static string LogFileGlobal
+        {
+            get
+            {
+                return SPath.ResolveSpecialPath(SpecialFile.Log, ResolutionScope.Global);
+            }
+        }
+        /// <summary>
+        /// Gets an absolute path to the directory where log files are stored.
+        /// </summary>
+        public static string LogsFolder
+        {
+            get
+            {
+                return SPath.ResolveSpecialPath(SpecialFolder.Logs);
+            }
+        }
+        public static string LogsFolderGlobal
+        {
+            get
+            {
+                return SPath.ResolveSpecialPath(SpecialFolder.Logs, ResolutionScope.Global);
+            }
+        }
+        
         /// <summary>
         /// Gets an absolute path to the directory where modules are stored.
         /// </summary>
@@ -326,6 +341,13 @@ namespace Serenity
             get
             {
                 return SPath.ResolveSpecialPath(SpecialFolder.Modules);
+            }
+        }
+        public static string ModulesFolderGlobal
+        {
+            get
+            {
+                return SPath.ResolveSpecialPath(SpecialFolder.Modules, ResolutionScope.Global);
             }
         }
         /// <summary>
@@ -356,6 +378,13 @@ namespace Serenity
             get
             {
                 return SPath.ResolveSpecialPath(SpecialFolder.Themes);
+            }
+        }
+        public static string ThemesFolderGlobal
+        {
+            get
+            {
+                return SPath.ResolveSpecialPath(SpecialFolder.Themes, ResolutionScope.Global);
             }
         }
         #endregion        
