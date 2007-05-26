@@ -12,6 +12,7 @@ http://www.microsoft.com/resources/sharedsource/licensingbasics/communitylicense
 */
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
@@ -20,10 +21,114 @@ using Serenity.Properties;
 
 namespace Serenity
 {
+    public sealed class InstanceManager<T> where T : class
+    {
+        #region Constructors - Private
+        /// <summary>
+        /// Initializes the static members of the Multiton class.
+        /// </summary>
+        static InstanceManager()
+        {
+            InstanceManager<T>.manager = new InstanceManager<T>();
+        }
+        private InstanceManager()
+        {
+            this.instances = new Dictionary<string, T>();
+        }
+        #endregion
+        #region Fields - Private
+        [ThreadStatic]
+        private T currentInstance;
+        private T defaultInstance;
+        private Dictionary<string, T> instances;
+        private static InstanceManager<T> manager;
+        private T systemInstance;
+        #endregion
+        #region Methods - Public
+        public T GetInstance(string key)
+        {
+            if (this.ContainsKey(key))
+            {
+                return this.instances[key];
+            }
+            else
+            {
+                return default(T);
+            }
+        }
+        public bool ContainsKey(string key)
+        {
+            return this.instances.ContainsKey(key);
+        }
+        public bool ContainsInstance(T instance)
+        {
+            return this.instances.ContainsValue(instance);
+        }
+        #endregion
+        #region Properties - Public
+        public T CurrentInstance
+        {
+            get
+            {
+                return this.currentInstance;
+            }
+            set
+            {
+                this.currentInstance = value;
+            }
+        }
+        /// <summary>
+        /// Gets or sets the default instance.
+        /// </summary>
+        public T DefaultInstance
+        {
+            get
+            {
+                if (this.defaultInstance != null)
+                {
+                    return this.defaultInstance;
+                }
+                else
+                {
+                    return this.systemInstance;
+                }
+            }
+            set
+            {
+                this.defaultInstance = value;
+            }
+        }
+        public static InstanceManager<T> Default
+        {
+            get
+            {
+                return InstanceManager<T>.manager;
+            }
+        }
+        /// <summary>
+        /// Gets or sets the system instance.
+        /// </summary>
+        public T SystemInstance
+        {
+            get
+            {
+                return this.systemInstance;
+            }
+            set
+            {
+                if ((this.systemInstance == null) && (value != null))
+                {
+                    this.systemInstance = value;
+                }
+            }
+        }
+        #endregion  
+    }
+
     /// <summary>
     /// Represents a collection of settings that are specific to a domain name.
     /// </summary>
-    public sealed class DomainSettings : Multiton<string, DomainSettings>
+    public sealed class DomainSettings
     {
         #region Constructors - Private
         static DomainSettings()
@@ -32,13 +137,15 @@ namespace Serenity
             {
                 Directory.CreateDirectory(SPath.DomainsFolder);
             }
-            DomainSettings.SystemInstance = new DomainSettings("");
+            DomainSettings sys = new DomainSettings("");
 
-            DomainSettings.SystemInstance.DefaultEnvironment.Value = GlobalSettings.DefaultEnvironment;
-            DomainSettings.SystemInstance.DefaultModule.Value = GlobalSettings.DefaultModule;
-            DomainSettings.SystemInstance.DefaultTheme.Value = GlobalSettings.DefaultTheme;
-            DomainSettings.SystemInstance.DefaultResourceClass.Value = GlobalSettings.DefaultResourceClass;
-            DomainSettings.SystemInstance.DefaultResourceName.Value = GlobalSettings.DefaultResourceName;
+            sys.DefaultEnvironment.Value = GlobalSettings.DefaultEnvironment;
+            sys.DefaultModule.Value = GlobalSettings.DefaultModule;
+            sys.DefaultTheme.Value = GlobalSettings.DefaultTheme;
+            sys.DefaultResourceClass.Value = GlobalSettings.DefaultResourceClass;
+            sys.DefaultResourceName.Value = GlobalSettings.DefaultResourceName;
+
+            InstanceManager<DomainSettings>.Default.SystemInstance = sys;
         }
         #endregion
         #region Constructors - Public
@@ -46,7 +153,7 @@ namespace Serenity
         /// Initializes a new instance of the DomainSettings class.
         /// </summary>
         /// <param name="name"></param>
-        public DomainSettings(string name) : base(name)
+        public DomainSettings(string name)
         {
             DomainSettings parent = DomainSettings.GetParent(name);
 
@@ -64,6 +171,7 @@ namespace Serenity
                 this.DefaultTheme = new DomainSettingValue<string>();
                 this.OmitEnvironment = new DomainSettingValue<bool>();
                 this.OmitResourceClass = new DomainSettingValue<bool>();
+                this.OutputCompressionThreshhold = new DomainSettingValue<int>();
             }
             else
             {
@@ -78,6 +186,7 @@ namespace Serenity
                 this.DefaultTheme = new DomainSettingValue<string>(this.parent.DefaultTheme);
                 this.OmitEnvironment = new DomainSettingValue<bool>(this.parent.OmitEnvironment);
                 this.OmitResourceClass = new DomainSettingValue<bool>(this.parent.OmitResourceClass);
+                this.OutputCompressionThreshhold = new DomainSettingValue<int>(this.parent.OutputCompressionThreshhold);
             }
         }
         #endregion
@@ -101,6 +210,7 @@ namespace Serenity
         public readonly DomainSettingValue<string[]> InactiveThemes;
         public readonly DomainSettingValue<bool> OmitEnvironment;
         public readonly DomainSettingValue<bool> OmitResourceClass;
+        public readonly DomainSettingValue<int> OutputCompressionThreshhold;
         #endregion
         #region Methods - Public
         /// <summary>
@@ -140,9 +250,9 @@ namespace Serenity
         {
             if (string.IsNullOrEmpty(hostName) == false)
             {
-                if (DomainSettings.ContainsInstance(hostName) == true)
+                if (InstanceManager<DomainSettings>.Default.ContainsKey(hostName) == true)
                 {
-                    return DomainSettings.GetInstance(hostName);
+                    return InstanceManager<DomainSettings>.Default.GetInstance(hostName);
                 }
                 else if (recurse == true)
                 {
@@ -150,13 +260,13 @@ namespace Serenity
                 }
                 else
                 {
-                    return DomainSettings.SystemInstance;
+                    return InstanceManager<DomainSettings>.Default.SystemInstance;
                 }
             }
             else
             {
                 //system instance is the only domain settings instance that has an empty name.
-                return DomainSettings.SystemInstance;
+                return InstanceManager<DomainSettings>.Default.SystemInstance;
             }
         }
         public static DomainSettings GetParent(string hostName)
@@ -167,9 +277,9 @@ namespace Serenity
                 string[] newNames = new string[oldNames.Length - 1];
                 Array.Copy(oldNames, newNames, newNames.Length);
                 string newHostName = string.Join(".", newNames);
-                if (DomainSettings.ContainsInstance(newHostName) == true)
+                if (InstanceManager<DomainSettings>.Default.ContainsKey(newHostName) == true)
                 {
-                    return DomainSettings.GetInstance(newHostName);
+                    return InstanceManager<DomainSettings>.Default.GetInstance(newHostName);
                 }
                 else
                 {
@@ -179,7 +289,7 @@ namespace Serenity
             else
             {
                 //system instance is the only domain settings instance that has an empty name.
-                return DomainSettings.SystemInstance;
+                return InstanceManager<DomainSettings>.Default.SystemInstance;
             }
         }
         public static void LoadAll()
@@ -198,7 +308,7 @@ namespace Serenity
         }
         public static void Save(DomainSettings settings)
         {
-            if (settings != DomainSettings.SystemInstance)
+            if (settings != InstanceManager<DomainSettings>.Default.SystemInstance)
             {
                 using (MemoryStream ms = new MemoryStream())
                 {
@@ -207,7 +317,7 @@ namespace Serenity
                     formatter.Serialize(ms, settings);
                     ms.Close();
 
-                    File.WriteAllBytes(Path.Combine(SPath.DomainsFolder, settings.Key), ms.ToArray());
+                    File.WriteAllBytes(Path.Combine(SPath.DomainsFolder, settings.ToString()), ms.ToArray());
                 }
             }
             else
@@ -219,7 +329,6 @@ namespace Serenity
         #region Properties - Public
         public bool HasParent
         {
-
             get
             {
                 return this.hasParent;
@@ -227,5 +336,4 @@ namespace Serenity
         }
         #endregion
     }
-    
 }

@@ -32,11 +32,12 @@ namespace Serenity.ResourceClasses
             string resourceName;
             string[] segments = context.Request.Url.Segments;
             int n = 1;
-            if (!DomainSettings.CurrentInstance.OmitEnvironment.Value)
+            InstanceManager<DomainSettings> manager = InstanceManager<DomainSettings>.Default;
+            if (!manager.CurrentInstance.OmitEnvironment.Value)
             {
                 n++;
             }
-            if (!DomainSettings.CurrentInstance.OmitResourceClass.Value)
+            if (!manager.CurrentInstance.OmitResourceClass.Value)
             {
                 n++;
             }
