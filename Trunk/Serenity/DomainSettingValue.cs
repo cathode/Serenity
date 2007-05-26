@@ -19,6 +19,7 @@ namespace Serenity
     [Serializable]
     public sealed class DomainSettingValue<T>
     {
+        #region Constructors - Internal
         internal DomainSettingValue()
             : this(null)
         {
@@ -35,12 +36,19 @@ namespace Serenity
                 this.parent = parent;
             }
         }
-        internal bool isDefined;
-        internal bool hasParent;
+        #endregion
+        #region Fields - Private
         [NonSerialized]
         private readonly DomainSettingValue<T> parent;
         private T value;
-
+        #endregion
+        #region Fields - Internal
+        [NonSerialized]
+        internal bool isDefined;
+        [NonSerialized]
+        internal bool hasParent;
+        #endregion
+        #region Properties - Public
         public bool IsDefined
         {
             get
@@ -78,5 +86,6 @@ namespace Serenity
                 this.value = value;
             }
         }
+        #endregion
     }
 }

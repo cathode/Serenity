@@ -128,6 +128,7 @@
     <Compile Include="TryResult.cs" />
     <Compile Include="Themes\Color.cs" />
     <Compile Include="Themes\Theme.cs" />
+    <None Include="Users\SingleSignOn\SsoClient.cs" />
     <Compile Include="Web\CommonContext.cs" />
     <None Include="Web\Drivers\BinaryAdapter.cs" />
     <None Include="Web\Drivers\BinaryDriver.cs" />

@@ -144,6 +144,7 @@ namespace Serenity
             sys.DefaultTheme.Value = GlobalSettings.DefaultTheme;
             sys.DefaultResourceClass.Value = GlobalSettings.DefaultResourceClass;
             sys.DefaultResourceName.Value = GlobalSettings.DefaultResourceName;
+            sys.OutputCompressionThreshhold.Value = 4096;
 
             InstanceManager<DomainSettings>.Default.SystemInstance = sys;
         }

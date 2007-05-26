@@ -63,7 +63,7 @@ namespace Serenity.Web
         /// <summary>
         /// Writes a sequence of bytes to the internal write Buffer.
         /// </summary>
-        /// <param name="Content">The array of bytes to write.</param>
+        /// <param name="value">The array of bytes to write.</param>
         /// <returns>The number of bytes written, or -1 if an error occurred.</returns>
         public int Write(byte[] value)
         {

@@ -87,8 +87,8 @@ namespace Serenity
         /// <summary>
         /// Logs a message.
         /// </summary>
-        /// <param name="MessageText">A string containing a description of the message.</param>
-        /// <param name="Level">A LogMessageLevel object describing the severity of the message.</param>
+        /// <param name="message">A string containing a description of the message.</param>
+        /// <param name="level">A LogMessageLevel object describing the severity of the message.</param>
         public static void Write(string message, LogMessageLevel level)
         {
             message = Log.Sanitize(message);

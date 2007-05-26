@@ -23,7 +23,6 @@ namespace Serenity
     /// </summary>
     /// <typeparam name="TKey">The type to be used for unique keys.</typeparam>
     /// <typeparam name="TValue">The type that will follow the multiton design pattern. This MUST be the inheriting type.</typeparam>
-    [Obsolete]
     public abstract class Multiton<TKey, TValue> : IDisposable where TValue : Multiton<TKey, TValue>
     {
         #region Constructors - Static
