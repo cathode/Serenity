@@ -34,22 +34,21 @@ namespace Serenity
         public virtual void HandleContext(CommonContext context)
         {
             Uri url = context.Request.Url;
-            InstanceManager<DomainSettings> manager = InstanceManager<DomainSettings>.Default;
 
-            manager.CurrentInstance = DomainSettings.GetBestMatch(url);
+            InstanceManager<DomainSettings>.CurrentInstance = DomainSettings.GetBestMatch(url);
 
-            if ((manager.CurrentInstance.OmitEnvironment.Value) || (context.Request.Url.Segments.Length < 2))
+            if ((InstanceManager<DomainSettings>.CurrentInstance.OmitEnvironment.Value) || (context.Request.Url.Segments.Length < 2))
             {
-                SerenityEnvironment.CurrentInstance = SerenityEnvironment.GetInstance(manager.CurrentInstance.DefaultEnvironment.Value);
+                SerenityEnvironment.CurrentInstance = SerenityEnvironment.GetInstance(InstanceManager<DomainSettings>.CurrentInstance.DefaultEnvironment.Value);
             }
             else
             {
                 SerenityEnvironment.CurrentInstance = SerenityEnvironment.GetInstance(context.Request.Url.Segments[1].TrimEnd('/').ToLower());
             }
             ResourceClass resourceClass;
-            if ((manager.CurrentInstance.OmitResourceClass.Value) || ((context.Request.Url.Segments.Length < 3) && (!manager.CurrentInstance.OmitEnvironment.Value)))
+            if ((InstanceManager<DomainSettings>.CurrentInstance.OmitResourceClass.Value) || ((context.Request.Url.Segments.Length < 3) && (!InstanceManager<DomainSettings>.CurrentInstance.OmitEnvironment.Value)))
             {
-                resourceClass = ResourceClass.GetInstance(manager.CurrentInstance.DefaultResourceClass.Value.ToLower());
+                resourceClass = ResourceClass.GetInstance(InstanceManager<DomainSettings>.CurrentInstance.DefaultResourceClass.Value.ToLower());
             }
             else
             {

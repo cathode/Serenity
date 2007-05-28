@@ -7,14 +7,11 @@ namespace Serenity
     public static class GlobalSettings
     {
         #region Fields - Private
-        private static string defaultEnvironment = GlobalSettings.SystemName;
-        private static string defaultModule = GlobalSettings.SystemName;
-        private static string defaultResourceClass = GlobalSettings.SystemName;
-        private static string defaultResourceName = GlobalSettings.SystemName;
-        private static string defaultTheme = GlobalSettings.SystemName;
-        #endregion
-        #region Fields - Public
-        public const string SystemName = "system";
+        private static string defaultEnvironment = SerenityInfo.SystemName;
+        private static string defaultModule = SerenityInfo.SystemName;
+        private static string defaultResourceClass = SerenityInfo.SystemName;
+        private static string defaultResourceName = SerenityInfo.SystemName;
+        private static string defaultTheme = SerenityInfo.SystemName;
         #endregion
         #region Properties - Public
         public static string DefaultEnvironment

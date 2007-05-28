@@ -26,15 +26,15 @@ namespace Serenity.ResourceClasses
         public override void HandleContext(CommonContext context)
         {
             ContentPage page;
-            InstanceManager<DomainSettings> manager = InstanceManager<DomainSettings>.Default;
+
             if (context.Request.Url.Segments.Length > 1)
             {
                 int n = 3;
-                if (manager.CurrentInstance.OmitEnvironment.Value)
+                if (InstanceManager<DomainSettings>.CurrentInstance.OmitEnvironment.Value)
                 {
                     n--;
                 }
-                if (manager.CurrentInstance.OmitResourceClass.Value)
+                if (InstanceManager<DomainSettings>.CurrentInstance.OmitResourceClass.Value)
                 {
                     n--;
                 }

@@ -21,7 +21,7 @@ using Serenity.Properties;
 
 namespace Serenity
 {
-    public sealed class InstanceManager<T> where T : class
+    public static class InstanceManager<T> where T : class
     {
         #region Constructors - Private
         /// <summary>
@@ -29,96 +29,84 @@ namespace Serenity
         /// </summary>
         static InstanceManager()
         {
-            InstanceManager<T>.manager = new InstanceManager<T>();
-        }
-        private InstanceManager()
-        {
-            this.instances = new Dictionary<string, T>();
+            InstanceManager<T>.instances = new Dictionary<string, T>();
         }
         #endregion
         #region Fields - Private
         [ThreadStatic]
-        private T currentInstance;
-        private T defaultInstance;
-        private Dictionary<string, T> instances;
-        private static InstanceManager<T> manager;
-        private T systemInstance;
+        private static T currentInstance;
+        private static T defaultInstance;
+        private static Dictionary<string, T> instances;
+        private static T systemInstance;
         #endregion
         #region Methods - Public
-        public T GetInstance(string key)
+        public static T GetInstance(string key)
         {
-            if (this.ContainsKey(key))
+            if (InstanceManager<T>.ContainsKey(key))
             {
-                return this.instances[key];
+                return InstanceManager<T>.instances[key];
             }
             else
             {
                 return default(T);
             }
         }
-        public bool ContainsKey(string key)
+        public static bool ContainsKey(string key)
         {
-            return this.instances.ContainsKey(key);
+            return InstanceManager<T>.instances.ContainsKey(key);
         }
-        public bool ContainsInstance(T instance)
+        public static bool ContainsInstance(T instance)
         {
-            return this.instances.ContainsValue(instance);
+            return InstanceManager<T>.instances.ContainsValue(instance);
         }
         #endregion
         #region Properties - Public
-        public T CurrentInstance
+        public static T CurrentInstance
         {
             get
             {
-                return this.currentInstance;
+                return InstanceManager<T>.currentInstance;
             }
             set
             {
-                this.currentInstance = value;
+                InstanceManager<T>.currentInstance = value;
             }
         }
         /// <summary>
         /// Gets or sets the default instance.
         /// </summary>
-        public T DefaultInstance
+        public static T DefaultInstance
         {
             get
             {
-                if (this.defaultInstance != null)
+                if (InstanceManager<T>.defaultInstance != null)
                 {
-                    return this.defaultInstance;
+                    return InstanceManager<T>.defaultInstance;
                 }
                 else
                 {
-                    return this.systemInstance;
+                    return InstanceManager<T>.systemInstance;
                 }
             }
             set
             {
-                this.defaultInstance = value;
-            }
-        }
-        public static InstanceManager<T> Default
-        {
-            get
-            {
-                return InstanceManager<T>.manager;
+                InstanceManager<T>.defaultInstance = value;
             }
         }
         /// <summary>
         /// Gets or sets the system instance.
         /// </summary>
-        public T SystemInstance
+        public static T SystemInstance
         {
             get
             {
-                return this.systemInstance;
+                return InstanceManager<T>.systemInstance;
             }
             set
             {
-                if ((this.systemInstance == null) && (value != null))
+                if ((InstanceManager<T>.systemInstance == null) && (value != null))
                 {
-                    this.systemInstance = value;
+                    InstanceManager<T>.systemInstance = value;
                 }
             }
         }
@@ -146,7 +134,7 @@ namespace Serenity
             sys.DefaultResourceName.Value = GlobalSettings.DefaultResourceName;
             sys.OutputCompressionThreshhold.Value = 4096;
 
-            InstanceManager<DomainSettings>.Default.SystemInstance = sys;
+            InstanceManager<DomainSettings>.SystemInstance = sys;
         }
         #endregion
         #region Constructors - Public
@@ -251,9 +239,9 @@ namespace Serenity
         {
             if (string.IsNullOrEmpty(hostName) == false)
             {
-                if (InstanceManager<DomainSettings>.Default.ContainsKey(hostName) == true)
+                if (InstanceManager<DomainSettings>.ContainsKey(hostName) == true)
                 {
-                    return InstanceManager<DomainSettings>.Default.GetInstance(hostName);
+                    return InstanceManager<DomainSettings>.GetInstance(hostName);
                 }
                 else if (recurse == true)
                 {
@@ -261,13 +249,13 @@ namespace Serenity
                 }
                 else
                 {
-                    return InstanceManager<DomainSettings>.Default.SystemInstance;
+                    return InstanceManager<DomainSettings>.SystemInstance;
                 }
             }
             else
             {
                 //system instance is the only domain settings instance that has an empty name.
-                return InstanceManager<DomainSettings>.Default.SystemInstance;
+                return InstanceManager<DomainSettings>.SystemInstance;
             }
         }
         public static DomainSettings GetParent(string hostName)
@@ -278,9 +266,9 @@ namespace Serenity
                 string[] newNames = new string[oldNames.Length - 1];
                 Array.Copy(oldNames, newNames, newNames.Length);
                 string newHostName = string.Join(".", newNames);
-                if (InstanceManager<DomainSettings>.Default.ContainsKey(newHostName) == true)
+                if (InstanceManager<DomainSettings>.ContainsKey(newHostName) == true)
                 {
-                    return InstanceManager<DomainSettings>.Default.GetInstance(newHostName);
+                    return InstanceManager<DomainSettings>.GetInstance(newHostName);
                 }
                 else
                 {
@@ -290,7 +278,7 @@ namespace Serenity
             else
             {
                 //system instance is the only domain settings instance that has an empty name.
-                return InstanceManager<DomainSettings>.Default.SystemInstance;
+                return InstanceManager<DomainSettings>.SystemInstance;
             }
         }
         public static void LoadAll()
@@ -309,7 +297,7 @@ namespace Serenity
         }
         public static void Save(DomainSettings settings)
         {
-            if (settings != InstanceManager<DomainSettings>.Default.SystemInstance)
+            if (settings != InstanceManager<DomainSettings>.SystemInstance)
             {
                 using (MemoryStream ms = new MemoryStream())
                 {

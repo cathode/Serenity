@@ -18,7 +18,7 @@ using LibINI;
 
 namespace Serenity
 {
-    public class FileTypeRegistry
+    public static class FileTypeRegistry
     {
         #region Methods - Public
         public static void Initialize()
