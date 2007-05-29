@@ -30,11 +30,11 @@ namespace Serenity.ResourceClasses
             if (context.Request.Url.Segments.Length > 1)
             {
                 int n = 3;
-                if (InstanceManager<DomainSettings>.CurrentInstance.OmitEnvironment.Value)
+                if (DomainSettings.Current.OmitEnvironment.Value)
                 {
                     n--;
                 }
-                if (InstanceManager<DomainSettings>.CurrentInstance.OmitResourceClass.Value)
+                if (DomainSettings.Current.OmitResourceClass.Value)
                 {
                     n--;
                 }

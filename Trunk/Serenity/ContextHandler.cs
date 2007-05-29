@@ -35,20 +35,22 @@ namespace Serenity
         {
             Uri url = context.Request.Url;
 
-            InstanceManager<DomainSettings>.CurrentInstance = DomainSettings.GetBestMatch(url);
+            DomainSettings.Current = DomainSettings.GetBestMatch(url);
 
-            if ((InstanceManager<DomainSettings>.CurrentInstance.OmitEnvironment.Value) || (context.Request.Url.Segments.Length < 2))
+            DomainSettings settings = DomainSettings.Current;
+
+            if ((settings.OmitEnvironment.Value) || (context.Request.Url.Segments.Length < 2))
             {
-                SerenityEnvironment.CurrentInstance = SerenityEnvironment.GetInstance(InstanceManager<DomainSettings>.CurrentInstance.DefaultEnvironment.Value);
+                SerenityEnvironment.CurrentInstance = SerenityEnvironment.GetInstance(settings.DefaultEnvironment.Value);
             }
             else
             {
                 SerenityEnvironment.CurrentInstance = SerenityEnvironment.GetInstance(context.Request.Url.Segments[1].TrimEnd('/').ToLower());
             }
             ResourceClass resourceClass;
-            if ((InstanceManager<DomainSettings>.CurrentInstance.OmitResourceClass.Value) || ((context.Request.Url.Segments.Length < 3) && (!InstanceManager<DomainSettings>.CurrentInstance.OmitEnvironment.Value)))
+            if ((DomainSettings.Current.OmitResourceClass.Value) || ((context.Request.Url.Segments.Length < 3) && (!settings.OmitEnvironment.Value)))
             {
-                resourceClass = ResourceClass.GetInstance(InstanceManager<DomainSettings>.CurrentInstance.DefaultResourceClass.Value.ToLower());
+                resourceClass = ResourceClass.GetInstance(settings.DefaultResourceClass.Value.ToLower());
             }
             else
             {

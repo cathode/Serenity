@@ -26,6 +26,8 @@ namespace Server
     {
         internal static void Main(string[] args)
         {
+            Console.WriteLine("{0}, v{1}\r\n{2} ({3})\r\n",
+                SerenityInfo.Name, SerenityInfo.Version, SerenityInfo.Copyright, "http://serenityproject.net/");
             foreach (string arg in args)
             {
                 switch (arg)

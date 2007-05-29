@@ -33,11 +33,11 @@ namespace Serenity.ResourceClasses
             string[] segments = context.Request.Url.Segments;
             int n = 1;
 
-            if (!InstanceManager<DomainSettings>.CurrentInstance.OmitEnvironment.Value)
+            if (!DomainSettings.Current.OmitEnvironment.Value)
             {
                 n++;
             }
-            if (!InstanceManager<DomainSettings>.CurrentInstance.OmitResourceClass.Value)
+            if (!DomainSettings.Current.OmitResourceClass.Value)
             {
                 n++;
             }

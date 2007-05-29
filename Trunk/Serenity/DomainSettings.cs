@@ -21,6 +21,7 @@ using Serenity.Properties;
 
 namespace Serenity
 {
+/*
     public static class InstanceManager<T> where T : class
     {
         #region Constructors - Private
@@ -112,7 +113,7 @@ namespace Serenity
         }
         #endregion  
     }
-
+    */
     /// <summary>
     /// Represents a collection of settings that are specific to a domain name.
     /// </summary>
@@ -121,20 +122,18 @@ namespace Serenity
         #region Constructors - Private
         static DomainSettings()
         {
-            if (Directory.Exists(SPath.DomainsFolder) == false)
-            {
-                Directory.CreateDirectory(SPath.DomainsFolder);
-            }
-            DomainSettings sys = new DomainSettings("");
+            DomainSettings.settings = new Dictionary<string, DomainSettings>();
 
-            sys.DefaultEnvironment.Value = GlobalSettings.DefaultEnvironment;
-            sys.DefaultModule.Value = GlobalSettings.DefaultModule;
-            sys.DefaultTheme.Value = GlobalSettings.DefaultTheme;
-            sys.DefaultResourceClass.Value = GlobalSettings.DefaultResourceClass;
-            sys.DefaultResourceName.Value = GlobalSettings.DefaultResourceName;
-            sys.OutputCompressionThreshhold.Value = 4096;
+            DomainSettings.root = new DomainSettings("");
 
-            InstanceManager<DomainSettings>.SystemInstance = sys;
+            DomainSettings.root.DefaultEnvironment.Value = GlobalSettings.DefaultEnvironment;
+            DomainSettings.root.DefaultModule.Value = GlobalSettings.DefaultModule;
+            DomainSettings.root.DefaultTheme.Value = GlobalSettings.DefaultTheme;
+            DomainSettings.root.DefaultResourceClass.Value = GlobalSettings.DefaultResourceClass;
+            DomainSettings.root.DefaultResourceName.Value = GlobalSettings.DefaultResourceName;
+            DomainSettings.root.CompressionThreshhold.Value = 4096;
+
+            DomainSettings.settings.Add("", root);
         }
         #endregion
         #region Constructors - Public
@@ -144,6 +143,8 @@ namespace Serenity
         /// <param name="name"></param>
         public DomainSettings(string name)
         {
+            this.name = name;
+
             DomainSettings parent = DomainSettings.GetParent(name);
 
             if (parent == null)
@@ -160,7 +161,7 @@ namespace Serenity
                 this.DefaultTheme = new DomainSettingValue<string>();
                 this.OmitEnvironment = new DomainSettingValue<bool>();
                 this.OmitResourceClass = new DomainSettingValue<bool>();
-                this.OutputCompressionThreshhold = new DomainSettingValue<int>();
+                this.CompressionThreshhold = new DomainSettingValue<int>();
             }
             else
             {
@@ -175,15 +176,23 @@ namespace Serenity
                 this.DefaultTheme = new DomainSettingValue<string>(this.parent.DefaultTheme);
                 this.OmitEnvironment = new DomainSettingValue<bool>(this.parent.OmitEnvironment);
                 this.OmitResourceClass = new DomainSettingValue<bool>(this.parent.OmitResourceClass);
-                this.OutputCompressionThreshhold = new DomainSettingValue<int>(this.parent.OutputCompressionThreshhold);
+                this.CompressionThreshhold = new DomainSettingValue<int>(this.parent.CompressionThreshhold);
             }
         }
         #endregion
         #region Fields - Private
         [NonSerialized]
+        [ThreadStatic]
+        private static DomainSettings current;
+        [NonSerialized]
         private bool hasParent;
+        private readonly string name;
         [NonSerialized]
         private readonly DomainSettings parent;
+        [NonSerialized]
+        private static readonly DomainSettings root;
+        [NonSerialized]
+        private static readonly Dictionary<string, DomainSettings> settings;
         #endregion
         #region Fields - Public
         public readonly DomainSettingValue<string[]> ActiveEnvironments;
@@ -199,7 +208,7 @@ namespace Serenity
         public readonly DomainSettingValue<string[]> InactiveThemes;
         public readonly DomainSettingValue<bool> OmitEnvironment;
         public readonly DomainSettingValue<bool> OmitResourceClass;
-        public readonly DomainSettingValue<int> OutputCompressionThreshhold;
+        public readonly DomainSettingValue<int> CompressionThreshhold;
         #endregion
         #region Methods - Public
         /// <summary>
@@ -239,9 +248,9 @@ namespace Serenity
         {
             if (string.IsNullOrEmpty(hostName) == false)
             {
-                if (InstanceManager<DomainSettings>.ContainsKey(hostName) == true)
+                if (DomainSettings.settings.ContainsKey(hostName) == true)
                 {
-                    return InstanceManager<DomainSettings>.GetInstance(hostName);
+                    return DomainSettings.settings[hostName];
                 }
                 else if (recurse == true)
                 {
@@ -249,13 +258,13 @@ namespace Serenity
                 }
                 else
                 {
-                    return InstanceManager<DomainSettings>.SystemInstance;
+                    return DomainSettings.root;
                 }
             }
             else
             {
-                //system instance is the only domain settings instance that has an empty name.
-                return InstanceManager<DomainSettings>.SystemInstance;
+                //the root settings are the only domain settings instance that have an empty name.
+                return DomainSettings.root;
             }
         }
         public static DomainSettings GetParent(string hostName)
@@ -266,9 +275,9 @@ namespace Serenity
                 string[] newNames = new string[oldNames.Length - 1];
                 Array.Copy(oldNames, newNames, newNames.Length);
                 string newHostName = string.Join(".", newNames);
-                if (InstanceManager<DomainSettings>.ContainsKey(newHostName) == true)
+                if (DomainSettings.settings.ContainsKey(newHostName) == true)
                 {
-                    return InstanceManager<DomainSettings>.GetInstance(newHostName);
+                    return DomainSettings.settings[newHostName];
                 }
                 else
                 {
@@ -277,8 +286,7 @@ namespace Serenity
             }
             else
             {
-                //system instance is the only domain settings instance that has an empty name.
-                return InstanceManager<DomainSettings>.SystemInstance;
+                return DomainSettings.root;
             }
         }
         public static void LoadAll()
@@ -297,7 +305,7 @@ namespace Serenity
         }
         public static void Save(DomainSettings settings)
         {
-            if (settings != InstanceManager<DomainSettings>.SystemInstance)
+            if (settings != DomainSettings.root)
             {
                 using (MemoryStream ms = new MemoryStream())
                 {
@@ -316,6 +324,17 @@ namespace Serenity
         }
         #endregion
         #region Properties - Public
+        public static DomainSettings Current
+        {
+            get
+            {
+                return DomainSettings.current;
+            }
+            set
+            {
+                DomainSettings.current = value;
+            }
+        }
         public bool HasParent
         {
             get

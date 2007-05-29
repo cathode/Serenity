@@ -63,7 +63,7 @@ namespace Serenity.Web.Drivers
             bool useGzip = false;
             bool useDeflate = false;
 
-            if ((response.UseCompression == false) || (response.SendBuffer.Length < InstanceManager<DomainSettings>.CurrentInstance.OutputCompressionThreshhold.Value))
+            if ((response.UseCompression == false) || (response.SendBuffer.Length < DomainSettings.Current.CompressionThreshhold.Value))
             {
                 contentBuffer = response.SendBuffer;
             }
