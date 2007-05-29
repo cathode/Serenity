@@ -63,7 +63,7 @@ namespace Serenity.Web.Drivers
             bool useGzip = false;
             bool useDeflate = false;
 
-            if (response.UseCompression == false)
+            if ((response.UseCompression == false) || (response.SendBuffer.Length < InstanceManager<DomainSettings>.CurrentInstance.OutputCompressionThreshhold.Value))
             {
                 contentBuffer = response.SendBuffer;
             }
@@ -151,7 +151,7 @@ namespace Serenity.Web.Drivers
                     if (useGzip == true)
                     {
                         response.Headers.Add("Content-Encoding", "gzip");
-                        
+
                     }
                     else if (useDeflate == true)
                     {
