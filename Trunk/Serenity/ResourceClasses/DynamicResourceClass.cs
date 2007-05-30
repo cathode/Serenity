@@ -27,6 +27,8 @@ namespace Serenity.ResourceClasses
         {
             ContentPage page;
 
+            // http://localhost/system/dynamic/system/default
+
             if (context.Request.Url.Segments.Length > 1)
             {
                 int n = 4;
@@ -38,9 +40,16 @@ namespace Serenity.ResourceClasses
                 {
                     n--;
                 }
-                string[] nameParts = new string[context.Request.Url.Segments.Length - n];
-                Array.Copy(context.Request.Url.Segments, n, nameParts, 0, nameParts.Length);
-                page = SerenityModule.CurrentInstance.GetPage(string.Join("", nameParts).ToLower());
+                string[] nameParts = new string[Math.Max(context.Request.Url.Segments.Length - n, 0)];
+                if (nameParts.Length > 0)
+                {
+                    Array.Copy(context.Request.Url.Segments, n, nameParts, 0, nameParts.Length);
+                    page = SerenityModule.CurrentInstance.GetPage(string.Join("", nameParts).ToLower());
+                }
+                else
+                {
+                    page = SerenityModule.CurrentInstance.DefaultPage;
+                }
             }
             else
             {

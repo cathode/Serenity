@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading;
 
 using Serenity;
 using Serenity.Web.Drivers;
@@ -61,8 +62,6 @@ namespace Server
                         break;
                 }
             }
-
-            
 
             Log.Write("Beginning File Verification", LogMessageLevel.Info);
 
