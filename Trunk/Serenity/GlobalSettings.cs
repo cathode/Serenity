@@ -9,8 +9,8 @@ namespace Serenity
         #region Fields - Private
         private static string defaultEnvironment = SerenityInfo.SystemName;
         private static string defaultModule = SerenityInfo.SystemName;
-        private static string defaultResourceClass = SerenityInfo.SystemName;
-        private static string defaultResourceName = SerenityInfo.SystemName;
+        private static string defaultResourceClass = "dynamic";
+        private static string defaultResourceName = "default";
         private static string defaultTheme = SerenityInfo.SystemName;
         #endregion
         #region Properties - Public

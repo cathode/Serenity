@@ -63,6 +63,8 @@ namespace Serenity
             else
             {
                 //generate 404 not found response.
+                context.Response.Write("404 Not Found");
+                context.Response.Status = StatusCode.Http404NotFound;
             }
         }
         #endregion
