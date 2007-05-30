@@ -28,6 +28,11 @@ namespace Server
         {
             Console.WriteLine("{0}, v{1}\r\n{2} ({3})\r\n",
                 SerenityInfo.Name, SerenityInfo.Version, SerenityInfo.Copyright, "http://serenityproject.net/");
+
+            Log.LogToConsole = true;
+            Log.LogToFile = true;
+            OverwriteMode mode = OverwriteMode.None;
+
             foreach (string arg in args)
             {
                 switch (arg)
@@ -36,12 +41,20 @@ namespace Server
                     case "--global":
                         SPath.DefaultScope = ResolutionScope.Global;
                         SPath.ForceDefaultScope = true;
+                        Log.Write("Forced global scope mode engaged", LogMessageLevel.Info);
                         break;
 
                     case "-l":
                     case "--local":
                         SPath.DefaultScope = ResolutionScope.Local;
                         SPath.ForceDefaultScope = true;
+                        Log.Write("Forced local scope mode engaged", LogMessageLevel.Info);
+                        break;
+
+                    case "-o":
+                    case "--overwrite":
+                        mode = OverwriteMode.Older;
+                        Log.Write("Overwrite Older Files mode engaged", LogMessageLevel.Info);
                         break;
 
                     default:
@@ -49,8 +62,7 @@ namespace Server
                 }
             }
 
-            Log.LogToConsole = true;
-            Log.LogToFile = true;
+            
 
             Log.Write("Beginning File Verification", LogMessageLevel.Info);
 
@@ -70,7 +82,7 @@ namespace Server
                             Directory.CreateDirectory(SPath.ResolveSpecialPath(specialFolder, ResolutionScope.Local));
                         }
                         copied += SPath.CopyDirectory(SPath.ResolveSpecialPath(specialFolder, ResolutionScope.Global),
-                            SPath.ResolveSpecialPath(specialFolder, ResolutionScope.Local));
+                            SPath.ResolveSpecialPath(specialFolder, ResolutionScope.Local), mode);
                     }
                 }
                 catch

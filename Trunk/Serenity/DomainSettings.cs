@@ -21,99 +21,6 @@ using Serenity.Properties;
 
 namespace Serenity
 {
-/*
-    public static class InstanceManager<T> where T : class
-    {
-        #region Constructors - Private
-        /// <summary>
-        /// Initializes the static members of the Multiton class.
-        /// </summary>
-        static InstanceManager()
-        {
-            InstanceManager<T>.instances = new Dictionary<string, T>();
-        }
-        #endregion
-        #region Fields - Private
-        [ThreadStatic]
-        private static T currentInstance;
-        private static T defaultInstance;
-        private static Dictionary<string, T> instances;
-        private static T systemInstance;
-        #endregion
-        #region Methods - Public
-        public static T GetInstance(string key)
-        {
-            if (InstanceManager<T>.ContainsKey(key))
-            {
-                return InstanceManager<T>.instances[key];
-            }
-            else
-            {
-                return default(T);
-            }
-        }
-        public static bool ContainsKey(string key)
-        {
-            return InstanceManager<T>.instances.ContainsKey(key);
-        }
-        public static bool ContainsInstance(T instance)
-        {
-            return InstanceManager<T>.instances.ContainsValue(instance);
-        }
-        #endregion
-        #region Properties - Public
-        public static T CurrentInstance
-        {
-            get
-            {
-                return InstanceManager<T>.currentInstance;
-            }
-            set
-            {
-                InstanceManager<T>.currentInstance = value;
-            }
-        }
-        /// <summary>
-        /// Gets or sets the default instance.
-        /// </summary>
-        public static T DefaultInstance
-        {
-            get
-            {
-                if (InstanceManager<T>.defaultInstance != null)
-                {
-                    return InstanceManager<T>.defaultInstance;
-                }
-                else
-                {
-                    return InstanceManager<T>.systemInstance;
-                }
-            }
-            set
-            {
-                InstanceManager<T>.defaultInstance = value;
-            }
-        }
-        /// <summary>
-        /// Gets or sets the system instance.
-        /// </summary>
-        public static T SystemInstance
-        {
-            get
-            {
-                return InstanceManager<T>.systemInstance;
-            }
-            set
-            {
-                if ((InstanceManager<T>.systemInstance == null) && (value != null))
-                {
-                    InstanceManager<T>.systemInstance = value;
-                }
-            }
-        }
-        #endregion  
-    }
-    */
     /// <summary>
     /// Represents a collection of settings that are specific to a domain name.
     /// </summary>
@@ -289,19 +196,23 @@ namespace Serenity
                 return DomainSettings.root;
             }
         }
-        public static void LoadAll()
+        public static bool LoadAll()
         {
-            /*
-             * Domain loading not implemented yet!
-            lock (DomainSettings)
+            foreach (DomainSettings ds in DomainSettings.settings.Values)
             {
-                
-                foreach (string domain in Directory.GetFiles(SPath.DomainsDirectory))
-                {
 
-                }
             }
-             * */
+
+            return true;
+        }
+        public static bool SaveAll()
+        {
+            foreach (DomainSettings ds in DomainSettings.settings.Values)
+            {
+
+            }
+
+            return true;
         }
         public static void Save(DomainSettings settings)
         {

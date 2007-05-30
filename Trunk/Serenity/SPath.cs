@@ -65,6 +65,13 @@ namespace Serenity
         Local,
         Global,
     }
+    public enum OverwriteMode
+    {
+        All,
+        Newer,
+        Older,
+        None,
+    }
     public static class SPath
     {
         #region Constructors - Static
@@ -123,13 +130,17 @@ namespace Serenity
             }
             return result;
         }
+        public static int CopyDirectory(string source, string destination)
+        {
+            return SPath.CopyDirectory(source, destination, OverwriteMode.None);
+        }
         /// <summary>
         /// Recursively copies files and directories from one directory to another.
         /// </summary>
         /// <param name="source"></param>
         /// <param name="destination"></param>
         /// <returns></returns>
-        public static int CopyDirectory(string source, string destination)
+        public static int CopyDirectory(string source, string destination, OverwriteMode mode)
         {
             int copied = 0;
             source = Path.GetFullPath(source);
@@ -152,7 +163,7 @@ namespace Serenity
             foreach (string path in Directory.GetDirectories(source))
             {
                 string temp = Path.Combine(destination, Path.GetFileName(path));
-                copied += SPath.CopyDirectory(path, temp);
+                copied += SPath.CopyDirectory(path, temp, mode);
             }
 
             return copied;
