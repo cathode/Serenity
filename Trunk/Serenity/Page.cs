@@ -56,6 +56,13 @@ namespace Serenity
         {
             get;
         }
+        public string SystemName
+        {
+            get
+            {
+                return this.Name.ToLower();
+            }
+        }
         #endregion
     }
 }

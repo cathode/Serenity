@@ -29,7 +29,7 @@ namespace Serenity.ResourceClasses
 
             if (context.Request.Url.Segments.Length > 1)
             {
-                int n = 3;
+                int n = 4;
                 if (DomainSettings.Current.OmitEnvironment.Value)
                 {
                     n--;

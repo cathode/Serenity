@@ -68,7 +68,7 @@ namespace Serenity
             {
                 foreach (ContentPage P in this.pages)
                 {
-                    if (P.Name == name)
+                    if (P.SystemName == name)
                     {
                         return P;
                     }
