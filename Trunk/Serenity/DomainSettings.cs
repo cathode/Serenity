@@ -24,6 +24,7 @@ namespace Serenity
     /// <summary>
     /// Represents a collection of settings that are specific to a domain name.
     /// </summary>
+    [Serializable]
     public sealed class DomainSettings
     {
         #region Constructors - Private
@@ -33,11 +34,11 @@ namespace Serenity
 
             DomainSettings.root = new DomainSettings("");
 
-            DomainSettings.root.DefaultEnvironment.Value = GlobalSettings.DefaultEnvironment;
-            DomainSettings.root.DefaultModule.Value = GlobalSettings.DefaultModule;
-            DomainSettings.root.DefaultTheme.Value = GlobalSettings.DefaultTheme;
-            DomainSettings.root.DefaultResourceClass.Value = GlobalSettings.DefaultResourceClass;
-            DomainSettings.root.DefaultResourceName.Value = GlobalSettings.DefaultResourceName;
+            DomainSettings.root.DefaultEnvironment.Value = "system";
+            DomainSettings.root.DefaultModule.Value = "system";
+            DomainSettings.root.DefaultTheme.Value = "system";
+            DomainSettings.root.DefaultResourceClass.Value = "static";
+            DomainSettings.root.DefaultResourceName.Value = "default.html";
             DomainSettings.root.CompressionThreshhold.Value = 4096;
 
             DomainSettings.settings.Add("", root);
@@ -198,39 +199,41 @@ namespace Serenity
         }
         public static bool LoadAll()
         {
-            foreach (DomainSettings ds in DomainSettings.settings.Values)
+            if (Directory.Exists(SPath.ResolveSpecialPath(SpecialFolder.Domains)))
             {
 
+                return true;
             }
-
-            return true;
+            else
+            {
+                return false;
+            }
         }
         public static bool SaveAll()
         {
             foreach (DomainSettings ds in DomainSettings.settings.Values)
             {
-
+                DomainSettings.Save(ds);
             }
 
             return true;
         }
-        public static void Save(DomainSettings settings)
+        public static bool Save(DomainSettings settings)
         {
-            if (settings != DomainSettings.root)
+            if (Directory.Exists(SPath.ResolveSpecialPath(SpecialFolder.Domains)))
             {
-                using (MemoryStream ms = new MemoryStream())
+                using (FileStream fs = File.Open(Path.Combine(SPath.DomainsFolder, settings.name + ".ds"), FileMode.Create))
                 {
                     BinaryFormatter formatter = new BinaryFormatter();
 
-                    formatter.Serialize(ms, settings);
-                    ms.Close();
-
-                    File.WriteAllBytes(Path.Combine(SPath.DomainsFolder, settings.ToString()), ms.ToArray());
+                    formatter.Serialize(fs, settings);
+                    fs.Close();
                 }
+                return true;
             }
             else
             {
-                throw new ArgumentException("Cannot specify SystemInstance as object to be saved.");
+                return false;
             }
         }
         #endregion
@@ -246,6 +249,9 @@ namespace Serenity
                 DomainSettings.current = value;
             }
         }
+        /// <summary>
+        /// Gets a boolean value which indicates if the current DomainSettings has a parent.
+        /// </summary>
         public bool HasParent
         {
             get

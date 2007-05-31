@@ -19,14 +19,24 @@ using Serenity.IO;
 
 namespace Serenity.Hdf
 {
+    /// <summary>
+    /// Provides a way to write HdfDatasets to a stream.
+    /// </summary>
     public sealed class HdfWriter : Writer<HdfDataset>
     {
         #region Constructors - Public
+        /// <summary>
+        /// Initializes a new instance of the HdfWriter class, using the default HdfWriterSettings.
+        /// </summary>
         public HdfWriter()
             : this(new HdfWriterSettings())
         {
 
         }
+        /// <summary>
+        /// Initializes a new instance of the HdfWriter class, using the supplied HdfWriterSettings.
+        /// </summary>
+        /// <param name="settings"></param>
         public HdfWriter(HdfWriterSettings settings)
         {
             this.settings = settings;
@@ -87,7 +97,15 @@ namespace Serenity.Hdf
         }
         #endregion
         #region Methods - Public
-        public override void Write(Stream stream, HdfDataset obj)
+        /// <summary>
+        /// Writes the supplied HdfDataset to the supplied Stream,
+        /// in the manner defined by the HdfWriterSettings that the
+        /// current HdfWriter was created with.
+        /// </summary>
+        /// <param name="stream">The stream to be written to.</param>
+        /// <param name="obj">The HdfDataset to write.</param>
+        /// <returns>True if everything went okay, otherwise false.</returns>
+        public override bool Write(Stream stream, HdfDataset obj)
         {
             if (stream.CanWrite)
             {
@@ -95,13 +113,16 @@ namespace Serenity.Hdf
                 {
                     this.WriteElement(stream, element);
                 }
+                return true;
             }
             else
             {
-                throw new NotSupportedException("The supplied stream does not support writing, which is a required capability");
+                return false;
             }
         }
-
+        /// <summary>
+        /// Frees any unmanaged resources used by the current HdfWriter.
+        /// </summary>
         public override void Dispose()
         {
             

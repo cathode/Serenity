@@ -45,7 +45,7 @@ namespace Serenity.ResourceClasses
             {
                 string[] nameParts = new string[segments.Length - n];
                 Array.Copy(segments, n, nameParts, 0, nameParts.Length);
-                resourceName = string.Join("", nameParts);
+                resourceName = string.Join("", nameParts).ToLower();
             }
             else if (segments.Length == 3)
             {

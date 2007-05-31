@@ -31,11 +31,11 @@ namespace Serenity.IO
         /// When overridden in a derived class, writes the supplied T to the supplied Stream.
         /// </summary>
         /// <param name="stream">The stream to be written to.</param>
-        /// <param name="obj">The object to write to the stream.</param>
+        /// <param name="value">The object to write to the stream.</param>
         /// <remarks>
         /// The supplied Stream must support writing.
         /// </remarks>
-        public abstract void Write(Stream stream, T obj);
+        public abstract bool Write(Stream stream, T value);
         #endregion
         #region Properties - Public
         /// <summary>

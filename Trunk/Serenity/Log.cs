@@ -58,18 +58,56 @@ namespace Serenity
         #region Constructors - Private
         static Log()
         {
-            if (Directory.Exists(SPath.LogsFolder) == false)
-            {
-                Directory.CreateDirectory(SPath.LogsFolder);
-            }
+            Log.waiting = new Queue<LogEntry>();
+            Log.active = true;
+            ThreadPool.QueueUserWorkItem(new WaitCallback(Log.LogWorker));
         }
         #endregion
         #region Fields - Private
         private static bool console = false;
         private static bool file = true;
-        private static Mutex mutex = new Mutex();
+        private static Queue<LogEntry> waiting;
+        private static int interval = Log.MinimumInterval;
+        private static bool active = false;
+        #endregion
+        #region Fields - Public
+        public const int MinimumInterval = 500;
         #endregion
         #region Methods - Private
+        private static void LogWorker(object unused)
+        {
+            while (Log.active)
+            {
+                while (Log.waiting.Count > 0)
+                {
+                    LogEntry entry = Log.waiting.Dequeue();
+                    if (Log.console == true)
+                    {
+                        Console.WriteLine("[{0}] {1} ({2}) {3}",
+                            entry.Time.ToString("s"),
+                            entry.Level.ToString(),
+                            entry.AssemblyFile,
+                            entry.Message);
+                    }
+                    if (Log.file == true)
+                    {
+                        using (FileStream fs = File.Open(SPath.LogFile, FileMode.Append))
+                        {
+                            byte[] content = Encoding.UTF8.GetBytes(string.Format("{0}\t{1}\t{2}\t{3}\r\n",
+                                entry.Time.ToString("s"),
+                                entry.Level.ToString(),
+                                entry.AssemblyFile,
+                                entry.Message));
+
+                            fs.Write(content, 0, content.Length);
+                            fs.Flush();
+                            fs.Close();
+                        }
+                    }
+                }
+                Thread.Sleep(Log.interval);
+            }
+        }
         private static string Sanitize(string value)
         {
             string Output = value;
@@ -91,49 +129,42 @@ namespace Serenity
         /// <param name="level">A LogMessageLevel object describing the severity of the message.</param>
         public static void Write(string message, LogMessageLevel level)
         {
-            message = Log.Sanitize(message);
-            DateTime When = DateTime.UtcNow;
-
-            string AssemblyFile;
-            if (level > LogMessageLevel.Warning)
+            lock (Log.waiting)
             {
-                AssemblyFile = Path.GetFileName(Assembly.GetCallingAssembly().Location);
-            }
-            else
-            {
-                AssemblyFile = "none";
-            }
-
-            StringBuilder Output = new StringBuilder();
-            Output.AppendFormat("{0}\t{1}\t{2}\t{3}\r\n",
-                When.ToString("s"),
-                (Byte)level,
-                AssemblyFile,
-                message);
-
-            if (Log.console == true)
-            {
-                Console.WriteLine("[{0}] {1} ({2}) {3}",
-                    When.ToString("s"),
-                    level.ToString(),
-                    AssemblyFile,
-                    message);
-            }
-            if (Log.file == true)
-            {
-                byte[] WriteContent = Encoding.UTF8.GetBytes(Output.ToString());
-                Log.mutex.WaitOne();
-                using (FileStream OutputStream = File.Open(SPath.LogFile, FileMode.Append))
-                {
-                    OutputStream.Write(WriteContent, 0, WriteContent.Length);
-                    OutputStream.Flush();
-                    OutputStream.Close();
-                }
-                Log.mutex.ReleaseMutex();
+                Log.waiting.Enqueue(LogEntry.Create(message, level));
             }
         }
         #endregion
         #region Properties - Public
+        public static bool Active
+        {
+            get
+            {
+                return Log.active;
+            }
+            set
+            {
+                Log.active = value;
+            }
+        }
+        public static int Interval
+        {
+            get
+            {
+                return Log.interval;
+            }
+            set
+            {
+                if (value >= Log.MinimumInterval)
+                {
+                    Log.interval = value;
+                }
+                else
+                {
+                    Log.interval = Log.MinimumInterval;
+                }
+            }
+        }
         /// <summary>
         /// Gets or sets a boolean value which determines whether log messages
         /// will be written to the console (true), or not (false).
@@ -171,5 +202,34 @@ namespace Serenity
             }
         }
         #endregion
+    }
+    internal class LogEntry
+    {
+        #region Fields - Internal
+        internal string Message;
+        internal LogMessageLevel Level;
+        internal string AssemblyFile;
+        internal DateTime Time;
+        #endregion;
+
+        internal static LogEntry Create(string message, LogMessageLevel level)
+        {
+            LogEntry entry = new LogEntry();
+
+            entry.Message = message;
+            entry.Level = level;
+            entry.Time = DateTime.UtcNow;
+
+            if (level > LogMessageLevel.Info)
+            {
+                entry.AssemblyFile = Path.GetFileName(Assembly.GetCallingAssembly().Location);
+            }
+            else
+            {
+                entry.AssemblyFile = "none";
+            }
+
+            return entry;
+        }
     }
 }
