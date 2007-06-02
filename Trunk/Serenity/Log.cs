@@ -18,7 +18,12 @@ using System.Text;
 using System.Threading;
 
 namespace Serenity
-{   
+{
+    internal enum LogState
+    {
+        Started,
+        Stopped,
+    }
     /// <summary>
     /// Used to indicate the severity or type of a log message.
     /// </summary>
@@ -59,8 +64,7 @@ namespace Serenity
         static Log()
         {
             Log.waiting = new Queue<LogEntry>();
-            Log.active = true;
-            ThreadPool.QueueUserWorkItem(new WaitCallback(Log.LogWorker));
+            
         }
         #endregion
         #region Fields - Private
@@ -68,7 +72,8 @@ namespace Serenity
         private static bool file = true;
         private static Queue<LogEntry> waiting;
         private static int interval = Log.MinimumInterval;
-        private static bool active = false;
+        private static LogState currentState = LogState.Stopped;
+        private static LogState desiredState = LogState.Stopped;
         #endregion
         #region Fields - Public
         public const int MinimumInterval = 500;
@@ -76,37 +81,50 @@ namespace Serenity
         #region Methods - Private
         private static void LogWorker(object unused)
         {
-            while (Log.active)
+            if (Log.desiredState == LogState.Started)
             {
-                while (Log.waiting.Count > 0)
+                Log.currentState = LogState.Started;
+
+                while (Log.currentState == LogState.Started)
                 {
-                    LogEntry entry = Log.waiting.Dequeue();
-                    if (Log.console == true)
+                    while (Log.waiting.Count > 0)
                     {
-                        Console.WriteLine("[{0}] {1} ({2}) {3}",
-                            entry.Time.ToString("s"),
-                            entry.Level.ToString(),
-                            entry.AssemblyFile,
-                            entry.Message);
-                    }
-                    if (Log.file == true)
-                    {
-                        using (FileStream fs = File.Open(SPath.LogFile, FileMode.Append))
+                        LogEntry entry = Log.waiting.Dequeue();
+                        if (Log.console == true)
                         {
-                            byte[] content = Encoding.UTF8.GetBytes(string.Format("{0}\t{1}\t{2}\t{3}\r\n",
+                            Console.WriteLine("[{0}] {1} ({2}) {3}",
                                 entry.Time.ToString("s"),
                                 entry.Level.ToString(),
                                 entry.AssemblyFile,
-                                entry.Message));
+                                entry.Message);
+                        }
+                        if (Log.file == true)
+                        {
+                            using (FileStream fs = (File.Exists(SPath.LogFile) ? File.Open(SPath.LogFile, FileMode.Append) : File.Open(SPath.LogFile, FileMode.Create)))
+                            {
+                                byte[] content = Encoding.UTF8.GetBytes(string.Format("{0}\t{1}\t{2}\t{3}\r\n",
+                                    entry.Time.ToString("s"),
+                                    entry.Level.ToString(),
+                                    entry.AssemblyFile,
+                                    entry.Message));
 
-                            fs.Write(content, 0, content.Length);
-                            fs.Flush();
-                            fs.Close();
+                                fs.Write(content, 0, content.Length);
+                                fs.Flush();
+                                fs.Close();
+                            }
                         }
                     }
+                    if (Log.desiredState == LogState.Stopped)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        Thread.Sleep(Log.interval);
+                    }
                 }
-                Thread.Sleep(Log.interval);
             }
+            Log.currentState = LogState.Stopped;
         }
         private static string Sanitize(string value)
         {
@@ -122,6 +140,19 @@ namespace Serenity
         }
         #endregion
         #region Methods - Public
+        public static void StartLogging()
+        {
+            Log.desiredState = LogState.Started;
+            ThreadPool.QueueUserWorkItem(new WaitCallback(Log.LogWorker));
+        }
+        public static void StopLogging()
+        {
+            Log.desiredState = LogState.Stopped;
+            while (Log.currentState != Log.desiredState)
+            {
+                Thread.Sleep(Log.Interval + (Log.Interval / 2));
+            }
+        }
         /// <summary>
         /// Logs a message.
         /// </summary>
@@ -133,17 +164,6 @@ namespace Serenity
         }
         #endregion
         #region Properties - Public
-        public static bool Active
-        {
-            get
-            {
-                return Log.active;
-            }
-            set
-            {
-                Log.active = value;
-            }
-        }
         public static int Interval
         {
             get

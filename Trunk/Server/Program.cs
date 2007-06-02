@@ -68,29 +68,42 @@ namespace Server
             int copied = 0;
             foreach (SpecialFolder specialFolder in Program.RecurseEnum<SpecialFolder>())
             {
-                try
+                if (specialFolder != SpecialFolder.Root)
                 {
-                    if (specialFolder != SpecialFolder.Root)
+                    try
                     {
                         if (Directory.Exists(SPath.ResolveSpecialPath(specialFolder, ResolutionScope.Global)) == false)
                         {
                             Directory.CreateDirectory(SPath.ResolveSpecialPath(specialFolder, ResolutionScope.Global));
                         }
+                    }
+                    catch
+                    {
+                    }
+                    try
+                    {
                         if (Directory.Exists(SPath.ResolveSpecialPath(specialFolder, ResolutionScope.Local)) == false)
                         {
                             Directory.CreateDirectory(SPath.ResolveSpecialPath(specialFolder, ResolutionScope.Local));
                         }
+                    }
+                    catch
+                    {
+                    }
+                    try
+                    {
                         copied += SPath.CopyDirectory(SPath.ResolveSpecialPath(specialFolder, ResolutionScope.Global),
                             SPath.ResolveSpecialPath(specialFolder, ResolutionScope.Local), mode);
                     }
-                }
-                catch
-                {
-
+                    catch
+                    {
+                    }
                 }
             }
 
             Log.Write("Completed File Verfication (" + copied.ToString() + " files)", LogMessageLevel.Info);
+
+            Log.StartLogging();
 
             string operatingMode = "server";
             if (args.Length > 0)
