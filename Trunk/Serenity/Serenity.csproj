@@ -66,7 +66,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\Module.cs" />
-    <Compile Include="Attributes\Page.cs" />
     <None Include="Cache\CacheManager.cs" />
     <None Include="Cache\CachedStream.cs" />
     <Compile Include="ContentPage.cs" />
@@ -104,7 +103,6 @@
     <Compile Include="ResourceClasses\ThemeResourceClass.cs" />
     <Compile Include="ResourceClass.cs" />
     <Compile Include="FileTypeRegistry.cs" />
-    <Compile Include="GlobalSettings.cs" />
     <Compile Include="SPath.cs" />
     <Compile Include="SerenityModule.cs" />
     <Compile Include="Log.cs" />

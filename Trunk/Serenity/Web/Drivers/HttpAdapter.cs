@@ -395,6 +395,10 @@ namespace Serenity.Web.Drivers
                         break;
 
                     case HttpAdapterSteps.FieldsParsed:
+                        if (this.CurrentContext.Request.Url == null)
+                        {
+                            this.CurrentContext.Request.Url = new Uri("http://localhost/");
+                        }
                         this.Recycle();
                         unused = new byte[0];
                         this.currentStep = HttpAdapterSteps.PreParse;

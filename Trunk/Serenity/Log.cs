@@ -129,10 +129,7 @@ namespace Serenity
         /// <param name="level">A LogMessageLevel object describing the severity of the message.</param>
         public static void Write(string message, LogMessageLevel level)
         {
-            lock (Log.waiting)
-            {
-                Log.waiting.Enqueue(LogEntry.Create(message, level));
-            }
+            Log.waiting.Enqueue(LogEntry.Create(message, level));
         }
         #endregion
         #region Properties - Public

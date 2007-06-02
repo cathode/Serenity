@@ -9,26 +9,10 @@ namespace Server.OperatingModes
 {
     internal static class DebugMode
     {
-        private static void Fib(int n)
-        {
-            ulong a = 0;
-            ulong b = 1;
-            ulong c = 0;
-
-            if (n != 1)
-            {
-                for (int i = 1; i <= n; i++)
-                {
-                    Console.WriteLine(a);
-                    c = a + b;
-                    a = b;
-                    b = c;
-                }
-                
-            }
-        }
         internal static void Run()
         {
+            Serenity.DomainSettings.SaveAll();
+            Serenity.DomainSettings.LoadAll();
             using (MemoryStream stream = new MemoryStream())
             {
                 HdfDataset dataset = new HdfDataset();

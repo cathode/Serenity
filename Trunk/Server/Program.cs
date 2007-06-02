@@ -97,7 +97,6 @@ namespace Server
             {
                 operatingMode = args[0];
             }
-            Console.CancelKeyPress += new ConsoleCancelEventHandler(Console_CancelKeyPress);
             switch (operatingMode)
             {
                 default:
@@ -115,13 +114,6 @@ namespace Server
                     Console.ReadLine();
                     break;
             }
-        }
-
-        static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
-        {
-            Log.Write("Stopping server", LogMessageLevel.Info);
-            WebManager.StopAll();
-            Log.Write("Server stopped", LogMessageLevel.Info);
         }
         private static IEnumerable<T> RecurseEnum<T>()
         {

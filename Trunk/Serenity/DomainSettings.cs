@@ -31,16 +31,7 @@ namespace Serenity
         static DomainSettings()
         {
             DomainSettings.settings = new Dictionary<string, DomainSettings>();
-
-            DomainSettings.root = new DomainSettings("");
-
-            DomainSettings.root.DefaultEnvironment.Value = "system";
-            DomainSettings.root.DefaultModule.Value = "system";
-            DomainSettings.root.DefaultTheme.Value = "system";
-            DomainSettings.root.DefaultResourceClass.Value = "static";
-            DomainSettings.root.DefaultResourceName.Value = "default.html";
-            DomainSettings.root.CompressionThreshhold.Value = 4096;
-
+            DomainSettings.root = DomainSettings.CreateDefaultRoot();
             DomainSettings.settings.Add("", root);
         }
         #endregion
@@ -98,7 +89,7 @@ namespace Serenity
         [NonSerialized]
         private readonly DomainSettings parent;
         [NonSerialized]
-        private static readonly DomainSettings root;
+        private static DomainSettings root;
         [NonSerialized]
         private static readonly Dictionary<string, DomainSettings> settings;
         #endregion
@@ -118,6 +109,20 @@ namespace Serenity
         public readonly DomainSettingValue<bool> OmitResourceClass;
         public readonly DomainSettingValue<int> CompressionThreshhold;
         #endregion
+        #region Methods - Private
+        private static DomainSettings CreateDefaultRoot()
+        {
+            DomainSettings root = new DomainSettings("");
+            root.DefaultEnvironment.Value = "system";
+            root.DefaultModule.Value = "system";
+            root.DefaultTheme.Value = "system";
+            root.DefaultResourceClass.Value = "static";
+            root.DefaultResourceName.Value = "default.html";
+            root.CompressionThreshhold.Value = 4096;
+
+            return root;
+        }
+        #endregion
         #region Methods - Public
         /// <summary>
         /// Gets the domain settings object which best matches the supplied hostUrl.
@@ -126,15 +131,22 @@ namespace Serenity
         /// <returns></returns>
         public static DomainSettings GetBestMatch(Uri hostUrl)
         {
-            if (hostUrl.HostNameType == UriHostNameType.Dns)
+            if (hostUrl != null)
             {
-                string[] names = hostUrl.Host.Split('.');
-                Array.Reverse(names);
-                return DomainSettings.GetBestMatch(string.Join(".", names), true);
+                if (hostUrl.HostNameType == UriHostNameType.Dns)
+                {
+                    string[] names = hostUrl.Host.Split('.');
+                    Array.Reverse(names);
+                    return DomainSettings.GetBestMatch(string.Join(".", names), true);
+                }
+                else
+                {
+                    return DomainSettings.GetBestMatch(hostUrl.Host, false);
+                }
             }
             else
             {
-                return DomainSettings.GetBestMatch(hostUrl.Host, false);
+                return DomainSettings.root;
             }
         }
         /// <summary>
@@ -199,9 +211,24 @@ namespace Serenity
         }
         public static bool LoadAll()
         {
-            if (Directory.Exists(SPath.ResolveSpecialPath(SpecialFolder.Domains)))
+            string domainPath = SPath.ResolveSpecialPath(SpecialFolder.Domains);
+            DomainSettings oldRoot = DomainSettings.root;
+            DomainSettings.settings.Clear();
+            if (Directory.Exists(domainPath))
             {
-
+                string[] files = Directory.GetFiles(domainPath);
+                foreach (string path in files)
+                {
+                    DomainSettings settings = DomainSettings.Load(path);
+                    if (settings != null)
+                    {
+                        DomainSettings.settings.Add(settings.name, settings);
+                    }
+                }
+                if (DomainSettings.settings.ContainsKey(""))
+                {
+                    DomainSettings.root = DomainSettings.settings[""];
+                }
                 return true;
             }
             else
@@ -217,6 +244,27 @@ namespace Serenity
             }
 
             return true;
+        }
+        public static DomainSettings Load(string path)
+        {
+            //start with null, thats what is returned if it couldnt be loaded.
+            DomainSettings result = null;
+
+            if (File.Exists(path))
+            {
+                using (FileStream fs = File.Open(path, FileMode.Open))
+                {
+                    BinaryFormatter formatter = new BinaryFormatter();
+
+                    object settings = formatter.Deserialize(fs);
+
+                    if (settings is DomainSettings)
+                    {
+                        result = (DomainSettings)settings;
+                    }
+                }
+            }
+            return result;
         }
         public static bool Save(DomainSettings settings)
         {
