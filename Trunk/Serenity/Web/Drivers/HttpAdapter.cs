@@ -455,8 +455,14 @@ namespace Serenity.Web.Drivers
             }
             if (Response.Headers.Contains("Content-Type") == false)
             {
-                Response.Headers.Add("Content-Type", Response.MimeType + "; charset=UTF-8\r\n");
+                Response.Headers.Add("Content-Type", Response.MimeType + "; charset=UTF-8");
             }
+            if (Response.Headers.Contains("Server"))
+            {
+                Response.Headers.Remove("Server");
+            }
+            Response.Headers.Add(new Header("Server", SerenityInfo.Name + "/" + SerenityInfo.Version));
+
             foreach (Header H in Response.Headers)
             {
                 outputText.Append(string.Format("{0}: {1}\r\n", H.Name, this.GetWholeValue(H)));
