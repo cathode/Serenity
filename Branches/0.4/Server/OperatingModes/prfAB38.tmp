@@ -1,0 +1,73 @@
+/*
+Serenity - The next evolution of web server technology
+
+Copyright © 2006-2007 Serenity Project (http://serenityproject.net/)
+
+This file is protected by the terms and conditions of the
+Microsoft Community License (Ms-CL), a copy of which should
+have been distributed along with this software. If not,
+you may find the license information at the following URL:
+
+http://www.microsoft.com/resources/sharedsource/licensingbasics/communitylicense.mspx
+*/
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+using Serenity;
+using Serenity.Hdf;
+
+namespace Server.OperatingModes
+{
+    using System.IO;
+
+    internal class ServerMode
+    {
+        
+        public static void Run()
+        {
+#if DEBUG
+            using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(@"title = test
+groups
+{
+	Directories
+	{
+		columns
+		{
+			0 = 'Directory Name'
+			1 = 'Last Modified'
+		}
+		rows
+		{
+			0.icon = folder.png
+			0.0 = Icons
+			0.1 = 2007-04-27T22:18:56
+		}
+	}
+	Files
+	{
+		columns
+		{
+			0 = 'File Name'
+			1 = 'File Size'
+			2 = 'File Type'
+			3 = 'Last Modified'
+		}
+		rows
+		{
+			0.icon = page_white.png
+		}
+	}
+}")))
+            {
+                HdfReader reader = new HdfReader();
+                HdfDataset dataset = reader.Read(stream);
+                dataset.CreateElement("groups.Directories.columns.0", "");
+                dataset["groups.Directories.columns.0"].Value = "Hello World";
+            }
+#else
+            SerenityServer.Run();
+#endif
+        }
+    }
+}
