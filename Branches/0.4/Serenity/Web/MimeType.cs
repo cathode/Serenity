@@ -18,11 +18,26 @@ namespace Serenity.Web
         }
         #endregion
         #region Fields - Private
-        private string subtype;
-        private string type;
+        private readonly string subtype;
+        private readonly string type;
         #endregion
 
         #region Properties - Public
+        public string Subtype
+        {
+            get
+            {
+                return this.subtype;
+            }
+        }
+        public string Type
+        {
+            get
+            {
+                return this.type;
+            }
+        }
+        
         /// <summary>
         /// application/EDI-X12
         /// </summary>
@@ -203,6 +218,9 @@ namespace Serenity.Web
                 return new MimeType("multipart", "mixed");
             }
         }
+        /// <summary>
+        /// multipart/alternative
+        /// </summary>
         public static MimeType MultipartAlternative
         {
             get
@@ -210,11 +228,54 @@ namespace Serenity.Web
                 return new MimeType("multipart", "alternative");
             }
         }
+        /// <summary>
+        /// multipart/related
+        /// </summary>
         public static MimeType MultipartRelated
         {
             get
             {
                 return new MimeType("multipart", "related");
+            }
+        }
+        /// <summary>
+        /// text/css
+        /// </summary>
+        public static MimeType TextCss
+        {
+            get
+            {
+                return new MimeType("text", "css");
+            }
+        }
+        /// <summary>
+        /// text/html
+        /// </summary>
+        public static MimeType TextHtml
+        {
+            get
+            {
+                return new MimeType("text", "html");
+            }
+        }
+        /// <summary>
+        /// text/javascript
+        /// </summary>
+        public static MimeType TextJavascript
+        {
+            get
+            {
+                return new MimeType("text", "javascript");
+            }
+        }
+        /// <summary>
+        /// text/plain
+        /// </summary>
+        public static MimeType TextPlain
+        {
+            get
+            {
+                return new MimeType("text", "plain");
             }
         }
         #endregion

@@ -8,6 +8,10 @@ namespace Serenity.ResourceClasses
 {
     internal class ResourceResourceClass : ResourceClass
     {
+        internal ResourceResourceClass() : base("resource")
+        {
+
+        }
         public override void HandleContext(Serenity.Web.CommonContext context)
         {
             
