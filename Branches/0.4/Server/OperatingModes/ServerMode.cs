@@ -15,6 +15,9 @@ using System.Collections.Generic;
 using System.Text;
 
 using Serenity;
+using Serenity.Themes;
+using Serenity.Web;
+using Serenity.Web.Drivers;
 
 namespace Server.OperatingModes
 {
@@ -23,7 +26,53 @@ namespace Server.OperatingModes
         
         internal static void Run()
         {
-            SerenityServer.Run();
+            Theme theme = new Theme(SerenityInfo.SystemName);
+            theme.AccentA.TextColor.Value = "114 124 163";
+            theme.AccentB.TextColor.Value = "159 184 205";
+            theme.AccentC.TextColor.Value = "210 218 122";
+            theme.AccentD.TextColor.Value = "250 218 122";
+            theme.AccentE.TextColor.Value = "184 132 114";
+            theme.AccentF.TextColor.Value = "145 115 106";
+            theme.ContentA.TextColor.Value = "0 0 0";
+            theme.ContentA.BackgroundColor.Value = "251 251 251";
+            theme.ContentB.TextColor.Value = "70 70 83";
+            theme.ContentB.BackgroundColor.Value = "231 243 246";
+
+            Border border = theme.HeadingA.Border;
+
+            border.Top.BorderType = BorderType.Dotted;
+            border.Top.Width.Value = 1;
+
+            border.Left.BorderType = BorderType.Dotted;
+            border.Left.Width.Value = 1;
+
+            theme.HeadingA.Padding.Top.Value = 8;
+            theme.HeadingA.Padding.Left.Value = 16;
+
+            Theme.SystemInstance = theme;
+
+            SerenityEnvironment.LoadAllEnvironments();
+            if (SerenityEnvironment.ContainsInstance(SerenityInfo.SystemName) == true)
+            {
+                SerenityEnvironment.SystemInstance = SerenityEnvironment.GetInstance(SerenityInfo.SystemName);
+            }
+
+            Module.LoadAllModules();
+            Module module = Module.GetModule("system");
+
+            Log.Write(string.Format("Loaded: {0} environments, {1} modules, {2} themes.",
+                SerenityEnvironment.Instances.Length,
+                Module.ModuleCount,
+                Theme.Instances.Length), LogMessageLevel.Info);
+            WebDriverSettings InitSettings = WebDriverSettings.Create(80, 1000);
+            InitSettings.RecieveInterval = 0;
+            InitSettings.FallbackPorts = new ushort[] { 8080, 8081 };
+
+            WebManager.AddDriver(new HttpDriver(new ContextHandler()));
+            WebManager.Initialize<HttpDriver>(InitSettings);
+            WebManager.StartAll();
+
+            Log.Write("Server shutting down", LogMessageLevel.Info);
         }
     }
 }

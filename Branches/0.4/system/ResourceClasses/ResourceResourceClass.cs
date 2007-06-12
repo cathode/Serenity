@@ -8,7 +8,7 @@ namespace Serenity.ResourceClasses
 {
     internal class ResourceResourceClass : ResourceClass
     {
-        internal ResourceResourceClass() : base("resource")
+        public ResourceResourceClass() : base("resource")
         {
 
         }

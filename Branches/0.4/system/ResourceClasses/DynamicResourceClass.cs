@@ -44,16 +44,16 @@ namespace Serenity.ResourceClasses
                 if (nameParts.Length > 0)
                 {
                     Array.Copy(context.Request.Url.Segments, n, nameParts, 0, nameParts.Length);
-                    page = SerenityModule.CurrentInstance.GetPage(string.Join("", nameParts).ToLower());
+                    page = null; //SerenityModule.CurrentInstance.GetPage(string.Join("", nameParts).ToLower());
                 }
                 else
                 {
-                    page = SerenityModule.CurrentInstance.DefaultPage;
+                    page = null; //SerenityModule.CurrentInstance.DefaultPage;
                 }
             }
             else
             {
-                page = SerenityModule.CurrentInstance.DefaultPage;
+                page = null; //SerenityModule.CurrentInstance.DefaultPage;
             }
            
             if (page != null)

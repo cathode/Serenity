@@ -19,7 +19,7 @@ using Serenity.Xml;
 
 namespace Serenity.Pages
 {
-    internal sealed class DomainsPage : ContentPage
+    public sealed class DomainsPage : ContentPage
     {
         private IEnumerable<XmlNode> GetItemList(string[] items, XmlDocument doc)
         {

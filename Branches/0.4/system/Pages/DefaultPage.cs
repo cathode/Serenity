@@ -22,7 +22,7 @@ using Serenity.Xml.Html;
 
 namespace Serenity.Pages
 {
-    internal class DefaultPage : ContentPage
+    public sealed class DefaultPage : ContentPage
     {
         public override void OnRequest(CommonContext Context)
         {

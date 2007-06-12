@@ -6,7 +6,7 @@ using Serenity.Web;
 
 namespace Serenity.Pages
 {
-    internal sealed class SystemMaster : MasterPage
+    public sealed class SystemMaster : MasterPage
     {
         public override void PostRequest(CommonContext context)
         {
