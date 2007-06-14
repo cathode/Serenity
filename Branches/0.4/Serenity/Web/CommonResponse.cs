@@ -31,14 +31,14 @@ namespace Serenity.Web
             this.sendBuffer = new byte[0];
             this.headers = new HeaderCollection();
             this.owningContext = Owner;
-            this.mimeType = "text/plain";
+            this.mimeType = MimeType.ApplicationOctetStream;
             this.useCompression = false;
         }
         #endregion
         #region Fields - Private
         private Socket clientSocket;
         private byte[] sendBuffer;
-        private string mimeType;
+        private MimeType mimeType;
         private HeaderCollection headers;
         private CommonContext owningContext;
         private bool useCompression;
@@ -109,7 +109,7 @@ namespace Serenity.Web
         }
         #endregion
         #region Properties - Public
-        public string MimeType
+        public MimeType MimeType
         {
             get
             {
@@ -117,13 +117,7 @@ namespace Serenity.Web
             }
             set
             {
-                if (value.Contains("/") == true)
-                {
-                    if (value.IndexOf('/') == value.LastIndexOf('/'))
-                    {
-                        this.mimeType = value;
-                    }
-                }
+                this.mimeType = value;
             }
         }
         

@@ -208,7 +208,7 @@ namespace Serenity.ResourceClasses
 
                     context.Response.Write(Doc.SaveMarkup());
                     context.Response.Status = StatusCode.Http200Ok;
-                    context.Response.MimeType = "text/html";
+                    context.Response.MimeType = MimeType.TextHtml;
                     context.Response.UseCompression = true;
                 }
                 else
@@ -225,36 +225,9 @@ namespace Serenity.ResourceClasses
                     //AJ: Cache check goes here
                     context.Response.Write(File.ReadAllBytes(resourcePath));
 
-                    string mimeType;
-                    bool useCompression;
-                    switch (Path.GetExtension(resourcePath).TrimStart('.'))
-                    {
-                        case "css":
-                            mimeType = "text/css";
-                            useCompression = true;
-                            break;
-                        case "html":
-                            mimeType = "text/html";
-                            useCompression = true;
-                            break;
-                        case "xml":
-                            mimeType = "application/xml";
-                            useCompression = true;
-                            break;
-                        case "png":
-                            mimeType = "image/png";
-                            useCompression = false;
-                            break;
-                        case "jpg":
-                        case "jpeg":
-                            mimeType = "image/jpeg";
-                            useCompression = false;
-                            break;
-                        default:
-                            mimeType = "text/plain";
-                            useCompression = true;
-                            break;
-                    }
+                    MimeType mimeType = MimeType.Default;
+                    bool useCompression = false;
+                    
                     context.Response.UseCompression = useCompression;
                     context.Response.MimeType = mimeType;
                     context.Response.Status = StatusCode.Http200Ok;

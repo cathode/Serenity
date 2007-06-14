@@ -21,7 +21,20 @@ namespace Serenity.Web
         private readonly string subtype;
         private readonly string type;
         #endregion
-
+        #region Methods - Public
+        public static MimeType FromString(string mimeType)
+        {
+            string[] parts = mimeType.Split('/');
+            if (parts.Length == 2)
+            {
+                return new MimeType(parts[0], parts[1]);
+            }
+            else
+            {
+                return MimeType.Default;
+            }
+        }
+        #endregion
         #region Properties - Public
         public string Subtype
         {
@@ -156,6 +169,13 @@ namespace Serenity.Web
             get
             {
                 return new MimeType("audio", "x-wav");
+            }
+        }
+        public static MimeType Default
+        {
+            get
+            {
+                return new MimeType("application", "octet-stream");
             }
         }
         /// <summary>

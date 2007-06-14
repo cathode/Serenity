@@ -29,7 +29,7 @@ namespace Serenity.ResourceClasses
             CommonResponse response = context.Response;
             response.Write(SerenityEnvironment.CurrentInstance.Theme.StylesheetContent);
             response.Status = StatusCode.Http200Ok;
-            response.MimeType = "text/css";
+            response.MimeType = MimeType.TextCss;
             response.UseCompression = true;
         }
     }

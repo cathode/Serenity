@@ -35,13 +35,4 @@ namespace Serenity.Attributes
         }
         public readonly string TypeName;
     }
-    [AttributeUsage(AttributeTargets.Assembly)]
-    public sealed class ModuleResourceClassExposureAttribute : Attribute
-    {
-        public ModuleResourceClassExposureAttribute(string typeName)
-        {
-            this.TypeName = typeName;
-        }
-        public readonly string TypeName;
-    }
 }
