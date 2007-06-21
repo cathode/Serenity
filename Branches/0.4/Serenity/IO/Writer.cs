@@ -36,6 +36,13 @@ namespace Serenity.IO
         /// The supplied Stream must support writing.
         /// </remarks>
         public abstract bool Write(Stream stream, T value);
+        /// <summary>
+        /// When overridden in a derived class, performs cleanup and freeing
+        /// of any unmanaged resources that may have been used by the current Writer.
+        /// </summary>
+        public virtual void Dispose()
+        {
+        }
         #endregion
         #region Properties - Public
         /// <summary>
@@ -53,13 +60,6 @@ namespace Serenity.IO
                 this.isReusable = value;
             }
         }
-        #endregion
-        #region IDisposable Members
-        /// <summary>
-        /// When overridden in a derived class, performs cleanup and freeing
-        /// of any unmanaged resources that may have been used by the current Writer.
-        /// </summary>
-        public abstract void Dispose();
         #endregion
     }
 }

@@ -62,7 +62,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite, Version=1.0.42.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -70,8 +69,8 @@
     <None Include="Cache\CacheManager.cs" />
     <None Include="Cache\CachedStream.cs" />
     <Compile Include="ContentPage.cs" />
-    <Compile Include="DomainSettingValue.cs" />
     <None Include="Data\Database.cs" />
+    <Compile Include="DomainSettingValue.cs" />
     <Compile Include="FileTypeEntry.cs" />
     <Compile Include="Hdf\HdfCollection.cs" />
     <Compile Include="Hdf\HdfDataset.cs" />

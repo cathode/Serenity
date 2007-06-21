@@ -50,14 +50,7 @@ namespace Serenity
             {
                 this.hasParent = false;
                 this.parent = null;
-                this.ActiveEnvironments = new DomainSettingValue<string[]>();
-                this.ActiveModules = new DomainSettingValue<string[]>();
-                this.ActiveThemes = new DomainSettingValue<string[]>();
                 this.DefaultEnvironment = new DomainSettingValue<string>();
-                this.DefaultModule = new DomainSettingValue<string>();
-                this.DefaultResourceClass = new DomainSettingValue<string>();
-                this.DefaultResourceName = new DomainSettingValue<string>();
-                this.DefaultTheme = new DomainSettingValue<string>();
                 this.OmitEnvironment = new DomainSettingValue<bool>();
                 this.OmitResourceClass = new DomainSettingValue<bool>();
                 this.CompressionThreshhold = new DomainSettingValue<int>();
@@ -65,14 +58,7 @@ namespace Serenity
             else
             {
                 this.parent = parent;
-                this.ActiveEnvironments = new DomainSettingValue<string[]>(this.parent.ActiveEnvironments);
-                this.ActiveModules = new DomainSettingValue<string[]>(this.parent.ActiveModules);
-                this.ActiveThemes = new DomainSettingValue<string[]>(this.parent.ActiveThemes);
                 this.DefaultEnvironment = new DomainSettingValue<string>(this.parent.DefaultEnvironment);
-                this.DefaultModule = new DomainSettingValue<string>(this.parent.DefaultModule);
-                this.DefaultResourceClass = new DomainSettingValue<string>(this.parent.DefaultResourceClass);
-                this.DefaultResourceName = new DomainSettingValue<string>(this.parent.DefaultResourceName);
-                this.DefaultTheme = new DomainSettingValue<string>(this.parent.DefaultTheme);
                 this.OmitEnvironment = new DomainSettingValue<bool>(this.parent.OmitEnvironment);
                 this.OmitResourceClass = new DomainSettingValue<bool>(this.parent.OmitResourceClass);
                 this.CompressionThreshhold = new DomainSettingValue<int>(this.parent.CompressionThreshhold);
@@ -94,17 +80,7 @@ namespace Serenity
         private static readonly Dictionary<string, DomainSettings> settings;
         #endregion
         #region Fields - Public
-        public readonly DomainSettingValue<string[]> ActiveEnvironments;
-        public readonly DomainSettingValue<string[]> ActiveModules;
-        public readonly DomainSettingValue<string[]> ActiveThemes;
         public readonly DomainSettingValue<string> DefaultEnvironment;
-        public readonly DomainSettingValue<string> DefaultModule;
-        public readonly DomainSettingValue<string> DefaultResourceClass;
-        public readonly DomainSettingValue<string> DefaultResourceName;
-        public readonly DomainSettingValue<string> DefaultTheme;
-        public readonly DomainSettingValue<string[]> InactiveEnvironments;
-        public readonly DomainSettingValue<string[]> InactiveModules;
-        public readonly DomainSettingValue<string[]> InactiveThemes;
         public readonly DomainSettingValue<bool> OmitEnvironment;
         public readonly DomainSettingValue<bool> OmitResourceClass;
         public readonly DomainSettingValue<int> CompressionThreshhold;
@@ -114,12 +90,9 @@ namespace Serenity
         {
             DomainSettings root = new DomainSettings("");
             root.DefaultEnvironment.Value = "system";
-            root.DefaultModule.Value = "system";
-            root.DefaultTheme.Value = "system";
-            root.DefaultResourceClass.Value = "static";
-            root.DefaultResourceName.Value = "default.html";
-            root.CompressionThreshhold.Value = 4096;
-
+            root.CompressionThreshhold.Value = 8192;
+            root.OmitEnvironment.Value = false;
+            root.OmitResourceClass.Value = false;
             return root;
         }
         #endregion

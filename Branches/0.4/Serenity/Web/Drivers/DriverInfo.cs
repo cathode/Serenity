@@ -44,6 +44,9 @@ namespace Serenity.Web.Drivers
         private Version version;
         #endregion
         #region Properties - Public
+        /// <summary>
+        /// Gets a string describing the classification of the current DriverInfo.
+        /// </summary>
         public string ClassName
         {
             get
@@ -55,6 +58,9 @@ namespace Serenity.Web.Drivers
                 this.className = value;
             }
         }
+        /// <summary>
+        /// Gets a string describing the type of the current DriverInfo.
+        /// </summary>
         public string TypeName
         {
             get
@@ -66,6 +72,9 @@ namespace Serenity.Web.Drivers
                 this.type = value;
             }
         }
+        /// <summary>
+        /// Gets the URI schema used by the current DriverInfo.
+        /// </summary>
         public string UriSchema
         {
             get
@@ -77,6 +86,9 @@ namespace Serenity.Web.Drivers
                 this.uriSchema = value;
             }
         }
+        /// <summary>
+        /// Gets the version of the current DriverInfo.
+        /// </summary>
         public Version Version
         {
             get

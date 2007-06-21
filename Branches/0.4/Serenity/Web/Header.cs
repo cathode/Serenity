@@ -16,6 +16,9 @@ using System.Text;
 
 namespace Serenity.Web
 {
+    /// <summary>
+    /// Represents a name and a set of values associated with a request or response.
+    /// </summary>
     public sealed class Header
     {
         #region Constructors - Public
@@ -39,7 +42,7 @@ namespace Serenity.Web
         /// <param name="index">The zero-based index</param>
         /// <returns>The header value at the specified index.</returns>
         /// <remarks>
-        /// Any values less than 0 return the primary value for the header. Values over 
+        /// Any values less than 0 return the primary value for the header.
         /// </remarks>
         public string this[int index]
         {

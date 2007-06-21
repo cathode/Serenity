@@ -36,6 +36,13 @@ namespace Serenity
         /// The supplied stream must support reading.
         /// </remarks>
         public abstract T Read(Stream stream);
+        /// <summary>
+        /// When overridden in a derived class, performs cleanup and freeing
+        /// of any unmanaged resources that may have been used by the current Reader.
+        /// </summary>
+        public virtual void Dispose()
+        {
+        }
         #endregion
         #region Properties - Public
         /// <summary>
@@ -53,13 +60,6 @@ namespace Serenity
                 this.isReusable = value;
             }
         }
-        #endregion
-        #region IDisposable Members
-        /// <summary>
-        /// When overridden in a derived class, performs cleanup and freeing
-        /// of any unmanaged resources that may have been used by the current Reader.
-        /// </summary>
-        public abstract void Dispose();
         #endregion
     }
 }

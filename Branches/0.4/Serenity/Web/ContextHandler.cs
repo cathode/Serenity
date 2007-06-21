@@ -50,7 +50,7 @@ namespace Serenity.Web
             ResourceClass resourceClass;
             if ((DomainSettings.Current.OmitResourceClass.Value) || ((context.Request.Url.Segments.Length < 3) && (!settings.OmitEnvironment.Value)))
             {
-                resourceClass = ResourceClass.GetResourceClass(settings.DefaultResourceClass.Value.ToLower());
+                resourceClass = ResourceClass.GetResourceClass(SerenityEnvironment.CurrentInstance.DefaultResourceClass.ToLower());
             }
             else
             {
