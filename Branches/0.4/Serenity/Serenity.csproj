@@ -123,7 +123,9 @@
     <Compile Include="Web\CommonContext.cs" />
     <None Include="Web\Drivers\BinaryAdapter.cs" />
     <None Include="Web\Drivers\BinaryDriver.cs" />
-    <Compile Include="Web\Controls\Control.cs" />
+    <None Include="Web\Controls\Control.cs" />
+    <Compile Include="Web\Drivers\HttpAdapterState.cs" />
+    <Compile Include="Web\Drivers\WebDriverState.cs" />
     <Compile Include="Web\ErrorHandler.cs" />
     <Compile Include="Web\MimeType.cs" />
     <Compile Include="Web\StatusCode.cs" />

@@ -121,6 +121,9 @@ namespace Serenity.Web.Drivers
 
         protected override bool DriverStart()
         {
+            this.State = WebDriverState.Started;
+            this.listenSocket.Listen(10);
+
             while (this.State == WebDriverState.Started)
             {
                 this.allDone.Reset();

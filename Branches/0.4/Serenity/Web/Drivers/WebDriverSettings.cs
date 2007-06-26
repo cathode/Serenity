@@ -19,7 +19,7 @@ namespace Serenity.Web.Drivers
     /// <summary>
     /// Represents a collection of options used to initialize a WebDriver with.
     /// </summary>
-    public class WebDriverSettings
+    public sealed class WebDriverSettings
     {
         #region Fields - Private
         private ushort[] fallbackPorts;

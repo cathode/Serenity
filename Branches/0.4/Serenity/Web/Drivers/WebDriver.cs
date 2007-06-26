@@ -18,46 +18,6 @@ using System.Threading;
 namespace Serenity.Web.Drivers
 {
     /// <summary>
-    /// Represents the state of a WebDriver's operation.
-    /// </summary>
-    public enum WebDriverState
-    {
-        /// <summary>
-        /// Indicates that the WebDriver is newly created and has not carried out any action so far.
-        /// </summary>
-        Created = 0,
-        /// <summary>
-        /// Indicates that the WebDriver has been initialized with a set of parameters which define it's behaviour.
-        /// </summary>
-        Initialized = 1,
-        /// <summary>
-        /// Indicates that the WebDriver is in a stopped state.
-        /// It is not listening for connections and all pending requests have been responded to.
-        /// </summary>
-        Stopped = 2,
-        /// <summary>
-        /// Indicates that the WebDriver is attempting to reach a Stopped state.
-        /// It is not listening for connections,
-        /// but some some pending requests are still being responded to.
-        /// </summary>
-        Stopping = 3,
-        /// <summary>
-        /// Indicates that the WebDriver is attempting to start listening for connections.
-        /// It is not yet listening for connections, or other initialization tasks have not completed yet.
-        /// </summary>
-        Starting = 4,
-        /// <summary>
-        /// Indicates that the WebDriver is ready to begin Running. It may already be listening,
-        /// but it has not recieved any incoming connections yet.
-        /// </summary>
-        Started = 5,
-        /// <summary>
-        /// Indicates that the WebDriver is currently active. At least one request has been recieved and may
-        /// already be responded to, or is being responded to currently.
-        /// </summary>
-        Running = 6
-    }
-    /// <summary>
     /// Provides a mechanism for recieving and responding to requests from clients (browsers).
     /// </summary>
     public abstract class WebDriver
@@ -71,19 +31,16 @@ namespace Serenity.Web.Drivers
         protected WebDriver(ContextHandler contextHandler)
         {
             this.contextHandler = contextHandler;
-            this.isInitialized = false;
-            this.state = WebDriverState.Created;
         }
         #endregion
         #region Fields - Private
         private ContextHandler contextHandler;
         private DriverInfo info;
-        private bool isInitialized;
         private ushort listenPort;
         private int recieveInterval;
         private int recieveTimeout;
         private WebDriverSettings settings;
-        private WebDriverState state;
+        private WebDriverState state = WebDriverState.None;
         #endregion
         #region Methods - Private
         /// <summary>
@@ -140,7 +97,6 @@ namespace Serenity.Web.Drivers
             this.recieveTimeout = Settings.RecieveTimeout;
             this.listenPort = Settings.ListenPort;
             this.DriverInitialize();
-            this.isInitialized = true;
             this.state = WebDriverState.Initialized;
         }
         /// <summary>
@@ -157,7 +113,6 @@ namespace Serenity.Web.Drivers
         {
             if (this.state == WebDriverState.Initialized)
             {
-                this.state = WebDriverState.Starting;
                 return this.DriverStart();
             }
             else
@@ -168,10 +123,16 @@ namespace Serenity.Web.Drivers
         /// <summary>
         /// Stops the WebDriver.
         /// </summary>
-        public void Stop()
+        public bool Stop()
         {
-            this.state = WebDriverState.Stopping;
-            this.DriverStop();
+            if (this.state == WebDriverState.Started)
+            {
+                return this.DriverStop();
+            }
+            else
+            {
+                return false;
+            }
         }
         #endregion
         #region Properties - Public
@@ -196,7 +157,48 @@ namespace Serenity.Web.Drivers
         {
             get
             {
-                return this.isInitialized;
+                if (this.state >= WebDriverState.Initialized)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+        /// <summary>
+        /// Gets a boolean value that indicates whether the current WebDriver is in a started state.
+        /// </summary>
+        public bool IsStarted
+        {
+            get
+            {
+                if (this.state == WebDriverState.Started)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+        /// <summary>
+        /// Gets a boolean value that indicates whether the current WebDriver is in a stopped state.
+        /// </summary>
+        public bool IsStopped
+        {
+            get
+            {
+                if (this.state == WebDriverState.Stopped)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
         /// <summary>

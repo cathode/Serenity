@@ -68,11 +68,17 @@ namespace Server.OperatingModes
             InitSettings.RecieveInterval = 0;
             InitSettings.FallbackPorts = new ushort[] { 8080, 8081 };
 
-            WebManager.AddDriver(new HttpDriver(new ContextHandler()));
-            WebManager.Initialize<HttpDriver>(InitSettings);
-            WebManager.StartAll(true);
+            WebDriver driver = new HttpDriver(new ContextHandler());
+
+            driver.Initialize(InitSettings);
+            if (!driver.Start())
+            {
+                Log.Write("Failed to start web driver", LogMessageLevel.Warning);
+            }
 
             Log.Write("Server shutting down", LogMessageLevel.Info);
+            Console.WriteLine("Press any key...");
+            Console.Read();
         }
     }
 }

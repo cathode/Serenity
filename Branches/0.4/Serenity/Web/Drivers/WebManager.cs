@@ -78,16 +78,13 @@ namespace Serenity.Web.Drivers
             {
                 lock (driver)
                 {
-                    if ((driver.State > WebDriverState.Initialized) && (driver.State < WebDriverState.Starting))
+                    if (threaded == true)
                     {
-                        if (threaded == true)
-                        {
-                            driver.ThreadedStart();
-                        }
-                        else
-                        {
-                            driver.Start();
-                        }
+                        driver.ThreadedStart();
+                    }
+                    else
+                    {
+                        driver.Start();
                     }
                 }
             }
@@ -98,10 +95,7 @@ namespace Serenity.Web.Drivers
             {
                 lock (driver)
                 {
-                    if (driver.State > WebDriverState.Starting)
-                    {
-                        driver.Stop();
-                    }
+                    driver.Stop();
                 }
             }
         }
@@ -116,7 +110,7 @@ namespace Serenity.Web.Drivers
             {
                 lock (driver)
                 {
-                    if ((driver.State >= WebDriverState.Initialized) && (driver.State < WebDriverState.Starting))
+                    if (driver.State >= WebDriverState.Initialized)
                     {
                         initializedDrivers.Add(driver);
                     }

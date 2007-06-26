@@ -51,8 +51,8 @@ namespace Serenity.Web
         private RequestDataCollection requestData = new RequestDataCollection();
         private string rawUrl;
         private IPEndPoint remoteEndPoint;
-        private Uri url;
-        private Uri referrer;
+        private Uri url = new Uri("http://localhost/");
+        private Uri referrer = new Uri("http://localhost/");
         private string userAgent;
         private string userHostName;
         private string[] userLanguages;

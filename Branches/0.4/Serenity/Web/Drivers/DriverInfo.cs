@@ -17,7 +17,7 @@ using System.Text;
 namespace Serenity.Web.Drivers
 {
     /// <summary>
-    /// Provides an type that WebDrivers can use to expose information about themselves.
+    /// Provides a way for WebDrivers to expose information about themselves.
     /// </summary>
     public sealed class DriverInfo
     {
@@ -26,20 +26,20 @@ namespace Serenity.Web.Drivers
         {
             this.className = "unknown";
             this.version = new Version();
-            this.type = "unknown";
+            this.typeName = "unknown";
             this.uriSchema = "unknown";
         }
-        internal DriverInfo(string className, string typeName, string uriSchema, Version version)
+        public DriverInfo(string className, string typeName, string uriSchema, Version version)
         {
             this.className = className;
-            this.type = typeName;
+            this.typeName = typeName;
             this.uriSchema = uriSchema;
             this.version = version;
         }
         #endregion
         #region Fields - Private
         private string className;
-        private string type;
+        private string typeName;
         private string uriSchema;
         private Version version;
         #endregion
@@ -65,11 +65,11 @@ namespace Serenity.Web.Drivers
         {
             get
             {
-                return this.type;
+                return this.typeName;
             }
             internal set
             {
-                this.type = value;
+                this.typeName = value;
             }
         }
         /// <summary>
