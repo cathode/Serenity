@@ -24,19 +24,20 @@ namespace Serenity.Web
     public sealed class CommonContext
     {
         #region Constructors - Internal
-        internal CommonContext(WebDriver origin)
+        internal CommonContext(WebAdapter adapter)
         {
             this.request = new CommonRequest(this);
             this.response = new CommonResponse(this);
-            this.driver = origin;
+            this.adapter = adapter;
         }
         #endregion
         #region Fields - Private
+        private bool headersWritten = false;
         private string protocolType;
         private Version protocolVersion;
         private CommonRequest request;
         private CommonResponse response;
-        private WebDriver driver;
+        private WebAdapter adapter;
         private bool supportsAuthentication;
         private bool supportsChunkedTransfer;
         private bool supportsContentControl;
@@ -48,11 +49,22 @@ namespace Serenity.Web
         /// <summary>
         /// Gets the WebDriver from which the current CommonContext originated from.
         /// </summary>
-        public WebDriver Driver
+        public WebAdapter Adapter
         {
             get
             {
-                return this.driver;
+                return this.adapter;
+            }
+        }
+        public bool HeadersWritten
+        {
+            get
+            {
+                return this.headersWritten;
+            }
+            set
+            {
+                this.headersWritten = value;
             }
         }
         /// <summary>
@@ -64,7 +76,7 @@ namespace Serenity.Web
             {
                 return this.protocolType;
             }
-            internal set
+            set
             {
                 this.protocolType = value;
             }
@@ -78,7 +90,7 @@ namespace Serenity.Web
             {
                 return this.protocolVersion;
             }
-            internal set
+            set
             {
                 this.protocolVersion = value;
             }
@@ -112,7 +124,7 @@ namespace Serenity.Web
             {
                 return this.supportsAuthentication;
             }
-            internal set
+            set
             {
                 this.supportsAuthentication = value;
             }
@@ -156,7 +168,7 @@ namespace Serenity.Web
             {
                 return this.supportsFields;
             }
-            internal set
+            set
             {
                 this.supportsFields = value;
             }

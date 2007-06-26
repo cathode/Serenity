@@ -12,6 +12,7 @@ http://www.microsoft.com/resources/sharedsource/licensingbasics/communitylicense
 */
 using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using System.Text;
 
 namespace Serenity.Web.Drivers
@@ -23,126 +24,30 @@ namespace Serenity.Web.Drivers
     public abstract class WebAdapter
     {
         #region Constructors - Internal
-        internal WebAdapter(WebDriver driver)
+        protected WebAdapter()
         {
-            this.driver = driver;
-            this.currentcontext = new CommonContext(driver);
-            this.contexts = new Queue<CommonContext>();
-        }
-        #endregion
-        #region Fields - Private
-        private int available = 0;
-        private Queue<CommonContext> contexts;
-        private CommonContext currentcontext;
-        private WebDriver driver;
-        #endregion
-        #region Methods - Protected
-        /// <summary>
-        /// Finalizes the CommonContext being constructed and adds it to
-        /// the queue of available completed CommonContexts.
-        /// </summary>
-        protected void Recycle()
-        {
-            if (this.currentcontext != null)
-            {
-                this.available++;
-                this.contexts.Enqueue(this.currentcontext);
-                this.currentcontext = new CommonContext(this.driver);
-            }
         }
         #endregion
         #region Methods - Public
-        /// <summary>
-        /// When overridden in a derived class, translates the input Byte array to one or more CommonRequest objects.
-        /// </summary>
-        /// <param name="source">The bytes used as input.</param>
-        /// <param name="unused">Any bytes that were unable to be processed or were unnecessary.</param>
-        public abstract void ConstructRequest(byte[] source, out byte[] unused);
-        /// <summary>
-        /// When overridden in a derived class, translates the input Byte array to one or more CommonResponse objects.
-        /// </summary>
-        /// <param name="source">The bytes used as input.</param>
-        /// <param name="unused">Any bytes that were unable to be processed or were unnecessary.</param>
-        public abstract void ConstructResponse(byte[] source, out byte[] unused);
-        /// <summary>
-        /// When overridden in a derived class,
-        /// translates the CommonResponse of context to an array of bytes.
-        /// </summary>
-        /// <param name="context">The CommonContext to translate.</param>
-        /// <returns>An array of bytes representing the CommonResponse of context.</returns>
-        public abstract byte[] DestructResponse(CommonContext context);
-        /// <summary>
-        /// When overridden in a derived class,
-        /// translates the CommonRequest of context to an array of bytes.
-        /// </summary>
-        /// <param name="context">The CommonContext to translate.</param>
-        /// <returns>An array of bytes representing the CommonRequest of context.</returns>
-        public abstract byte[] DestructRequest(CommonContext context);
-        /// <summary>
-        /// If there are available contexts in the postprocess queue, gets the next available CommonContext.
-        /// If there are none available, returns null.
-        /// </summary>
-        /// <returns>The next available CommonContext, or null if none available.</returns>
-        public CommonContext NextContext()
+        public abstract bool ReadContext(Socket socket, out CommonContext context);
+        public virtual bool WriteContext(Socket socket, CommonContext context)
         {
-            if (this.available > 0)
+            if (!context.HeadersWritten)
             {
-                this.available--;
-                return this.contexts.Dequeue();
+                context.HeadersWritten = this.WriteHeaders(socket, context);
+            }
+
+            if (context.HeadersWritten)
+            {
+                return this.WriteContent(socket, context);
             }
             else
             {
-                return null;
+                return false;
             }
         }
-        #endregion
-        #region Properties - Protected
-        /// <summary>
-        /// Gets the CommonContext currently being constructed.
-        /// </summary>
-        protected CommonContext CurrentContext
-        {
-            get
-            {
-                return this.currentcontext;
-            }
-        }
-        #endregion
-        #region Properties - Public
-        /// <summary>
-        /// Gets the number of CommonContexts available.
-        /// </summary>
-        public int Available
-        {
-            get
-            {
-                return this.available;
-            }
-        }
-        /// <summary>
-        /// Gets the WebDriver which created the current WebAdapter.
-        /// </summary>
-        public WebDriver Driver
-        {
-            get
-            {
-                return this.driver;
-            }
-        }
-        /// <summary>
-        /// Obsolete. Gets the WebDriver which created the current WebAdapter.
-        /// </summary>
-        /// <remarks>
-        /// This property will be removed in Serenity 0.5.0.0.
-        /// </remarks>
-        [Obsolete]
-        public WebDriver Origin
-        {
-            get
-            {
-                return this.driver;
-            }
-        }
+        public abstract bool WriteHeaders(Socket socket, CommonContext context);
+        public abstract bool WriteContent(Socket socket, CommonContext context);
         #endregion
     }
 }

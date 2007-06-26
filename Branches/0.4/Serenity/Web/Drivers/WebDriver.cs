@@ -66,9 +66,9 @@ namespace Serenity.Web.Drivers
         /// <summary>
         /// Initializes a new instance of the WebDriver class.
         /// </summary>
-        /// <param name="contextHandler">An IContextHandler object which handles
+        /// <param name="contextHandler">A ContextHandler which handles
         /// incoming CommonContext objects.</param>
-        internal WebDriver(ContextHandler contextHandler)
+        protected WebDriver(ContextHandler contextHandler)
         {
             this.contextHandler = contextHandler;
             this.isInitialized = false;
@@ -99,7 +99,7 @@ namespace Serenity.Web.Drivers
         /// <summary>
         /// Contains the code that is executed when the current WebDriver is initialized (before handling clients).
         /// </summary>
-        protected abstract void DriverInitialize();
+        protected abstract bool DriverInitialize();
         /// <summary>
         /// When overridden in a derived class, causes the current WebDriver to begin listening for
         /// and accepting incoming connections.
@@ -107,14 +107,14 @@ namespace Serenity.Web.Drivers
         /// <remarks>
         /// A call to this method may not immediately result in a Started state of the current WebDriver.
         /// </remarks>
-        protected abstract void DriverStart();
+        protected abstract bool DriverStart();
         /// <summary>
         /// When overridden in a derived class, causes the current WebDriver to cease operation.
         /// </summary>
         /// <remarks>
         /// A call to this method may not immediately result in a Stopped state of the current WebDriver.
         /// </remarks>
-        protected abstract void DriverStop();
+        protected abstract bool DriverStop();
         /// <summary>
         /// Causes the ContextCallback event to be fired for the current WebDriver.
         /// </summary>
@@ -153,16 +153,16 @@ namespace Serenity.Web.Drivers
         /// <summary>
         /// Starts the WebDriver.
         /// </summary>
-        public void Start()
+        public bool Start()
         {
             if (this.state == WebDriverState.Initialized)
             {
                 this.state = WebDriverState.Starting;
-                this.DriverStart();
+                return this.DriverStart();
             }
             else
             {
-                throw new InvalidOperationException("Cannot start a WebDriver that has already been started, or has not been initialized yet.");
+                return false;
             }
         }
         /// <summary>
@@ -200,7 +200,7 @@ namespace Serenity.Web.Drivers
             }
         }
         /// <summary>
-        /// Gets the port number that the current WebDriver will listen on for incoming connections.
+        /// Gets the port number that the current WebDriver is listening on for incoming connections.
         /// </summary>
         public ushort ListenPort
         {
@@ -208,34 +208,13 @@ namespace Serenity.Web.Drivers
             {
                 return this.listenPort;
             }
-            internal set
+            protected set
             {
                 this.listenPort = value;
             }
         }
         /// <summary>
-        /// Gets the number of miliseconds to wait between attempts to recieve data from the client.
-        /// </summary>
-        public int RecieveInterval
-        {
-            get
-            {
-                return this.recieveInterval;
-            }
-        }
-        /// <summary>
-        /// Gets the number of milliseconds to wait before closing the connection, if no data
-        /// was recieved within this timeframe.
-        /// </summary>
-        public int RecieveTimeout
-        {
-            get
-            {
-                return this.recieveTimeout;
-            }
-        }
-        /// <summary>
-        /// Gets the WebDriverSettings object used to initialize the current WebDriver.
+        /// Gets the WebDriverSettings which determine the behaviour of the current WebDriver.
         /// </summary>
         public WebDriverSettings Settings
         {

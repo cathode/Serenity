@@ -14,22 +14,121 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Net.Sockets;
 using System.Text;
 
 namespace Serenity.Web.Drivers
 {
-    internal enum HttpAdapterSteps
+    internal class HttpAdapterState
     {
-        PreParse,
-        MethodParsed,
-        HeadersParsed,
-        FieldsParsed,
+        internal Socket WorkSocket;
+        internal const int BufferSize = 256;
+        internal byte[] Buffer = new byte[BufferSize];
     }
     /// <summary>
     /// Provides a WebAdapter used to translate CommonContexts to and from an HTTP-based WebDriver.
     /// </summary>
     public sealed class HttpAdapter : WebAdapter
     {
+        /// <summary>
+        /// Initializes a new instance of the HttpAdapter class.
+        /// </summary>
+        public HttpAdapter()
+        {
+        }
+        #region Methods - Private
+        private void RecieveCallback(IAsyncResult result)
+        {
+
+        }
+        #endregion
+        #region Methods - Public
+        /// <summary>
+        /// Reads data from the supplied socket until a complete CommonContext object has been
+        /// populated from the read data.
+        /// </summary>
+        /// <param name="socket">The socket to read from.</param>
+        /// <param name="context">When this method returns, context will contain the created CommonContext.</param>
+        /// <returns>True if successful, or false if any error occurred.</returns>
+        public override bool ReadContext(Socket socket, out CommonContext context)
+        {
+            context = new CommonContext(this);
+
+            HttpAdapterState state = new HttpAdapterState();
+            state.WorkSocket = socket;
+
+            socket.BeginReceive(state.Buffer, 0, HttpAdapterState.BufferSize,
+                SocketFlags.Peek, new AsyncCallback(this.RecieveCallback), state);
+
+            return true;
+        }
+        public override bool WriteHeaders(Socket socket, CommonContext context)
+        {
+            if (socket != null && socket.Connected)
+            {
+                CommonRequest request = context.Request;
+                CommonResponse response = context.Response;
+                StringBuilder outputText = new StringBuilder();
+
+                outputText.Append("HTTP/1.1 " + response.Status.ToString() + "\r\n");
+
+                if (response.Headers.Contains("Content-Length") == false)
+                {
+                    response.Headers.Add("Content-Length", response.SendBuffer.Length.ToString());
+                }
+                if (response.Headers.Contains("Content-Type") == false)
+                {
+                    response.Headers.Add("Content-Type", response.MimeType + "; charset=UTF-8");
+                }
+                if (!response.Headers.Contains("Server"))
+                {
+                    response.Headers.Add(new Header("Server", SerenityInfo.Name + "/" + SerenityInfo.Version));
+                }
+
+                foreach (Header header in response.Headers)
+                {
+                    string value;
+                    if (header.Complex == true)
+                    {
+                        switch (header.Name)
+                        {
+                            default:
+                                value = string.Format("{0},{1}", header.PrimaryValue, string.Join(",", header.SecondaryValues)).TrimEnd('\r', '\n');
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        value = header.PrimaryValue.TrimEnd('\r', '\n');
+                    }
+                    outputText.Append(header.Name + ": " + value + "\r\n");
+                }
+                outputText.Append("\r\n");
+
+                List<Byte> output = new List<Byte>(Encoding.ASCII.GetBytes(outputText.ToString()));
+
+                try
+                {
+                    socket.Send(output.ToArray());
+                }
+                catch
+                {
+                    return false;
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public override bool WriteContent(Socket socket, CommonContext context)
+        {
+            return false;
+        }
+        #endregion
+        #region Old
+        /*
         #region Constructors - Public
         /// <summary>
         /// Initializes a new instance of the HttpAdapter class.
@@ -38,7 +137,7 @@ namespace Serenity.Web.Drivers
         {
             this.CurrentContext.ProtocolType = "HTTP";
             this.CurrentContext.ProtocolVersion = new Version(1, 1);
-            CommonContext c = this.CurrentContext;
+            CommonContext c = new CommonContext(Origin);
             c.SupportsAuthentication = false;
             c.SupportsChunkedTransfer = false;
             c.SupportsContentControl = true;
@@ -46,13 +145,6 @@ namespace Serenity.Web.Drivers
             c.SupportsHeaders = true;
             c.SupportsPeerInfo = true;
         }
-        #endregion
-        #region Fields - Private
-        private string buffer;
-        private string requestPath;
-        private HttpAdapterSteps currentStep = HttpAdapterSteps.PreParse;
-        private int contentLength;
-        private string multipartBoundary;
         #endregion
         #region Methods - Private
         private byte[] CompressContent(CommonContext Context)
@@ -173,18 +265,7 @@ namespace Serenity.Web.Drivers
         }
         private string GetWholeValue(Header H)
         {
-            if (H.Complex == true)
-            {
-                switch (H.Name)
-                {
-                    default:
-                        return string.Format("{0},{1}", H.PrimaryValue, string.Join(",", H.SecondaryValues)).TrimEnd('\r', '\n');
-                }
-            }
-            else
-            {
-                return H.PrimaryValue.TrimEnd('\r', '\n');
-            }
+            
         }
         private void ProcessUrlEncodedRequestData(string Input)
         {
@@ -473,6 +554,8 @@ namespace Serenity.Web.Drivers
 
             return output.ToArray();
         }
+        #endregion
+        */
         #endregion
     }
 }

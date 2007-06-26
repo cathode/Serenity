@@ -70,7 +70,7 @@ namespace Server.OperatingModes
 
             WebManager.AddDriver(new HttpDriver(new ContextHandler()));
             WebManager.Initialize<HttpDriver>(InitSettings);
-            WebManager.StartAll();
+            WebManager.StartAll(true);
 
             Log.Write("Server shutting down", LogMessageLevel.Info);
         }
