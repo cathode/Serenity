@@ -63,6 +63,8 @@ namespace Serenity.Web.Drivers
                         adapter.ReadContext(socket, out context);
 
                         this.InvokeContextCallback(context);
+
+                        adapter.WriteContext(socket, context);
                     }
                     else
                     {
@@ -144,130 +146,6 @@ namespace Serenity.Web.Drivers
         {
             return new HttpAdapter();
         }
-        #endregion
-        #region Old
-        /*
-        #region Fields - Private
-        private int usedListenPort;
-        #endregion
-        #region Methods - Private
-        private void HandleAcceptedSocket(object socketObject)
-        {
-            if (socketObject is Socket)
-            {
-                using (Socket socket = (Socket)socketObject)
-                {
-                    int sleepTime = 0;
-                    
-                    List<Byte> recieveBuffer = new List<Byte>(socket.Available);
-                    
-                    WebAdapter adapter = this.CreateAdapter();
-
-                    WebDriverSettings settings = this.Settings;
-
-                    while (socket.Connected == true)
-                    {
-                        if (socket.Available > 0)
-                        {
-                            byte[] Temp = new byte[socket.Available];
-                            socket.Receive(Temp);
-                            recieveBuffer.AddRange(Temp);
-                            sleepTime = 0;
-                        }
-                        else
-                        {
-                            if (sleepTime <= settings.RecieveTimeout)
-                            {
-                                Thread.Sleep(settings.RecieveInterval);
-                                sleepTime += settings.RecieveInterval;
-                            }
-                            else
-                            {
-                                socket.Close();
-                                return;
-                            }
-                        }
-                    }
-                    if ((this.State == WebDriverState.Stopping) || (this.State == WebDriverState.Stopped))
-                    {
-                        socket.Shutdown(SocketShutdown.Both);
-                        socket.Close(100);
-                    }
-                }
-            }
-            else
-            {
-                throw new ArgumentException("AcceptedObject parameter must be a System.Net.Socket instance!");
-            }
-        }
-        #endregion
-        #region Methods - Protected
-        protected override void DriverInitialize()
-        {
-
-        }
-        protected override void DriverStart()
-        {
-            using (Socket ListenSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP))
-            {
-                try
-                {
-                    this.usedListenPort = this.ListenPort;
-                    ListenSocket.Bind(new IPEndPoint(IPAddress.Any, this.usedListenPort));
-                    Log.Write("Listening on port " + this.usedListenPort.ToString(), LogMessageLevel.Info);
-                }
-                catch
-                {
-                    for (int I = 0; I < this.Settings.FallbackPorts.Length; I++)
-                    {
-                        try
-                        {
-                            this.usedListenPort = this.Settings.FallbackPorts[I];
-                            ListenSocket.Bind(new IPEndPoint(IPAddress.Any, this.usedListenPort));
-                            Log.Write("Listening on port " + this.usedListenPort.ToString(), LogMessageLevel.Info);
-                            break;
-                        }
-                        catch
-                        {
-
-                        }
-                    }
-                }
-                finally
-                {
-                    ListenSocket.Listen(10);
-                }
-                this.State = WebDriverState.Running;
-                WaitCallback SocketHandleCallback = new WaitCallback(this.HandleAcceptedSocket);
-                while (true)
-                {
-                    ThreadPool.QueueUserWorkItem(SocketHandleCallback, ListenSocket.Accept());
-                    if ((this.State == WebDriverState.Stopping) || (this.State == WebDriverState.Stopped))
-                    {
-                        break;
-                    }
-                }
-            }
-        }
-        
-        protected override void DriverStop()
-        {
-            using (Socket cleanupSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP))
-            {
-                try
-                {
-                    cleanupSocket.Connect(new IPEndPoint(IPAddress.Loopback, this.usedListenPort));
-                    cleanupSocket.Close();
-                }
-                catch
-                {
-
-                }
-            }
-            this.State = WebDriverState.Stopped;
-        }
-        #endregion
-        */
         #endregion
     }
 }

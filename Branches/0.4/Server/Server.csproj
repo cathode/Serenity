@@ -218,6 +218,7 @@
     <Content Include="Environments\system\static\icons\page_white_zip.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Configuration\Server.ini" />
     <None Include="Themes\system\Theme" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

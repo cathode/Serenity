@@ -124,7 +124,8 @@
     <None Include="Web\Drivers\BinaryAdapter.cs" />
     <None Include="Web\Drivers\BinaryDriver.cs" />
     <None Include="Web\Controls\Control.cs" />
-    <Compile Include="Web\Drivers\HttpAdapterState.cs" />
+    <Compile Include="Web\Drivers\WebAdapterState.cs" />
+    <Compile Include="Web\Drivers\WebAdapterResult.cs" />
     <Compile Include="Web\Drivers\WebDriverState.cs" />
     <Compile Include="Web\ErrorHandler.cs" />
     <Compile Include="Web\MimeType.cs" />

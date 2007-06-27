@@ -19,7 +19,7 @@ using System.Text;
 
 namespace Serenity.Web.Drivers
 {
-    
+
     /// <summary>
     /// Provides a WebAdapter used to translate CommonContexts to and from an HTTP-based WebDriver.
     /// </summary>
@@ -32,32 +32,38 @@ namespace Serenity.Web.Drivers
         {
         }
         #region Methods - Private
+        private void ProcessUrlEncodedRequestData(string input, CommonContext context)
+        {
+            string[] Pairs = input.Split('&');
+            foreach (string Pair in Pairs)
+            {
+                if (Pair.IndexOf('=') != -1)
+                {
+                    string Name = Pair.Substring(0, Pair.IndexOf('='));
+                    string Value = Pair.Substring(Pair.IndexOf('=') + 1);
+                    context.Request.RequestData.AddDataStream(Name, Encoding.UTF8.GetBytes(Value));
+                }
+            }
+        }
         private void RecieveCallback(IAsyncResult result)
         {
 
         }
-        #endregion
-        #region Methods - Public
-        /// <summary>
-        /// Reads data from the supplied socket until a complete CommonContext object has been
-        /// populated from the read data.
-        /// </summary>
-        /// <param name="socket">The socket to read from.</param>
-        /// <param name="context">When this method returns, context will contain the created CommonContext.</param>
-        /// <returns>True if successful, or false if any error occurred.</returns>
-        public override bool ReadContext(Socket socket, out CommonContext context)
+        private void SendCallback(IAsyncResult result)
         {
-            context = new CommonContext(this);
+            try
+            {
+                Socket socket = (Socket)result.AsyncState;
+                socket.EndSend(result);
+            }
+            catch
+            {
 
-            HttpAdapterState state = new HttpAdapterState();
-            state.WorkSocket = socket;
-
-            socket.BeginReceive(state.Buffer, 0, HttpAdapterState.BufferSize,
-                SocketFlags.Peek, new AsyncCallback(this.RecieveCallback), state);
-
-            return true;
+            }
         }
-        public override bool WriteHeaders(Socket socket, CommonContext context)
+        #endregion
+        #region Methods - Protected
+        protected override bool WriteHeaders(Socket socket, CommonContext context)
         {
             if (socket != null && socket.Connected)
             {
@@ -100,11 +106,11 @@ namespace Serenity.Web.Drivers
                 }
                 outputText.Append("\r\n");
 
-                List<Byte> output = new List<Byte>(Encoding.ASCII.GetBytes(outputText.ToString()));
+                byte[] output = Encoding.ASCII.GetBytes(outputText.ToString());
 
                 try
                 {
-                    socket.Send(output.ToArray());
+                    socket.BeginSend(output, 0, output.Length, SocketFlags.None, new AsyncCallback(this.SendCallback), null);
                 }
                 catch
                 {
@@ -117,164 +123,196 @@ namespace Serenity.Web.Drivers
                 return false;
             }
         }
-        public override bool WriteContent(Socket socket, CommonContext context)
+        protected override bool WriteContent(Socket socket, CommonContext context)
         {
-            return false;
+            try
+            {
+                socket.BeginSend(context.Response.SendBuffer, 0, context.Response.SendBuffer.Length, SocketFlags.None, new AsyncCallback(this.SendCallback), socket);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+        #endregion
+        #region Methods - Public
+        /// <summary>
+        /// Reads data from the supplied socket until a complete CommonContext object has been
+        /// populated from the read data.
+        /// </summary>
+        /// <param name="socket">The socket to read from.</param>
+        /// <param name="context">When this method returns, context will contain the created CommonContext.</param>
+        /// <returns>True if successful, or false if any error occurred.</returns>
+        public override bool ReadContext(Socket socket, out CommonContext context)
+        {
+            context = new CommonContext(this);
+
+            WebAdapterState state = new WebAdapterState();
+            state.Buffer = new byte[socket.Available];
+            state.WorkSocket = socket;
+
+            socket.BeginReceive(state.Buffer, 0, state.Buffer.Length,
+                SocketFlags.Peek, new AsyncCallback(this.RecieveCallback), state);
+
+            string requestContent = Encoding.ASCII.GetString(state.Buffer);
+            int headerSize = requestContent.IndexOf("\r\n\r\n");
+            if (headerSize != -1)
+            {
+                headerSize += 4;
+
+                state = new WebAdapterState();
+                state.WorkSocket = socket;
+                state.Buffer = new byte[headerSize];
+
+                socket.BeginReceive(state.Buffer, 0, state.Buffer.Length,
+                SocketFlags.None, new AsyncCallback(this.RecieveCallback), state);
+
+                requestContent = Encoding.ASCII.GetString(state.Buffer);
+                int indexOf = requestContent.IndexOf("\r\n");
+                string line = requestContent.Substring(0, indexOf);
+                requestContent = requestContent.Substring(indexOf + 2);
+                string requestPath = "/";
+                string hostName = "localhost";
+                string[] methodParts = line.Split(' ');
+
+                //First line must be "<METHOD> <URI> HTTP/<VERSION>" which translates to 3 elements
+                //when split by the space char.
+                if (methodParts.Length == 3)
+                {
+                    //Get down to business.
+                    switch (methodParts[0])
+                    {
+                        //WS: Normal HTTP methods:
+                        case "HEAD":
+                        case "GET":
+                        case "POST":
+                        case "PUT":
+                        case "DELETE":
+                        case "TRACE":
+                        case "OPTIONS":
+                        case "CONNECT":
+                        //WS: WebDAV extension methods:
+                        case "PROPFIND":
+                        case "PROPPATCH":
+                        case "MKCOL":
+                        case "COPY":
+                        case "MOVE":
+                        case "LOCK":
+                        case "UNLOCK":
+                            context.Request.Method = methodParts[0];
+                            break;
+
+                        default:
+                            //WS: We need to generate an error here if the method is not supported.
+                            context.Request.Method = "GET";
+                            break;
+                    }
+                    switch (methodParts[2])
+                    {
+                        case "HTTP/0.9":
+                            context.ProtocolVersion = new Version(0, 9);
+                            break;
+                        case "HTTP/1.0":
+                            context.ProtocolVersion = new Version(1, 0);
+                            break;
+
+                        default:
+                            //WS: This should probably be changed to send an error to the client.
+                            context.ProtocolVersion = new Version(1, 1);
+                            break;
+                    }
+
+                    if (methodParts[1].Contains("?") == true)
+                    {
+                        requestPath = methodParts[1].Substring(0, methodParts[1].IndexOf('?'));
+                        
+                        string[] pairs = methodParts[1].Substring(methodParts[1].IndexOf('?') + 1).Split('&');
+                        foreach (string pair in pairs)
+                        {
+                            int i = pair.IndexOf('=');
+                            if (i != -1)
+                            {
+                                string name = pair.Substring(0, i);
+                                string value = pair.Substring(i + 1);
+                                context.Request.RequestData.AddDataStream(name, Encoding.UTF8.GetBytes(value));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        requestPath = methodParts[1];
+                    }
+                }
+                int contentLength = 0;
+                string multipartBoundary = "";
+
+                indexOf = requestContent.IndexOf("\r\n");
+                while (indexOf != -1)
+                {
+                    line = requestContent.Substring(0, indexOf);
+                    requestContent = requestContent.Substring(indexOf + 2);
+                    if (line.Length > 0)
+                    {
+                        int n = line.IndexOf(':');
+                        if (n != -1)
+                        {
+                            string headerName = line.Substring(0, n);
+                            string headerValue = line.Substring(n + 2);
+                            Header header = new Header(headerName, headerValue);
+                            switch (headerName)
+                            {
+                                case "Content-Length":
+                                    contentLength = int.Parse(headerValue);
+                                    break;
+                                case "Content-Type":
+                                    if (headerValue.StartsWith("multipart/form-data") == true)
+                                    {
+                                        context.Request.ContentType = "multipart/form-data";
+                                        multipartBoundary = headerValue.Substring(headerValue.IndexOf('=') + 1);
+                                    }
+                                    else
+                                    {
+                                        context.Request.ContentType = "application/x-www-form-urlencoded";
+                                    }
+                                    header = new Header(headerName, headerValue);
+                                    break;
+
+                                case "Host":
+                                    hostName = headerValue;
+                                    break;
+
+                                case "Accept":
+                                case "Accept-Charset":
+                                //AJ: Removed for http compression support
+                                //case "Accept-Encoding":
+                                case "Accept-Language":
+                                case "Keep-Alive":
+                                    header = null;
+                                    break;
+                            }
+                            if (header != null)
+                            {
+                                context.Request.Headers.Add(header);
+                            }
+                        }
+                    }
+                    indexOf = requestContent.IndexOf("\r\n");
+                }
+
+                context.Request.Url = new Uri("http://" + hostName + requestPath);
+            }
+            return true;
         }
         #endregion
         #region Old
         /*
-        #region Constructors - Public
-        /// <summary>
-        /// Initializes a new instance of the HttpAdapter class.
-        /// </summary>
-        public HttpAdapter(WebDriver Origin) : base(Origin)
-        {
-            this.CurrentContext.ProtocolType = "HTTP";
-            this.CurrentContext.ProtocolVersion = new Version(1, 1);
-            CommonContext c = new CommonContext(Origin);
-            c.SupportsAuthentication = false;
-            c.SupportsChunkedTransfer = false;
-            c.SupportsContentControl = true;
-            c.SupportsFields = true;
-            c.SupportsHeaders = true;
-            c.SupportsPeerInfo = true;
-        }
-        #endregion
         #region Methods - Private
-        private byte[] CompressContent(CommonContext Context)
-        {
-            CommonRequest request = Context.Request;
-            CommonResponse response = Context.Response;
-            byte[] contentBuffer;
-            bool useGzip = false;
-            bool useDeflate = false;
-
-            if ((response.UseCompression == false) || (response.SendBuffer.Length < DomainSettings.Current.CompressionThreshhold.Value))
-            {
-                contentBuffer = response.SendBuffer;
-            }
-            else
-            {
-                //WS: We need to check the headers that the client has sent to determine what type of compression to use.
-                Header compressionHeader = request.Headers["Accept-Encoding"];
-
-                if (compressionHeader.PrimaryValue.Contains("gzip") == true)
-                {
-                    useGzip = true;
-                }
-                else if (compressionHeader.PrimaryValue.Contains("deflate") == true)
-                {
-                    useDeflate = true;
-                }
-
-                if (!useGzip && !useDeflate && compressionHeader.Complex)
-                {
-                    foreach (string secondaryValue in compressionHeader.SecondaryValues)
-                    {
-                        if (secondaryValue.Contains("gzip") == true)
-                        {
-                            useGzip = true;
-                            break;
-                        }
-                        else if (secondaryValue.Contains("deflate") == true)
-                        {
-                            useDeflate = true;
-                            break;
-                        }
-                    }
-                }
-                if (useGzip == true)
-                {
-                    using (MemoryStream memoryStream = new System.IO.MemoryStream())
-                    {
-                        using (GZipStream gZipStream = new GZipStream(memoryStream, CompressionMode.Compress, true))
-                        {
-                            //AJ: Compress content
-                            gZipStream.Write(response.SendBuffer, 0, response.SendBuffer.Length);
-                            gZipStream.Flush();
-                            gZipStream.Close();
-                            contentBuffer = memoryStream.ToArray();
-                        }
-                    }
-                    Log.Write("GZipped message: "
-                        + response.SendBuffer.Length.ToString()
-                        + " bytes to "
-                        + contentBuffer.Length.ToString()
-                        + " bytes.",
-                        LogMessageLevel.Debug);
-                }
-                else if (useDeflate == true)
-                {
-                    using (MemoryStream memoryStream = new System.IO.MemoryStream())
-                    {
-                        using (DeflateStream deflateStream = new DeflateStream(memoryStream, CompressionMode.Compress))
-                        {
-                            //AJ: Compress content
-                            deflateStream.Write(response.SendBuffer, 0, response.SendBuffer.Length);
-                            deflateStream.Flush();
-                            deflateStream.Close();
-                            contentBuffer = memoryStream.ToArray();
-                        }
-                    }
-                    Log.Write("Deflated message: "
-                        + response.SendBuffer.Length.ToString()
-                        + " bytes to "
-                        + contentBuffer.Length.ToString()
-                        + " bytes.",
-                        LogMessageLevel.Debug);
-                }
-                else
-                {
-                    contentBuffer = response.SendBuffer;
-                }
-
-                if (contentBuffer.Length > response.SendBuffer.Length)
-                {
-                    contentBuffer = response.SendBuffer;
-                }
-                else
-                {
-                    if (useGzip == true)
-                    {
-                        response.Headers.Add("Content-Encoding", "gzip");
-
-                    }
-                    else if (useDeflate == true)
-                    {
-                        response.Headers.Add("Content-Encoding", "deflate");
-                    }
-                }
-
-            }
-
-            if (response.Headers.Contains("Content-Length") == false)
-            {
-                response.Headers.Add("Content-Length", contentBuffer.Length.ToString());
-            }
-            else
-            {
-                response.Headers["Content-Length"].PrimaryValue = contentBuffer.Length.ToString();
-            }
-            return contentBuffer;
-        }
         private string GetWholeValue(Header H)
         {
             
         }
-        private void ProcessUrlEncodedRequestData(string Input)
-        {
-            string[] Pairs = Input.Split('&');
-            foreach (string Pair in Pairs)
-            {
-                if (Pair.IndexOf('=') != -1)
-                {
-                    string Name = Pair.Substring(0, Pair.IndexOf('='));
-                    string Value = Pair.Substring(Pair.IndexOf('=') + 1);
-                    this.CurrentContext.Request.RequestData.AddDataStream(Name, Encoding.UTF8.GetBytes(Value));
-                }
-            }
-        }
+        
         private void ProcessMultipartEncodedRequestData(string input)
         {
 

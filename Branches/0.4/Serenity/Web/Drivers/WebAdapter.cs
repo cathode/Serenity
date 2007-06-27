@@ -28,6 +28,10 @@ namespace Serenity.Web.Drivers
         {
         }
         #endregion
+        #region Methods - Protected
+        protected abstract bool WriteHeaders(Socket socket, CommonContext context);
+        protected abstract bool WriteContent(Socket socket, CommonContext context);
+        #endregion
         #region Methods - Public
         public abstract bool ReadContext(Socket socket, out CommonContext context);
         public virtual bool WriteContext(Socket socket, CommonContext context)
@@ -46,8 +50,7 @@ namespace Serenity.Web.Drivers
                 return false;
             }
         }
-        public abstract bool WriteHeaders(Socket socket, CommonContext context);
-        public abstract bool WriteContent(Socket socket, CommonContext context);
+        
         #endregion
     }
 }
