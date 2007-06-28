@@ -153,20 +153,14 @@ namespace Serenity.Web.Drivers
             state.WorkSocket = socket;
 
             socket.BeginReceive(state.Buffer, 0, state.Buffer.Length,
-                SocketFlags.Peek, new AsyncCallback(this.RecieveCallback), state);
+                SocketFlags.None, new AsyncCallback(this.RecieveCallback), state);
 
             string requestContent = Encoding.ASCII.GetString(state.Buffer);
             int headerSize = requestContent.IndexOf("\r\n\r\n");
+
             if (headerSize != -1)
             {
                 headerSize += 4;
-
-                state = new WebAdapterState();
-                state.WorkSocket = socket;
-                state.Buffer = new byte[headerSize];
-
-                socket.BeginReceive(state.Buffer, 0, state.Buffer.Length,
-                SocketFlags.None, new AsyncCallback(this.RecieveCallback), state);
 
                 requestContent = Encoding.ASCII.GetString(state.Buffer);
                 int indexOf = requestContent.IndexOf("\r\n");
@@ -208,25 +202,11 @@ namespace Serenity.Web.Drivers
                             context.Request.Method = "GET";
                             break;
                     }
-                    switch (methodParts[2])
-                    {
-                        case "HTTP/0.9":
-                            context.ProtocolVersion = new Version(0, 9);
-                            break;
-                        case "HTTP/1.0":
-                            context.ProtocolVersion = new Version(1, 0);
-                            break;
-
-                        default:
-                            //WS: This should probably be changed to send an error to the client.
-                            context.ProtocolVersion = new Version(1, 1);
-                            break;
-                    }
 
                     if (methodParts[1].Contains("?") == true)
                     {
                         requestPath = methodParts[1].Substring(0, methodParts[1].IndexOf('?'));
-                        
+
                         string[] pairs = methodParts[1].Substring(methodParts[1].IndexOf('?') + 1).Split('&');
                         foreach (string pair in pairs)
                         {
@@ -243,6 +223,25 @@ namespace Serenity.Web.Drivers
                     {
                         requestPath = methodParts[1];
                     }
+
+                    switch (methodParts[2])
+                    {
+                        case "HTTP/0.9":
+                            context.ProtocolVersion = new Version(0, 9);
+                            break;
+                        case "HTTP/1.0":
+                            context.ProtocolVersion = new Version(1, 0);
+                            break;
+
+                        default:
+                            //WS: This should probably be changed to send an error to the client.
+                            context.ProtocolVersion = new Version(1, 1);
+                            break;
+                    }
+                }
+                else
+                {
+                    //WS: A bad request error page needs to be generated and sent at this point.
                 }
                 int contentLength = 0;
                 string multipartBoundary = "";
@@ -260,6 +259,7 @@ namespace Serenity.Web.Drivers
                             string headerName = line.Substring(0, n);
                             string headerValue = line.Substring(n + 2);
                             Header header = new Header(headerName, headerValue);
+
                             switch (headerName)
                             {
                                 case "Content-Length":
