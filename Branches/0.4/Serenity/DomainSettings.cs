@@ -50,18 +50,18 @@ namespace Serenity
             {
                 this.hasParent = false;
                 this.parent = null;
-                this.DefaultEnvironment = new DomainSettingValue<string>();
-                this.OmitEnvironment = new DomainSettingValue<bool>();
-                this.OmitResourceClass = new DomainSettingValue<bool>();
-                this.CompressionThreshhold = new DomainSettingValue<int>();
+                this.defaultEnvironment = new DomainSettingValue<string>();
+                this.omitEnvironment = new DomainSettingValue<bool>();
+                this.omitResourceClass = new DomainSettingValue<bool>();
+                this.compressionThreshhold = new DomainSettingValue<int>();
             }
             else
             {
                 this.parent = parent;
-                this.DefaultEnvironment = new DomainSettingValue<string>(this.parent.DefaultEnvironment);
-                this.OmitEnvironment = new DomainSettingValue<bool>(this.parent.OmitEnvironment);
-                this.OmitResourceClass = new DomainSettingValue<bool>(this.parent.OmitResourceClass);
-                this.CompressionThreshhold = new DomainSettingValue<int>(this.parent.CompressionThreshhold);
+                this.defaultEnvironment = new DomainSettingValue<string>(this.parent.DefaultEnvironment);
+                this.omitEnvironment = new DomainSettingValue<bool>(this.parent.omitEnvironment);
+                this.omitResourceClass = new DomainSettingValue<bool>(this.parent.omitResourceClass);
+                this.compressionThreshhold = new DomainSettingValue<int>(this.parent.CompressionThreshhold);
             }
         }
         #endregion
@@ -80,19 +80,19 @@ namespace Serenity
         private static readonly Dictionary<string, DomainSettings> settings;
         #endregion
         #region Fields - Public
-        public readonly DomainSettingValue<string> DefaultEnvironment;
-        public readonly DomainSettingValue<bool> OmitEnvironment;
-        public readonly DomainSettingValue<bool> OmitResourceClass;
-        public readonly DomainSettingValue<int> CompressionThreshhold;
+        private readonly DomainSettingValue<string> defaultEnvironment;
+        private readonly DomainSettingValue<bool> omitEnvironment;
+        private readonly DomainSettingValue<bool> omitResourceClass;
+        private readonly DomainSettingValue<int> compressionThreshhold;
         #endregion
         #region Methods - Private
         private static DomainSettings CreateDefaultRoot()
         {
             DomainSettings root = new DomainSettings("");
-            root.DefaultEnvironment.Value = "system";
-            root.CompressionThreshhold.Value = 8192;
-            root.OmitEnvironment.Value = false;
-            root.OmitResourceClass.Value = false;
+            root.defaultEnvironment.Value = "system";
+            root.compressionThreshhold.Value = 8192;
+            root.omitEnvironment.Value = false;
+            root.omitResourceClass.Value = false;
             return root;
         }
         #endregion
@@ -259,6 +259,14 @@ namespace Serenity
         }
         #endregion
         #region Properties - Public
+        public DomainSettingValue<int> CompressionThreshhold
+        {
+            get
+            {
+                return this.compressionThreshhold;
+            }
+        }
+
         public static DomainSettings Current
         {
             get
@@ -268,6 +276,13 @@ namespace Serenity
             set
             {
                 DomainSettings.current = value;
+            }
+        }
+        public DomainSettingValue<string> DefaultEnvironment
+        {
+            get
+            {
+                return this.defaultEnvironment;
             }
         }
         /// <summary>
@@ -285,6 +300,20 @@ namespace Serenity
             get
             {
                 return this.name;
+            }
+        }
+        public DomainSettingValue<bool> OmitEnvironment
+        {
+            get
+            {
+                return this.omitEnvironment;
+            }
+        }
+        public DomainSettingValue<bool> OmitResourceClass
+        {
+            get
+            {
+                return this.omitResourceClass;
             }
         }
         #endregion

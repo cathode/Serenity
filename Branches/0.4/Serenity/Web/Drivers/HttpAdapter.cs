@@ -79,7 +79,7 @@ namespace Serenity.Web.Drivers
                 }
                 if (response.Headers.Contains("Content-Type") == false)
                 {
-                    response.Headers.Add("Content-Type", response.MimeType + "; charset=UTF-8");
+                    response.Headers.Add("Content-Type", response.MimeType.ToString() + "; charset=UTF-8");
                 }
                 if (!response.Headers.Contains("Server"))
                 {
@@ -162,7 +162,6 @@ namespace Serenity.Web.Drivers
             {
                 headerSize += 4;
 
-                requestContent = Encoding.ASCII.GetString(state.Buffer);
                 int indexOf = requestContent.IndexOf("\r\n");
                 string line = requestContent.Substring(0, indexOf);
                 requestContent = requestContent.Substring(indexOf + 2);
@@ -268,12 +267,12 @@ namespace Serenity.Web.Drivers
                                 case "Content-Type":
                                     if (headerValue.StartsWith("multipart/form-data") == true)
                                     {
-                                        context.Request.ContentType = "multipart/form-data";
+                                        context.Request.ContentType = MimeType.MultipartFormData;
                                         multipartBoundary = headerValue.Substring(headerValue.IndexOf('=') + 1);
                                     }
                                     else
                                     {
-                                        context.Request.ContentType = "application/x-www-form-urlencoded";
+                                        context.Request.ContentType = MimeType.ApplicationXWwwFormUrlEncoded;
                                     }
                                     header = new Header(headerName, headerValue);
                                     break;
@@ -301,23 +300,24 @@ namespace Serenity.Web.Drivers
                 }
 
                 context.Request.Url = new Uri("http://" + hostName + requestPath);
+
+                if (contentLength > 0)
+                {
+                    if (context.Request.Headers.Contains("Content-Type"))
+                    {
+
+                    }
+                    else
+                    {
+                        state.Buffer = new byte[contentLength];
+                    }
+                }
             }
             return true;
         }
         #endregion
         #region Old
         /*
-        #region Methods - Private
-        private string GetWholeValue(Header H)
-        {
-            
-        }
-        
-        private void ProcessMultipartEncodedRequestData(string input)
-        {
-
-        }
-        #endregion
         #region Methods - Public
         /// <summary>
         /// Translates an HTTP request, represented as an array of bytes,

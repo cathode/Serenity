@@ -34,6 +34,10 @@ namespace Serenity.Web
                 return MimeType.Default;
             }
         }
+        public override string ToString()
+        {
+            return this.type + "/" + this.subtype;
+        }
         #endregion
         #region Properties - Public
         public string Subtype
@@ -50,7 +54,7 @@ namespace Serenity.Web
                 return this.type;
             }
         }
-        
+
         /// <summary>
         /// application/EDI-X12
         /// </summary>
@@ -132,6 +136,16 @@ namespace Serenity.Web
             }
         }
         /// <summary>
+        /// application/x-www-form-urlencoded
+        /// </summary>
+        public static MimeType ApplicationXWwwFormUrlEncoded
+        {
+            get
+            {
+                return new MimeType("application", "x-www-form-urlencoded");
+            }
+        }
+        /// <summary>
         /// audio/mpeg
         /// </summary>
         public static MimeType AudioMpeg
@@ -175,7 +189,7 @@ namespace Serenity.Web
         {
             get
             {
-                return new MimeType("application", "octet-stream");
+                return new MimeType("text", "plain");
             }
         }
         /// <summary>
@@ -246,6 +260,16 @@ namespace Serenity.Web
             get
             {
                 return new MimeType("multipart", "alternative");
+            }
+        }
+        /// <summary>
+        /// multipart/form-data
+        /// </summary>
+        public static MimeType MultipartFormData
+        {
+            get
+            {
+                return new MimeType("multipart", "form-data");
             }
         }
         /// <summary>

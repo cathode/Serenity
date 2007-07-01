@@ -36,7 +36,7 @@ namespace Serenity.Web
         private int clientCertificateError;
         private Encoding contentEncoding;
         private int contentLength;
-        private string contentType;
+        private MimeType contentType;
         private CommonContext context;
         private CookieCollection cookies;
         private bool hasEntityBody;
@@ -92,7 +92,7 @@ namespace Serenity.Web
                 this.contentLength = value;
             }
         }
-        public string ContentType
+        public MimeType ContentType
         {
             get
             {

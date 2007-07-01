@@ -17,10 +17,52 @@ using System.Text;
 
 namespace Serenity.Web.Drivers
 {
-    internal class WebAdapterState
+    public class WebAdapterState
     {
-        internal Socket WorkSocket;
-        internal const int BufferSize = 256;
-        internal byte[] Buffer = new byte[BufferSize];
+        #region Constructors - Public
+        public WebAdapterState() : this(WebAdapterState.DefaultBufferSize)
+        {
+        }
+        public WebAdapterState(int bufferSize)
+        {
+            this.Buffer = new byte[bufferSize];
+        }
+        #endregion
+        #region Fields - Private
+        private byte[] buffer = new byte[DefaultBufferSize];
+        private Socket workSocket;
+        #endregion
+        #region Fields - Public
+        public const int MaxBufferSize = 65536;
+        public const int MinBufferSize = 32;
+        public const int DefaultBufferSize = MinBufferSize * 4;
+        #endregion
+        #region Properties - Public
+        public byte[] Buffer
+        {
+            get
+            {
+                return this.buffer;
+            }
+            set
+            {
+                if (value != null && value.Length > WebAdapterState.MinBufferSize)
+                {
+                    this.buffer = value;
+                }
+            }
+        }
+        public Socket WorkSocket
+        {
+            get
+            {
+                return this.workSocket;
+            }
+            set
+            {
+                this.workSocket = value;
+            }
+        }
+        #endregion
     }
 }
