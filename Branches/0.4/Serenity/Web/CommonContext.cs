@@ -12,6 +12,7 @@ http://www.microsoft.com/resources/sharedsource/licensingbasics/communitylicense
 */
 using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using System.Text;
 
 using Serenity.Web.Drivers;
@@ -32,18 +33,32 @@ namespace Serenity.Web
         }
         #endregion
         #region Fields - Private
+        private WebAdapter adapter;
         private bool headersWritten = false;
         private string protocolType;
         private Version protocolVersion;
         private CommonRequest request;
         private CommonResponse response;
-        private WebAdapter adapter;
+        private Socket socket;
         private bool supportsAuthentication;
         private bool supportsChunkedTransfer;
         private bool supportsContentControl;
         private bool supportsFields;
         private bool supportsHeaders;
         private bool supportsPeerInfo;
+        #endregion
+        #region Properties - Internal
+        internal Socket Socket
+        {
+            get
+            {
+                return this.socket;
+            }
+            set
+            {
+                this.socket = value;
+            }
+        }
         #endregion
         #region Properties - Public
         /// <summary>

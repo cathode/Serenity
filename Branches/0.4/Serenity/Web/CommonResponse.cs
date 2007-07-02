@@ -50,6 +50,10 @@ namespace Serenity.Web
         /// <returns>The number of bytes flushed, or -1 if an error occurred.</returns>
         public int Flush()
         {
+            if (this.context.Adapter.WriteContext(this.context.Socket, this.context))
+            {
+
+            }
             return -1;
         }
         /// <summary>
