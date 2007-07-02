@@ -9,14 +9,12 @@ namespace Serenity.Web
     /// </summary>
     public static class ErrorHandler
     {
-        /// <summary>
-        /// Handles a supplied StatusCode.
-        /// </summary>
-        /// <param name="code"></param>
-        /// <param name="context"></param>
-        /// <returns>True if an error response was generated,
-        /// or false if no error response necessary.</returns>
-        public static bool Handle(StatusCode code, CommonContext context)
+        #region Methods - Public
+        public static bool Handle(CommonContext context, StatusCode code)
+        {
+            return ErrorHandler.Handle(context, code, null);
+        }
+        public static bool Handle(CommonContext context, StatusCode code, string message)
         {
             context.Response.Status = code;
             bool isError = true;
@@ -38,12 +36,32 @@ namespace Serenity.Web
                     context.Response.Write("Error: 405 Method Not Allowed\r\nYour browser sent a method that was unrecognized or not part of the HTTP standard.");
                     break;
 
+                case 406:
+                case 407:
+                case 408:
+                case 409:
+                case 410:
+                    break;
+
+                case 500:
+                case 501:
+                case 502:
+                case 503:
+                    break;
+
                 default:
                     isError = false;
                     break;
             }
 
+            if (isError && !string.IsNullOrEmpty(message))
+            {
+                context.Response.Write("\r\nAdditional information about this error:\r\n");
+                context.Response.Write(message);
+            }
+
             return isError;
         }
+#endregion
     }
 }

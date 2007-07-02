@@ -197,7 +197,7 @@ namespace Serenity.Web.Drivers
 
                         default:
                             //WS: We need to generate an error here if the method is not supported.
-                            ErrorHandler.Handle(StatusCode.Http405MethodNotAllowed, context);
+                            ErrorHandler.Handle(context, StatusCode.Http405MethodNotAllowed, methodParts[0]);
                             return true;
                     }
                     //Request URI is the "middle"
@@ -211,22 +211,20 @@ namespace Serenity.Web.Drivers
                         case "HTTP/1.0":
                             context.ProtocolVersion = new Version(1, 0);
                             break;
-
-                        default:
-                            //WS: This should probably be changed to send an error to the client.
+                        case "HTTP/1.1":
                             context.ProtocolVersion = new Version(1, 1);
                             break;
+
+                        default:
+                            ErrorHandler.Handle(context, StatusCode.Http400BadRequest, "An invalid HTTP version was detected");
+                            return true;
                     }
                 }
                 else
                 {
-                    //WS: A bad request error page needs to be generated and sent at this point.
-                    ErrorHandler.Handle(StatusCode.Http400BadRequest, context);
+                    ErrorHandler.Handle(context, StatusCode.Http400BadRequest, "The first line of the request was invalid");
                     return true;
                 }
-                int contentLength = 0;
-                string multipartBoundary = "";
-
                 indexOf = requestContent.IndexOf("\r\n");
                 while (indexOf != -1)
                 {
@@ -237,41 +235,7 @@ namespace Serenity.Web.Drivers
                         int n = line.IndexOf(':');
                         if (n != -1)
                         {
-                            string headerName = line.Substring(0, n);
-                            string headerValue = line.Substring(n + 2);
-                            Header header = new Header(headerName, headerValue);
-
-                            switch (headerName)
-                            {
-                                case "Content-Length":
-                                    contentLength = int.Parse(headerValue);
-                                    break;
-                                case "Content-Type":
-                                    if (headerValue.StartsWith("multipart/form-data") == true)
-                                    {
-                                        context.Request.ContentType = MimeType.MultipartFormData;
-                                        multipartBoundary = headerValue.Substring(headerValue.IndexOf('=') + 1);
-                                    }
-                                    else
-                                    {
-                                        context.Request.ContentType = MimeType.ApplicationXWwwFormUrlEncoded;
-                                    }
-                                    header = new Header(headerName, headerValue);
-                                    break;
-                                
-                                case "Accept":
-                                case "Accept-Charset":
-                                //AJ: Removed for http compression support
-                                //case "Accept-Encoding":
-                                case "Accept-Language":
-                                case "Keep-Alive":
-                                    header = null;
-                                    break;
-                            }
-                            if (header != null)
-                            {
-                                context.Request.Headers.Add(header);
-                            }
+                            context.Request.Headers.Add(line.Substring(0, n), line.Substring(n + 2));
                         }
                     }
                     indexOf = requestContent.IndexOf("\r\n");
@@ -295,36 +259,47 @@ namespace Serenity.Web.Drivers
                     else
                     {
                         //invalid url scheme for HTTP.
-                        ErrorHandler.Handle(StatusCode.Http400BadRequest, context);
+                        ErrorHandler.Handle(context, StatusCode.Http400BadRequest, "Invalid request URI scheme");
                         return true;
                     }
                 }
                 else
                 {
                     //Request is invalid because it doesnt have a Host header.
-                    ErrorHandler.Handle(StatusCode.Http400BadRequest, context);
+                    ErrorHandler.Handle(context, StatusCode.Http400BadRequest, "No Host header included");
                     return true;
                 }
 
-                if (context.Request.Headers.Contains("Content-Length")
-                   || context.Request.Headers.Contains("Transfer-Encoding"))
+                bool hasContentLength = context.Request.Headers.Contains("Content-Length");
+                bool hasTransferEncoding = context.Request.Headers.Contains("Transfer-Encoding");
+                bool hasBody = hasContentLength | hasTransferEncoding;
+
+                if (hasBody)
                 {
-                    if (context.Request.Headers.Contains("Content-Length")
-                        && !context.Request.Headers.Contains("Transfer-Encoding"))
+                    //Check if the client sent the Content-Type header, which is required if
+                    //a message body is included with the request. 
+                    if (context.Request.Headers.Contains("Content-Type"))
                     {
-                        contentLength = int.Parse(context.Request.Headers["Content-Length"].PrimaryValue);
-                    }
-                    else if (!context.Request.Headers.Contains("Content-Length")
-                        && context.Request.Headers.Contains("Transfer-Encoding")
-                        && context.Request.Headers["Transfer-Encoding"].PrimaryValue == "chunked")
-                    {
-                        ErrorHandler.Handle(StatusCode.Http501NotImplemented, context);
-                        return true;
+                        //Content-Length and Transfer-Encoding headers can't coexist.
+                        if (hasContentLength && !hasTransferEncoding)
+                        {
+                            ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
+                            return true;
+                        }
+                        else if (hasTransferEncoding && !hasContentLength)
+                        {
+                            ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
+                            return true;
+                        }
+                        else
+                        {
+                            ErrorHandler.Handle(context, StatusCode.Http400BadRequest, "Content-Length and Transfer-Encoding headers cannot exist in the same request.");
+                            return true;
+                        }
                     }
                     else
                     {
-                        ErrorHandler.Handle(StatusCode.Http400BadRequest, context);
-                        return true;
+                        ErrorHandler.Handle(context, StatusCode.Http400BadRequest, "No Content-Type header included with request that includes a message body.");
                     }
                 }
             }
