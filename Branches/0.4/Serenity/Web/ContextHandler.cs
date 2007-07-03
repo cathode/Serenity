@@ -22,7 +22,7 @@ using Serenity.Xml.Html;
 namespace Serenity.Web
 {
     /// <summary>
-    /// Defines a method which handle incoming CommonContexts by directing them to the proper dynamic page.
+    /// Defines a method which handle incoming CommonContexts by directing them to the proper resource class.
     /// </summary>
     public class ContextHandler
     {
@@ -39,22 +39,22 @@ namespace Serenity.Web
 
             DomainSettings settings = DomainSettings.Current;
 
-            if ((settings.OmitEnvironment.Value) || (context.Request.Url.Segments.Length < 2))
+            if ((settings.OmitEnvironment.Value) || (url.Segments.Length < 2))
             {
                 SerenityEnvironment.CurrentInstance = SerenityEnvironment.GetInstance(settings.DefaultEnvironment.Value);
             }
             else
             {
-                SerenityEnvironment.CurrentInstance = SerenityEnvironment.GetInstance(context.Request.Url.Segments[1].TrimEnd('/').ToLower());
+                SerenityEnvironment.CurrentInstance = SerenityEnvironment.GetInstance(url.Segments[1].TrimEnd('/').ToLower());
             }
             ResourceClass resourceClass;
-            if ((DomainSettings.Current.OmitResourceClass.Value) || ((context.Request.Url.Segments.Length < 3) && (!settings.OmitEnvironment.Value)))
+            if ((DomainSettings.Current.OmitResourceClass.Value) || ((url.Segments.Length < 3) && (!settings.OmitEnvironment.Value)))
             {
                 resourceClass = ResourceClass.GetResourceClass(SerenityEnvironment.CurrentInstance.DefaultResourceClass.ToLower());
             }
             else
             {
-                resourceClass = ResourceClass.GetResourceClass(context.Request.Url.Segments[2].TrimEnd('/').ToLower());
+                resourceClass = ResourceClass.GetResourceClass(url.Segments[2].TrimEnd('/').ToLower());
             }
             if (resourceClass != null)
             {
@@ -63,8 +63,7 @@ namespace Serenity.Web
             else
             {
                 //generate 404 not found response.
-                context.Response.Write("404 Not Found");
-                context.Response.Status = StatusCode.Http404NotFound;
+                ErrorHandler.Handle(context, StatusCode.Http404NotFound, url.ToString());
             }
         }
         #endregion
