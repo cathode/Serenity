@@ -30,7 +30,7 @@ namespace Serenity
         }
         #endregion
         #region Constructors - Protected
-        protected ResourceClass(string name)
+        public ResourceClass(string name)
         {
             this.name = name;
         }
@@ -77,7 +77,7 @@ namespace Serenity
         public sealed class DefaultImplementation : ResourceClass
         {
             #region Constructors - Internal
-            internal DefaultImplementation() : base("default")
+            public DefaultImplementation() : base("default")
             {
             }
             #endregion
