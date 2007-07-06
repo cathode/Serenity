@@ -206,10 +206,12 @@ namespace Serenity.ResourceClasses
                     FooterDiv.AppendAnchor("http://famfamfam.com/", "FamFamFam.com");
                     FooterDiv.AddClass("Footer");
 
-                    context.Response.Write(Doc.SaveMarkup());
                     context.Response.Status = StatusCode.Http200Ok;
                     context.Response.MimeType = MimeType.TextHtml;
                     context.Response.UseCompression = true;
+					//BR: Moved things around to make sure that the mimetype and others
+					//are getting set before we write anything out.
+					context.Response.Write(Doc.SaveMarkup());
                 }
                 else
                 {
@@ -223,14 +225,17 @@ namespace Serenity.ResourceClasses
                 if (File.Exists(resourcePath) == true)
                 {
                     //AJ: Cache check goes here
-                    context.Response.Write(File.ReadAllBytes(resourcePath));
-
-                    MimeType mimeType = MimeType.Default;
-                    bool useCompression = false;
-                    
+					//BR: As above, rearranged things to make sure that mimetype and other
+					//header-related things are going out first.
+					MimeType mimeType = MimeType.TextHtml;
+					
+					bool useCompression = false;
                     context.Response.UseCompression = useCompression;
+					
                     context.Response.MimeType = mimeType;
                     context.Response.Status = StatusCode.Http200Ok;
+					
+                    context.Response.Write(File.ReadAllBytes(resourcePath));
                 }
                 else
                 {
