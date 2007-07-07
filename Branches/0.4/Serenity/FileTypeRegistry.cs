@@ -16,6 +16,8 @@ using System.Text;
 
 using LibINI;
 
+using Serenity.Web;
+
 namespace Serenity
 {
     public static class FileTypeRegistry
@@ -36,7 +38,8 @@ namespace Serenity
 
             foreach (IniSection section in file)
             {
-                string description, mimeType, extension;
+                string description, extension;
+				MimeType mimeType;
                 bool compress;
 
                 extension = section.Name;
@@ -53,11 +56,11 @@ namespace Serenity
 
                     if (section.ContainsEntry("MimeType") == true)
                     {
-                        mimeType = section["MimeType"].Value.Trim('"');
+						mimeType = MimeType.FromString(section["MimeType"].Value.Trim('"'));
                     }
                     else
                     {
-                        mimeType = "text/plain";
+						mimeType = MimeType.Default;
                     }
                     if (section.ContainsEntry("Compress") == true)
                     {
@@ -79,8 +82,8 @@ namespace Serenity
             }
         }
 
-        private static Dictionary<string, FileTypeEntry> entries;
-        public static readonly FileTypeEntry DefaultEntry = new FileTypeEntry("File", "text/plain", false);
+		private static Dictionary<string, FileTypeEntry> entries = new Dictionary<string, FileTypeEntry>();
+        public static readonly FileTypeEntry DefaultEntry = new FileTypeEntry("File", MimeType.Default, false);
 
         public static bool GetCompressionUsage(string extension)
         {
@@ -105,7 +108,7 @@ namespace Serenity
                 return FileTypeRegistry.DefaultEntry.Description;
             }
         }
-        public static string GetMimeType(string extension)
+        public static MimeType GetMimeType(string extension)
         {
             if (FileTypeRegistry.entries.ContainsKey(extension) == true)
             {

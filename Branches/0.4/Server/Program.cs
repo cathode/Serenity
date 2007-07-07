@@ -105,6 +105,8 @@ namespace Server
 
             Log.StartLogging();
 
+			FileTypeRegistry.Initialize();
+
             string operatingMode = "server";
             if (args.Length > 0)
             {

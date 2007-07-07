@@ -30,24 +30,24 @@ namespace Serenity.Themes
         public Theme(string name) : base(name.ToLower())
         {
             this.stylesheetContent = null;
-            this.styles = new Style[17];
-            this.styles[(int)StyleType.AccentA] = new Style("AccentA");
-            this.styles[(int)StyleType.AccentB] = new Style("AccentB");
-            this.styles[(int)StyleType.AccentC] = new Style("AccentC");
-            this.styles[(int)StyleType.AccentD] = new Style("AccentD");
-            this.styles[(int)StyleType.AccentE] = new Style("AccentE");
-            this.styles[(int)StyleType.AccentF] = new Style("AccentF");
-            this.styles[(int)StyleType.BlockText] = new Style("BlockText");
-            this.styles[(int)StyleType.ContentA] = new Style("ContentA");
-            this.styles[(int)StyleType.ContentB] = new Style("ContentB");
-            this.styles[(int)StyleType.HeadingA] = new Style("HeadingA");
-            this.styles[(int)StyleType.HeadingB] = new Style("HeadingB");
-            this.styles[(int)StyleType.HeadingC] = new Style("HeadingC");
-            this.styles[(int)StyleType.HeadingD] = new Style("HeadingD");
-            this.styles[(int)StyleType.HeadingE] = new Style("HeadingE");
-            this.styles[(int)StyleType.HeadingF] = new Style("HeadingF");
-            this.styles[(int)StyleType.Link] = new Style("Link");
-            this.styles[(int)StyleType.LinkExternal] = new Style("LinkExternal");
+            this.styles = new Dictionary<StyleType, Style>();
+            this.styles[StyleType.AccentA] = new Style("AccentA");
+            this.styles[StyleType.AccentB] = new Style("AccentB");
+            this.styles[StyleType.AccentC] = new Style("AccentC");
+            this.styles[StyleType.AccentD] = new Style("AccentD");
+            this.styles[StyleType.AccentE] = new Style("AccentE");
+            this.styles[StyleType.AccentF] = new Style("AccentF");
+            this.styles[StyleType.BlockText] = new Style("BlockText");
+            this.styles[StyleType.ContentA] = new Style("ContentA");
+            this.styles[StyleType.ContentB] = new Style("ContentB");
+            this.styles[StyleType.HeadingA] = new Style("HeadingA");
+            this.styles[StyleType.HeadingB] = new Style("HeadingB");
+            this.styles[StyleType.HeadingC] = new Style("HeadingC");
+            this.styles[StyleType.HeadingD] = new Style("HeadingD");
+            this.styles[StyleType.HeadingE] = new Style("HeadingE");
+            this.styles[StyleType.HeadingF] = new Style("HeadingF");
+            this.styles[StyleType.Link] = new Style("Link");
+            this.styles[StyleType.LinkExternal] = new Style("LinkExternal");
 
             this.AccentA.BaseStyle = this.ContentA;
             this.AccentB.BaseStyle = this.AccentA;
@@ -68,13 +68,13 @@ namespace Serenity.Themes
         }
         #endregion
         #region Fields - Private
-        private Style[] styles;
+        private Dictionary<StyleType, Style> styles;
         private byte[] stylesheetContent;
         #endregion
         #region Methods - Public
         public void Clear()
         {
-            foreach (Style style in this.styles)
+            foreach (Style style in this.styles.Values)
             {
                 style.Undefine();
             }
@@ -99,7 +99,7 @@ namespace Serenity.Themes
                 IEnumerable<XmlElement> Styles = ((XmlElement)Doc.DocumentElement["Styles"]).GetElementsByName("Style");
                 foreach (XmlElement Style in Styles)
                 {
-                    Style style = theme.styles[(int)Enum.Parse(typeof(StyleType), Style.GetAttributeValue("Class"))];
+                    Style style = theme.styles[(StyleType)Enum.Parse(typeof(StyleType), Style.GetAttributeValue("Class"))];
 
                     XmlElement ColorElement = (XmlElement)(Style["Color"]);
                     if (ColorElement != null)
@@ -121,37 +121,12 @@ namespace Serenity.Themes
             }
         }
         /// <summary>
-        /// Attempts to load the theme specified by name.
-        /// </summary>
-        /// <param name="name">The name of the Theme to attempt to load.</param>
-        /// <returns>A TryResult&lt;Theme&gt; result.</returns>
-        public static TryResult<Theme> TryLoadTheme(string name)
-        {
-            try
-            {
-                Theme theme = Theme.LoadTheme(name);
-                if (theme != null)
-                {
-                    return TryResult<Theme>.SuccessResult(theme);
-                }
-                else
-                {
-                    return TryResult<Theme>.FailResult(new Exception("Unspecified Error"));
-                }
-            }
-            catch (Exception e)
-            {
-                return TryResult<Theme>.FailResult(e);
-            }
-        }
-
-        /// <summary>
         /// Generates and caches the stylesheet output of the current Theme.
         /// </summary>
         public void GenerateStylesheet()
         {
             StringBuilder output = new StringBuilder();
-            foreach (Style style in this.styles)
+            foreach (Style style in this.styles.Values)
             {
                 if (style.QualifiedIsDefined == true)
                 {
@@ -400,50 +375,50 @@ namespace Serenity.Themes
         {
             get
             {
-                return this.styles[(int)StyleType.AccentA];
+                return this.styles[StyleType.AccentA];
             }
         }
         public Style AccentB
         {
             get
             {
-                return this.styles[(int)StyleType.AccentB];
+                return this.styles[StyleType.AccentB];
             }
         }
         public Style AccentC
         {
             get
             {
-                return this.styles[(int)StyleType.AccentC];
+                return this.styles[StyleType.AccentC];
             }
         }
         public Style AccentD
         {
             get
             {
-                return this.styles[(int)StyleType.AccentD];
+                return this.styles[StyleType.AccentD];
             }
         }
         public Style AccentE
         {
             get
             {
-                return this.styles[(int)StyleType.AccentE];
+                return this.styles[StyleType.AccentE];
             }
         }
         public Style AccentF
         {
             get
             {
-                return this.styles[(int)StyleType.AccentF];
+                return this.styles[StyleType.AccentF];
             }
         }
         public Style[] AllStyles
         {
             get
             {
-                Style[] allStyles = new Style[this.styles.Length];
-                this.styles.CopyTo(allStyles, 0);
+                Style[] allStyles = new Style[this.styles.Count];
+                this.styles.Values.CopyTo(allStyles, 0);
                 return allStyles;
             }
         }
@@ -451,77 +426,77 @@ namespace Serenity.Themes
         {
             get
             {
-                return this.styles[(int)StyleType.BlockText];
+                return this.styles[StyleType.BlockText];
             }
         }
         public Style ContentA
         {
             get
             {
-                return this.styles[(int)StyleType.ContentA];
+                return this.styles[StyleType.ContentA];
             }
         }
         public Style ContentB
         {
             get
             {
-                return this.styles[(int)StyleType.ContentB];
+                return this.styles[StyleType.ContentB];
             }
         }
         public Style HeadingA
         {
             get
             {
-                return this.styles[(int)StyleType.HeadingA];
+                return this.styles[StyleType.HeadingA];
             }
         }
         public Style HeadingB
         {
             get
             {
-                return this.styles[(int)StyleType.HeadingB];
+                return this.styles[StyleType.HeadingB];
             }
         }
         public Style HeadingC
         {
             get
             {
-                return this.styles[(int)StyleType.HeadingC];
+                return this.styles[StyleType.HeadingC];
             }
         }
         public Style HeadingD
         {
             get
             {
-                return this.styles[(int)StyleType.HeadingD];
+                return this.styles[StyleType.HeadingD];
             }
         }
         public Style HeadingE
         {
             get
             {
-                return this.styles[(int)StyleType.HeadingE];
+                return this.styles[StyleType.HeadingE];
             }
         }
         public Style HeadingF
         {
             get
             {
-                return this.styles[(int)StyleType.HeadingF];
+                return this.styles[StyleType.HeadingF];
             }
         }
         public Style Link
         {
             get
             {
-                return this.styles[(int)StyleType.Link];
+                return this.styles[StyleType.Link];
             }
         }
         public Style LinkExternal
         {
             get
             {
-                return this.styles[(int)StyleType.LinkExternal];
+                return this.styles[StyleType.LinkExternal];
             }
         }
         public byte[] StylesheetContent
@@ -549,7 +524,7 @@ namespace Serenity.Themes
         /// <returns>The requested Style.</returns>
         public Style GetStyle(StyleType type)
         {
-            return this.styles[(int)type];
+            return this.styles[type];
         }
         #endregion
     }
