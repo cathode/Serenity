@@ -12,6 +12,7 @@ http://www.microsoft.com/resources/sharedsource/licensingbasics/communitylicense
 */
 using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
@@ -53,6 +54,10 @@ namespace Serenity.Web.Drivers
         }
         #endregion
         #region Methods - Protected
+		protected void DisconnectCallback(IAsyncResult ar)
+		{
+			((Socket)ar.AsyncState).EndDisconnect(ar);
+		}
         /// <summary>
         /// Contains the code that is executed when the current WebDriver is initialized (before handling clients).
         /// </summary>

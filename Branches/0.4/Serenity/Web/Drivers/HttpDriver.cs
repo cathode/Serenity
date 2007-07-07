@@ -45,8 +45,8 @@ namespace Serenity.Web.Drivers
         private Socket listenSocket;
         private ManualResetEvent allDone = new ManualResetEvent(false);
         #endregion
-        #region Methods - Private
-        private void AcceptCallback(IAsyncResult ar)
+		#region Methods - Private
+		private void AcceptCallback(IAsyncResult ar)
         {
             this.allDone.Set();
 
@@ -57,22 +57,15 @@ namespace Serenity.Web.Drivers
 				while (socket.Connected)
 				{
 					CommonContext context = new CommonContext(adapter);
-					if (adapter.ReadContext(socket, out context))
+					if (adapter.ReadContext(socket, out context) && context != null)
 					{
-						if (context != null)
-						{
-							this.InvokeContextCallback(context);
+						this.InvokeContextCallback(context);
 
-							adapter.WriteContext(socket, context);
-						}
-						else
-						{
-							socket.BeginDisconnect(false, null, null);
-						}
+						adapter.WriteContext(socket, context);
 					}
 					else
 					{
-						socket.BeginDisconnect(false, null, null);
+						socket.BeginDisconnect(false, new AsyncCallback(this.DisconnectCallback), socket);
 					}
 				}
 				socket.Close();
