@@ -59,14 +59,20 @@ namespace Serenity.Web.Drivers
 					CommonContext context = new CommonContext(adapter);
 					if (adapter.ReadContext(socket, out context))
 					{
+						if (context != null)
+						{
+							this.InvokeContextCallback(context);
 
-						this.InvokeContextCallback(context);
-
-						adapter.WriteContext(socket, context);
+							adapter.WriteContext(socket, context);
+						}
+						else
+						{
+							socket.BeginDisconnect(false, null, null);
+						}
 					}
 					else
 					{
-						socket.Disconnect(false);
+						socket.BeginDisconnect(false, null, null);
 					}
 				}
 				socket.Close();

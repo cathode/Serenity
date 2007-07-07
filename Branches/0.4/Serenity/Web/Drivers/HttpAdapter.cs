@@ -146,6 +146,12 @@ namespace Serenity.Web.Drivers
         /// <returns>True if successful, or false if any error occurred.</returns>
         public override bool ReadContext(Socket socket, out CommonContext context)
         {
+			if (socket.Available == 0)
+			{
+				context = null;
+				return false;
+			}
+
             context = new CommonContext(this);
 
             WebAdapterState state = new WebAdapterState();
