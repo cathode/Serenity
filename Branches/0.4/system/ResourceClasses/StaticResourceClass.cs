@@ -228,7 +228,7 @@ namespace Serenity.ResourceClasses
 					//AJ: Cache check goes here
 					//BR: As above, rearranged things to make sure that mimetype and other
 					//header-related things are going out first.
-					MimeType mimeType = FileTypeRegistry.GetMimeType(Path.GetExtension(resourcePath));
+					MimeType mimeType = FileTypeRegistry.GetMimeType(Path.GetExtension(resourcePath).Substring(1));
 
 					bool useCompression = false;
 					context.Response.UseCompression = useCompression;

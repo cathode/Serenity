@@ -50,36 +50,27 @@ namespace Serenity.Web.Drivers
         {
             this.allDone.Set();
 
-            using (Socket socket = ((Socket)ar.AsyncState).EndAccept(ar))
-            {
-                int sleepTime = 0;
-                WebAdapter adapter = this.CreateAdapter();
+			using (Socket socket = ((Socket)ar.AsyncState).EndAccept(ar))
+			{
+				WebAdapter adapter = this.CreateAdapter();
 
-                while (socket.Connected == true)
-                {
-                    if (socket.Available > 0)
-                    {
-                        CommonContext context = new CommonContext(adapter);
-                        adapter.ReadContext(socket, out context);
+				while (socket.Connected)
+				{
+					CommonContext context = new CommonContext(adapter);
+					if (adapter.ReadContext(socket, out context))
+					{
 
-                        this.InvokeContextCallback(context);
+						this.InvokeContextCallback(context);
 
-                        adapter.WriteContext(socket, context);
-                    }
-                    else
-                    {
-                        if (sleepTime <= this.Settings.RecieveTimeout)
-                        {
-                            Thread.Sleep(this.Settings.RecieveInterval);
-                            sleepTime += this.Settings.RecieveInterval;
-                        }
-                        else
-                        {
-                            socket.Close();
-                        }
-                    }
-                }
-            }
+						adapter.WriteContext(socket, context);
+					}
+					else
+					{
+						socket.Disconnect(false);
+					}
+				}
+				socket.Close();
+			}
         }
         #endregion
         #region Methods - Protected

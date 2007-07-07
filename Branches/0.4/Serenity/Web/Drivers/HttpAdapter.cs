@@ -152,8 +152,16 @@ namespace Serenity.Web.Drivers
             state.Buffer = new byte[socket.Available];
             state.WorkSocket = socket;
 
-            socket.BeginReceive(state.Buffer, 0, state.Buffer.Length,
-                SocketFlags.None, new AsyncCallback(this.RecieveCallback), state);
+			try
+			{
+				socket.BeginReceive(state.Buffer, 0, state.Buffer.Length,
+					SocketFlags.None, new AsyncCallback(this.RecieveCallback), state);
+			}
+			catch
+			{
+				context = null;
+				return false;
+			}
 
             string requestContent = Encoding.ASCII.GetString(state.Buffer);
             int headerSize = requestContent.IndexOf("\r\n\r\n");
@@ -302,8 +310,9 @@ namespace Serenity.Web.Drivers
                         ErrorHandler.Handle(context, StatusCode.Http400BadRequest, "No Content-Type header included with request that includes a message body.");
                     }
                 }
+				return true;
             }
-            return true;
+			return false;
         }
         #endregion
     }
