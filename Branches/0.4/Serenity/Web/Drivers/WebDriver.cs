@@ -39,7 +39,7 @@ namespace Serenity.Web.Drivers
 		private Socket listeningSocket;
 		private DriverInfo info;
 		private WebDriverSettings settings;
-		private WebDriverState state = WebDriverState.None;
+		private WebDriverStatus state = WebDriverStatus.None;
 		#endregion
 		#region Methods - Protected
 		protected virtual void DisconnectCallback(IAsyncResult ar)
@@ -67,7 +67,7 @@ namespace Serenity.Web.Drivers
 		protected abstract bool DriverStop();
 		protected virtual void RecieveCallback(IAsyncResult ar)
 		{
-			WebDriverContext context = ar.AsyncState as WebDriverContext;
+			WebDriverState context = ar.AsyncState as WebDriverState;
 			if (context != null)
 			{
 				context.Signal.Set();
@@ -76,7 +76,7 @@ namespace Serenity.Web.Drivers
 		}
 		protected virtual void SendCallback(IAsyncResult ar)
 		{
-			WebDriverContext driverContext = ar.AsyncState as WebDriverContext;
+			WebDriverState driverContext = ar.AsyncState as WebDriverState;
 			if (driverContext != null)
 			{
 				driverContext.Signal.Set();
@@ -92,10 +92,10 @@ namespace Serenity.Web.Drivers
 		/// </summary>
 		public void Initialize()
 		{
-			if (this.state < WebDriverState.Initialized)
+			if (this.state < WebDriverStatus.Initialized)
 			{
 				this.DriverInitialize();
-				this.state = WebDriverState.Initialized;
+				this.state = WebDriverStatus.Initialized;
 			}
 		}
 		public abstract bool ReadContext(Socket socket, out CommonContext context);
@@ -104,7 +104,7 @@ namespace Serenity.Web.Drivers
 		/// </summary>
 		public bool Start()
 		{
-			if (this.state == WebDriverState.Initialized)
+			if (this.state == WebDriverStatus.Initialized)
 			{
 				return this.DriverStart();
 			}
@@ -118,7 +118,7 @@ namespace Serenity.Web.Drivers
 		/// </summary>
 		public bool Stop()
 		{
-			if (this.state == WebDriverState.Started)
+			if (this.state == WebDriverStatus.Started)
 			{
 				return this.DriverStop();
 			}
@@ -189,7 +189,7 @@ namespace Serenity.Web.Drivers
 		{
 			get
 			{
-				if (this.state >= WebDriverState.Initialized)
+				if (this.state >= WebDriverStatus.Initialized)
 				{
 					return true;
 				}
@@ -206,7 +206,7 @@ namespace Serenity.Web.Drivers
 		{
 			get
 			{
-				if (this.state == WebDriverState.Started)
+				if (this.state == WebDriverStatus.Started)
 				{
 					return true;
 				}
@@ -223,7 +223,7 @@ namespace Serenity.Web.Drivers
 		{
 			get
 			{
-				if (this.state == WebDriverState.Stopped)
+				if (this.state == WebDriverStatus.Stopped)
 				{
 					return true;
 				}
@@ -246,7 +246,7 @@ namespace Serenity.Web.Drivers
 		/// <summary>
 		/// Gets the state of the current WebDriver.
 		/// </summary>
-		public WebDriverState State
+		public WebDriverStatus State
 		{
 			get
 			{

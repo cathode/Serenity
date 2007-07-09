@@ -29,6 +29,8 @@ namespace Serenity.Web.Drivers
 			this.typeName = "unknown";
 			this.uriSchema = "unknown";
 		}
+		#endregion
+		#region Constructors - Public
 		public DriverInfo(string className, string typeName, string uriSchema, Version version)
 		{
 			this.className = className;

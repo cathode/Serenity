@@ -87,6 +87,9 @@ namespace Serenity
                 return Multiton<TKey, TValue>.instances.ContainsKey(key);
             }
         }
+		/// <summary>
+		/// Disposes any resources used by the current Multiton.
+		/// </summary>
         public virtual void Dispose()
         {
             Multiton<TKey, TValue>.RemoveInstance(this.key);

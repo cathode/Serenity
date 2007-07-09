@@ -106,12 +106,12 @@ namespace Serenity.Web.Drivers
 		}
 		protected override bool DriverStart()
 		{
-			if (this.State >= WebDriverState.Initialized)
+			if (this.State >= WebDriverStatus.Initialized)
 			{
-				this.State = WebDriverState.Started;
+				this.State = WebDriverStatus.Started;
 				this.ListeningSocket.Listen(10);
 
-				while (this.State == WebDriverState.Started)
+				while (this.State == WebDriverStatus.Started)
 				{
 					this.allDone.Reset();
 					this.ListeningSocket.BeginAccept(new AsyncCallback(this.AcceptCallback), this.ListeningSocket);
@@ -127,7 +127,7 @@ namespace Serenity.Web.Drivers
 		}
 		protected override bool DriverStop()
 		{
-			this.State = WebDriverState.Stopped;
+			this.State = WebDriverStatus.Stopped;
 			return true;
 		}
 		protected override bool WriteHeaders(Socket socket, CommonContext context)
@@ -177,7 +177,7 @@ namespace Serenity.Web.Drivers
 
 				try
 				{
-					WebDriverContext driverContext = new WebDriverContext();
+					WebDriverState driverContext = new WebDriverState();
 					driverContext.WorkSocket = socket;
 					socket.BeginSend(output, 0, output.Length, SocketFlags.None, new AsyncCallback(this.SendCallback), driverContext);
 				}
@@ -216,7 +216,7 @@ namespace Serenity.Web.Drivers
 
 			context = new CommonContext(this);
 
-			WebDriverContext state = new WebDriverContext();
+			WebDriverState state = new WebDriverState();
 			state.Buffer = new byte[socket.Available];
 			state.WorkSocket = socket;
 

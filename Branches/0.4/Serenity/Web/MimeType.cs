@@ -10,6 +10,11 @@ namespace Serenity.Web
     public struct MimeType
     {
         #region Constructors - Public
+		/// <summary>
+		/// Initializes a new instance of the MimeType class using the supplied type/subtype.
+		/// </summary>
+		/// <param name="type">The primary type of the new MimeType.</param>
+		/// <param name="subtype">The secondary type of the new MimeType.</param>
         public MimeType(string type, string subtype)
         {
             //WS: add input-validation here.
@@ -22,6 +27,11 @@ namespace Serenity.Web
         private readonly string type;
         #endregion
         #region Methods - Public
+		/// <summary>
+		/// Creates a new MimeType given a supplied string in the format: "type/subtype"
+		/// </summary>
+		/// <param name="mimeType"></param>
+		/// <returns></returns>
         public static MimeType FromString(string mimeType)
         {
             string[] parts = mimeType.Split('/');
@@ -40,6 +50,9 @@ namespace Serenity.Web
         }
         #endregion
         #region Properties - Public
+		/// <summary>
+		/// Gets the secondary type associated with the current MimeType.
+		/// </summary>
         public string Subtype
         {
             get
@@ -47,6 +60,9 @@ namespace Serenity.Web
                 return this.subtype;
             }
         }
+		/// <summary>
+		/// Gets the primary type associated with the current MimeType.
+		/// </summary>
         public string Type
         {
             get

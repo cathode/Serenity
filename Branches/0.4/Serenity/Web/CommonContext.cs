@@ -71,6 +71,10 @@ namespace Serenity.Web
                 return this.driver;
             }
         }
+		/// <summary>
+		/// Gets or sets a value indicating if the headers contained in the current CommonContext's
+		/// CommonResponse have been sent to the client yet.
+		/// </summary>
         public bool HeadersWritten
         {
             get

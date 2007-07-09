@@ -17,10 +17,12 @@ using System.Text;
 using Serenity.Web;
 using Serenity.Web.Drivers;
 
-//WS: This code probably needs LOTS of work in the future.
-
 namespace Serenity
 {
+	/// <summary>
+	/// Represents a Resource Class, which is an organizational and functional unit
+	/// that assists in the processing of requests.
+	/// </summary>
     public abstract class ResourceClass
     {
         #region Constructors - Private
@@ -29,7 +31,11 @@ namespace Serenity
             ResourceClass.resourceClasses = new Dictionary<string, ResourceClass>();
         }
         #endregion
-        #region Constructors - Protected
+        #region Constructors - Public
+		/// <summary>
+		/// Initializes a new instance of the ResourceClass class.
+		/// </summary>
+		/// <param name="name"></param>
         public ResourceClass(string name)
         {
             this.name = name;
@@ -40,7 +46,16 @@ namespace Serenity
         private static Dictionary<string, ResourceClass> resourceClasses;
         #endregion
         #region Methods - Public
+		/// <summary>
+		/// When overridden in a derived class, handles a supplied CommonContext and generates a suitable response.
+		/// </summary>
+		/// <param name="context"></param>
         public abstract void HandleContext(CommonContext context);
+		/// <summary>
+		/// Gets a registered ResourceClass.
+		/// </summary>
+		/// <param name="name">The name of the ResourceClass to get.</param>
+		/// <returns></returns>
         public static ResourceClass GetResourceClass(string name)
         {
             if (ResourceClass.resourceClasses.ContainsKey(name))
@@ -52,6 +67,11 @@ namespace Serenity
                 return new ResourceClass.DefaultImplementation();
             }
         }
+		/// <summary>
+		/// Registers a ResourceClass.
+		/// </summary>
+		/// <param name="resourceClass">The ResourceClass to register.</param>
+		/// <returns></returns>
         public static bool RegisterResourceClass(ResourceClass resourceClass)
         {
             if (!ResourceClass.resourceClasses.ContainsKey(resourceClass.Name))
@@ -66,6 +86,9 @@ namespace Serenity
         }
         #endregion
         #region Properties - Public
+		/// <summary>
+		/// Gets the name of the current ResourceClass.
+		/// </summary>
         public string Name
         {
             get
@@ -74,14 +97,24 @@ namespace Serenity
             }
         }
         #endregion
+		/// <summary>
+		/// Provides a basic implementation of the ResourceClass class which does nothing.
+		/// </summary>
         public sealed class DefaultImplementation : ResourceClass
         {
             #region Constructors - Internal
+			/// <summary>
+			/// Initializes a new instance of the ResourceClass.DefaultImplementation class.
+			/// </summary>
             public DefaultImplementation() : base("default")
             {
             }
             #endregion
             #region Methods - Public
+			/// <summary>
+			/// Does nothing.
+			/// </summary>
+			/// <param name="context"></param>
             public override void HandleContext(CommonContext context)
             {
             }

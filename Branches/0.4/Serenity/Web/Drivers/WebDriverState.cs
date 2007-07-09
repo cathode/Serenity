@@ -12,32 +12,88 @@ http://www.microsoft.com/resources/sharedsource/licensingbasics/communitylicense
 */
 using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 
 namespace Serenity.Web.Drivers
 {
 	/// <summary>
-	/// Represents the state of a WebDriver's operation.
+	/// Provides a simple data structure used to pass objects to and from async callback methods.
 	/// </summary>
-	public enum WebDriverState
+	public sealed class WebDriverState
 	{
+		#region Constructors - Public
 		/// <summary>
-		/// Indicates that the WebDriver is newly created and has not carried out any action so far.
+		/// Initializes a new instance of the WebDriverState class using the default buffer size.
 		/// </summary>
-		None = 0,
+		public WebDriverState()
+			: this(WebDriverState.DefaultBufferSize)
+		{
+		}
 		/// <summary>
-		/// Indicates that the WebDriver has been initialized with a set of parameters which define it's behaviour.
+		/// Initializes a new instance of the WebDriverState class using the supplied buffer size.
 		/// </summary>
-		Initialized = 1,
+		/// <param name="bufferSize"></param>
+		public WebDriverState(int bufferSize)
+		{
+			this.Buffer = new byte[bufferSize];
+		}
+		#endregion
+		#region Fields - Private
+		private byte[] buffer = new byte[DefaultBufferSize];
+		private Socket workSocket;
+		private ManualResetEvent signal = new ManualResetEvent(false);
+		#endregion
+		#region Fields - Public
+		public const int MaxBufferSize = 65536;
+		public const int MinBufferSize = 32;
+		public const int DefaultBufferSize = MinBufferSize * 4;
+		#endregion
+		#region Properties - Public
 		/// <summary>
-		/// Indicates that the WebDriver is in a stopped state.
-		/// It is not listening for connections and all pending requests have been responded to.
+		/// Gets or sets the data buffer associated with the current WebDriverState.
 		/// </summary>
-		Stopped = 2,
+		public byte[] Buffer
+		{
+			get
+			{
+				return this.buffer;
+			}
+			set
+			{
+				if (value != null && value.Length > WebDriverState.MinBufferSize)
+				{
+					this.buffer = value;
+				}
+			}
+		}
 		/// <summary>
-		/// Indicates that the WebDriver is ready to begin Running. It may already be listening,
-		/// but it has not recieved any incoming connections yet.
+		/// Gets the ManualResetEvent, used to assist in syncronization, associated
+		/// with the current WebDriverState.
 		/// </summary>
-		Started = 3,
+		public ManualResetEvent Signal
+		{
+			get
+			{
+				return this.signal;
+			}
+		}
+		/// <summary>
+		/// Gets or sets the socket, used to perform operations on, associated with the
+		/// current WebDriverState.
+		/// </summary>
+		public Socket WorkSocket
+		{
+			get
+			{
+				return this.workSocket;
+			}
+			set
+			{
+				this.workSocket = value;
+			}
+		}
+		#endregion
 	}
 }

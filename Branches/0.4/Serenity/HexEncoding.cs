@@ -16,6 +16,9 @@ using System.Text;
 
 namespace Serenity
 {
+	/// <summary>
+	/// Provides static methods to convert and translate arrays of bytes or strings to and from hexadecimal.
+	/// </summary>
     public static class HexEncoding
     {
         #region Methods - Public
@@ -45,6 +48,11 @@ namespace Serenity
         {
             return HexEncoding.Convert(input.ToCharArray());
         }
+		/// <summary>
+		/// Returns a string containing the supplied bytes as hex.
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns></returns>
         public static string Convert(params byte[] input)
         {
             StringBuilder result = new StringBuilder();
@@ -54,10 +62,20 @@ namespace Serenity
             }
             return result.ToString();
         }
+		/// <summary>
+		/// Returns a string containing the supplied byte as hex.
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns></returns>
         public static string Convert(Byte input)
         {
             return input.ToString("X2");
         }
+		/// <summary>
+		/// Determines if a specific char is a valid hexadecimal character.
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns></returns>
         public static bool Validate(char input)
         {
             switch (input)
@@ -89,6 +107,11 @@ namespace Serenity
                     return false;
             }
         }
+		/// <summary>
+		/// Determines if all the chars in the supplied char array are valid hexadecimal characters.
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns></returns>
         public static bool Validate(char[] input)
         {
             foreach (char c in input)
@@ -100,6 +123,11 @@ namespace Serenity
             }
             return true;
         }
+		/// <summary>
+		/// Determines if the contents of the supplied string are all valid hexadecimal characters.
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns></returns>
         public static bool Validate(string input)
         {
             return HexEncoding.Validate(input.ToCharArray());
