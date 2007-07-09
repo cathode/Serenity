@@ -35,6 +35,12 @@ namespace Serenity.Web.Drivers
 			this.settings = settings;
 		}
 		#endregion
+		#region Destructor
+		~WebDriver()
+		{
+			this.ListeningSocket.Close();
+		}
+		#endregion
 		#region Fields - Private
 		private Socket listeningSocket;
 		private DriverInfo info;
@@ -42,9 +48,23 @@ namespace Serenity.Web.Drivers
 		private WebDriverStatus state = WebDriverStatus.None;
 		#endregion
 		#region Methods - Protected
+		/// <summary>
+		/// Provides a callback method to use for an async socket disconnection.
+		/// </summary>
+		/// <param name="ar"></param>
 		protected virtual void DisconnectCallback(IAsyncResult ar)
 		{
-			((Socket)ar.AsyncState).EndDisconnect(ar);
+			if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
+			{
+				WebDriverState state = ar.AsyncState as WebDriverState;
+
+				state.Signal.Set();
+				state.WorkSocket.EndDisconnect(ar);
+			}
+			else if (ar.AsyncState is Socket)
+			{
+				((Socket)ar.AsyncState).EndDisconnect(ar);
+			}
 		}
 		/// <summary>
 		/// Contains the code that is executed when the current WebDriver is initialized (before handling clients).
@@ -67,23 +87,48 @@ namespace Serenity.Web.Drivers
 		protected abstract bool DriverStop();
 		protected virtual void RecieveCallback(IAsyncResult ar)
 		{
-			WebDriverState context = ar.AsyncState as WebDriverState;
-			if (context != null)
+			if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
 			{
-				context.Signal.Set();
-				context.WorkSocket.EndReceive(ar);
+				WebDriverState state = ar.AsyncState as WebDriverState;
+
+				state.Signal.Set();
+				state.WorkSocket.EndReceive(ar);
+			}
+			else if (ar.AsyncState is Socket)
+			{
+				((Socket)ar.AsyncState).EndReceive(ar);
 			}
 		}
 		protected virtual void SendCallback(IAsyncResult ar)
 		{
-			WebDriverState driverContext = ar.AsyncState as WebDriverState;
-			if (driverContext != null)
+			if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
 			{
-				driverContext.Signal.Set();
-				driverContext.WorkSocket.EndSend(ar);
+				WebDriverState state = ar.AsyncState as WebDriverState;
+
+				state.Signal.Set();
+				state.WorkSocket.EndSend(ar);
+			}
+			else if (ar.AsyncState is Socket)
+			{
+				((Socket)ar.AsyncState).EndSend(ar);
 			}
 		}
-		protected abstract bool WriteContent(Socket socket, CommonContext context);
+		protected virtual bool WriteContent(Socket socket, CommonContext context)
+		{
+			try
+			{
+				WebDriverState state = new WebDriverState();
+				state.WorkSocket = socket;
+				state.Signal.Reset();
+				socket.BeginSend(context.Response.SendBuffer, 0, context.Response.SendBuffer.Length, SocketFlags.None, new AsyncCallback(this.SendCallback), socket);
+				state.Signal.WaitOne();
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
+		}
 		protected abstract bool WriteHeaders(Socket socket, CommonContext context);
 		#endregion
 		#region Methods - Public
@@ -246,7 +291,7 @@ namespace Serenity.Web.Drivers
 		/// <summary>
 		/// Gets the state of the current WebDriver.
 		/// </summary>
-		public WebDriverStatus State
+		public WebDriverStatus Status
 		{
 			get
 			{

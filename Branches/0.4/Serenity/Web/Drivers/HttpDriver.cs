@@ -37,27 +37,27 @@ namespace Serenity.Web.Drivers
 		}
 		#endregion
 		#region Destructor
-		~HttpDriver()
-		{
-			this.ListeningSocket.Close();
-		}
-		#endregion
-		#region Fields - Private
-		private ManualResetEvent allDone = new ManualResetEvent(false);
+		
 		#endregion
 		#region Methods - Private
 		private void AcceptCallback(IAsyncResult ar)
 		{
-			this.allDone.Set();
-
-			Socket socket = ((Socket)ar.AsyncState).EndAccept(ar);
-
-			CommonContext context = new CommonContext(this);
-			if (this.ReadContext(socket, out context) && context != null)
+			if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
 			{
-				this.Settings.ContextHandler.HandleContext(context);
+				WebDriverState state = ar.AsyncState as WebDriverState;
 
-				this.WriteContext(socket, context);
+				state.Signal.Set();
+				Socket socket = state.WorkSocket.EndAccept(ar);
+
+				CommonContext context = new CommonContext(this);
+				context.Socket = socket;
+
+				if (this.ReadContext(socket, out context) && context != null)
+				{
+					this.Settings.ContextHandler.HandleContext(context);
+
+					this.WriteContext(socket, context);
+				}
 			}
 		}
 		private void ProcessUrlEncodedRequestData(string input, CommonContext context)
@@ -106,16 +106,18 @@ namespace Serenity.Web.Drivers
 		}
 		protected override bool DriverStart()
 		{
-			if (this.State >= WebDriverStatus.Initialized)
+			if (this.Status >= WebDriverStatus.Initialized)
 			{
-				this.State = WebDriverStatus.Started;
+				this.Status = WebDriverStatus.Started;
 				this.ListeningSocket.Listen(10);
 
-				while (this.State == WebDriverStatus.Started)
+				while (this.Status == WebDriverStatus.Started)
 				{
-					this.allDone.Reset();
-					this.ListeningSocket.BeginAccept(new AsyncCallback(this.AcceptCallback), this.ListeningSocket);
-					this.allDone.WaitOne();
+					WebDriverState state = new WebDriverState();
+					state.Signal.Reset();
+					state.WorkSocket = this.ListeningSocket;
+					IAsyncResult result = this.ListeningSocket.BeginAccept(new AsyncCallback(this.AcceptCallback), state);
+					state.Signal.WaitOne();
 				}
 				this.ListeningSocket.EndAccept(null);
 				return true;
@@ -127,7 +129,7 @@ namespace Serenity.Web.Drivers
 		}
 		protected override bool DriverStop()
 		{
-			this.State = WebDriverStatus.Stopped;
+			this.Status = WebDriverStatus.Stopped;
 			return true;
 		}
 		protected override bool WriteHeaders(Socket socket, CommonContext context)
@@ -177,9 +179,11 @@ namespace Serenity.Web.Drivers
 
 				try
 				{
-					WebDriverState driverContext = new WebDriverState();
-					driverContext.WorkSocket = socket;
-					socket.BeginSend(output, 0, output.Length, SocketFlags.None, new AsyncCallback(this.SendCallback), driverContext);
+					WebDriverState state = new WebDriverState();
+					state.WorkSocket = socket;
+					state.Signal.Reset();
+					socket.BeginSend(output, 0, output.Length, SocketFlags.None, new AsyncCallback(this.SendCallback), state);
+					state.Signal.WaitOne();
 				}
 				catch
 				{
@@ -192,18 +196,7 @@ namespace Serenity.Web.Drivers
 				return false;
 			}
 		}
-		protected override bool WriteContent(Socket socket, CommonContext context)
-		{
-			try
-			{
-				socket.BeginSend(context.Response.SendBuffer, 0, context.Response.SendBuffer.Length, SocketFlags.None, new AsyncCallback(this.SendCallback), socket);
-			}
-			catch
-			{
-				return false;
-			}
-			return true;
-		}
+		
 		#endregion
 		#region Methods - Public
 		public override bool ReadContext(Socket socket, out CommonContext context)
@@ -215,13 +208,13 @@ namespace Serenity.Web.Drivers
 			}
 
 			context = new CommonContext(this);
-
 			WebDriverState state = new WebDriverState();
-			state.Buffer = new byte[socket.Available];
-			state.WorkSocket = socket;
 
 			try
 			{
+				
+				state.Buffer = new byte[socket.Available];
+				state.WorkSocket = socket;
 				state.Signal.Reset();
 				socket.BeginReceive(state.Buffer, 0, state.Buffer.Length,
 					SocketFlags.None, new AsyncCallback(this.RecieveCallback), state);

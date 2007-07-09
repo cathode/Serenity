@@ -46,8 +46,17 @@ namespace Serenity.Web.Drivers
 		private ManualResetEvent signal = new ManualResetEvent(false);
 		#endregion
 		#region Fields - Public
+		/// <summary>
+		/// Holds the maximum buffer size.
+		/// </summary>
 		public const int MaxBufferSize = 65536;
+		/// <summary>
+		/// Holds the minimum buffer size.
+		/// </summary>
 		public const int MinBufferSize = 32;
+		/// <summary>
+		/// Holds the default (optimal) buffer size.
+		/// </summary>
 		public const int DefaultBufferSize = MinBufferSize * 4;
 		#endregion
 		#region Properties - Public
