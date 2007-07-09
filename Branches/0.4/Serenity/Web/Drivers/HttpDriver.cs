@@ -19,31 +19,32 @@ using System.Threading;
 
 namespace Serenity.Web.Drivers
 {
-    /// <summary>
-    /// Provides a WebDriver implementation that provides support for the HTTP protocol.
-    /// This class cannot be inherited.
-    /// </summary>
-    public sealed class HttpDriver : WebDriver
-    {
-        #region Constructors - Public
-        /// <summary>
-        /// Initializes a new instance of the HttpDriver class.
-        /// </summary>
-        /// <param name="contextHandler">The context handler to use for the operation of the new HttpDriver.</param>
-        public HttpDriver(WebDriverSettings settings) : base(settings)
-        {
-            this.Info = new DriverInfo("Serenity", "HyperText Transmission Protocol", "http", new Version(1, 1));
-        }
-        #endregion
-        #region Destructor
-        ~HttpDriver()
-        {
-            this.ListeningSocket.Close();
-        }
-        #endregion
-        #region Fields - Private
-        private ManualResetEvent allDone = new ManualResetEvent(false);
-        #endregion
+	/// <summary>
+	/// Provides a WebDriver implementation that provides support for the HTTP protocol.
+	/// This class cannot be inherited.
+	/// </summary>
+	public sealed class HttpDriver : WebDriver
+	{
+		#region Constructors - Public
+		/// <summary>
+		/// Initializes a new instance of the HttpDriver class.
+		/// </summary>
+		/// <param name="contextHandler">The context handler to use for the operation of the new HttpDriver.</param>
+		public HttpDriver(WebDriverSettings settings)
+			: base(settings)
+		{
+			this.Info = new DriverInfo("Serenity", "HyperText Transmission Protocol", "http", new Version(1, 1));
+		}
+		#endregion
+		#region Destructor
+		~HttpDriver()
+		{
+			this.ListeningSocket.Close();
+		}
+		#endregion
+		#region Fields - Private
+		private ManualResetEvent allDone = new ManualResetEvent(false);
+		#endregion
 		#region Methods - Private
 		private void AcceptCallback(IAsyncResult ar)
 		{
@@ -72,30 +73,13 @@ namespace Serenity.Web.Drivers
 				}
 			}
 		}
-		private void RecieveCallback(IAsyncResult ar)
+
+
+		#endregion
+		#region Methods - Protected
+		protected override bool DriverInitialize()
 		{
-			WebDriverContext context = (WebDriverContext)ar.AsyncState;
-			context.Signal.Set();
-			context.WorkSocket.EndReceive(ar);
-		}
-		private void SendCallback(IAsyncResult ar)
-		{
-			if (ar.AsyncState is Socket)
-			{
-				try
-				{
-					((Socket)ar.AsyncState).EndSend(ar);
-				}
-				catch
-				{
-				}
-			}
-		}
-        #endregion
-        #region Methods - Protected
-        protected override bool DriverInitialize()
-        {
-            this.ListeningSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
+			this.ListeningSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
 
 			foreach (ushort port in this.Settings.Ports)
 			{
@@ -109,19 +93,19 @@ namespace Serenity.Web.Drivers
 				}
 				return false;
 			}
-            if (this.ListeningSocket.IsBound)
-            {
-                Log.Write("Listening socket bound to port " + this.ListeningPort.ToString(), LogMessageLevel.Info);
-                return true;
-            }
-            else
-            {
-                Log.Write("Failed to bind listening socket to any port!", LogMessageLevel.Warning);
-                return false;
-            }
-        }
-        protected override bool DriverStart()
-        {
+			if (this.ListeningSocket.IsBound)
+			{
+				Log.Write("Listening socket bound to port " + this.ListeningPort.ToString(), LogMessageLevel.Info);
+				return true;
+			}
+			else
+			{
+				Log.Write("Failed to bind listening socket to any port!", LogMessageLevel.Warning);
+				return false;
+			}
+		}
+		protected override bool DriverStart()
+		{
 			if (this.State >= WebDriverState.Initialized)
 			{
 				this.State = WebDriverState.Started;
@@ -140,12 +124,12 @@ namespace Serenity.Web.Drivers
 			{
 				return false;
 			}
-        }
-        protected override bool DriverStop()
-        {
-            this.State = WebDriverState.Stopped;
-            return true;
-        }
+		}
+		protected override bool DriverStop()
+		{
+			this.State = WebDriverState.Stopped;
+			return true;
+		}
 		protected override bool WriteHeaders(Socket socket, CommonContext context)
 		{
 			if (socket != null && socket.Connected)
@@ -193,7 +177,9 @@ namespace Serenity.Web.Drivers
 
 				try
 				{
-					socket.BeginSend(output, 0, output.Length, SocketFlags.None, new AsyncCallback(this.SendCallback), null);
+					WebDriverContext driverContext = new WebDriverContext();
+					driverContext.WorkSocket = socket;
+					socket.BeginSend(output, 0, output.Length, SocketFlags.None, new AsyncCallback(this.SendCallback), driverContext);
 				}
 				catch
 				{
@@ -218,7 +204,7 @@ namespace Serenity.Web.Drivers
 			}
 			return true;
 		}
-        #endregion
+		#endregion
 		#region Methods - Public
 		public override bool ReadContext(Socket socket, out CommonContext context)
 		{

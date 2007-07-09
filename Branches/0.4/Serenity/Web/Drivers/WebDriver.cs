@@ -36,14 +36,13 @@ namespace Serenity.Web.Drivers
 		}
 		#endregion
 		#region Fields - Private
-		private ushort activePort;
 		private Socket listeningSocket;
 		private DriverInfo info;
 		private WebDriverSettings settings;
 		private WebDriverState state = WebDriverState.None;
 		#endregion
 		#region Methods - Protected
-		protected void DisconnectCallback(IAsyncResult ar)
+		protected virtual void DisconnectCallback(IAsyncResult ar)
 		{
 			((Socket)ar.AsyncState).EndDisconnect(ar);
 		}
@@ -66,6 +65,24 @@ namespace Serenity.Web.Drivers
 		/// A call to this method may not immediately result in a Stopped state of the current WebDriver.
 		/// </remarks>
 		protected abstract bool DriverStop();
+		protected virtual void RecieveCallback(IAsyncResult ar)
+		{
+			WebDriverContext context = ar.AsyncState as WebDriverContext;
+			if (context != null)
+			{
+				context.Signal.Set();
+				context.WorkSocket.EndReceive(ar);
+			}
+		}
+		protected virtual void SendCallback(IAsyncResult ar)
+		{
+			WebDriverContext driverContext = ar.AsyncState as WebDriverContext;
+			if (driverContext != null)
+			{
+				driverContext.Signal.Set();
+				driverContext.WorkSocket.EndSend(ar);
+			}
+		}
 		protected abstract bool WriteContent(Socket socket, CommonContext context);
 		protected abstract bool WriteHeaders(Socket socket, CommonContext context);
 		#endregion
@@ -89,8 +106,7 @@ namespace Serenity.Web.Drivers
 		{
 			if (this.state == WebDriverState.Initialized)
 			{
-				bool ret = this.DriverStart();
-				return ret;
+				return this.DriverStart();
 			}
 			else
 			{
