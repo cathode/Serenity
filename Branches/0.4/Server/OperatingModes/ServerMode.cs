@@ -23,7 +23,6 @@ namespace Server.OperatingModes
 {
     internal class ServerMode
     {
-        
         internal static void Run()
         {
             Theme theme = new Theme(SerenityInfo.SystemName);
@@ -64,13 +63,14 @@ namespace Server.OperatingModes
                 SerenityEnvironment.Instances.Length,
                 Module.ModuleCount,
                 Theme.Instances.Length), LogMessageLevel.Info);
-            WebDriverSettings InitSettings = WebDriverSettings.Create(80, 1000);
-            InitSettings.RecieveInterval = 0;
-            InitSettings.FallbackPorts = new ushort[] { 8080, 8081 };
+			WebDriverSettings InitSettings = new WebDriverSettings();
+			InitSettings.ContextHandler = new ContextHandler();
+            InitSettings.Ports = new ushort[] { 80, 8080, 8081 };
 
-            WebDriver driver = new HttpDriver(new ContextHandler());
+            WebDriver driver = new HttpDriver(InitSettings);
 
-            driver.Initialize(InitSettings);
+            driver.Initialize();
+
             if (!driver.Start())
             {
                 Log.Write("Failed to start web driver", LogMessageLevel.Warning);

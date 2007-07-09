@@ -14,16 +14,17 @@ using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 
 namespace Serenity.Web.Drivers
 {
-    public class WebAdapterState
+    public sealed class WebDriverContext
     {
         #region Constructors - Public
-        public WebAdapterState() : this(WebAdapterState.DefaultBufferSize)
+        public WebDriverContext() : this(WebDriverContext.DefaultBufferSize)
         {
         }
-        public WebAdapterState(int bufferSize)
+        public WebDriverContext(int bufferSize)
         {
             this.Buffer = new byte[bufferSize];
         }
@@ -31,6 +32,7 @@ namespace Serenity.Web.Drivers
         #region Fields - Private
         private byte[] buffer = new byte[DefaultBufferSize];
         private Socket workSocket;
+		private ManualResetEvent signal = new ManualResetEvent(false);
         #endregion
         #region Fields - Public
         public const int MaxBufferSize = 65536;
@@ -46,12 +48,19 @@ namespace Serenity.Web.Drivers
             }
             set
             {
-                if (value != null && value.Length > WebAdapterState.MinBufferSize)
+                if (value != null && value.Length > WebDriverContext.MinBufferSize)
                 {
                     this.buffer = value;
                 }
             }
         }
+		public ManualResetEvent Signal
+		{
+			get
+			{
+				return this.signal;
+			}
+		}
         public Socket WorkSocket
         {
             get

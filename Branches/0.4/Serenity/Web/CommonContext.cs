@@ -25,15 +25,15 @@ namespace Serenity.Web
     public sealed class CommonContext
     {
         #region Constructors - Internal
-        internal CommonContext(WebAdapter adapter)
+        internal CommonContext(WebDriver driver)
         {
             this.request = new CommonRequest(this);
             this.response = new CommonResponse(this);
-            this.adapter = adapter;
+            this.driver = driver;
         }
         #endregion
         #region Fields - Private
-        private WebAdapter adapter;
+        private WebDriver driver;
         private bool headersWritten = false;
         private string protocolType;
         private Version protocolVersion;
@@ -64,11 +64,11 @@ namespace Serenity.Web
         /// <summary>
         /// Gets the WebDriver from which the current CommonContext originated from.
         /// </summary>
-        public WebAdapter Adapter
+        public WebDriver Driver
         {
             get
             {
-                return this.adapter;
+                return this.driver;
             }
         }
         public bool HeadersWritten
