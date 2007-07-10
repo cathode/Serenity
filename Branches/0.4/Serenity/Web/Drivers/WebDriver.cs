@@ -91,8 +91,8 @@ namespace Serenity.Web.Drivers
 			{
 				WebDriverState state = ar.AsyncState as WebDriverState;
 
-				state.Signal.Set();
 				state.WorkSocket.EndReceive(ar);
+				state.Signal.Set();
 			}
 			else if (ar.AsyncState is Socket)
 			{
@@ -104,9 +104,8 @@ namespace Serenity.Web.Drivers
 			if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
 			{
 				WebDriverState state = ar.AsyncState as WebDriverState;
-
-				state.Signal.Set();
 				state.WorkSocket.EndSend(ar);
+				state.Signal.Set();
 			}
 			else if (ar.AsyncState is Socket)
 			{
@@ -120,7 +119,7 @@ namespace Serenity.Web.Drivers
 				WebDriverState state = new WebDriverState();
 				state.WorkSocket = socket;
 				state.Signal.Reset();
-				socket.BeginSend(context.Response.SendBuffer, 0, context.Response.SendBuffer.Length, SocketFlags.None, new AsyncCallback(this.SendCallback), socket);
+				socket.BeginSend(context.Response.SendBuffer, 0, context.Response.SendBuffer.Length, SocketFlags.None, new AsyncCallback(this.SendCallback), state);
 				state.Signal.WaitOne();
 				return true;
 			}

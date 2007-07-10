@@ -58,6 +58,8 @@ namespace Serenity.Web.Drivers
 
 					this.WriteContext(socket, context);
 				}
+				//socket.LingerState = new LingerOption(true, 100);
+				//socket.Close();
 			}
 		}
 		private void ProcessUrlEncodedRequestData(string input, CommonContext context)
@@ -116,7 +118,7 @@ namespace Serenity.Web.Drivers
 					WebDriverState state = new WebDriverState();
 					state.Signal.Reset();
 					state.WorkSocket = this.ListeningSocket;
-					IAsyncResult result = this.ListeningSocket.BeginAccept(new AsyncCallback(this.AcceptCallback), state);
+					this.ListeningSocket.BeginAccept(new AsyncCallback(this.AcceptCallback), state);
 					state.Signal.WaitOne();
 				}
 				this.ListeningSocket.EndAccept(null);

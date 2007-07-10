@@ -32,78 +32,17 @@ namespace Server
 
 			Log.LogToConsole = true;
 			Log.LogToFile = true;
-			OverwriteMode mode = OverwriteMode.None;
-
-			foreach (string arg in args)
-			{
-				switch (arg)
-				{
-					case "-g":
-					case "--global":
-						SPath.DefaultScope = ResolutionScope.Global;
-						SPath.ForceDefaultScope = true;
-						Log.Write("Forced global scope mode engaged", LogMessageLevel.Info);
-						break;
-
-					case "-l":
-					case "--local":
-						SPath.DefaultScope = ResolutionScope.Local;
-						SPath.ForceDefaultScope = true;
-						Log.Write("Forced local scope mode engaged", LogMessageLevel.Info);
-						break;
-
-					case "-o":
-					case "--overwrite":
-						mode = OverwriteMode.Older;
-						Log.Write("Overwrite Older Files mode engaged", LogMessageLevel.Info);
-						break;
-
-					default:
-						break;
-				}
-			}
-
-			Log.Write("Beginning File Verification", LogMessageLevel.Info);
-
-			int copied = 0;
-			foreach (SpecialFolder specialFolder in Program.RecurseEnum<SpecialFolder>())
-			{
-				if (specialFolder != SpecialFolder.Root)
-				{
-					try
-					{
-						if (Directory.Exists(SPath.ResolveSpecialPath(specialFolder, ResolutionScope.Global)) == false)
-						{
-							Directory.CreateDirectory(SPath.ResolveSpecialPath(specialFolder, ResolutionScope.Global));
-						}
-					}
-					catch
-					{
-					}
-					try
-					{
-						if (Directory.Exists(SPath.ResolveSpecialPath(specialFolder, ResolutionScope.Local)) == false)
-						{
-							Directory.CreateDirectory(SPath.ResolveSpecialPath(specialFolder, ResolutionScope.Local));
-						}
-					}
-					catch
-					{
-					}
-					try
-					{
-						copied += SPath.CopyDirectory(SPath.ResolveSpecialPath(specialFolder, ResolutionScope.Global),
-							SPath.ResolveSpecialPath(specialFolder, ResolutionScope.Local), mode);
-					}
-					catch
-					{
-					}
-				}
-			}
-
-			Log.Write("Completed File Verfication (" + copied.ToString() + " files)", LogMessageLevel.Info);
 
 			Log.StartLogging();
+
+			foreach (SpecialFolder sf in Program.RecurseEnum<SpecialFolder>())
+			{
+				string dir = SPath.ResolveSpecialPath(sf);
+				if (!Directory.Exists(dir))
+				{
+					Directory.CreateDirectory(dir);
+				}
+			}
 
 			FileTypeRegistry.Initialize();
 
