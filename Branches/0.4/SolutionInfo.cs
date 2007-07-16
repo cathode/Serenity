@@ -1,4 +1,4 @@
-/*
+﻿/*
 Serenity - The next evolution of web server technology
 SolutionInfo.cs
 Copyright © 2006-2007 Serenity Project (http://SerenityProject.net/)

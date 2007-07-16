@@ -4,10 +4,10 @@
 !define PRODUCT "Serenity"
 !define COMPANY "Serenity Project"
 
-!define BINDIR "${PRODUCT}-${VERSION}-bin"
-!define SRCDIR "${PRODUCT}-${VERSION}-src"
+!define BINDIR "${PRODUCT}-${VERSION}\bin"
+!define SRCDIR "${PRODUCT}-${VERSION}\src"
 
-!define KEYFILE "E:\Keys\WShelley.snk"
+!define KEYFILE "%USERPROFILE%\Documents\Keys\WShelley.snk"
 
 # Preexecution tasks
 !system "rmdir /s /q ${BINDIR}"

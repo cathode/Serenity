@@ -42,7 +42,7 @@ namespace Serenity
         #endregion
         #region Fields - Private;
         private Module defaultModule;
-        private Theme theme;
+		private Theme theme = Theme.DefaultInstance;
         private string defaultResourceClass;
         private string defaultResourceName;
         #endregion
@@ -154,15 +154,14 @@ namespace Serenity
         {
             get
             {
-                if (this.theme == null)
-                {
-                    this.theme = Theme.DefaultInstance;
-                }
                 return this.theme;
             }
             set
             {
-                this.theme = value;
+				if (value != null)
+				{
+					this.theme = value;
+				}
             }
         }
         public string DefaultResourceClass
