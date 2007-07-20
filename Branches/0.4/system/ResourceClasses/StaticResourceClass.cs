@@ -139,64 +139,22 @@ namespace Serenity.ResourceClasses
 						HtmlElement Table = Div.AppendTable(Columns);
 						foreach (string FilePath in Files)
 						{
-							string Extension = Path.GetExtension(FilePath).TrimStart('.');
-							string Type = Extension.ToUpper() + " File";
-							string icon = "page_white";
-							switch (Extension)
-							{
-								case "c":
-									icon = "page_white_c";
-									Type = "C Code File";
-									break;
-								case "cpp":
-									icon = "page_white_cplusplus";
-									Type = "C++ Code File";
-									break;
-								case "cs":
-									icon = "page_white_csharp";
-									Type = "C# Code File";
-									break;
-								case "dll":
-									icon = "page_white_gear";
-									Type = "Dynamic Link Library";
-									break;
-								case "exe":
-									icon = "page_white_gear";
-									Type = "Executable";
-									break;
-								case "pdf":
-									icon = "page_white_acrobat";
-									Type = "PDF Document";
-									break;
-								case "png":
-									icon = "page_white_picture";
-									Type = "PNG Image";
-									break;
-								case "sql":
-									icon = "page_white_database";
-									Type = "SQL Script";
-									break;
-								case "rar":
-									icon = "page_white_compressed";
-									Type = "RAR Archive";
-									break;
-								case "zip":
-									icon = "page_white_zip";
-									Type = "ZIP Archive";
-									break;
-							}
+							string ext = Path.GetExtension(FilePath).TrimStart('.');
+							string fileType = FileTypeRegistry.GetDescription(ext);
+							string fileIcon = "page_white";
+							
 							HtmlElement row = Table.AppendTableRow();
 
 							HtmlElement cell = row.AppendTableCell();
 							cell.Class = "Icon";
-							cell.AppendImage("/System/static/Icons/" + icon + ".png");
+							cell.AppendImage("/System/static/Icons/" + fileIcon + ".png");
 
 							cell = row.AppendTableCell();
 							cell.AppendAnchor(Path.GetFileName(FilePath), Path.GetFileName(FilePath), Theme.CurrentInstance.Link);
 							cell.Class = "Name";
 
 							row.AppendTableCell("Unknown").Class = "Size";
-							row.AppendTableCell(Type).Class = "Type";
+							row.AppendTableCell(fileType).Class = "Type";
 							row.AppendTableCell(File.GetLastWriteTimeUtc(FilePath).ToString("s")).Class = "Time";
 						}
 					}

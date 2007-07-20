@@ -17,7 +17,7 @@ using System.Text;
 namespace Serenity.Web.Drivers
 {
 	/// <summary>
-	/// Represents the state of a WebDriver's operation.
+	/// Represents the status of a WebDriver's operation.
 	/// </summary>
 	public enum WebDriverStatus
 	{

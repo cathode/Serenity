@@ -13,6 +13,7 @@ http://www.microsoft.com/resources/sharedsource/licensingbasics/communitylicense
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 using Serenity;
 using Serenity.Themes;
@@ -63,18 +64,25 @@ namespace Server.OperatingModes
                 SerenityEnvironment.Instances.Length,
                 Module.ModuleCount,
                 Theme.Instances.Length), LogMessageLevel.Info);
-			WebDriverSettings InitSettings = new WebDriverSettings();
-			InitSettings.ContextHandler = new ContextHandler();
-            InitSettings.Ports = new ushort[] { 80, 8080, 8081 };
+			WebDriverSettings settings = new WebDriverSettings();
+			settings.ContextHandler = new ContextHandler();
+            settings.Ports = new ushort[] { 80, 8080, 8081 };
 
-            WebDriver driver = new HttpDriver(InitSettings);
+            WebDriver driver = new HttpDriver(settings);
 
             driver.Initialize();
 
-            if (!driver.Start())
-            {
-                Log.Write("Failed to start web driver", LogMessageLevel.Warning);
-            }
+			if (!driver.Start())
+			{
+				Log.Write("Failed to start web driver", LogMessageLevel.Warning);
+			}
+			else
+			{
+				while (driver.Status == WebDriverStatus.Started)
+				{
+					Thread.Sleep(10000);
+				}
+			}
 
             Log.Write("Server shutting down", LogMessageLevel.Info);
             Console.WriteLine("Press any key...");

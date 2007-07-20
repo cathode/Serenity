@@ -36,18 +36,15 @@ namespace Serenity.Web.Drivers
 			this.Info = new DriverInfo("Serenity", "HyperText Transmission Protocol", "http", new Version(1, 1));
 		}
 		#endregion
-		#region Destructor
-		
-		#endregion
 		#region Methods - Private
 		private void AcceptCallback(IAsyncResult ar)
 		{
 			if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
 			{
-				WebDriverState state = ar.AsyncState as WebDriverState;
+				WebDriverState state = (WebDriverState)ar.AsyncState;
 
-				state.Signal.Set();
 				Socket socket = state.WorkSocket.EndAccept(ar);
+				state.WorkSocket.BeginAccept(new AsyncCallback(this.AcceptCallback), state);
 
 				CommonContext context = new CommonContext(this);
 				context.Socket = socket;
@@ -56,10 +53,11 @@ namespace Serenity.Web.Drivers
 				{
 					this.Settings.ContextHandler.HandleContext(context);
 
-					this.WriteContext(socket, context);
+					if (context.Response.SendBuffer.Length > 0)
+					{
+						this.WriteContext(socket, context);
+					}
 				}
-				//socket.LingerState = new LingerOption(true, 100);
-				//socket.Close();
 			}
 		}
 		private void ProcessUrlEncodedRequestData(string input, CommonContext context)
@@ -113,15 +111,11 @@ namespace Serenity.Web.Drivers
 				this.Status = WebDriverStatus.Started;
 				this.ListeningSocket.Listen(10);
 
-				while (this.Status == WebDriverStatus.Started)
-				{
-					WebDriverState state = new WebDriverState();
-					state.Signal.Reset();
-					state.WorkSocket = this.ListeningSocket;
-					this.ListeningSocket.BeginAccept(new AsyncCallback(this.AcceptCallback), state);
-					state.Signal.WaitOne();
-				}
-				this.ListeningSocket.EndAccept(null);
+				WebDriverState state = new WebDriverState();
+				state.Signal.Reset();
+				state.WorkSocket = this.ListeningSocket;
+				this.ListeningSocket.BeginAccept(new AsyncCallback(this.AcceptCallback), state);
+
 				return true;
 			}
 			else
