@@ -43,20 +43,16 @@ InstallDir "$PROGRAMFILES\${COMPANY}\${PRODUCT}"
 InstallDirRegKey HKLM "Software\${COMPANY}\${PRODUCT}" "InstallDir"
 
 # Installer Interface definitions
-
-!define MUI_ABORTWARNING
-
-!define OMUI_THEME "Clean"
-
-!define MUI_ICON "${NSISDIR}\Contrib\MUI Orange Vista Theme\${OMUI_THEME}\installer-nopng.ico"
-!define MUI_UNICON "${NSISDIR}\Contrib\MUI Orange Vista Theme\${OMUI_THEME}\uninstaller-nopng.ico"
-
-!define MUI_HEADERIMAGE
-!define MUI_HEADERIMAGE_RIGHT
-!define MUI_HEADERIMAGE_BITMAP "${NSISDIR}\Contrib\MUI Orange Vista Theme\${OMUI_THEME}\header-r.bmp"
-!define MUI_HEADERIMAGE_UNBITMAP "${NSISDIR}\Contrib\MUI Orange Vista Theme\${OMUI_THEME}\header-r-un.bmp"
-!define MUI_WELCOMEFINISHPAGE_BITMAP "${NSISDIR}\Contrib\MUI Orange Vista Theme\${OMUI_THEME}\wizard.bmp"
-!define MUI_UNWELCOMEFINISHPAGE_BITMAP "${NSISDIR}\Contrib\MUI Orange Vista Theme\${OMUI_THEME}\wizard-un.bmp"
+; !define MUI_ABORTWARNING
+; !define OMUI_THEME "Clean"
+; !define MUI_ICON "${NSISDIR}\Contrib\MUI Orange Vista Theme\${OMUI_THEME}\installer-nopng.ico"
+; !define MUI_UNICON "${NSISDIR}\Contrib\MUI Orange Vista Theme\${OMUI_THEME}\uninstaller-nopng.ico"
+; !define MUI_HEADERIMAGE
+; !define MUI_HEADERIMAGE_RIGHT
+; !define MUI_HEADERIMAGE_BITMAP "${NSISDIR}\Contrib\MUI Orange Vista Theme\${OMUI_THEME}\header-r.bmp"
+; !define MUI_HEADERIMAGE_UNBITMAP "${NSISDIR}\Contrib\MUI Orange Vista Theme\${OMUI_THEME}\header-r-un.bmp"
+; !define MUI_WELCOMEFINISHPAGE_BITMAP "${NSISDIR}\Contrib\MUI Orange Vista Theme\${OMUI_THEME}\wizard.bmp"
+; !define MUI_UNWELCOMEFINISHPAGE_BITMAP "${NSISDIR}\Contrib\MUI Orange Vista Theme\${OMUI_THEME}\wizard-un.bmp"
 
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE "license.txt"
@@ -64,8 +60,8 @@ InstallDirRegKey HKLM "Software\${COMPANY}\${PRODUCT}" "InstallDir"
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
 
+!insertmacro MUI_UNPAGE_WELCOME
 !insertmacro MUI_UNPAGE_CONFIRM
-!insertmacro MUI_UNPAGE_COMPONENTS
 !insertmacro MUI_UNPAGE_INSTFILES
 !insertmacro MUI_UNPAGE_FINISH
 
@@ -78,7 +74,7 @@ InstallDirRegKey HKLM "Software\${COMPANY}\${PRODUCT}" "InstallDir"
 
 Section "Serenity"
 	SectionIn RO
-	SetShellVarContext current
+	SetShellVarContext all
 	
 	SetOutPath "$INSTDIR\bin"
 	File /r "${BINDIR}\*"
@@ -91,8 +87,6 @@ Section "Serenity"
 	File "SolutionInfo.cs"
 	File "WShelley.public.snk"
 	
-	SetShellVarContext all
-	
 	SetOutPath "$INSTDIR"
 	File "license.txt"
 	WriteUninstaller "Uninstall.exe"
@@ -100,9 +94,6 @@ Section "Serenity"
 	SetOutPath "$INSTDIR\bin"
 	CreateShortCut "$SMPROGRAMS\${COMPANY}\${PRODUCT}\Uninstall ${PRODUCT}.lnk" "$INSTDIR\Uninstall.exe"
 	CreateShortCut "$SMPROGRAMS\${COMPANY}\${PRODUCT}\${PRODUCT}.lnk" "$INSTDIR\bin\server.exe"
-	
-	SetOutPath ""
-	CreateShortCut "$SMPROGRAMS\${COMPANY}\${PRODUCT}\Data Folder.lnk" '%APPDATA%\${COMPANY}\${PRODUCT}'
 	
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT}" "DisplayName" "${PRODUCT}"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT}" "DisplayVersion" "${VERSION}"
@@ -127,13 +118,8 @@ Section "un.Serenity"
 	DeleteRegKey /ifempty HKLM  "Software\${COMPANY}"
 	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT}"
 SectionEnd
-Section "un.Application Data"
-	SetShellVarContext current
-	
-	RMDir /r "$APPDATA\${COMPANY}\${PRODUCT}"
-	RMDir "$APPDATA\${COMPANY}"
-SectionEnd
 
 # Cleanup tasks
 !system "rmdir /s /q ${BINDIR}"
 !system "rmdir /s /q ${SRCDIR}"
+!system "rmdir /s /q ${PRODUCT}-${VERSION}"

@@ -91,9 +91,7 @@ namespace Serenity
 		#endregion
 		#region Fields - Private
 		private static Dictionary<SpecialFolder, string> specialFolders;
-		private static Dictionary<SpecialFolder, string> specialFoldersGlobal;
 		private static Dictionary<SpecialFile, string> specialFiles;
-		private static Dictionary<SpecialFile, string> specialFilesGlobal;
 		#endregion
 		#region Methods - Public
 		public static string Combine(params string[] paths)

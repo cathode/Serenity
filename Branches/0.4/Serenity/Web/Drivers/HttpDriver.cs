@@ -37,29 +37,8 @@ namespace Serenity.Web.Drivers
 		}
 		#endregion
 		#region Methods - Private
-		private void AcceptCallback(IAsyncResult ar)
-		{
-			if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
-			{
-				WebDriverState state = (WebDriverState)ar.AsyncState;
-
-				Socket socket = state.WorkSocket.EndAccept(ar);
-				state.WorkSocket.BeginAccept(new AsyncCallback(this.AcceptCallback), state);
-
-				CommonContext context = new CommonContext(this);
-				context.Socket = socket;
-
-				if (this.ReadContext(socket, out context) && context != null)
-				{
-					this.Settings.ContextHandler.HandleContext(context);
-
-					if (context.Response.SendBuffer.Length > 0)
-					{
-						this.WriteContext(socket, context);
-					}
-				}
-			}
-		}
+		
+		
 		private void ProcessUrlEncodedRequestData(string input, CommonContext context)
 		{
 			string[] Pairs = input.Split('&');
@@ -73,8 +52,6 @@ namespace Serenity.Web.Drivers
 				}
 			}
 		}
-
-
 		#endregion
 		#region Methods - Protected
 		protected override bool DriverInitialize()
@@ -104,19 +81,30 @@ namespace Serenity.Web.Drivers
 				return false;
 			}
 		}
-		protected override bool DriverStart()
+		protected override bool DriverStart(bool block)
 		{
 			if (this.Status >= WebDriverStatus.Initialized)
 			{
 				this.Status = WebDriverStatus.Started;
 				this.ListeningSocket.Listen(10);
 
-				WebDriverState state = new WebDriverState();
-				state.Signal.Reset();
-				state.WorkSocket = this.ListeningSocket;
-				this.ListeningSocket.BeginAccept(new AsyncCallback(this.AcceptCallback), state);
+				if (block)
+				{
+					while (this.Status == WebDriverStatus.Started)
+					{
+						this.HandleAcceptedSocket(this.ListeningSocket.Accept());
+					}
+					return true;
+				}
+				else
+				{
+					WebDriverState state = new WebDriverState();
+					state.Signal.Reset();
+					state.WorkSocket = this.ListeningSocket;
+					this.ListeningSocket.BeginAccept(new AsyncCallback(this.AcceptCallback), state);
 
-				return true;
+					return true;
+				}
 			}
 			else
 			{
@@ -128,7 +116,7 @@ namespace Serenity.Web.Drivers
 			this.Status = WebDriverStatus.Stopped;
 			return true;
 		}
-		protected override bool WriteHeaders(Socket socket, CommonContext context)
+		protected override bool WriteHeaders(Socket socket, CommonContext context, bool block)
 		{
 			if (socket != null && socket.Connected)
 			{
@@ -169,11 +157,11 @@ namespace Serenity.Web.Drivers
 					}
 					outputText.Append(header.Name + ": " + value + "\r\n");
 				}
-				outputText.Append("\r\n");
 
+				outputText.Append("\r\n");
 				byte[] output = Encoding.ASCII.GetBytes(outputText.ToString());
 
-				try
+				if (block)
 				{
 					WebDriverState state = new WebDriverState();
 					state.WorkSocket = socket;
@@ -181,9 +169,9 @@ namespace Serenity.Web.Drivers
 					socket.BeginSend(output, 0, output.Length, SocketFlags.None, new AsyncCallback(this.SendCallback), state);
 					state.Signal.WaitOne();
 				}
-				catch
+				else
 				{
-					return false;
+					socket.BeginSend(output, 0, output.Length, SocketFlags.None, new AsyncCallback(this.SendCallback), socket);
 				}
 				return true;
 			}

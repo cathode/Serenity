@@ -72,16 +72,9 @@ namespace Server.OperatingModes
 
             driver.Initialize();
 
-			if (!driver.Start())
+			if (!driver.Start(true))
 			{
 				Log.Write("Failed to start web driver", LogMessageLevel.Warning);
-			}
-			else
-			{
-				while (driver.Status == WebDriverStatus.Started)
-				{
-					Thread.Sleep(10000);
-				}
 			}
 
             Log.Write("Server shutting down", LogMessageLevel.Info);
