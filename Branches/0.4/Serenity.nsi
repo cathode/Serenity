@@ -67,33 +67,18 @@ InstallDirRegKey HKLM "Software\${COMPANY}\${PRODUCT}" "InstallDir"
 
 !insertmacro MUI_LANGUAGE "English"
 
-!macro Project name
-	SetOutPath "$INSTDIR\src\${name}"
-	File /r /x *.user /x .svn /x obj /x bin "${name}\*"
-!macroend
-
 Section "Serenity"
 	SectionIn RO
 	SetShellVarContext all
 	
-	SetOutPath "$INSTDIR\bin"
-	File /r "${BINDIR}\*"
-	
-	!insertmacro Project "Serenity"
-	!insertmacro Project "Server"
-	
-	SetOutPath "$INSTDIR\src"
-	File "Serenity.sln"
-	File "SolutionInfo.cs"
-	File "WShelley.public.snk"
-	
 	SetOutPath "$INSTDIR"
+	File /r "${BINDIR}\*"
 	File "license.txt"
+	
 	WriteUninstaller "Uninstall.exe"
 	CreateDirectory "$SMPROGRAMS\${COMPANY}\${PRODUCT}"
-	SetOutPath "$INSTDIR\bin"
 	CreateShortCut "$SMPROGRAMS\${COMPANY}\${PRODUCT}\Uninstall ${PRODUCT}.lnk" "$INSTDIR\Uninstall.exe"
-	CreateShortCut "$SMPROGRAMS\${COMPANY}\${PRODUCT}\${PRODUCT}.lnk" "$INSTDIR\bin\server.exe"
+	CreateShortCut "$SMPROGRAMS\${COMPANY}\${PRODUCT}\${PRODUCT}.lnk" "$INSTDIR\Server.exe"
 	
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT}" "DisplayName" "${PRODUCT}"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT}" "DisplayVersion" "${VERSION}"

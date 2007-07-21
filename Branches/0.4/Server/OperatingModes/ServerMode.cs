@@ -79,6 +79,7 @@ namespace Server.OperatingModes
 			}
 			else
 			{
+				//WS: Temporary loop to keep the main thread from exiting when in async mode.
 				while (driver.Status == WebDriverStatus.Started)
 				{
 					Thread.Sleep(1000);
