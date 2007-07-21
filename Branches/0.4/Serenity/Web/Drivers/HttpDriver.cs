@@ -23,7 +23,7 @@ namespace Serenity.Web.Drivers
 	/// Provides a WebDriver implementation that provides support for the HTTP protocol.
 	/// This class cannot be inherited.
 	/// </summary>
-	public sealed class HttpDriver : WebDriver
+	public class HttpDriver : WebDriver
 	{
 		#region Constructors - Public
 		/// <summary>
@@ -37,8 +37,6 @@ namespace Serenity.Web.Drivers
 		}
 		#endregion
 		#region Methods - Private
-		
-		
 		private void ProcessUrlEncodedRequestData(string input, CommonContext context)
 		{
 			string[] Pairs = input.Split('&');
@@ -54,69 +52,7 @@ namespace Serenity.Web.Drivers
 		}
 		#endregion
 		#region Methods - Protected
-		protected override bool DriverInitialize()
-		{
-			this.ListeningSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
-
-			foreach (ushort port in this.Settings.Ports)
-			{
-				try
-				{
-					this.ListeningSocket.Bind(new IPEndPoint(IPAddress.Any, port));
-					break;
-				}
-				catch
-				{
-				}
-				return false;
-			}
-			if (this.ListeningSocket.IsBound)
-			{
-				Log.Write("Listening socket bound to port " + this.ListeningPort.ToString(), LogMessageLevel.Info);
-				return true;
-			}
-			else
-			{
-				Log.Write("Failed to bind listening socket to any port!", LogMessageLevel.Warning);
-				return false;
-			}
-		}
-		protected override bool DriverStart(bool block)
-		{
-			if (this.Status >= WebDriverStatus.Initialized)
-			{
-				this.Status = WebDriverStatus.Started;
-				this.ListeningSocket.Listen(10);
-
-				if (block)
-				{
-					while (this.Status == WebDriverStatus.Started)
-					{
-						this.HandleAcceptedSocket(this.ListeningSocket.Accept());
-					}
-					return true;
-				}
-				else
-				{
-					WebDriverState state = new WebDriverState();
-					state.Signal.Reset();
-					state.WorkSocket = this.ListeningSocket;
-					this.ListeningSocket.BeginAccept(new AsyncCallback(this.AcceptCallback), state);
-
-					return true;
-				}
-			}
-			else
-			{
-				return false;
-			}
-		}
-		protected override bool DriverStop()
-		{
-			this.Status = WebDriverStatus.Stopped;
-			return true;
-		}
-		protected override bool WriteHeaders(Socket socket, CommonContext context, bool block)
+		protected override bool WriteHeaders(Socket socket, CommonContext context)
 		{
 			if (socket != null && socket.Connected)
 			{
@@ -128,7 +64,7 @@ namespace Serenity.Web.Drivers
 
 				if (response.Headers.Contains("Content-Length") == false)
 				{
-					response.Headers.Add("Content-Length", response.SendBuffer.Length.ToString());
+					response.Headers.Add("Content-Length", response.OutputBuffer.Length.ToString());
 				}
 				if (response.Headers.Contains("Content-Type") == false)
 				{
@@ -161,13 +97,9 @@ namespace Serenity.Web.Drivers
 				outputText.Append("\r\n");
 				byte[] output = Encoding.ASCII.GetBytes(outputText.ToString());
 
-				if (block)
+				if (this.Settings.Block)
 				{
-					WebDriverState state = new WebDriverState();
-					state.WorkSocket = socket;
-					state.Signal.Reset();
-					socket.BeginSend(output, 0, output.Length, SocketFlags.None, new AsyncCallback(this.SendCallback), state);
-					state.Signal.WaitOne();
+					socket.Send(output);
 				}
 				else
 				{
@@ -185,6 +117,12 @@ namespace Serenity.Web.Drivers
 		#region Methods - Public
 		public override bool ReadContext(Socket socket, out CommonContext context)
 		{
+			int waits = 0;
+			while (socket.Available == 0 && waits < 100)
+			{
+				Thread.Sleep(1);
+				waits++;
+			}
 			if (socket.Available == 0)
 			{
 				context = null;
@@ -192,25 +130,24 @@ namespace Serenity.Web.Drivers
 			}
 
 			context = new CommonContext(this);
-			WebDriverState state = new WebDriverState();
+			byte[] buffer = new byte[socket.Available];
 
-			try
+			if (this.Settings.Block)
 			{
-				
-				state.Buffer = new byte[socket.Available];
+				socket.Receive(buffer);
+			}
+			else
+			{
+				WebDriverState state = new WebDriverState();
+				state.Buffer = buffer;
 				state.WorkSocket = socket;
 				state.Signal.Reset();
 				socket.BeginReceive(state.Buffer, 0, state.Buffer.Length,
 					SocketFlags.None, new AsyncCallback(this.RecieveCallback), state);
 				state.Signal.WaitOne();
 			}
-			catch
-			{
-				context = null;
-				return false;
-			}
 
-			string requestContent = Encoding.ASCII.GetString(state.Buffer);
+			string requestContent = Encoding.ASCII.GetString(buffer);
 			int headerSize = requestContent.IndexOf("\r\n\r\n");
 
 			if (headerSize != -1)

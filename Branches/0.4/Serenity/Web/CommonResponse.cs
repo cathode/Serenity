@@ -32,7 +32,7 @@ namespace Serenity.Web
         }
         #endregion
         #region Fields - Private
-        private List<byte> sendBuffer = new List<byte>();
+        private List<byte> outputBuffer = new List<byte>();
         private MimeType mimeType = MimeType.Default;
         private HeaderCollection headers = new HeaderCollection();
         private CommonContext context;
@@ -43,6 +43,10 @@ namespace Serenity.Web
         public StatusCode Status;
         #endregion
         #region Methods - Public
+		public void ClearOutputBuffer()
+		{
+			this.outputBuffer = new List<byte>();
+		}
         /// <summary>
         /// Causes the currently buffered data to be written to the underlying client socket, then clears the Buffer.
         /// Note: The underlying Socket is unaffected if the current CommonResponse does not support chunked transmission.
@@ -65,7 +69,7 @@ namespace Serenity.Web
         {
             if (value != null)
             {
-                this.sendBuffer.AddRange(value);
+                this.outputBuffer.AddRange(value);
                 return value.Length;
             }
             else
@@ -84,11 +88,11 @@ namespace Serenity.Web
         }
         #endregion
         #region Properties - Internal
-        internal byte[] SendBuffer
+        internal byte[] OutputBuffer
         {
             get
             {
-                return this.sendBuffer.ToArray();
+                return this.outputBuffer.ToArray();
             }
         }
         #endregion

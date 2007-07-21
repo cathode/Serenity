@@ -81,56 +81,55 @@ namespace Serenity.Web.Drivers
 			if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
 			{
 				WebDriverState state = ar.AsyncState as WebDriverState;
-
-				state.Signal.Set();
 				state.WorkSocket.EndDisconnect(ar);
+				state.Signal.Set();
 			}
 			else if (ar.AsyncState is Socket)
 			{
 				((Socket)ar.AsyncState).EndDisconnect(ar);
 			}
 		}
-		/// <summary>
-		/// Contains the code that is executed when the current WebDriver is initialized (before handling clients).
-		/// </summary>
-		protected abstract bool DriverInitialize();
-		/// <summary>
-		/// When overridden in a derived class, causes the current WebDriver to begin listening for
-		/// and accepting incoming connections.
-		/// </summary>
-		/// <remarks>
-		/// A call to this method may not immediately result in a Started status of the current WebDriver.
-		/// </remarks>
-		protected abstract bool DriverStart(bool block);
-		/// <summary>
-		/// When overridden in a derived class, causes the current WebDriver to cease operation.
-		/// </summary>
-		/// <remarks>
-		/// A call to this method may not immediately result in a Stopped status of the current WebDriver.
-		/// </remarks>
-		protected abstract bool DriverStop();
+		protected virtual void HandleAcceptedSocket(object socket)
+		{
+			this.HandleAcceptedSocket(socket as Socket);
+		}
 		protected virtual void HandleAcceptedSocket(Socket socket)
 		{
-			CommonContext context = new CommonContext(this);
-			context.Socket = socket;
-
-			if (this.ReadContext(socket, out context) && context != null)
+			if (socket != null)
 			{
-				this.Settings.ContextHandler.HandleContext(context);
+				CommonContext context = new CommonContext(this);
+				context.Socket = socket;
 
-				this.WriteContext(socket, context, true);
+				if (this.ReadContext(socket, out context) && context != null)
+				{
+					this.Settings.ContextHandler.HandleContext(context);
+
+					if (!this.WriteContext(socket, context))
+					{
+						Log.Write("Failed to write context", LogMessageLevel.Warning);
+					}
+				}
+				else
+				{
+					Log.Write("Failed to read context", LogMessageLevel.Warning);
+				}
+				
+				if (this.Settings.Block)
+				{
+					socket.Disconnect(false);
+				}
+				else
+				{
+					socket.BeginDisconnect(false, new AsyncCallback(this.DisconnectCallback), socket);
+				}
+				socket.Close();
 			}
-
-			socket.Shutdown(SocketShutdown.Both);
-			socket.Close();
-			socket = null;
 		}
 		protected virtual void RecieveCallback(IAsyncResult ar)
 		{
 			if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
 			{
 				WebDriverState state = ar.AsyncState as WebDriverState;
-
 				state.WorkSocket.EndReceive(ar);
 				state.Signal.Set();
 			}
@@ -154,63 +153,87 @@ namespace Serenity.Web.Drivers
 		}
 		protected bool WriteContent(Socket socket, CommonContext context)
 		{
-			return this.WriteContent(socket, context, false);
-		}
-		protected virtual bool WriteContent(Socket socket, CommonContext context, bool block)
-		{
-			if (block)
+			if (this.Settings.Block)
 			{
-				WebDriverState state = new WebDriverState();
-				state.WorkSocket = socket;
-				state.Signal.Reset();
-				socket.BeginSend(context.Response.SendBuffer, 0, context.Response.SendBuffer.Length, SocketFlags.None, new AsyncCallback(this.SendCallback), state);
-				state.Signal.WaitOne();
+				socket.Send(context.Response.OutputBuffer);
+				context.Response.ClearOutputBuffer();
 			}
 			else
 			{
-				socket.BeginSend(context.Response.SendBuffer, 0, context.Response.SendBuffer.Length, SocketFlags.None, new AsyncCallback(this.SendCallback), socket);
+				socket.BeginSend(context.Response.OutputBuffer, 0, context.Response.OutputBuffer.Length, SocketFlags.None, new AsyncCallback(this.SendCallback), socket);
 			}
 			return true;
 
 		}
-		protected bool WriteHeaders(Socket socket, CommonContext context)
-		{
-			return this.WriteHeaders(socket, context, false);
-		}
-		protected abstract bool WriteHeaders(Socket socket, CommonContext context, bool block);
+		protected abstract bool WriteHeaders(Socket socket, CommonContext context);
 		#endregion
 		#region Methods - Public
 		/// <summary>
-		/// Publicly used method to perform pre-start initialization tasks.
+		/// Creates and binds the listening socket, preparing the WebDriver so that it can be started.
 		/// </summary>
-		public void Initialize()
+		public virtual bool Initialize()
 		{
 			if (this.status < WebDriverStatus.Initialized)
 			{
-				this.DriverInitialize();
-				this.status = WebDriverStatus.Initialized;
+				this.ListeningSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
+
+				foreach (ushort port in this.Settings.Ports)
+				{
+					try
+					{
+						this.ListeningSocket.Bind(new IPEndPoint(IPAddress.Any, port));
+						break;
+					}
+					catch
+					{
+					}
+				}
+				if (this.ListeningSocket.IsBound)
+				{
+					Log.Write("Listening socket bound to port " + this.ListeningPort.ToString(), LogMessageLevel.Info);
+					this.status = WebDriverStatus.Initialized;
+					return true;
+				}
+				else
+				{
+					Log.Write("Failed to bind listening socket to any port!", LogMessageLevel.Warning);
+					return false;
+				}
+			}
+			else
+			{
+				return false;
 			}
 		}
 		public abstract bool ReadContext(Socket socket, out CommonContext context);
 
 		/// <summary>
-		/// Starts the WebDriver in non-blocking (asnychronus) mode.
+		/// Starts the WebDriver.
 		/// </summary>
-		public bool Start()
+		public virtual bool Start()
 		{
-			return this.Start(false);
-		}
-		/// <summary>
-		/// Starts the WebDriver. If block is true,
-		/// the current thread will block while the current WebDriver is running.
-		/// </summary>
-		/// <param name="block"></param>
-		/// <returns></returns>
-		public bool Start(bool block)
-		{
-			if (this.status == WebDriverStatus.Initialized)
+			if (this.Status >= WebDriverStatus.Initialized)
 			{
-				return this.DriverStart(block);
+				this.Status = WebDriverStatus.Started;
+				this.ListeningSocket.Listen(10);
+
+				if (this.Settings.Block)
+				{
+					while (this.Status == WebDriverStatus.Started)
+					{
+						ThreadPool.QueueUserWorkItem(new WaitCallback(this.HandleAcceptedSocket), this.ListeningSocket.Accept());
+					}
+					return true;
+				}
+				else
+				{
+					WebDriverState state = new WebDriverState();
+					state.Signal.Reset();
+					state.WorkSocket = this.ListeningSocket;
+					this.ListeningSocket.BeginAccept(new AsyncCallback(this.AcceptCallback), state);
+
+					return true;
+				}
 			}
 			else
 			{
@@ -220,33 +243,30 @@ namespace Serenity.Web.Drivers
 		/// <summary>
 		/// Stops the WebDriver.
 		/// </summary>
-		public bool Stop()
+		public virtual bool Stop()
 		{
 			if (this.status == WebDriverStatus.Started)
 			{
-				return this.DriverStop();
+				this.status = WebDriverStatus.Stopped;
+				return true;
 			}
 			else
 			{
 				return false;
 			}
 		}
-		public bool WriteContext(Socket socket, CommonContext context)
-		{
-			return this.WriteContext(socket, context, false);
-		}
-		public virtual bool WriteContext(Socket socket, CommonContext context, bool block)
+		public virtual bool WriteContext(Socket socket, CommonContext context)
 		{
 			if (!context.HeadersWritten)
 			{
-				context.HeadersWritten = this.WriteHeaders(socket, context, block);
+				context.HeadersWritten = this.WriteHeaders(socket, context);
 			}
 
 			bool ret = false;
 
 			if (context.HeadersWritten)
 			{
-				ret = this.WriteContent(socket, context, block);
+				ret = this.WriteContent(socket, context);
 			}
 			return ret;
 		}

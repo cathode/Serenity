@@ -22,23 +22,20 @@ namespace Serenity.Web.Drivers
 	public sealed class WebDriverSettings
 	{
 		#region Fields - Private
+		private bool blockingMode;
 		private ContextHandler contextHandler;
 		private IEnumerable<ushort> ports;
 		#endregion
 		#region Properties - Public
-		/// <summary>
-		/// Gets or sets a list of port numbers that should be used,
-		/// in the event that the primary listen port is already in use.
-		/// </summary>
-		public IEnumerable<ushort> Ports
+		public bool Block
 		{
 			get
 			{
-				return this.ports;
+				return this.blockingMode;
 			}
 			set
 			{
-				this.ports = value;
+				this.blockingMode = value;
 			}
 		}
 		/// <summary>
@@ -55,6 +52,22 @@ namespace Serenity.Web.Drivers
 				this.contextHandler = value;
 			}
 		}
+		/// <summary>
+		/// Gets or sets a list of port numbers that should be used,
+		/// in the event that the primary listen port is already in use.
+		/// </summary>
+		public IEnumerable<ushort> Ports
+		{
+			get
+			{
+				return this.ports;
+			}
+			set
+			{
+				this.ports = value;
+			}
+		}
+		
 		#endregion
 	}
 }

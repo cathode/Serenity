@@ -65,6 +65,7 @@ namespace Server.OperatingModes
                 Module.ModuleCount,
                 Theme.Instances.Length), LogMessageLevel.Info);
 			WebDriverSettings settings = new WebDriverSettings();
+			settings.Block = true;
 			settings.ContextHandler = new ContextHandler();
             settings.Ports = new ushort[] { 80, 8080, 8081 };
 
@@ -72,9 +73,16 @@ namespace Server.OperatingModes
 
             driver.Initialize();
 
-			if (!driver.Start(true))
+			if (!driver.Start())
 			{
 				Log.Write("Failed to start web driver", LogMessageLevel.Warning);
+			}
+			else
+			{
+				while (driver.Status == WebDriverStatus.Started)
+				{
+					Thread.Sleep(1000);
+				}
 			}
 
             Log.Write("Server shutting down", LogMessageLevel.Info);
