@@ -99,11 +99,6 @@
     <Compile Include="Presentation\Templates\CsTemplate.cs" />
     <Compile Include="Presentation\Templates\CsTemplateReader.cs" />
     <Compile Include="SerenityInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="ResourceClass.cs" />
     <Compile Include="FileTypeRegistry.cs" />
     <Compile Include="SPath.cs" />
@@ -173,13 +168,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Presentation\indextest.hdf" />

@@ -15,7 +15,7 @@ namespace Serenity.ResourceClasses
 		}
 		public override void HandleContext(Serenity.Web.CommonContext context)
 		{
-
+			ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
 		}
 	}
 }

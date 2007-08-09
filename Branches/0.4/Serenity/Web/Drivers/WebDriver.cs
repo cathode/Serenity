@@ -206,7 +206,6 @@ namespace Serenity.Web.Drivers
 			}
 		}
 		public abstract bool ReadContext(Socket socket, out CommonContext context);
-
 		/// <summary>
 		/// Starts the WebDriver.
 		/// </summary>
@@ -286,16 +285,6 @@ namespace Serenity.Web.Drivers
 		#endregion
 		#region Properties - Public
 		/// <summary>
-		/// Gets the port number that the current WebDriver is listening on for incoming connections.
-		/// </summary>
-		public ushort ListeningPort
-		{
-			get
-			{
-				return (ushort)((IPEndPoint)this.listeningSocket.LocalEndPoint).Port;
-			}
-		}
-		/// <summary>
 		/// Gets a DriverInfo object which contains information about the current WebDriver.
 		/// </summary>
 		public DriverInfo Info
@@ -358,6 +347,16 @@ namespace Serenity.Web.Drivers
 				{
 					return false;
 				}
+			}
+		}
+		/// <summary>
+		/// Gets the port number that the current WebDriver is listening on for incoming connections.
+		/// </summary>
+		public ushort ListeningPort
+		{
+			get
+			{
+				return (ushort)((IPEndPoint)this.listeningSocket.LocalEndPoint).Port;
 			}
 		}
 		/// <summary>

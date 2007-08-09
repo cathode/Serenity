@@ -25,6 +25,7 @@
 !system "xcopy /E /I Serenity\* ${SRCDIR}\Serenity"
 !system "xcopy /E /I Server\* ${SRCDIR}\Server"
 !system "xcopy /E /I system\* ${SRCDIR}\system"
+!system "mt -manifest Server\Server.exe.manifest -outputresource:${BINDIR}\Server.exe;#1"
 !system "sn -Ra ${BINDIR}\Serenity.dll ${KEYFILE}"
 !system "sn -Ra ${BINDIR}\Server.exe ${KEYFILE}"
 !system "sn -Ra ${BINDIR}\Modules\system.dll ${KEYFILE}"

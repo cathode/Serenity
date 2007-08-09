@@ -112,29 +112,38 @@ namespace Serenity.Web.Drivers
 				return false;
 			}
 		}
-		
 		#endregion
 		#region Methods - Public
 		public override bool ReadContext(Socket socket, out CommonContext context)
 		{
-			int waits = 0;
-			while (socket.Available == 0 && waits < 100)
-			{
-				Thread.Sleep(1);
-				waits++;
-			}
 			if (socket.Available == 0)
 			{
-				context = null;
-				return false;
+				int waits = 0;
+				while (socket.Available == 0 && waits < 100)
+				{
+					Thread.Sleep(1);
+					waits++;
+				}
+				if (socket.Available == 0)
+				{
+					context = null;
+					return false;
+				}
 			}
-
+			
 			context = new CommonContext(this);
 			byte[] buffer = new byte[socket.Available];
 
 			if (this.Settings.Block)
 			{
-				socket.Receive(buffer);
+				List<byte> listBuffer = new List<byte>();
+				while (socket.Available > 0)
+				{
+					buffer = new byte[socket.Available];
+					socket.Receive(buffer);
+					listBuffer.AddRange(buffer);
+				}
+				buffer = listBuffer.ToArray();
 			}
 			else
 			{

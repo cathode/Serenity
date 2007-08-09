@@ -36,11 +36,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <None Include="ContentPages\Default.cs" />
     <Compile Include="Pages\DefaultPage.cs" />
     <Compile Include="Pages\DomainsPage.cs" />
     <Compile Include="Pages\SystemMaster.cs" />
@@ -61,6 +64,10 @@
     <None Include="..\WShelley.public.snk">
       <Link>WShelley.public.snk</Link>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ContentPages\Default.xml" />
+    <Content Include="system.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
