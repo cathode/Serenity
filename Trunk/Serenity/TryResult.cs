@@ -22,6 +22,7 @@ namespace Serenity
 	/// indicates if the operation actually succeeded.
 	/// </summary>
 	/// <typeparam name="T">The type of the result.</typeparam>
+	[Obsolete]
 	public sealed class TryResult<T>
 	{
 		#region Constructors - Private
