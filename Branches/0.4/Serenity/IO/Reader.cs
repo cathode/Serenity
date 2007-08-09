@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Serenity
+namespace Serenity.IO
 {
     /// <summary>
     /// Provides an abstract base class for objects that read objects of a specific type from a stream.
@@ -27,15 +27,60 @@ namespace Serenity
         private bool isReusable;
         #endregion
         #region Methods - Public
+		/// <summary>
+		/// Reads and returns a T from the supplied array of bytes.
+		/// </summary>
+		/// <param name="bytes">bytes to read a T from.</param>
+		/// <returns>A T read from the supplied byte array.</returns>
+		/// <remarks>The supplied stream must support reading.</remarks>
+		public T Read(byte[] bytes)
+		{
+			bool b;
+			return this.Read(bytes, out b);
+		}
+		/// <summary>
+		/// Reads and returns a T from the supplied array of bytes,
+		/// and indicates if the reading operation succeeded.
+		/// </summary>
+		/// <param name="bytes">The bytes to read a T from.</param>
+		/// <param name="result">A boolean that indicates if the read operation suceeded (true) or failed (false).</param>
+		/// <returns>A T read from the supplied byte array.</returns>
+		/// <remarks>The supplied stream must support reading.</remarks>
+		public virtual T Read(byte[] bytes, out bool result)
+		{
+			T value;
+			if (bytes != null)
+			{
+				using (MemoryStream ms = new MemoryStream(bytes))
+				{
+					value = this.Read(ms, out result);
+				}
+				return value;
+			}
+			else
+			{
+				result = false;
+				return default(T);
+			}
+		}
         /// <summary>
-        /// When overridden in a derived class, reads and returns a T from the supplied Stream.
+        /// Reads and returns a T from the supplied stream.
         /// </summary>
-        /// <param name="stream"></param>
-        /// <returns>A T object read from the supplied Stream.</returns>
-        /// <remarks>
-        /// The supplied stream must support reading.
-        /// </remarks>
-        public abstract T Read(Stream stream);
+        /// <param name="stream">The stream to read the T from.</param>
+		/// <returns>A T read from the supplied Stream.</returns>
+		/// <remarks>The supplied stream must support reading.</remarks>
+		public T Read(Stream stream)
+		{
+			bool b;
+			return this.Read(stream, out b);
+		}
+		/// <summary>
+		/// When overridden in a derived class, reads and returns a T from the supplied Stream.
+		/// </summary>
+		/// <param name="stream">The stream to read the T from.</param>
+		/// <returns>A T read from the supplied Stream.</returns>
+		/// <remarks>The supplied stream must support reading.</remarks>
+		public abstract T Read(Stream stream, out bool result);
         /// <summary>
         /// When overridden in a derived class, performs cleanup and freeing
         /// of any unmanaged resources that may have been used by the current Reader.

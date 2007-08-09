@@ -97,25 +97,6 @@ namespace Serenity
                 return null;
             }
         }
-        public static TryResult<SerenityEnvironment> TryLoadEnvironment(string name)
-        {
-            try
-            {
-                SerenityEnvironment environment = SerenityEnvironment.LoadEnvironment(name);
-                if (environment != null)
-                {
-                    return TryResult<SerenityEnvironment>.SuccessResult(environment);
-                }
-                else
-                {
-                    return TryResult<SerenityEnvironment>.FailResult(new Exception("Unspecified Error"));
-                }
-            }
-            catch (Exception e)
-            {
-                return TryResult<SerenityEnvironment>.FailResult(e);
-            }
-        }
         public static void Save(SerenityEnvironment environment)
         {
             IniFile settings = new IniFile(SPath.GetEnvironmentFile(environment.Key));

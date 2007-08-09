@@ -27,15 +27,10 @@ namespace Serenity.Presentation.Templates
         }
         #endregion
         #region Methods - Public
-        public override CsTemplate Read(Stream stream)
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
-
-        public override void Dispose()
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
+		public override CsTemplate Read(Stream stream, out bool result)
+		{
+			throw new Exception("The method or operation is not implemented.");
+		}
         #endregion
-    }
+	}
 }

@@ -15,6 +15,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
+using Serenity.IO;
+
 namespace Serenity.Hdf
 {
     /// <summary>
@@ -47,7 +49,7 @@ namespace Serenity.Hdf
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public override HdfDataset Read(Stream stream)
+        public override HdfDataset Read(Stream stream, out bool result)
         {
             if (stream.Length > 0)
             {
@@ -122,11 +124,12 @@ namespace Serenity.Hdf
                         }
                     }
                 }
-
+				result = true;
                 return dataset;
             }
             else
             {
+				result = false;
                 return null;
             }
         }

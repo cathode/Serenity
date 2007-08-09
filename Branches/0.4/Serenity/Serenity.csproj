@@ -125,6 +125,7 @@
     <None Include="Users\SingleSignOn\SsoClient.cs" />
     <Compile Include="Web\CommonContext.cs" />
     <None Include="Web\Controls\Control.cs" />
+    <Compile Include="Web\Drivers\HttpReader.cs" />
     <Compile Include="Web\Drivers\WebDriverState.cs" />
     <Compile Include="Web\Drivers\WebDriverStatus.cs" />
     <Compile Include="Web\ErrorHandler.cs" />
