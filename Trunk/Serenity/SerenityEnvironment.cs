@@ -41,8 +41,8 @@ namespace Serenity
         }
         #endregion
         #region Fields - Private;
-        private SerenityModule defaultModule;
-        private Theme theme;
+        private Module defaultModule;
+		private Theme theme = Theme.DefaultInstance;
         private string defaultResourceClass;
         private string defaultResourceName;
         #endregion
@@ -80,7 +80,7 @@ namespace Serenity
                     IniSection envSection = settings["Environment"];
 
                     environment = new SerenityEnvironment(name);
-                    environment.defaultModule = SerenityModule.LoadModule(envSection["DefaultModule"].Value);
+                    environment.defaultModule = Module.GetModule(envSection["DefaultModule"].Value);
                     environment.defaultResourceClass = envSection["DefaultResourceClass"].Value;
                     environment.defaultResourceName = envSection["DefaultResourceName"].Value;
                     environment.theme = Theme.LoadTheme(envSection["Theme"].Value);
@@ -120,7 +120,7 @@ namespace Serenity
         {
             IniFile settings = new IniFile(SPath.GetEnvironmentFile(environment.Key));
             IniSection envSection = settings.CreateSection("Environment");
-            envSection.CreateEntry("DefaultModule", (environment.defaultModule == null) ? "" : environment.defaultModule.Key);
+            envSection.CreateEntry("DefaultModule", (environment.defaultModule == null) ? "" : environment.defaultModule.Name);
             envSection.CreateEntry("DefaultResourceClass", environment.defaultResourceClass);
             envSection.CreateEntry("DefaultResourceName", environment.defaultResourceName);
             envSection.CreateEntry("Theme", (environment.theme == null) ? "" : environment.theme.Key);
@@ -132,14 +132,10 @@ namespace Serenity
         /// <summary>
         /// Gets or sets the default module for the current SerenityEnvironment.
         /// </summary>
-        public SerenityModule DefaultModule
+        public Module DefaultModule
         {
             get
             {
-                if (this.defaultModule == null)
-                {
-                    this.defaultModule = SerenityModule.DefaultInstance;
-                }
                 return this.defaultModule;
             }
             set
@@ -158,15 +154,14 @@ namespace Serenity
         {
             get
             {
-                if (this.theme == null)
-                {
-                    this.theme = Theme.DefaultInstance;
-                }
                 return this.theme;
             }
             set
             {
-                this.theme = value;
+				if (value != null)
+				{
+					this.theme = value;
+				}
             }
         }
         public string DefaultResourceClass

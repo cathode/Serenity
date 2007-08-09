@@ -22,7 +22,7 @@ using Serenity.Xml.Html;
 
 namespace Serenity.Pages
 {
-    internal class DefaultPage : ContentPage
+    public sealed class DefaultPage : ContentPage
     {
         public override void OnRequest(CommonContext Context)
         {
@@ -32,7 +32,7 @@ namespace Serenity.Pages
             P.AppendBreak();
             P.AppendAnchor("http://serenityproject.net/", "Project Homepage");
             Context.Response.Write(Doc.SaveMarkup());
-            Context.Response.MimeType = "text/html";
+            Context.Response.MimeType = MimeType.TextHtml;
         }
         public override ContentPage CreateInstance()
         {

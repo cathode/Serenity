@@ -14,12 +14,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Serenity.Web;
+
 namespace Serenity
 {
     public struct FileTypeEntry
     {
         #region Constructors - Internal
-        internal FileTypeEntry(string description, string mimeType, bool compress)
+        internal FileTypeEntry(string description, MimeType mimeType, bool compress)
         {
             this.useCompression = compress;
             this.description = description;
@@ -28,7 +30,7 @@ namespace Serenity
         #endregion
         #region Fields - Private
         private readonly string description;
-        private readonly string mimeType;
+        private readonly MimeType mimeType;
         private readonly bool useCompression;
         #endregion
         #region Properties - Public
@@ -36,21 +38,21 @@ namespace Serenity
         {
             get
             {
-                return description;
+                return this.description;
             }
         }
-        public string MimeType
+        public MimeType MimeType
         {
             get
             {
-                return mimeType;
+                return this.mimeType;
             }
         }
         public bool UseCompression
         {
             get
             {
-                return useCompression;
+                return this.useCompression;
             }
         }
         #endregion

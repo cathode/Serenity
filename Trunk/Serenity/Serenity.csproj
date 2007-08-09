@@ -25,10 +25,10 @@
     </StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>false</DebugSymbols>
+    <DebugSymbols>True</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <Optimize>False</Optimize>
+    <OutputPath>../Output/</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -39,11 +39,15 @@
     <LangVersion>default</LangVersion>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <UseVSHostingProcess>true</UseVSHostingProcess>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Serenity</AssemblyName>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\Output\</OutputPath>
+    <Optimize>True</Optimize>
+    <OutputPath>../Output/</OutputPath>
     <DefineConstants>
     </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -53,24 +57,28 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <DocumentationFile>..\Output\Serenity.XML</DocumentationFile>
     <LangVersion>default</LangVersion>
-    <DebugSymbols>false</DebugSymbols>
+    <DebugSymbols>False</DebugSymbols>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Serenity</AssemblyName>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LibINI, Version=1.4.0.0, Culture=neutral, PublicKeyToken=aafe07b9ddf0a2a4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\LibINI.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <Reference Include="System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <Reference Include="System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\Module.cs" />
     <None Include="Cache\CacheManager.cs" />
     <None Include="Cache\CachedStream.cs" />
     <Compile Include="ContentPage.cs" />
-    <Compile Include="DomainSettingValue.cs" />
     <None Include="Data\Database.cs" />
+    <Compile Include="DomainSettingValue.cs" />
     <Compile Include="FileTypeEntry.cs" />
     <Compile Include="Hdf\HdfCollection.cs" />
     <Compile Include="Hdf\HdfDataset.cs" />
@@ -81,35 +89,23 @@
     <Compile Include="Hdf\HdfWriter.cs" />
     <Compile Include="Hdf\HdfWriterSettings.cs" />
     <Compile Include="HexEncoding.cs" />
-    <Compile Include="ContextHandler.cs" />
+    <Compile Include="Module.cs" />
+    <Compile Include="Web\ContextHandler.cs" />
     <Compile Include="IO\Reader.cs" />
     <Compile Include="IO\Writer.cs" />
-    <None Include="Pages\DomainsPage.cs" />
-    <Compile Include="Pages\DefaultPage.cs" />
     <Compile Include="MasterPage.cs" />
     <Compile Include="Page.cs" />
-    <Compile Include="Pages\SystemMaster.cs" />
     <Compile Include="Presentation\IndexRenderer.cs" />
     <Compile Include="Presentation\Templates\CsTemplate.cs" />
     <Compile Include="Presentation\Templates\CsTemplateReader.cs" />
     <Compile Include="SerenityInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="ResourceClasses\DynamicResourceClass.cs" />
-    <Compile Include="ResourceClasses\StaticResourceClass.cs" />
-    <Compile Include="ResourceClasses\ThemeResourceClass.cs" />
     <Compile Include="ResourceClass.cs" />
     <Compile Include="FileTypeRegistry.cs" />
     <Compile Include="SPath.cs" />
-    <Compile Include="SerenityModule.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerenityEnvironment.cs" />
     <Compile Include="Multiton.cs" />
-    <Compile Include="SerenityServer.cs" />
     <Compile Include="DomainSettings.cs" />
     <Compile Include="Themes\Border.cs" />
     <Compile Include="Themes\BorderSide.cs" />
@@ -128,19 +124,19 @@
     <Compile Include="Themes\Theme.cs" />
     <None Include="Users\SingleSignOn\SsoClient.cs" />
     <Compile Include="Web\CommonContext.cs" />
-    <None Include="Web\Drivers\BinaryAdapter.cs" />
-    <None Include="Web\Drivers\BinaryDriver.cs" />
+    <None Include="Web\Controls\Control.cs" />
+    <Compile Include="Web\Drivers\WebDriverState.cs" />
+    <Compile Include="Web\Drivers\WebDriverStatus.cs" />
+    <Compile Include="Web\ErrorHandler.cs" />
+    <Compile Include="Web\MimeType.cs" />
     <Compile Include="Web\StatusCode.cs" />
     <Compile Include="Web\Drivers\DriverInfo.cs" />
-    <Compile Include="Web\Drivers\WebManager.cs" />
     <Compile Include="Web\Header.cs" />
     <Compile Include="Web\HeaderCollection.cs" />
     <Compile Include="Web\RequestDataCollection.cs" />
     <Compile Include="Web\RequestDataStream.cs" />
-    <Compile Include="Web\Drivers\WebAdapter.cs" />
     <Compile Include="Web\CommonRequest.cs" />
     <Compile Include="Web\CommonResponse.cs" />
-    <Compile Include="Web\Drivers\HttpAdapter.cs" />
     <Compile Include="Web\Drivers\HttpDriver.cs" />
     <Compile Include="Web\Drivers\WebDriver.cs" />
     <None Include="Xml\Html\Doctype.cs" />
@@ -174,13 +170,6 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Presentation\indextest.hdf" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -189,5 +178,6 @@
     </PostBuildEvent>
     <PreBuildEvent>
     </PreBuildEvent>
+    <ProjectGuid>{2013CDED-1043-4FF6-A080-9B3C9BD7B140}</ProjectGuid>
   </PropertyGroup>
 </Project>

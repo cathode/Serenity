@@ -1,6 +1,6 @@
 /*
 Serenity - The next evolution of web server technology
-Serenity/Data/Database.cs
+
 Copyright © 2006-2007 Serenity Project (http://SerenityProject.net/)
 
 This file is protected by the terms and conditions of the
@@ -11,74 +11,38 @@ you may find the license information at the following URL:
 http://www.microsoft.com/resources/sharedsource/licensingbasics/communitylicense.mspx
 */
 using System;
+using System.Data;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
 
 namespace Serenity.Data
 {
-    //WS: Everything goes in this file for now, because there will probably be
-    // a lot of name changes of classes and such and doing source control renames
-    // is a hassle for the most part.
-
-    public class Row
+    /// <summary>
+    /// Used to determine which database is used for any data operations.
+    /// </summary>
+    public enum DatabaseScope
     {
-        public void Populate(params string[] values)
+        Global,
+        Environment,
+        Module,
+    }
+    public static class Database
+    {
+        public static QueryResultSet ExecuteQuery(string query)
+        {
+            return Database.ExecuteQuery(query, DatabaseScope.Global);
+        }
+        public static QueryResultSet ExecuteQuery(string query, DatabaseScope scope)
         {
 
         }
     }
-
-    public class Query
+    public sealed class QueryResultSet
     {
 
     }
-    public class QueryCondition
+    public sealed class QueryResultRow
     {
-        private QueryConditionOperator conditionOperator;
 
-        public QueryConditionOperator ConditionOperator
-        {
-            get
-            {
-                return this.conditionOperator;
-            }
-        }
-
-        private string leftOperand;
-
-        public string LeftOperand
-        {
-            get
-            {
-                return leftOperand;
-            }
-            set
-            {
-                leftOperand = value;
-            }
-        }
-        private string rightOperand;
-
-        public string RightOperand
-        {
-            get
-            {
-                return rightOperand;
-            }
-            set
-            {
-                rightOperand = value;
-            }
-        }
-     
-    }
-    public enum QueryConditionOperator
-    {
-        EqualTo,
-        NotEqualTo,
-        Like,
-        GreaterThan,
-        LessThan,
     }
 }

@@ -29,10 +29,10 @@ namespace Serenity.Attributes
     [AttributeUsage(AttributeTargets.Assembly)]
     public sealed class ModuleDefaultPageAttribute : Attribute
     {
-        public ModuleDefaultPageAttribute(Type pageType)
+        public ModuleDefaultPageAttribute(string typeName)
         {
-            this.PageType = pageType;
+            this.TypeName = typeName;
         }
-        public readonly Type PageType;
+        public readonly string TypeName;
     }
 }

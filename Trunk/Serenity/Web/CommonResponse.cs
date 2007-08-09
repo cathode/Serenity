@@ -26,31 +26,27 @@ namespace Serenity.Web
     public sealed class CommonResponse
     {
         #region Constructors - Internal
-        internal CommonResponse(CommonContext Owner)
+        internal CommonResponse(CommonContext context)
         {
-            this.sendBuffer = new byte[0];
-            this.headers = new HeaderCollection();
-            this.owningContext = Owner;
-            this.mimeType = "text/plain";
-            this.useCompression = false;
+            this.context = context;
         }
         #endregion
         #region Fields - Private
-        private Socket clientSocket;
-        private byte[] sendBuffer;
-        private string mimeType;
-        private HeaderCollection headers;
-        private CommonContext owningContext;
-        private bool useCompression;
+        private List<byte> outputBuffer = new List<byte>();
+        private MimeType mimeType = MimeType.Default;
+        private HeaderCollection headers = new HeaderCollection();
+        private CommonContext context;
+        private bool useCompression = false;
+        private bool useChunkedTransferEncoding = false;
         #endregion
         #region Fields - Public
         public StatusCode Status;
         #endregion
-        internal void Bind(Socket ClientSocket)
-        {
-            this.clientSocket = ClientSocket;
-        }
-
+        #region Methods - Public
+		public void ClearOutputBuffer()
+		{
+			this.outputBuffer = new List<byte>();
+		}
         /// <summary>
         /// Causes the currently buffered data to be written to the underlying client socket, then clears the Buffer.
         /// Note: The underlying Socket is unaffected if the current CommonResponse does not support chunked transmission.
@@ -58,10 +54,14 @@ namespace Serenity.Web
         /// <returns>The number of bytes flushed, or -1 if an error occurred.</returns>
         public int Flush()
         {
+            //if (this.context.Driver.WriteContext(this.context.Socket, this.context))
+            //{
+
+            //}
             return -1;
         }
         /// <summary>
-        /// Writes a sequence of bytes to the internal write Buffer.
+        /// Writes a sequence of bytes to the send buffer.
         /// </summary>
         /// <param name="value">The array of bytes to write.</param>
         /// <returns>The number of bytes written, or -1 if an error occurred.</returns>
@@ -69,47 +69,38 @@ namespace Serenity.Web
         {
             if (value != null)
             {
-                if (value.Length > 0)
-                {
-                    if (this.sendBuffer.Length > 0)
-                    {
-                        byte[] NewBuffer = new byte[this.sendBuffer.Length + value.Length];
-                        this.sendBuffer.CopyTo(NewBuffer, 0);
-                        value.CopyTo(NewBuffer, this.sendBuffer.Length - 1);
-                        this.sendBuffer = NewBuffer;
-                    }
-                    else
-                    {
-                        this.sendBuffer = new byte[value.Length];
-                        value.CopyTo(this.sendBuffer, 0);
-                    }
-                    return value.Length;
-                }
-                else
-                {
-                    return 0;
-                }
+                this.outputBuffer.AddRange(value);
+                return value.Length;
             }
             else
             {
                 return -1;
             }
         }
+        /// <summary>
+        /// Writes a string to the send buffer.
+        /// </summary>
+        /// <param name="value">The value to write.</param>
+        /// <returns></returns>
         public int Write(string value)
         {
             return this.Write(Encoding.UTF8.GetBytes(value));
         }
+        #endregion
         #region Properties - Internal
-        internal byte[] SendBuffer
+        internal byte[] OutputBuffer
         {
             get
             {
-                return this.sendBuffer;
+                return this.outputBuffer.ToArray();
             }
         }
         #endregion
         #region Properties - Public
-        public string MimeType
+        /// <summary>
+        /// Gets or sets the mimetype associated with the content returned to the client.
+        /// </summary>
+        public MimeType MimeType
         {
             get
             {
@@ -117,16 +108,12 @@ namespace Serenity.Web
             }
             set
             {
-                if (value.Contains("/") == true)
-                {
-                    if (value.IndexOf('/') == value.LastIndexOf('/'))
-                    {
-                        this.mimeType = value;
-                    }
-                }
+                this.mimeType = value;
             }
         }
-        
+        /// <summary>
+        /// Gets the HeaderCollection containing the headers returned to the client.
+        /// </summary>
         public HeaderCollection Headers
         {
             get
@@ -134,12 +121,25 @@ namespace Serenity.Web
                 return this.headers;
             }
         }
-
+        /// <summary>
+        /// Gets the CommonContext associated with the current CommonResponse.
+        /// </summary>
         public CommonContext Owner
         {
             get
             {
-                return this.owningContext;
+                return this.context;
+            }
+        }
+        public bool UseChunkedTransferEncoding
+        {
+            get
+            {
+                return this.useChunkedTransferEncoding;
+            }
+            set
+            {
+                this.useChunkedTransferEncoding = value;
             }
         }
         /// <summary>

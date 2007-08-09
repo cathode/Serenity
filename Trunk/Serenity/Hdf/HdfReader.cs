@@ -26,8 +26,7 @@ namespace Serenity.Hdf
         /// <summary>
         /// Initializes a new instance of the HdfReader class using the default set of HdfReaderSettings.
         /// </summary>
-        public HdfReader()
-            : this(new HdfReaderSettings())
+        public HdfReader() : this(new HdfReaderSettings())
         {
         }
         /// <summary>
@@ -43,6 +42,11 @@ namespace Serenity.Hdf
         private HdfReaderSettings settings;
         #endregion
         #region Methods - Public
+        /// <summary>
+        /// Reads and returns an HdfDataset from the supplied Stream.
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
         public override HdfDataset Read(Stream stream)
         {
             if (stream.Length > 0)
@@ -125,10 +129,6 @@ namespace Serenity.Hdf
             {
                 return null;
             }
-        }
-
-        public override void Dispose()
-        {
         }
         #endregion
     }

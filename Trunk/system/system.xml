@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Module Name="Tranquility"
+				Version="0.4.0.0"
+				Copyright="Copyright © 2006-2007 Serenity Project" 
+				Company="Serenity Project" 
+				CodeLanguage="C#">
+	<ContentPage Reference="ContentPages/Default" />
+</Module>

@@ -14,8 +14,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using Serenity.Properties;
-
 namespace Serenity
 {
     /// <summary>
@@ -23,6 +21,7 @@ namespace Serenity
     /// </summary>
     /// <typeparam name="TKey">The type to be used for unique keys.</typeparam>
     /// <typeparam name="TValue">The type that will follow the multiton design pattern. This MUST be the inheriting type.</typeparam>
+	[Obsolete]
     public abstract class Multiton<TKey, TValue> : IDisposable where TValue : Multiton<TKey, TValue>
     {
         #region Constructors - Static
@@ -54,15 +53,7 @@ namespace Serenity
                             Multiton<TKey, TValue>.defaultInstance = (TValue)this;
                         }
                     }
-                    else
-                    {
-                        throw new Exception(Resources.MultitonDuplicateKeyError);
-                    }
                 }
-            }
-            else
-            {
-                throw new Exception(Resources.MultitonNoKeyError);
             }
         }
         #endregion
@@ -87,6 +78,9 @@ namespace Serenity
                 return Multiton<TKey, TValue>.instances.ContainsKey(key);
             }
         }
+		/// <summary>
+		/// Disposes any resources used by the current Multiton.
+		/// </summary>
         public virtual void Dispose()
         {
             Multiton<TKey, TValue>.RemoveInstance(this.key);
@@ -254,21 +248,13 @@ namespace Serenity
             }
             set
             {
-                if (Multiton<TKey, TValue>.systemInstance == null)
-                {
-                    if (value != null)
-                    {
-                        Multiton<TKey, TValue>.systemInstance = value;
-                    }
-                    else
-                    {
-                        throw new ArgumentException(Serenity.Properties.Resources.MultitonSystemInstanceNullError);
-                    }
-                }
-                else
-                {
-                    throw new InvalidOperationException(Serenity.Properties.Resources.MultitonSystemInstanceRedefineError);
-                }
+				if (Multiton<TKey, TValue>.systemInstance == null)
+				{
+					if (value != null)
+					{
+						Multiton<TKey, TValue>.systemInstance = value;
+					}
+				}
             }
         }
         #endregion
