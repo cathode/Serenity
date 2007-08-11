@@ -51,7 +51,13 @@
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LibINI, Version=1.4.0.0, Culture=neutral, PublicKeyToken=aafe07b9ddf0a2a4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\LibINI.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OperatingModes\DebugMode.cs" />
@@ -61,6 +67,7 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="ServerConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\WShelley.public.snk">
@@ -218,7 +225,9 @@
     <Content Include="Environments\system\static\icons\page_white_zip.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Configuration\Server.ini" />
+    <Content Include="Configuration\Serenity.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Server.exe.manifest">
     </None>
     <None Include="Themes\system\Theme" />

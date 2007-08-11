@@ -27,14 +27,25 @@ namespace Server
 	{
 		internal static void Main(string[] args)
 		{
+			//Print out program name, version, copyright, and contact information.
 			Console.WriteLine("{0}, v{1}\r\n{2} ({3})\r\n",
 				SerenityInfo.Name, SerenityInfo.Version, SerenityInfo.Copyright, "http://serenityproject.net/");
 
-			Log.LogToConsole = true;
-			Log.LogToFile = true;
+			//Perform loading of the server configuration file.
+			ServerConfig config = new ServerConfig();
+			config.Read("Configuration/Serenity.ini");
 
-			Log.StartLogging();
+			Log.LogToConsole = config.LogToConsole;
+			Log.LogToFile = config.LogToFile;
 
+			if (Log.LogToConsole || Log.LogToFile)
+			{
+				//Only start logging if the log messages will be recorded somewhere.
+				Log.StartLogging();
+			}
+
+			//Make sure the server has the correct folders to use,
+			//if they don't exist we need to create them.
 			foreach (SpecialFolder sf in Program.RecurseEnum<SpecialFolder>())
 			{
 				string dir = SPath.ResolveSpecialPath(sf);
@@ -44,30 +55,12 @@ namespace Server
 				}
 			}
 
+			//This loads the file type registry information.
 			FileTypeRegistry.Initialize();
 
-			string operatingMode = "server";
-			if (args.Length > 0)
-			{
-				operatingMode = args[0];
-			}
-			switch (operatingMode)
-			{
-				default:
-				case "server":
-					OperatingModes.ServerMode.Run();
-					break;
 
-				case "debug":
-					OperatingModes.DebugMode.Run();
-					break;
-				case "service":
-				case "serverui":
-				case "serviceui":
-					Console.WriteLine("Not implemented yet! Press any key to continue...");
-					Console.ReadLine();
-					break;
-			}
+			//(Temporary) Runs the server.
+			ServerMode.Run();
 		}
 		private static IEnumerable<T> RecurseEnum<T>()
 		{
