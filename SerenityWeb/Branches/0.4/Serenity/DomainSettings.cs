@@ -29,12 +29,14 @@ namespace Serenity
 		static DomainSettings()
 		{
 			DomainSettings.instances = new Dictionary<string, DomainSettings>();
-			DomainSettings.root = new DomainSettings("");
-			DomainSettings.root.defaultResource.Value = "default";
-			DomainSettings.root.defaultResourceClass.Value = "dynamic";
-			DomainSettings.root.omitResourceClass.Value = false;
-			DomainSettings.root.theme.Value = SerenityInfo.SystemName;
-			DomainSettings.instances.Add("", root);
+			DomainSettings root = new DomainSettings("root");
+			root.defaultResource.Value = "default";
+			root.defaultResourceClass.Value = "dynamic";
+			root.omitResourceClass.Value = false;
+			root.theme.Value = SerenityInfo.SystemName;
+			root.documentRoot.Value = "Domains/Common";
+			DomainSettings.root = root;
+			DomainSettings.instances.Add(root.name, root);
 		}
 		#endregion
 		#region Constructors - Public
@@ -54,6 +56,7 @@ namespace Serenity
 				this.parent = null;
 				this.defaultResource = new DomainSettingValue<string>();
 				this.defaultResourceClass = new DomainSettingValue<string>();
+				this.documentRoot = new DomainSettingValue<string>();
 				this.omitResourceClass = new DomainSettingValue<bool>();
 				this.theme = new DomainSettingValue<string>();
 			}
@@ -62,6 +65,7 @@ namespace Serenity
 				this.parent = parent;
 				this.defaultResource = new DomainSettingValue<string>(this.parent.defaultResource);
 				this.defaultResourceClass = new DomainSettingValue<string>(this.parent.defaultResourceClass);
+				this.documentRoot = new DomainSettingValue<string>(this.parent.documentRoot);
 				this.omitResourceClass = new DomainSettingValue<bool>(this.parent.omitResourceClass);
 				this.theme = new DomainSettingValue<string>(this.parent.theme);
 			}
@@ -70,6 +74,7 @@ namespace Serenity
 		#region Fields - Private
 		private readonly DomainSettingValue<string> defaultResource;
 		private readonly DomainSettingValue<string> defaultResourceClass;
+		private readonly DomainSettingValue<string> documentRoot;
 		private bool hasParent;
 		private readonly string name;
 		private readonly DomainSettings parent;
@@ -249,7 +254,7 @@ namespace Serenity
 		{
 			get
 			{
-				return this.DocumentRoot;
+				return this.documentRoot.Value;
 			}
 		}
 		/// <summary>

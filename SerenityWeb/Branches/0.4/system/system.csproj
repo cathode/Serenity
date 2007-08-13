@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ContentPages\Default.xml" />
+    <Content Include="ResourceClasses\temp.html" />
     <Content Include="system.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

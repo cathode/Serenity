@@ -48,7 +48,7 @@ namespace Serenity.Web
             }
             else
             {
-                resourceClass = ResourceClass.GetResourceClass(url.Segments[2].TrimEnd('/').ToLower());
+                resourceClass = ResourceClass.GetResourceClass(url.Segments[1].TrimEnd('/').ToLower());
             }
             if (resourceClass != null)
             {

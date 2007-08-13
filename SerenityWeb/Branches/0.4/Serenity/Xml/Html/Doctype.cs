@@ -22,34 +22,44 @@ namespace Serenity.Xml.Html
     /// This class cannot be inherited.
     /// </summary>
     public sealed class Doctype
-    {
-        /// <summary>
+	{
+		#region Constructors - Public
+		/// <summary>
         /// Initializes a new instance of the Doctype class
         /// </summary>
         /// <param name="RootElement">Defines the root element that the current Doctype applies to.</param>
         /// <param name="PublicIdentifier">Defines the public identifier of the current Doctype.</param>
         /// <param name="SystemIdentifier">Defines the system identifier of the current Doctype.</param>
-        public Doctype(string RootElement, string PublicIdentifier, string SystemIdentifier)
+        public Doctype(string rootElement, string publicIdentifier, string systemIdentifier)
         {
-            this._RootElement = RootElement;
-            this._PublicIdentifier = PublicIdentifier;
-            this._SystemIdentifier = SystemIdentifier;
-        }
-        /// <summary>
+            this.rootElement = rootElement;
+            this.publicIdentifier = publicIdentifier;
+            this.systemIdentifier = systemIdentifier;
+		}
+		#endregion
+		#region Fields - Private
+		private string rootElement;
+		private string publicIdentifier;
+		private string systemIdentifier;
+		#endregion
+		#region Methods - Public
+		/// <summary>
         /// Returns the string representation of the current Doctype.
         /// </summary>
         /// <returns>The string representation of the current Doctype.</returns>
         public override string ToString()
         {
             return "<!DOCTYPE "
-                + this._RootElement
+                + this.rootElement
                 + " PUBLIC \""
-                + _PublicIdentifier
+                + publicIdentifier
                 + "\" \""
-                + this._SystemIdentifier
+                + this.systemIdentifier
                 + "\">";
-        }
-        /// <summary>
+		}
+		#endregion
+		#region Properties - Public
+		/// <summary>
         /// Gets the HTML 4.01 Frameset Doctype.
         /// </summary>
         public static Doctype HTML401Frameset
@@ -104,11 +114,7 @@ namespace Serenity.Xml.Html
         {
             get
             {
-                return this._PublicIdentifier;
-            }
-            set
-            {
-                this._PublicIdentifier = value;
+                return this.publicIdentifier;
             }
         }
         /// <summary>
@@ -118,11 +124,11 @@ namespace Serenity.Xml.Html
         {
             get
             {
-                return this._RootElement;
+                return this.rootElement;
             }
             set
             {
-                this._RootElement = value;
+                this.rootElement = value;
             }
         }
         /// <summary>
@@ -180,11 +186,7 @@ namespace Serenity.Xml.Html
         {
             get
             {
-                return this._SystemIdentifier;
-            }
-            set
-            {
-                this._SystemIdentifier = value;
+                return this.systemIdentifier;
             }
         }
         /// <summary>
@@ -246,9 +248,7 @@ namespace Serenity.Xml.Html
                     "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN",
                     "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg.dtd");
             }
-        }
-        private string _RootElement;
-        private string _PublicIdentifier;
-        private string _SystemIdentifier;
+		}
+		#endregion
     }
 }

@@ -46,7 +46,7 @@ namespace Serenity.ResourceClasses
 				Array.Copy(segments, n, nameParts, 0, nameParts.Length);
 				resourceName = string.Join("", nameParts).ToLower();
 			}
-			else if (segments.Length == 3)
+			else if (segments.Length == 2)
 			{
 				resourceName = "";
 			}
@@ -58,8 +58,7 @@ namespace Serenity.ResourceClasses
 			if (resourceName == null)
 			{
 				// 500 Internal Server Error
-				context.Response.Status = StatusCode.Http500InternalServerError;
-				context.Response.Write("500 Internal Server Error");
+				ErrorHandler.Handle(context, StatusCode.Http500InternalServerError);
 				return;
 			}
 
@@ -78,11 +77,49 @@ namespace Serenity.ResourceClasses
 				//Directory request
 				if (Directory.Exists(resourcePath) == true)
 				{
+#if RAW
+					CommonResponse response = context.Response;
+
+					response.WriteLine(Doctype.XHTML11.ToString());
+					response.WriteLine(@"<html xmlns='http://www.w3.org/1999/xhtml\'>
+<head>
+	<title>Index of " + resourceName + @"</title>
+	<link rel='stylesheet' type='text/css' href='/static/index.css' />
+	<link rel='stylesheet' type='text/css' href='/theme/stylesheet' />
+</head>
+<body>
+	<div class='HeadingA'>Index of " + resourceName + @"</div>
+	<div class='HeadingB'>Directories:</div>
+	<div class='List'>
+		<table class='AccentA'>
+			<tr>
+				<th></th>
+				<th>Directory Name</th>
+				<th>Last Modified</th>
+			</tr>
+		</table>
+	</div>
+	<div class='HeadingB'>Files:</div>
+	<div class='List'>
+		<table>
+			<tr>
+				<th></th>
+				<th>File Name</th>
+				<th>File Size</th>
+				<th>File Type</th>
+				<th>Last Modified</th>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>");
+					response.MimeType = MimeType.TextHtml;
+#else
 					HtmlDocument Doc = new HtmlDocument();
 					Doc.BodyElement.Class = Theme.CurrentInstance.ContentA.Class;
 
 					Doc.AddStylesheet(Theme.CurrentInstance.StylesheetUrl);
-					Doc.AddStylesheet("/system/static/index.css");
+					Doc.AddStylesheet("/static/index.css");
 					Doc.Title = "Index of " + resourceName;
 					HtmlElement Div = Doc.BodyElement.AppendDivision("Index of " + resourceName, Theme.CurrentInstance.HeadingA);
 					string[] SubDirs = Directory.GetDirectories(resourcePath);
@@ -169,11 +206,11 @@ namespace Serenity.ResourceClasses
 					//BR: Moved things around to make sure that the mimetype and others
 					//are getting set before we write anything out.
 					context.Response.Write(Doc.SaveMarkup());
+#endif
 				}
 				else
 				{
-					context.Response.Status = StatusCode.Http404NotFound;
-					context.Response.Write("Requested resource does not exist.");
+					ErrorHandler.Handle(context, StatusCode.Http404NotFound);
 				}
 			}
 			else

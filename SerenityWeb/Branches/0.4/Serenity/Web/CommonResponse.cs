@@ -61,7 +61,7 @@ namespace Serenity.Web
             return -1;
         }
         /// <summary>
-        /// Writes a sequence of bytes to the send buffer.
+        /// Writes a series of bytes to the output buffer.
         /// </summary>
         /// <param name="value">The array of bytes to write.</param>
         /// <returns>The number of bytes written, or -1 if an error occurred.</returns>
@@ -78,7 +78,7 @@ namespace Serenity.Web
             }
         }
         /// <summary>
-        /// Writes a string to the send buffer.
+        /// Writes a string to the output buffer.
         /// </summary>
         /// <param name="value">The value to write.</param>
         /// <returns></returns>
@@ -86,6 +86,15 @@ namespace Serenity.Web
         {
             return this.Write(Encoding.UTF8.GetBytes(value));
         }
+		/// <summary>
+		/// Writes a string followed by a newline to the output buffer.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public int WriteLine(string value)
+		{
+			return this.Write(Encoding.UTF8.GetBytes(value + "\r\n"));
+		}
         #endregion
         #region Properties - Internal
         internal byte[] OutputBuffer

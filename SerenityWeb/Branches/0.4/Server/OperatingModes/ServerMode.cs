@@ -54,7 +54,7 @@ namespace Server.OperatingModes
             Module.LoadAllModules();
 
             Log.Write(string.Format("Loaded: {0} domains, {1} modules, {2} themes.",
-                DomainSettings.Current,
+                DomainSettings.Count,
                 Module.ModuleCount,
                 Theme.Instances.Length), LogMessageLevel.Info);
 			WebDriverSettings settings = new WebDriverSettings();
