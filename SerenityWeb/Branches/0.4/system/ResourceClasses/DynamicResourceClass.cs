@@ -44,17 +44,20 @@ namespace Serenity.ResourceClasses
 					Array.Copy(context.Request.Url.Segments, n, nameParts, 0, nameParts.Length);
 					//page = null; //SerenityModule.CurrentInstance.GetPage(string.Join("", nameParts).ToLower());
 					ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
+					return;
 				}
 				else
 				{
 					//page = null; //SerenityModule.CurrentInstance.DefaultPage;
 					ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
+					return;
 				}
 			}
 			else
 			{
 				//page = null; //SerenityModule.CurrentInstance.DefaultPage;
 				ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
+				return;
 			}
 
 			if (page != null)
