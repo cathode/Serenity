@@ -20,8 +20,7 @@ namespace Serenity.ResourceClasses
 {
 	internal class DynamicResourceClass : ResourceClass
 	{
-		public DynamicResourceClass()
-			: base("dynamic")
+		public DynamicResourceClass() : base("dynamic")
 		{
 		}
 		public override void HandleContext(CommonContext context)
@@ -34,7 +33,7 @@ namespace Serenity.ResourceClasses
 
 			if (context.Request.Url.Segments.Length > 1)
 			{
-				int n = 4;
+				int n = 3;
 				if (settings.OmitResourceClass)
 				{
 					n--;
@@ -43,16 +42,19 @@ namespace Serenity.ResourceClasses
 				if (nameParts.Length > 0)
 				{
 					Array.Copy(context.Request.Url.Segments, n, nameParts, 0, nameParts.Length);
-					page = null; //SerenityModule.CurrentInstance.GetPage(string.Join("", nameParts).ToLower());
+					//page = null; //SerenityModule.CurrentInstance.GetPage(string.Join("", nameParts).ToLower());
+					ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
 				}
 				else
 				{
-					page = null; //SerenityModule.CurrentInstance.DefaultPage;
+					//page = null; //SerenityModule.CurrentInstance.DefaultPage;
+					ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
 				}
 			}
 			else
 			{
-				page = null; //SerenityModule.CurrentInstance.DefaultPage;
+				//page = null; //SerenityModule.CurrentInstance.DefaultPage;
+				ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
 			}
 
 			if (page != null)
