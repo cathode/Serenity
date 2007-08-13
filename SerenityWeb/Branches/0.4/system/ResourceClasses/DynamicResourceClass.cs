@@ -25,7 +25,7 @@ namespace Serenity.ResourceClasses
 		}
 		public override void HandleContext(CommonContext context)
 		{
-			ContentPage page;
+			ContentPage page = null;
 
 			// http://localhost/dynamic/system/default
 
