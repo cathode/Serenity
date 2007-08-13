@@ -10,6 +10,7 @@ you may find the license information at the following URL:
 
 http://www.microsoft.com/resources/sharedsource/licensingbasics/communitylicense.mspx
 */
+using LibINI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,15 +23,18 @@ namespace Serenity
 	/// <summary>
 	/// Represents a collection of settings that are specific to a domain name.
 	/// </summary>
-	[Serializable]
 	public sealed class DomainSettings
 	{
 		#region Constructors - Private
 		static DomainSettings()
 		{
-			DomainSettings.settings = new Dictionary<string, DomainSettings>();
-			DomainSettings.root = DomainSettings.CreateDefaultRoot();
-			DomainSettings.settings.Add("", root);
+			DomainSettings.instances = new Dictionary<string, DomainSettings>();
+			DomainSettings.root = new DomainSettings("");
+			DomainSettings.root.defaultResource.Value = "default";
+			DomainSettings.root.defaultResourceClass.Value = "dynamic";
+			DomainSettings.root.omitResourceClass.Value = false;
+			DomainSettings.root.theme.Value = SerenityInfo.SystemName;
+			DomainSettings.instances.Add("", root);
 		}
 		#endregion
 		#region Constructors - Public
@@ -48,51 +52,35 @@ namespace Serenity
 			{
 				this.hasParent = false;
 				this.parent = null;
-				this.defaultEnvironment = new DomainSettingValue<string>();
-				this.omitEnvironment = new DomainSettingValue<bool>();
+				this.defaultResource = new DomainSettingValue<string>();
+				this.defaultResourceClass = new DomainSettingValue<string>();
 				this.omitResourceClass = new DomainSettingValue<bool>();
-				this.compressionThreshhold = new DomainSettingValue<int>();
+				this.theme = new DomainSettingValue<string>();
 			}
 			else
 			{
 				this.parent = parent;
-				this.defaultEnvironment = new DomainSettingValue<string>(this.parent.DefaultEnvironment);
-				this.omitEnvironment = new DomainSettingValue<bool>(this.parent.omitEnvironment);
+				this.defaultResource = new DomainSettingValue<string>(this.parent.defaultResource);
+				this.defaultResourceClass = new DomainSettingValue<string>(this.parent.defaultResourceClass);
 				this.omitResourceClass = new DomainSettingValue<bool>(this.parent.omitResourceClass);
-				this.compressionThreshhold = new DomainSettingValue<int>(this.parent.CompressionThreshhold);
+				this.theme = new DomainSettingValue<string>(this.parent.theme);
 			}
 		}
 		#endregion
 		#region Fields - Private
-		[NonSerialized]
-		[ThreadStatic]
-		private static DomainSettings current;
-		[NonSerialized]
+		private readonly DomainSettingValue<string> defaultResource;
+		private readonly DomainSettingValue<string> defaultResourceClass;
 		private bool hasParent;
 		private readonly string name;
-		[NonSerialized]
 		private readonly DomainSettings parent;
-		[NonSerialized]
-		private static DomainSettings root;
-		[NonSerialized]
-		private static readonly Dictionary<string, DomainSettings> settings;
+		private static readonly DomainSettings root;
+		private static readonly Dictionary<string, DomainSettings> instances;
+		private readonly DomainSettingValue<bool> omitResourceClass;
+		private readonly DomainSettingValue<string> theme;
 		#endregion
 		#region Fields - Public
-		private readonly DomainSettingValue<string> defaultEnvironment;
-		private readonly DomainSettingValue<bool> omitEnvironment;
-		private readonly DomainSettingValue<bool> omitResourceClass;
-		private readonly DomainSettingValue<int> compressionThreshhold;
-		#endregion
-		#region Methods - Private
-		private static DomainSettings CreateDefaultRoot()
-		{
-			DomainSettings root = new DomainSettings("");
-			root.defaultEnvironment.Value = "system";
-			root.compressionThreshhold.Value = 8192;
-			root.omitEnvironment.Value = false;
-			root.omitResourceClass.Value = false;
-			return root;
-		}
+		[ThreadStatic]
+		public static DomainSettings Current;
 		#endregion
 		#region Methods - Public
 		/// <summary>
@@ -139,9 +127,9 @@ namespace Serenity
 		{
 			if (string.IsNullOrEmpty(hostName) == false)
 			{
-				if (DomainSettings.settings.ContainsKey(hostName) == true)
+				if (DomainSettings.instances.ContainsKey(hostName) == true)
 				{
-					return DomainSettings.settings[hostName];
+					return DomainSettings.instances[hostName];
 				}
 				else if (recurse == true)
 				{
@@ -166,9 +154,9 @@ namespace Serenity
 				string[] newNames = new string[oldNames.Length - 1];
 				Array.Copy(oldNames, newNames, newNames.Length);
 				string newHostName = string.Join(".", newNames);
-				if (DomainSettings.settings.ContainsKey(newHostName) == true)
+				if (DomainSettings.instances.ContainsKey(newHostName) == true)
 				{
-					return DomainSettings.settings[newHostName];
+					return DomainSettings.instances[newHostName];
 				}
 				else
 				{
@@ -184,7 +172,7 @@ namespace Serenity
 		{
 			string domainPath = SPath.ResolveSpecialPath(SpecialFolder.Domains);
 			DomainSettings oldRoot = DomainSettings.root;
-			DomainSettings.settings.Clear();
+			DomainSettings.instances.Clear();
 			if (Directory.Exists(domainPath))
 			{
 				string[] files = Directory.GetFiles(domainPath);
@@ -193,12 +181,8 @@ namespace Serenity
 					DomainSettings settings = DomainSettings.Load(path);
 					if (settings != null)
 					{
-						DomainSettings.settings.Add(settings.name, settings);
+						DomainSettings.instances.Add(settings.name, settings);
 					}
-				}
-				if (DomainSettings.settings.ContainsKey(""))
-				{
-					DomainSettings.root = DomainSettings.settings[""];
 				}
 				return true;
 			}
@@ -209,31 +193,20 @@ namespace Serenity
 		}
 		public static bool SaveAll()
 		{
-			foreach (DomainSettings ds in DomainSettings.settings.Values)
+			foreach (DomainSettings ds in DomainSettings.instances.Values)
 			{
 				DomainSettings.Save(ds);
 			}
 
 			return true;
 		}
-		public static DomainSettings Load(string path)
+		public static DomainSettings Load(string name)
 		{
-			//start with null, thats what is returned if it couldnt be loaded.
 			DomainSettings result = null;
-
+			string path = SPath.Combine(SPath.DomainsFolder, name + ".ini");
 			if (File.Exists(path))
 			{
-				using (FileStream fs = File.Open(path, FileMode.Open))
-				{
-					BinaryFormatter formatter = new BinaryFormatter();
-
-					object settings = formatter.Deserialize(fs);
-
-					if (settings is DomainSettings)
-					{
-						result = (DomainSettings)settings;
-					}
-				}
+				
 			}
 			return result;
 		}
@@ -241,13 +214,7 @@ namespace Serenity
 		{
 			if (Directory.Exists(SPath.ResolveSpecialPath(SpecialFolder.Domains)))
 			{
-				using (FileStream fs = File.Open(Path.Combine(SPath.DomainsFolder, settings.name + ".ds"), FileMode.Create))
-				{
-					BinaryFormatter formatter = new BinaryFormatter();
 
-					formatter.Serialize(fs, settings);
-					fs.Close();
-				}
 				return true;
 			}
 			else
@@ -257,30 +224,32 @@ namespace Serenity
 		}
 		#endregion
 		#region Properties - Public
-		public DomainSettingValue<int> CompressionThreshhold
+		public static int Count
 		{
 			get
 			{
-				return this.compressionThreshhold;
+				return DomainSettings.instances.Count;
 			}
 		}
-
-		public static DomainSettings Current
+		public string DefaultResource
 		{
 			get
 			{
-				return DomainSettings.current;
-			}
-			set
-			{
-				DomainSettings.current = value;
+				return this.defaultResource.Value;
 			}
 		}
-		public DomainSettingValue<string> DefaultEnvironment
+		public string DefaultResourceClass
 		{
 			get
 			{
-				return this.defaultEnvironment;
+				return this.defaultResourceClass.Value;
+			}
+		}
+		public string DocumentRoot
+		{
+			get
+			{
+				return this.DocumentRoot;
 			}
 		}
 		/// <summary>
@@ -300,18 +269,18 @@ namespace Serenity
 				return this.name;
 			}
 		}
-		public DomainSettingValue<bool> OmitEnvironment
+		public bool OmitResourceClass
 		{
 			get
 			{
-				return this.omitEnvironment;
+				return this.omitResourceClass.Value;
 			}
 		}
-		public DomainSettingValue<bool> OmitResourceClass
+		public string Theme
 		{
 			get
 			{
-				return this.omitResourceClass;
+				return this.theme.Value;
 			}
 		}
 		#endregion

@@ -28,16 +28,14 @@ namespace Serenity.ResourceClasses
 		{
 			ContentPage page;
 
-			// http://localhost/system/dynamic/system/default
+			// http://localhost/dynamic/system/default
+
+			DomainSettings settings = DomainSettings.GetBestMatch(context.Request.Url);
 
 			if (context.Request.Url.Segments.Length > 1)
 			{
 				int n = 4;
-				if (DomainSettings.Current.OmitEnvironment.Value)
-				{
-					n--;
-				}
-				if (DomainSettings.Current.OmitResourceClass.Value)
+				if (settings.OmitResourceClass)
 				{
 					n--;
 				}

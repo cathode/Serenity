@@ -34,11 +34,9 @@ namespace Serenity.ResourceClasses
 			string[] segments = context.Request.Url.Segments;
 			int n = 1;
 
-			if (!DomainSettings.Current.OmitEnvironment.Value)
-			{
-				n++;
-			}
-			if (!DomainSettings.Current.OmitResourceClass.Value)
+			DomainSettings settings = DomainSettings.GetBestMatch(context.Request.Url);
+
+			if (!settings.OmitResourceClass)
 			{
 				n++;
 			}
@@ -54,7 +52,7 @@ namespace Serenity.ResourceClasses
 			}
 			else
 			{
-				resourceName = SerenityEnvironment.CurrentInstance.DefaultResourceName;
+				resourceName = DomainSettings.Current.DefaultResource;
 			}
 
 			if (resourceName == null)
@@ -65,10 +63,10 @@ namespace Serenity.ResourceClasses
 				return;
 			}
 
-			string resourcePath = Path.Combine(SerenityEnvironment.CurrentInstance.StaticFilesDirectory,
+			string resourcePath = Path.Combine(DomainSettings.Current.DocumentRoot,
 				SPath.SanitizePath(resourceName.TrimStart('/')));
 
-			Theme theme = SerenityEnvironment.CurrentInstance.Theme;
+			Theme theme = Theme.GetInstance(DomainSettings.Current.Theme);
 
 			if (resourceName == "")
 			{
@@ -102,11 +100,11 @@ namespace Serenity.ResourceClasses
 
 							HtmlElement E = Row.AppendTableCell();
 							E.AddClass("Icon");
-							E.AppendImage("/System/static/icons/folder.png");
+							E.AppendImage("/static/icons/folder.png");
 
 							E = Row.AppendTableCell();
 							string[] Parts = resourceName.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-							string Name = "/" + SerenityEnvironment.CurrentInstance.Key + "/static/" + string.Join("/", Parts, 0, Parts.Length - 1);
+							string Name = "/static/" + string.Join("/", Parts, 0, Parts.Length - 1);
 							if (Name.EndsWith("/") == false)
 							{
 								Name += "/";
@@ -121,7 +119,7 @@ namespace Serenity.ResourceClasses
 
 							HtmlElement E = Row.AppendTableCell();
 							E.AddClass("Icon");
-							E.AppendImage("/System/static/icons/folder.png");
+							E.AppendImage("/static/icons/folder.png");
 
 							E = Row.AppendTableCell();
 							E.AppendAnchor(Path.GetFileName(DirPath) + "/", Path.GetFileName(DirPath), Theme.CurrentInstance.Link);
@@ -147,7 +145,7 @@ namespace Serenity.ResourceClasses
 
 							HtmlElement cell = row.AppendTableCell();
 							cell.Class = "Icon";
-							cell.AppendImage("/System/static/Icons/" + fileIcon + ".png");
+							cell.AppendImage("/static/Icons/" + fileIcon + ".png");
 
 							cell = row.AppendTableCell();
 							cell.AppendAnchor(Path.GetFileName(FilePath), Path.GetFileName(FilePath), Theme.CurrentInstance.Link);

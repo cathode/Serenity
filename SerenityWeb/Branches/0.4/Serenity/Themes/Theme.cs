@@ -514,7 +514,7 @@ namespace Serenity.Themes
         {
             get
             {
-                return "/" + SerenityEnvironment.CurrentInstance.Key + "/Theme/Stylesheet";
+                return  "/Theme/Stylesheet";
             }
         }
         /// <summary>

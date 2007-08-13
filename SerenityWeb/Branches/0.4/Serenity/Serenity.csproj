@@ -105,7 +105,6 @@
     <Compile Include="SPath.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SerenityEnvironment.cs" />
     <Compile Include="Multiton.cs" />
     <Compile Include="DomainSettings.cs" />
     <Compile Include="Themes\Border.cs" />

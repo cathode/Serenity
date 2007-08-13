@@ -51,17 +51,10 @@ namespace Server.OperatingModes
 
             Theme.SystemInstance = theme;
 
-            SerenityEnvironment.LoadAllEnvironments();
-            if (SerenityEnvironment.ContainsInstance(SerenityInfo.SystemName) == true)
-            {
-                SerenityEnvironment.SystemInstance = SerenityEnvironment.GetInstance(SerenityInfo.SystemName);
-            }
-
             Module.LoadAllModules();
-            Module module = Module.GetModule("system");
 
-            Log.Write(string.Format("Loaded: {0} environments, {1} modules, {2} themes.",
-                SerenityEnvironment.Instances.Length,
+            Log.Write(string.Format("Loaded: {0} domains, {1} modules, {2} themes.",
+                DomainSettings.Current,
                 Module.ModuleCount,
                 Theme.Instances.Length), LogMessageLevel.Info);
 			WebDriverSettings settings = new WebDriverSettings();

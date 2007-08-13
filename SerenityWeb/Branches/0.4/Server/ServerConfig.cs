@@ -76,5 +76,6 @@ namespace Server
 		internal bool BlockingIO = true;
 		internal bool LogToConsole = true;
 		internal bool LogToFile = true;
+		internal bool OnDemandLoading = true;
 	}
 }

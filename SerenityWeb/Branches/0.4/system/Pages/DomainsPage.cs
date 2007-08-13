@@ -37,7 +37,7 @@ namespace Serenity.Pages
         }
         public override void OnRequest(Serenity.Web.CommonContext context)
         {
-            DomainSettings settings = DomainSettings.Current;
+            DomainSettings settings = DomainSettings.GetBestMatch(context.Request.Url);
 
             CommonResponse response = context.Response;
 
