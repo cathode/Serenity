@@ -100,7 +100,7 @@ namespace Serenity.ResourceClasses
 		<table class='AccentA'>
 			<tr>
 				<th></th>
-				<th>Directory Name</th>
+				<th class='Name'>Directory Name</th>
 				<th>Last Modified</th>
 			</tr>");
 					if (resourceName != "/")
@@ -112,9 +112,9 @@ namespace Serenity.ResourceClasses
 							parentPath += "/";
 						}
 						response.WriteLine(@"			<tr>
-				<td><img src='/static/icons/folder.png' alt='x' /></td>
-				<td><a href='" + parentPath + @"'>Parent Directory</a></td>
-				<td>- - -</td>
+				<td class='Icon'><img src='/static/icons/folder.png' alt='x' /></td>
+				<td class='Name'><a href='" + parentPath + @"'>Parent Directory</a></td>
+				<td class='Time'>- - -</td>
 			</tr>");
 
 					}
@@ -125,9 +125,9 @@ namespace Serenity.ResourceClasses
 						{
 							string dirName = Path.GetFileName(dirPath);
 							response.Write(@"			<tr>
-				<td><img src='/static/icons/folder.png' alt='x' /></td>
-				<td><a href='/static" + (resourceName.EndsWith("/") ? resourceName : resourceName + "/") + dirName + "'>" + dirName + @"</a></td>
-				<td>" + Directory.GetLastWriteTimeUtc(Path.GetFullPath(SPath.Combine(resourcePath, dirName))).ToString() + @"</td>
+				<td class='Icon'><img src='/static/icons/folder.png' alt='x' /></td>
+				<td class='Name'><a href='/static" + (resourceName.EndsWith("/") ? resourceName : resourceName + "/") + dirName + "'>" + dirName + @"</a></td>
+				<td class='Time'>" + Directory.GetLastWriteTimeUtc(Path.GetFullPath(SPath.Combine(resourcePath, dirName))).ToString() + @"</td>
 			</tr>");
 						}
 					}
@@ -143,7 +143,22 @@ namespace Serenity.ResourceClasses
 				<th>File Type</th>
 				<th>Last Modified</th>
 			</tr>");
-					
+					string[] files = Directory.GetFiles(resourcePath);
+					foreach (string filePath in files)
+					{
+						string fileName = Path.GetFileName(filePath);
+						FileInfo info = new FileInfo(filePath);
+						long fileSize = info.Length;
+						response.Write(@"
+			<tr>
+				<td class='Icon'><img src='/static/icons/" + FileTypeRegistry.GetIcon(Path.GetExtension(fileName)) + @".png' alt='x' /></td>
+				<td class='Name'><a href='/static" + resourceName + fileName + "'>" + fileName + @"</a></td>
+				<td class='Size'>" + fileSize.ToString() +@"</td>
+				<td class='Type'>" + FileTypeRegistry.GetDescription(Path.GetExtension(fileName)) + @"</td>
+				<td class='Time'>" + File.GetLastWriteTimeUtc(filePath).ToString() + @"</td>
+			</td>
+			</tr>");
+					}
 					response.Write(@"		</table>
 	</div>
 </body>

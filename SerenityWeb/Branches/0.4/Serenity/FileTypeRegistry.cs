@@ -22,102 +22,19 @@ namespace Serenity
 {
 	public static class FileTypeRegistry
 	{
+		#region Constructors - Private
+		static FileTypeRegistry()
+		{
+			FileTypeRegistry.DefaultEntry = new FileTypeEntry();
+			FileTypeRegistry.DefaultEntry.Description = "File";
+			FileTypeRegistry.DefaultEntry.Icon = "page_white";
+			FileTypeRegistry.DefaultEntry.MimeType = MimeType.Default;
+			FileTypeRegistry.DefaultEntry.UseCompression = false;
+		}
+		#endregion
 		#region Methods - Public
 		public static void Initialize()
 		{
-			/*
-[c]
-Compress = true
-Description = "C Code File"
-Icon = "page_white_c"
-MimeType = "text/plain"
-
-[cpp]
-Compress = true
-Description = "C++ Code File"
-Icon = "page_white_cplusplus"
-MimeType = "text/plain"
-
-[cs]
-Compress = true
-Description = "CSharp Code File"
-Icon = "page_white_csharp"
-MimeType = "text/plain"
-
-[css]
-Compress = true
-Description = "Cascading Style Sheet"
-Icon = "page_white_text"
-MimeType = "text/css"
-
-[dll]
-Compress = false
-Description = "Application Extension"
-Icon = "page_white_gear"
-MimeType = "application/octet-stream"
-
-[exe]
-Compress = false
-Description = "Application"
-Icon = "page_white_gear"
-MimeType = "application/octet-stream"
-
-[html]
-Compress = true
-Description = "HTML Document"
-MimeType = "text/html"
-
-[pdf]
-Compress = true
-Description = "PDF Document"
-Icon = "page_white_acrobat"
-MimeType = "application/pdf"
-
-[png]
-Compress = false
-Description = "PNG Image"
-Icon = "page_white_picture"
-Type = "image/png"
-
-[rar]
-Compress = false
-Description = "RAR Archive"
-Icon = "page_white_zip"
-Type = "application/x-rar-compressed"
-
-[sql]
-Compress = true
-Description = "SQL Script"
-Icon = "page_white_database"
-Type = "text/plain"
-
-[txt]
-Compress = true
-Description = "Text Document"
-icon = "page_white"
-MimeType = "text/plain"
-
-[zip]
-Compress = false
-Description = "ZIP Archive"
-Icon = "page_white_zip"
-Type = "application/zip"
-			 */
-			entries.Add("c", new FileTypeEntry("C Code File", MimeType.TextPlain, true));
-			entries.Add("cpp", new FileTypeEntry("C++ Code File", MimeType.TextPlain, true));
-			entries.Add("cs", new FileTypeEntry("C# Code File", MimeType.TextPlain, true));
-			entries.Add("css", new FileTypeEntry("Cascading Style Sheet", MimeType.TextCss, true));
-			entries.Add("dll", new FileTypeEntry("Application Extension", MimeType.ApplicationOctetStream, false));
-			entries.Add("exe", new FileTypeEntry("Application", MimeType.ApplicationOctetStream, false));
-			entries.Add("html", new FileTypeEntry("HTML Document", MimeType.TextHtml, true));
-			entries.Add("pdf", new FileTypeEntry("PDF Document", MimeType.FromString("application/pdf"), true));
-			entries.Add("png", new FileTypeEntry("PNG Image", MimeType.ImagePng, false));
-			entries.Add("rar", new FileTypeEntry("RAR Archive", MimeType.FromString("application/x-rar-compressed"), false));
-			entries.Add("sql", new FileTypeEntry("SQL Script", MimeType.TextPlain, true));
-			entries.Add("txt", new FileTypeEntry("Text Document", MimeType.TextPlain, true));
-			entries.Add("zip", new FileTypeEntry("ZIP Archive", MimeType.FromString("application/zip"), false));
-			/*
-			 * WS: Some unknown problem with LibINI, disabling this code block untill its fixed.
 			
             FileTypeRegistry.entries = new Dictionary<string, FileTypeEntry>();
             IniFile file = new IniFile(SPath.ResolveSpecialPath(SpecialFile.FileTypeRegistry));
@@ -132,14 +49,14 @@ Type = "application/zip"
 
             foreach (IniSection section in file)
             {
-                string description, extension;
+                string description, extension, icon;
 				MimeType mimeType;
-                bool compress;
+                bool useCompression;
 
                 extension = section.Name;
-                if (string.IsNullOrEmpty(extension) == false)
+                if (!string.IsNullOrEmpty(extension))
                 {
-                    if (section.ContainsEntry("Description") == true)
+                    if (section.ContainsEntry("Description"))
                     {
                         description = section["Description"].Value.Trim('"');
                     }
@@ -148,7 +65,7 @@ Type = "application/zip"
                         description = extension + " file";
                     }
 
-                    if (section.ContainsEntry("MimeType") == true)
+                    if (section.ContainsEntry("MimeType"))
                     {
 						string mt = section["MimeType"].Value.Trim('"');
 						mimeType = MimeType.FromString(mt);
@@ -157,29 +74,41 @@ Type = "application/zip"
                     {
 						mimeType = MimeType.Default;
                     }
-                    if (section.ContainsEntry("Compress") == true)
+                    if (section.ContainsEntry("Compress"))
                     {
                         try
                         {
-                            compress = bool.Parse(section["Compress"].Value.Trim('"'));
+                            useCompression = bool.Parse(section["Compress"].Value.Trim('"'));
                         }
                         catch
                         {
-                            compress = false;
+                            useCompression = false;
                         }
                     }
                     else
                     {
-                        compress = false;
+                        useCompression = false;
                     }
-                    FileTypeRegistry.entries.Add(extension, new FileTypeEntry(description, mimeType, compress));
+					if (section.ContainsEntry("Icon"))
+					{
+						icon = section["Icon"].Value.Trim('"');
+					}
+					else
+					{
+						icon = "page_white";
+					}
+					FileTypeEntry entry = new FileTypeEntry();
+					entry.Description = description;
+					entry.Icon = icon;
+					entry.MimeType = mimeType;
+					entry.UseCompression = useCompression;
+                    FileTypeRegistry.entries.Add(extension, entry);
                 }
             }
-			*/
 		}
 
 		private static Dictionary<string, FileTypeEntry> entries = new Dictionary<string, FileTypeEntry>();
-		public static readonly FileTypeEntry DefaultEntry = new FileTypeEntry("File", MimeType.Default, false);
+		public static readonly FileTypeEntry DefaultEntry;
 
 		public static bool GetCompressionUsage(string extension)
 		{
@@ -204,17 +133,7 @@ Type = "application/zip"
 				return FileTypeRegistry.DefaultEntry.Description;
 			}
 		}
-		public static MimeType GetMimeType(string extension)
-		{
-			if (FileTypeRegistry.entries.ContainsKey(extension) == true)
-			{
-				return FileTypeRegistry.entries[extension].MimeType;
-			}
-			else
-			{
-				return FileTypeRegistry.DefaultEntry.MimeType;
-			}
-		}
+		
 		public static FileTypeEntry GetEntry(string extension)
 		{
 			if (FileTypeRegistry.entries.ContainsKey(extension) == true)
@@ -224,6 +143,28 @@ Type = "application/zip"
 			else
 			{
 				return FileTypeRegistry.DefaultEntry;
+			}
+		}
+		public static string GetIcon(string extension)
+		{
+			if (FileTypeRegistry.entries.ContainsKey(extension))
+			{
+				return FileTypeRegistry.entries[extension].Icon;
+			}
+			else
+			{
+				return FileTypeRegistry.DefaultEntry.Icon;
+			}
+		}
+		public static MimeType GetMimeType(string extension)
+		{
+			if (FileTypeRegistry.entries.ContainsKey(extension) == true)
+			{
+				return FileTypeRegistry.entries[extension].MimeType;
+			}
+			else
+			{
+				return FileTypeRegistry.DefaultEntry.MimeType;
 			}
 		}
 		public static IEnumerable<string> GetRegisteredExtensions()
