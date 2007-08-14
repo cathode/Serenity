@@ -83,24 +83,22 @@ namespace Serenity.ResourceClasses
 				//Directory request
 				if (Directory.Exists(resourcePath) == true)
 				{
-#if !RAW
 					CommonResponse response = context.Response;
 
 					response.WriteLine(Doctype.XHTML11.ToString());
-					response.WriteLine(@"<html xmlns='http://www.w3.org/1999/xhtml\'>
+					response.WriteLine(@"<html xmlns='http://www.w3.org/1999/xhtml'>
 <head>
 	<title>Index of " + resourceName + @"</title>
 	<link rel='stylesheet' type='text/css' href='/static/index.css' />
-	<link rel='stylesheet' type='text/css' href='/theme/stylesheet' />
 </head>
 <body>
-	<div class='HeadingA'>Index of " + resourceName + @"</div>
-	<div class='HeadingB'>Directories:</div>
+	<div class='TitleMain'>Index of " + resourceName + @"</div>
+	<div class='Title'>Directories:</div>
 	<div class='List'>
-		<table class='AccentA'>
+		<table>
 			<tr>
 				<th></th>
-				<th class='Name'>Directory Name</th>
+				<th>Directory Name</th>
 				<th>Last Modified</th>
 			</tr>");
 					if (resourceName != "/")
@@ -133,7 +131,7 @@ namespace Serenity.ResourceClasses
 					}
 					response.WriteLine(@"		</table>
 	</div>
-	<div class='HeadingB'>Files:</div>
+	<div class='Title'>Files:</div>
 	<div class='List'>
 		<table>
 			<tr>
@@ -164,101 +162,6 @@ namespace Serenity.ResourceClasses
 </body>
 </html>");
 					response.MimeType = MimeType.TextHtml;
-#else
-					Theme theme = Theme.GetInstance(DomainSettings.Current.Theme);
-
-					HtmlDocument Doc = new HtmlDocument();
-					Doc.BodyElement.Class = Theme.CurrentInstance.ContentA.Class;
-
-					Doc.AddStylesheet(Theme.CurrentInstance.StylesheetUrl);
-					Doc.AddStylesheet("/static/index.css");
-					Doc.Title = "Index of " + resourceName;
-					HtmlElement Div = Doc.BodyElement.AppendDivision("Index of " + resourceName, Theme.CurrentInstance.HeadingA);
-					string[] SubDirs = Directory.GetDirectories(resourcePath);
-					if ((SubDirs.Length > 0) || (resourceName != "/"))
-					{
-						Div = Doc.BodyElement.AppendDivision("Directories:", Theme.CurrentInstance.HeadingB);
-						Div = Doc.BodyElement.AppendDivision();
-						Div.AddClass("List");
-						string[] Columns = new string[3] { "", "Directory Name", "Last Modified" };
-						HtmlElement Table = Div.AppendTable(Columns);
-						Table.Class = Theme.CurrentInstance.AccentA.Class;
-						if (resourceName != "/")
-						{
-							HtmlElement Row = Table.AppendTableRow();
-
-							HtmlElement E = Row.AppendTableCell();
-							E.AddClass("Icon");
-							E.AppendImage("/static/icons/folder.png");
-
-							E = Row.AppendTableCell();
-							string[] Parts = resourceName.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-							string Name = "/static/" + string.Join("/", Parts, 0, Parts.Length - 1);
-							if (Name.EndsWith("/") == false)
-							{
-								Name += "/";
-							}
-							E.AppendAnchor(Name, "Parent Directory", Theme.CurrentInstance.Link);
-							E.AddClass("Name");
-							Row.AppendTableCell("- - -").AddClass("Time");
-						}
-						foreach (string DirPath in SubDirs)
-						{
-							HtmlElement Row = Table.AppendTableRow();
-
-							HtmlElement E = Row.AppendTableCell();
-							E.AddClass("Icon");
-							E.AppendImage("/static/icons/folder.png");
-
-							E = Row.AppendTableCell();
-							E.AppendAnchor(Path.GetFileName(DirPath) + "/", Path.GetFileName(DirPath), Theme.CurrentInstance.Link);
-							E.AddClass("Name");
-							Row.AppendTableCell(Directory.GetLastWriteTimeUtc(DirPath).ToString("s")).AddClass("Time");
-						}
-					}
-					string[] Files = Directory.GetFiles(resourcePath);
-					if (Files.Length > 0)
-					{
-						Div = Doc.BodyElement.AppendDivision("Files:", Theme.CurrentInstance.HeadingB);
-						string[] Columns = new string[5] { "", "File Name", "File Size", "File Type", "Last Modified" };
-						Div = Doc.BodyElement.AppendDivision();
-						Div.AddClass("List");
-						HtmlElement Table = Div.AppendTable(Columns);
-						foreach (string FilePath in Files)
-						{
-							string ext = Path.GetExtension(FilePath).TrimStart('.');
-							string fileType = FileTypeRegistry.GetDescription(ext);
-							string fileIcon = "page_white";
-							
-							HtmlElement row = Table.AppendTableRow();
-
-							HtmlElement cell = row.AppendTableCell();
-							cell.Class = "Icon";
-							cell.AppendImage("/static/Icons/" + fileIcon + ".png");
-
-							cell = row.AppendTableCell();
-							cell.AppendAnchor(Path.GetFileName(FilePath), Path.GetFileName(FilePath), Theme.CurrentInstance.Link);
-							cell.Class = "Name";
-
-							row.AppendTableCell("Unknown").Class = "Size";
-							row.AppendTableCell(fileType).Class = "Type";
-							row.AppendTableCell(File.GetLastWriteTimeUtc(FilePath).ToString("s")).Class = "Time";
-						}
-					}
-					HtmlElement FooterDiv = Doc.BodyElement.AppendDivision();
-					FooterDiv.AppendText("Powered by " + SerenityInfo.Name + " - " + SerenityInfo.Copyright);
-					FooterDiv.AppendBreak();
-					FooterDiv.AppendText("Icons by Fam - ");
-					FooterDiv.AppendAnchor("http://famfamfam.com/", "FamFamFam.com");
-					FooterDiv.AddClass("Footer");
-
-					context.Response.Status = StatusCode.Http200Ok;
-					context.Response.MimeType = MimeType.TextHtml;
-					context.Response.UseCompression = true;
-					//BR: Moved things around to make sure that the mimetype and others
-					//are getting set before we write anything out.
-					context.Response.Write(Doc.SaveMarkup());
-#endif
 				}
 				else
 				{

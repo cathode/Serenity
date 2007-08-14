@@ -11,7 +11,7 @@ namespace Server
 		internal bool Read(string path)
 		{
 			IniFile file = new IniFile(path);
-			file.Read();
+			file.Load();
 
 
 			if (file.ContainsSection("General"))

@@ -38,14 +38,8 @@ namespace Serenity
 			
             FileTypeRegistry.entries = new Dictionary<string, FileTypeEntry>();
             IniFile file = new IniFile(SPath.ResolveSpecialPath(SpecialFile.FileTypeRegistry));
-            try
-            {
-                file.Read();
-            }
-            catch (IniOperationException opEx)
-            {
-                Console.WriteLine(opEx.ToString());
-            }
+			file.CaseSensitiveRetrieval = false;
+			file.Load();
 
             foreach (IniSection section in file)
             {
@@ -65,7 +59,7 @@ namespace Serenity
                         description = extension + " file";
                     }
 
-                    if (section.ContainsEntry("MimeType"))
+					if (section.ContainsEntry("MimeType"))
                     {
 						string mt = section["MimeType"].Value.Trim('"');
 						mimeType = MimeType.FromString(mt);
@@ -97,12 +91,12 @@ namespace Serenity
 					{
 						icon = "page_white";
 					}
-					FileTypeEntry entry = new FileTypeEntry();
-					entry.Description = description;
-					entry.Icon = icon;
-					entry.MimeType = mimeType;
-					entry.UseCompression = useCompression;
-                    FileTypeRegistry.entries.Add(extension, entry);
+					FileTypeEntry typeEntry = new FileTypeEntry();
+					typeEntry.Description = description;
+					typeEntry.Icon = icon;
+					typeEntry.MimeType = mimeType;
+					typeEntry.UseCompression = useCompression;
+					FileTypeRegistry.entries.Add(extension, typeEntry);
                 }
             }
 		}

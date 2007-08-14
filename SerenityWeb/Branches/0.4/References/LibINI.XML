@@ -4,170 +4,6 @@
         <name>LibINI</name>
     </assembly>
     <members>
-        <member name="T:LibINI.IniEntry">
-            <summary>
-            Represents a single name/value pair inside of an IniSection. This class cannot be inherited.
-            </summary>
-        </member>
-        <member name="M:LibINI.IniEntry.Clone">
-            <summary>
-            Creates and returns a deep clone of the current IniEntry.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:LibINI.IniEntry.Clone(LibINI.IniFile)">
-            <summary>
-            Creates and returns a deep clone of the current IniEntry.
-            </summary>
-            <returns>A deep clone of the current IniEntry.</returns>
-        </member>
-        <member name="M:LibINI.IniEntry.ToString">
-            <summary>
-            Creates a string representation of the current IniEntry.
-            </summary>
-            <returns>A string representation of the current IniEntry.</returns>
-        </member>
-        <member name="P:LibINI.IniEntry.Comment">
-            <summary>
-            Gets or sets a comment associated with the current IniEntry.
-            </summary>
-        </member>
-        <member name="P:LibINI.IniEntry.File">
-            <summary>
-            Gets the IniFile that owns the current IniEntry.
-            </summary>
-        </member>
-        <member name="P:LibINI.IniEntry.Name">
-            <summary>
-            Gets the name of the current IniEntry.
-            </summary>
-        </member>
-        <member name="P:LibINI.IniEntry.Value">
-            <summary>
-            Gets or sets the value portion of the current IniEntry.
-            </summary>
-        </member>
-        <member name="T:LibINI.IniSection">
-            <summary>
-            Represents a grouping of key/value pairs (IniEntry objects).
-            </summary>
-        </member>
-        <member name="M:LibINI.IniSection.AddEntry(LibINI.IniEntry)">
-            <summary>
-            Adds an IniEntry object to the current IniSection.
-            </summary>
-            <param name="entry">The IniEntry object to be added.</param>
-        </member>
-        <member name="M:LibINI.IniSection.Clone">
-            <summary>
-            Creates a deep copy of the current IniSection.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:LibINI.IniSection.Clone(LibINI.IniFile)">
-            <summary>
-            Creates a deep copy of the current IniSection.
-            </summary>
-            <returns>A full clone of the current IniSection.</returns>
-        </member>
-        <member name="M:LibINI.IniSection.CreateEntry(System.String)">
-            <summary>
-            Creates a new IniEntry using the specified name,
-            adds it to the current IniSection, and returns it for further use.
-            </summary>
-            <param name="name"></param>
-            <returns></returns>
-        </member>
-        <member name="M:LibINI.IniSection.CreateEntry(System.String,System.String)">
-            <summary>
-            Creates a new IniEntry using the specified name and value,
-            adds it to the current IniSection, and returns it for further use.
-            </summary>
-            <param name="name">The name of the new IniEntry.</param>
-            <param name="value">A value to initialize the new IniEntry with.</param>
-        </member>
-        <member name="M:LibINI.IniSection.ContainsEntry(LibINI.IniEntry)">
-            <summary>
-            Determines whether an IniEntry exists in the current IniSection.
-            </summary>
-            <param name="entry">The IniEntry object to check existance for.</param>
-            <returns>True if the object is in the current IniSection's IniEntry list, otherwise false.</returns>
-        </member>
-        <member name="M:LibINI.IniSection.ContainsEntry(System.String)">
-            <summary>
-            Determines whether an IniEntry exists in the current IniSection.
-            </summary>
-            <param name="entry">The name of the IniEntry object to check existance for.</param>
-            <returns>True if the object is in the current IniSection's IniEntry list, otherwise false.</returns>
-        </member>
-        <member name="M:LibINI.IniSection.GetEnumerator">
-            <summary>
-            Gets an enumerator for the current IniSection.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:LibINI.IniSection.RemoveEntry(LibINI.IniEntry)">
-            <summary>
-            Removes an IniEntry from the current IniSection.
-            </summary>
-            <param name="entry">The IniEntry to remove.</param>
-        </member>
-        <member name="M:LibINI.IniSection.RemoveEntry(System.String)">
-            <summary>
-            Removes an IniEntry from the current IniSection.
-            </summary>
-            <param name="entry">The name of the IniEntry to remove.</param>
-        </member>
-        <member name="M:LibINI.IniSection.RenameEntry(System.String,System.String)">
-            <summary>
-            Renames an IniEntry.
-            </summary>
-            <remarks>
-            The IniEntry must exist in the current IniSection.
-            </remarks>
-            <param name="oldName">The name of the IniEntry to rename.</param>
-            <param name="newName">The new name of the IniEntry.</param>
-        </member>
-        <member name="M:LibINI.IniSection.ToString">
-            <summary>
-            Creates and returns an INI-format file fragment representing the
-            current IniSection and it's list of IniEntry objects.
-            </summary>
-            <returns>A string containing an INI-format file fragment.</returns>
-        </member>
-        <member name="M:LibINI.IniSection.System#Collections#IEnumerable#GetEnumerator">
-            <summary>
-            Gets a nongeneric enumerator for the current IniSection.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="P:LibINI.IniSection.Item(System.String)">
-            <summary>
-            Gets an IniEntry contained in the current IniSection.
-            </summary>
-            <param name="name">The name of the IniEntry to get.</param>
-            <returns>An IniEntry named name.</returns>
-        </member>
-        <member name="P:LibINI.IniSection.Comment">
-            <summary>
-            Gets or sets a comment associated with the current IniSection.
-            </summary>
-        </member>
-        <member name="P:LibINI.IniSection.EntryCount">
-            <summary>
-            Gets the number of IniEntries in the current IniSection.
-            </summary>
-        </member>
-        <member name="P:LibINI.IniSection.File">
-            <summary>
-            Gets the IniFile that the current IniSection is a part of.
-            </summary>
-        </member>
-        <member name="P:LibINI.IniSection.Name">
-            <summary>
-            Gets the name of the current IniElement.
-            </summary>
-        </member>
         <member name="T:LibINI.IniFile">
             <summary>
             Represents an INI-format configuration settings file, and contains methods to add,
@@ -328,7 +164,7 @@
             <param name="value">The value to validate.</param>
             <returns>False if the value paramater contains any invalid chars.</returns>
         </member>
-        <member name="M:LibINI.IniFile.Read">
+        <member name="M:LibINI.IniFile.Load">
             <summary>
             Parses the INI format file located at the
             location property of the current File,
@@ -391,17 +227,17 @@
             <param name="oldName">The name of the IniSection to rename.</param>
             <param name="newName">The new name of the IniSection.</param>
         </member>
+        <member name="M:LibINI.IniFile.Save">
+            <summary>
+            Writes the INI-format representation of the current File to the file
+            located at the location property.
+            </summary>
+        </member>
         <member name="M:LibINI.IniFile.ToString">
             <summary>
             Returns a string representation of the current File.
             </summary>
             <returns>A string representation of the current File.</returns>
-        </member>
-        <member name="M:LibINI.IniFile.Write">
-            <summary>
-            Writes the INI-format representation of the current File to the file
-            located at the location property.
-            </summary>
         </member>
         <member name="P:LibINI.IniFile.Item(System.String)">
             <summary>
@@ -486,34 +322,168 @@
             Gets or sets the encoding used for writing only.
             </summary>
         </member>
-        <member name="T:LibINI.IniOperationException">
+        <member name="T:LibINI.IniEntry">
             <summary>
-            Represents an error that occurs during an operation on an INI file.
+            Represents a single name/value pair inside of an IniSection. This class cannot be inherited.
             </summary>
         </member>
-        <member name="M:LibINI.IniOperationException.ToString">
+        <member name="M:LibINI.IniEntry.Clone">
             <summary>
-            Creates and returns a string representation of the current IniOperationException.
+            Creates and returns a deep clone of the current IniEntry.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:LibINI.IniEntry.Clone(LibINI.IniFile)">
+            <summary>
+            Creates and returns a deep clone of the current IniEntry.
+            </summary>
+            <returns>A deep clone of the current IniEntry.</returns>
+        </member>
+        <member name="M:LibINI.IniEntry.ToString">
+            <summary>
+            Creates a string representation of the current IniEntry.
+            </summary>
+            <returns>A string representation of the current IniEntry.</returns>
+        </member>
+        <member name="P:LibINI.IniEntry.Comment">
+            <summary>
+            Gets or sets a comment associated with the current IniEntry.
             </summary>
         </member>
-        <member name="T:LibINI.IniReadException">
+        <member name="P:LibINI.IniEntry.File">
             <summary>
-            Represents an error that occurs during the reading of an INI file.
+            Gets the IniFile that owns the current IniEntry.
             </summary>
         </member>
-        <member name="M:LibINI.IniReadException.ToString">
+        <member name="P:LibINI.IniEntry.Name">
             <summary>
-            Creates and returns a string representation of the current IniReadException.
+            Gets the name of the current IniEntry.
             </summary>
         </member>
-        <member name="P:LibINI.IniReadException.LineNumber">
+        <member name="P:LibINI.IniEntry.Value">
             <summary>
-            Gets the line number on which the current IniReadException happened.
+            Gets or sets the value portion of the current IniEntry.
             </summary>
         </member>
-        <member name="P:LibINI.IniReadException.LineContent">
+        <member name="T:LibINI.IniSection">
             <summary>
-            Gets the content of the line which caused the current IniReadException.
+            Represents a grouping of key/value pairs (IniEntry objects).
+            </summary>
+        </member>
+        <member name="M:LibINI.IniSection.AddEntry(LibINI.IniEntry)">
+            <summary>
+            Adds an IniEntry object to the current IniSection.
+            </summary>
+            <param name="entry">The IniEntry object to be added.</param>
+        </member>
+        <member name="M:LibINI.IniSection.Clone">
+            <summary>
+            Creates a deep copy of the current IniSection.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:LibINI.IniSection.Clone(LibINI.IniFile)">
+            <summary>
+            Creates a deep copy of the current IniSection.
+            </summary>
+            <returns>A full clone of the current IniSection.</returns>
+        </member>
+        <member name="M:LibINI.IniSection.CreateEntry(System.String)">
+            <summary>
+            Creates a new IniEntry using the specified name,
+            adds it to the current IniSection, and returns it for further use.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LibINI.IniSection.CreateEntry(System.String,System.String)">
+            <summary>
+            Creates a new IniEntry using the specified name and value,
+            adds it to the current IniSection, and returns it for further use.
+            </summary>
+            <param name="name">The name of the new IniEntry.</param>
+            <param name="value">A value to initialize the new IniEntry with.</param>
+        </member>
+        <member name="M:LibINI.IniSection.ContainsEntry(LibINI.IniEntry)">
+            <summary>
+            Determines whether an IniEntry exists in the current IniSection.
+            </summary>
+            <param name="entry">The IniEntry object to check existance for.</param>
+            <returns>True if the object is in the current IniSection's IniEntry list, otherwise false.</returns>
+        </member>
+        <member name="M:LibINI.IniSection.ContainsEntry(System.String)">
+            <summary>
+            Determines whether an IniEntry exists in the current IniSection.
+            </summary>
+            <param name="entryName">The name of the IniEntry object to check existance for.</param>
+            <returns>True if the object is in the current IniSection's IniEntry list, otherwise false.</returns>
+        </member>
+        <member name="M:LibINI.IniSection.GetEnumerator">
+            <summary>
+            Gets an enumerator for the current IniSection.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:LibINI.IniSection.RemoveEntry(LibINI.IniEntry)">
+            <summary>
+            Removes an IniEntry from the current IniSection.
+            </summary>
+            <param name="entry">The IniEntry to remove.</param>
+        </member>
+        <member name="M:LibINI.IniSection.RemoveEntry(System.String)">
+            <summary>
+            Removes an IniEntry from the current IniSection.
+            </summary>
+            <param name="entryName">The name of the IniEntry to remove.</param>
+        </member>
+        <member name="M:LibINI.IniSection.RenameEntry(System.String,System.String)">
+            <summary>
+            Renames an IniEntry.
+            </summary>
+            <remarks>
+            The IniEntry must exist in the current IniSection.
+            </remarks>
+            <param name="oldName">The name of the IniEntry to rename.</param>
+            <param name="newName">The new name of the IniEntry.</param>
+        </member>
+        <member name="M:LibINI.IniSection.ToString">
+            <summary>
+            Creates and returns an INI-format file fragment representing the
+            current IniSection and it's list of IniEntry objects.
+            </summary>
+            <returns>A string containing an INI-format file fragment.</returns>
+        </member>
+        <member name="M:LibINI.IniSection.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Gets a nongeneric enumerator for the current IniSection.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:LibINI.IniSection.Item(System.String)">
+            <summary>
+            Gets an IniEntry contained in the current IniSection.
+            </summary>
+            <param name="name">The name of the IniEntry to get.</param>
+            <returns>An IniEntry named name.</returns>
+        </member>
+        <member name="P:LibINI.IniSection.Comment">
+            <summary>
+            Gets or sets a comment associated with the current IniSection.
+            </summary>
+        </member>
+        <member name="P:LibINI.IniSection.EntryCount">
+            <summary>
+            Gets the number of IniEntries in the current IniSection.
+            </summary>
+        </member>
+        <member name="P:LibINI.IniSection.File">
+            <summary>
+            Gets the IniFile that the current IniSection is a part of.
+            </summary>
+        </member>
+        <member name="P:LibINI.IniSection.Name">
+            <summary>
+            Gets the name of the current IniElement.
             </summary>
         </member>
     </members>
