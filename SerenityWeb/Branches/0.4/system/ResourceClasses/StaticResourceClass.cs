@@ -21,13 +21,16 @@ using Serenity.Xml.Html;
 
 namespace Serenity.ResourceClasses
 {
-	internal sealed class staticResourceClass : ResourceClass
+	internal sealed class StaticResourceClass : ResourceClass
 	{
-		public staticResourceClass()
+		#region Constructors - Public
+		public StaticResourceClass()
 			: base("static")
 		{
 
 		}
+		#endregion
+		#region Methods - Public
 		public override void HandleContext(CommonContext context)
 		{
 			string resourceName;
@@ -62,22 +65,25 @@ namespace Serenity.ResourceClasses
 				return;
 			}
 
-			string resourcePath = Path.Combine(DomainSettings.Current.DocumentRoot,
-				SPath.SanitizePath(resourceName.TrimStart('/')));
+			string resourcePath = Path.GetFullPath(Path.Combine(DomainSettings.Current.DocumentRoot,
+				SPath.SanitizePath(resourceName.TrimStart('/'))));
 
-			Theme theme = Theme.GetInstance(DomainSettings.Current.Theme);
 
 			if (resourceName == "")
 			{
 				resourceName = "/";
 			}
+			else if (!resourceName.EndsWith("/") && !File.Exists(resourcePath))
+			{
+				resourceName += "/";
+			}
 
-			if (resourceName.EndsWith("/") == true)
+			if (resourceName.EndsWith("/"))
 			{
 				//Directory request
 				if (Directory.Exists(resourcePath) == true)
 				{
-#if RAW
+#if !RAW
 					CommonResponse response = context.Response;
 
 					response.WriteLine(Doctype.XHTML11.ToString());
@@ -96,8 +102,36 @@ namespace Serenity.ResourceClasses
 				<th></th>
 				<th>Directory Name</th>
 				<th>Last Modified</th>
-			</tr>
-		</table>
+			</tr>");
+					if (resourceName != "/")
+					{
+						string[] parts = resourceName.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+						string parentPath = "/static/" + string.Join("/", parts, 0, parts.Length - 1);
+						if (!parentPath.EndsWith("/"))
+						{
+							parentPath += "/";
+						}
+						response.WriteLine(@"			<tr>
+				<td><img src='/static/icons/folder.png' alt='x' /></td>
+				<td><a href='" + parentPath + @"'>Parent Directory</a></td>
+				<td>- - -</td>
+			</tr>");
+
+					}
+					string[] dirs = Directory.GetDirectories(resourcePath);
+					if (dirs.Length > 0)
+					{
+						foreach (string dirPath in dirs)
+						{
+							string dirName = Path.GetFileName(dirPath);
+							response.Write(@"			<tr>
+				<td><img src='/static/icons/folder.png' alt='x' /></td>
+				<td><a href='/static" + (resourceName.EndsWith("/") ? resourceName : resourceName + "/") + dirName + "'>" + dirName + @"</a></td>
+				<td>" + Directory.GetLastWriteTimeUtc(Path.GetFullPath(SPath.Combine(resourcePath, dirName))).ToString() + @"</td>
+			</tr>");
+						}
+					}
+					response.WriteLine(@"		</table>
 	</div>
 	<div class='HeadingB'>Files:</div>
 	<div class='List'>
@@ -108,13 +142,16 @@ namespace Serenity.ResourceClasses
 				<th>File Size</th>
 				<th>File Type</th>
 				<th>Last Modified</th>
-			</tr>
-		</table>
+			</tr>");
+					
+					response.Write(@"		</table>
 	</div>
 </body>
 </html>");
 					response.MimeType = MimeType.TextHtml;
 #else
+					Theme theme = Theme.GetInstance(DomainSettings.Current.Theme);
+
 					HtmlDocument Doc = new HtmlDocument();
 					Doc.BodyElement.Class = Theme.CurrentInstance.ContentA.Class;
 
@@ -233,10 +270,10 @@ namespace Serenity.ResourceClasses
 				}
 				else
 				{
-					context.Response.Status = StatusCode.Http404NotFound;
-					context.Response.Write("Requested resource does not exist.");
+					ErrorHandler.Handle(context, StatusCode.Http404NotFound, resourceName);
 				}
 			}
 		}
+		#endregion
 	}
 }
