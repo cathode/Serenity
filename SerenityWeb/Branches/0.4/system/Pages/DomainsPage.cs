@@ -44,7 +44,7 @@ namespace Serenity.Pages
 
             response.Write("Working with domainsettings: " + settings.Name);
 
-            response.MimeType = MimeType.ApplicationXml;
+            response.MimeType = MimeType.TextHtml;
         }
         public override void OnShutdown()
         {

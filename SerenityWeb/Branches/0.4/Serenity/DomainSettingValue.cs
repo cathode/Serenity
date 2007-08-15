@@ -33,7 +33,7 @@ namespace Serenity
         }
         #endregion
         #region Fields - Private
-        private readonly DomainSettingValue<T> parent;
+        private DomainSettingValue<T> parent;
         private T value;
         #endregion
         #region Fields - Internal
@@ -41,19 +41,23 @@ namespace Serenity
         internal bool hasParent;
         #endregion
         #region Properties - Public
-        public bool IsDefined
+        internal bool IsDefined
         {
             get
             {
                 return this.isDefined;
             }
         }
-        public DomainSettingValue<T> Parent
+        internal DomainSettingValue<T> Parent
         {
             get
             {
                 return this.parent;
             }
+			set
+			{
+				this.parent = value;
+			}
         }
         public T Value
         {

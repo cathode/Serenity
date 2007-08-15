@@ -51,7 +51,7 @@ namespace Serenity.ResourceClasses
 			}
 			else
 			{
-				resourceName = DomainSettings.Current.DefaultResource;
+				resourceName = DomainSettings.Current.DefaultResourceName;
 			}
 
 			if (resourceName == null)

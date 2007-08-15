@@ -117,7 +117,7 @@ namespace Serenity
         {
             if (!this.pages.ContainsKey(page.Name))
             {
-                this.pages.Add(page.Name, page);
+                this.pages.Add(page.SystemName, page);
             }
         }
         public void AddPages(IEnumerable<ContentPage> pages)

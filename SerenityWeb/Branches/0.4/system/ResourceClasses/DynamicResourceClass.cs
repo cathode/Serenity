@@ -26,32 +26,30 @@ namespace Serenity.ResourceClasses
 			// http://localhost/dynamic/system/default
 
 			DomainSettings settings = DomainSettings.GetBestMatch(context.Request.Url);
-
-			if (context.Request.Url.Segments.Length > 1)
+			int n = ((settings.OmitResourceClass) ? 1 : 2);
+			if (context.Request.Url.Segments.Length > n)
 			{
-				int n = 3;
-				if (settings.OmitResourceClass)
+				Module module = Module.GetModule(context.Request.Url.Segments[n].TrimEnd('/'));
+				if (module != null)
 				{
-					n--;
-				}
-				string[] nameParts = new string[Math.Max(context.Request.Url.Segments.Length - n, 0)];
-				if (nameParts.Length > 0)
-				{
-					Array.Copy(context.Request.Url.Segments, n, nameParts, 0, nameParts.Length);
-					//page = null; //SerenityModule.CurrentInstance.GetPage(string.Join("", nameParts).ToLower());
-					ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
-					return;
+					if (context.Request.Url.Segments.Length > n + 1)
+					{
+						string pageName = string.Join("", context.Request.Url.Segments, n + 1, context.Request.Url.Segments.Length - (n + 1));
+						page = module.GetPage(pageName);
+					}
+					else
+					{
+						page = module.DefaultPage;
+					}
 				}
 				else
 				{
-					//page = null; //SerenityModule.CurrentInstance.DefaultPage;
-					ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
-					return;
+					page = null;
 				}
 			}
 			else
 			{
-				Module module = Module.GetModule(settings.DefaultResource);
+				Module module = Module.GetModule(settings.DefaultResourceName);
 				if (module != null)
 				{
 					page = module.DefaultPage;

@@ -223,8 +223,12 @@
     <Content Include="Configuration\Serenity.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Domains\localhost.ini" />
-    <None Include="Domains\root.ini" />
+    <Content Include="Domains\localhost.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Domains\root.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Server.exe.manifest">
     </None>
     <None Include="Themes\system\Theme" />

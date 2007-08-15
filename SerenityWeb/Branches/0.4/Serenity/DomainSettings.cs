@@ -29,7 +29,7 @@ namespace Serenity
 			root.defaultResourceName.Value = "system";
 			root.defaultResourceClass.Value = "dynamic";
 			root.omitResourceClass.Value = false;
-			root.theme.Value = SerenityInfo.SystemName;
+			root.themeName.Value = SerenityInfo.SystemName;
 			root.documentRoot.Value = "Domains/Common";
 			DomainSettings.root = root;
 			DomainSettings.instances.Add(root.name, root);
@@ -54,7 +54,7 @@ namespace Serenity
 				this.defaultResourceClass = new DomainSettingValue<string>();
 				this.documentRoot = new DomainSettingValue<string>();
 				this.omitResourceClass = new DomainSettingValue<bool>();
-				this.theme = new DomainSettingValue<string>();
+				this.themeName = new DomainSettingValue<string>();
 			}
 			else
 			{
@@ -63,7 +63,7 @@ namespace Serenity
 				this.defaultResourceClass = new DomainSettingValue<string>(this.parent.defaultResourceClass);
 				this.documentRoot = new DomainSettingValue<string>(this.parent.documentRoot);
 				this.omitResourceClass = new DomainSettingValue<bool>(this.parent.omitResourceClass);
-				this.theme = new DomainSettingValue<string>(this.parent.theme);
+				this.themeName = new DomainSettingValue<string>(this.parent.themeName);
 			}
 		}
 		#endregion
@@ -73,11 +73,11 @@ namespace Serenity
 		private readonly DomainSettingValue<string> documentRoot;
 		private bool hasParent;
 		private readonly string name;
-		private readonly DomainSettings parent;
+		private DomainSettings parent;
 		private static readonly DomainSettings root;
 		private static readonly Dictionary<string, DomainSettings> instances;
 		private readonly DomainSettingValue<bool> omitResourceClass;
-		private readonly DomainSettingValue<string> theme;
+		private readonly DomainSettingValue<string> themeName;
 		#endregion
 		#region Fields - Public
 		[ThreadStatic]
@@ -179,12 +179,13 @@ namespace Serenity
 				string[] files = Directory.GetFiles(domainPath);
 				foreach (string path in files)
 				{
-					DomainSettings settings = DomainSettings.Load(path);
+					DomainSettings settings = DomainSettings.Load(Path.GetFileNameWithoutExtension(path));
 					if (settings != null)
 					{
 						DomainSettings.instances.Add(settings.name, settings);
 					}
 				}
+				DomainSettings.RecomputeRelationships();
 				return true;
 			}
 			else
@@ -203,13 +204,57 @@ namespace Serenity
 		}
 		public static DomainSettings Load(string name)
 		{
-			DomainSettings result = null;
-			string path = SPath.Combine(SPath.DomainsFolder, name + ".ini");
+			DomainSettings settings = null;
+			string path = Path.GetFullPath(SPath.Combine(SPath.DomainsFolder, name + ".ini"));
+
 			if (File.Exists(path))
 			{
-				
+				if (DomainSettings.instances.ContainsKey(name))
+				{
+					settings = DomainSettings.instances[name];
+				}
+				else
+				{
+					settings = new DomainSettings(name);
+				}
+				IniFile file = new IniFile(path);
+				file.CaseSensitiveRetrieval = false;
+
+				file.Load();
+
+				if (file.ContainsSection("DomainSettings"))
+				{
+					IniSection section = file["DomainSettings"];
+
+					if (section.ContainsEntry("DefaultResourceName"))
+					{
+						settings.defaultResourceName.Value = section["DefaultResourceName"].Value;
+					}
+					if (section.ContainsEntry("DefaultResourceClass"))
+					{
+						settings.defaultResourceClass.Value = section["DefaultResourceClass"].Value;
+					}
+					if (section.ContainsEntry("DocumentRoot"))
+					{
+						settings.documentRoot.Value = Path.GetFullPath(section["DocumentRoot"].Value);
+					}
+					if (section.ContainsEntry("OmitResourceClass"))
+					{
+						try
+						{
+							settings.omitResourceClass.Value = bool.Parse(section["OmitResourceClass"].Value);
+						}
+						catch
+						{
+						}
+					}
+					if (section.ContainsEntry("ThemeName"))
+					{
+						settings.themeName.Value = section["ThemeName"].Value;
+					}
+				}
 			}
-			return result;
+			return settings;
 		}
 		public static bool Save(DomainSettings settings)
 		{
@@ -223,6 +268,18 @@ namespace Serenity
 				return false;
 			}
 		}
+		public static void RecomputeRelationships()
+		{
+			foreach (DomainSettings settings in DomainSettings.instances.Values)
+			{
+				settings.parent = DomainSettings.GetParent(settings.name);
+				settings.defaultResourceClass.Parent = settings.parent.defaultResourceClass;
+				settings.defaultResourceName.Parent = settings.parent.defaultResourceName;
+				settings.documentRoot.Parent = settings.parent.documentRoot;
+				settings.omitResourceClass.Parent = settings.parent.omitResourceClass;
+				settings.themeName.Parent = settings.parent.themeName;
+			}
+		}
 		#endregion
 		#region Properties - Public
 		public static int Count
@@ -232,7 +289,7 @@ namespace Serenity
 				return DomainSettings.instances.Count;
 			}
 		}
-		public string DefaultResource
+		public string DefaultResourceName
 		{
 			get
 			{
@@ -277,11 +334,11 @@ namespace Serenity
 				return this.omitResourceClass.Value;
 			}
 		}
-		public string Theme
+		public string ThemeName
 		{
 			get
 			{
-				return this.theme.Value;
+				return this.themeName.Value;
 			}
 		}
 		#endregion

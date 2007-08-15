@@ -53,6 +53,7 @@ namespace Server
 
 			//This loads the file type registry information.
 			FileTypeRegistry.Initialize();
+			DomainSettings.LoadAll();
 
 			//(Temporary) Runs the server.
 			Theme theme = new Theme(SerenityInfo.SystemName);
