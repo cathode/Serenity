@@ -41,14 +41,14 @@ namespace Serenity
         #region Methods - Public
         public static Module LoadModule(string name)
         {
-            return Module.LoadModuleFile(SPath.Combine("Modules", name + ".dll"), name);
+            return Module.LoadModuleFile(name, SPath.Combine("Modules", name + ".dll"));
         }
-        public static Module LoadModuleFile(string path, string name)
+        public static Module LoadModuleFile(string name, string assemblyPath)
         {
             string title = "Untitled";
             ContentPage defaultPage = null;
 
-            Assembly moduleAsm = Assembly.LoadFile(Path.GetFullPath(path));
+            Assembly moduleAsm = Assembly.LoadFile(Path.GetFullPath(assemblyPath));
 
             object[] moduleAttributes = moduleAsm.GetCustomAttributes(true);
             foreach (object attrib in moduleAttributes)
@@ -149,23 +149,15 @@ namespace Serenity
 				return null;
 			}
 		}
-        public static void LoadAllModules()
-        {
-            string[] paths = Directory.GetFiles(SPath.ModulesFolder);
-
-            foreach (string path in paths)
-            {
-                if (Path.GetExtension(path).Equals(".dll"))
-                {
-                    Module m = Module.GetModule(Path.GetFileNameWithoutExtension(path));
-
-					Module.AddModule(m);
-
-                }
-            }
-        }
         #endregion
         #region Properties - Public
+		public ContentPage DefaultPage
+		{
+			get
+			{
+				return this.defaultPage;
+			}
+		}
         public string Name
         {
             get

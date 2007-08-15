@@ -26,7 +26,7 @@ namespace Serenity
 		{
 			DomainSettings.instances = new Dictionary<string, DomainSettings>();
 			DomainSettings root = new DomainSettings("root");
-			root.defaultResource.Value = "default";
+			root.defaultResourceName.Value = "system";
 			root.defaultResourceClass.Value = "dynamic";
 			root.omitResourceClass.Value = false;
 			root.theme.Value = SerenityInfo.SystemName;
@@ -50,7 +50,7 @@ namespace Serenity
 			{
 				this.hasParent = false;
 				this.parent = null;
-				this.defaultResource = new DomainSettingValue<string>();
+				this.defaultResourceName = new DomainSettingValue<string>();
 				this.defaultResourceClass = new DomainSettingValue<string>();
 				this.documentRoot = new DomainSettingValue<string>();
 				this.omitResourceClass = new DomainSettingValue<bool>();
@@ -59,7 +59,7 @@ namespace Serenity
 			else
 			{
 				this.parent = parent;
-				this.defaultResource = new DomainSettingValue<string>(this.parent.defaultResource);
+				this.defaultResourceName = new DomainSettingValue<string>(this.parent.defaultResourceName);
 				this.defaultResourceClass = new DomainSettingValue<string>(this.parent.defaultResourceClass);
 				this.documentRoot = new DomainSettingValue<string>(this.parent.documentRoot);
 				this.omitResourceClass = new DomainSettingValue<bool>(this.parent.omitResourceClass);
@@ -68,7 +68,7 @@ namespace Serenity
 		}
 		#endregion
 		#region Fields - Private
-		private readonly DomainSettingValue<string> defaultResource;
+		private readonly DomainSettingValue<string> defaultResourceName;
 		private readonly DomainSettingValue<string> defaultResourceClass;
 		private readonly DomainSettingValue<string> documentRoot;
 		private bool hasParent;
@@ -236,7 +236,7 @@ namespace Serenity
 		{
 			get
 			{
-				return this.defaultResource.Value;
+				return this.defaultResourceName.Value;
 			}
 		}
 		public string DefaultResourceClass

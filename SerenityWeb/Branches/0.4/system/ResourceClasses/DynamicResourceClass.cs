@@ -51,9 +51,15 @@ namespace Serenity.ResourceClasses
 			}
 			else
 			{
-				//page = null; //SerenityModule.CurrentInstance.DefaultPage;
-				ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
-				return;
+				Module module = Module.GetModule(settings.DefaultResource);
+				if (module != null)
+				{
+					page = module.DefaultPage;
+				}
+				else
+				{
+					page = null;
+				}
 			}
 
 			if (page != null)

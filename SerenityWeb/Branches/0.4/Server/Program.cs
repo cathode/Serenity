@@ -54,7 +54,6 @@ namespace Server
 			//This loads the file type registry information.
 			FileTypeRegistry.Initialize();
 
-
 			//(Temporary) Runs the server.
 			Theme theme = new Theme(SerenityInfo.SystemName);
 			theme.AccentA.TextColor.Value = "114 124 163";
@@ -85,7 +84,7 @@ namespace Server
 			{
 				string name = pair.Key;
 				string path = (pair.Value.StartsWith("@")) ? Path.GetFullPath("./Modules/" + pair.Value.TrimStart('@')) : pair.Value;
-				Module.AddModule(Module.LoadModuleFile(path, name));
+				Module.AddModule(Module.LoadModuleFile(name, path));
 			}
 
 			Log.Write(string.Format("Loaded: {0} domains, {1} modules, {2} themes.",
@@ -93,9 +92,9 @@ namespace Server
 				Module.ModuleCount,
 				Theme.Instances.Length), LogMessageLevel.Info);
 			WebDriverSettings settings = new WebDriverSettings();
-			settings.Block = true;
+			settings.Block = config.BlockingIO;
 			settings.ContextHandler = new ContextHandler();
-			settings.Ports = new ushort[] { 80, 8080, 8081 };
+			settings.Ports = config.Ports;
 
 			WebDriver driver = new HttpDriver(settings);
 
