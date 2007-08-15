@@ -38,12 +38,12 @@ namespace Serenity
         private string title;
         private ContentPage defaultPage;
         #endregion
-        #region Methods - Private
-        private static Module LoadModule(string name)
+        #region Methods - Public
+        public static Module LoadModule(string name)
         {
             return Module.LoadModuleFile(SPath.Combine("Modules", name + ".dll"), name);
         }
-        private static Module LoadModuleFile(string path, string name)
+        public static Module LoadModuleFile(string path, string name)
         {
             string title = "Untitled";
             ContentPage defaultPage = null;
@@ -101,8 +101,18 @@ namespace Serenity
                 return module;
             }
         }
-        #endregion
-        #region Methods - Public
+		public static bool AddModule(Module module)
+		{
+			if (module != null && !Module.modules.ContainsKey(module.Name))
+			{
+				Module.modules.Add(module.Name, module);
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
         public void AddPage(ContentPage page)
         {
             if (!this.pages.ContainsKey(page.Name))
@@ -128,6 +138,17 @@ namespace Serenity
                 return Module.LoadModule(name);
             }
         }
+		public ContentPage GetPage(string name)
+		{
+			if (this.pages.ContainsKey(name))
+			{
+				return this.pages[name];
+			}
+			else
+			{
+				return null;
+			}
+		}
         public static void LoadAllModules()
         {
             string[] paths = Directory.GetFiles(SPath.ModulesFolder);
@@ -138,10 +159,7 @@ namespace Serenity
                 {
                     Module m = Module.GetModule(Path.GetFileNameWithoutExtension(path));
 
-                    if ((m != null) && (!Module.modules.ContainsKey(m.name)))
-                    {
-                        Module.modules.Add(m.name, m);
-                    }
+					Module.AddModule(m);
 
                 }
             }

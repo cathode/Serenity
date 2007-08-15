@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
+using Serenity;
+
 namespace Server
 {
 	internal class ServerConfig
@@ -44,6 +46,15 @@ namespace Server
 					catch
 					{
 					}
+				}
+			}
+			if (file.ContainsSection("Modules"))
+			{
+				IniSection section = file["Modules"];
+
+				foreach (IniEntry entry in section)
+				{
+					this.Modules.Add(entry.Name, entry.Value);
 				}
 			}
 			if (file.ContainsSection("Network"))
@@ -84,6 +95,8 @@ namespace Server
 		internal bool BlockingIO = true;
 		internal bool LogToConsole = true;
 		internal bool LogToFile = true;
+		internal Dictionary<string, string> Modules = new Dictionary<string, string>();
 		internal bool OnDemandLoading = true;
+		
 	}
 }
