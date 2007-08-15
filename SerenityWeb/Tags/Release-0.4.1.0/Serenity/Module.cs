@@ -30,16 +30,19 @@ namespace Serenity
         }
         #endregion
         #region Fields - Private
-        [ThreadStatic]
-        private static Module current;
+        
         private static Dictionary<string, Module> modules;
         private readonly string name;
         private Dictionary<string, ContentPage> pages;
         private string title;
         private ContentPage defaultPage;
         #endregion
-        #region Methods - Public
-        public static Module LoadModule(string name)
+		#region Fields - Public
+		[ThreadStatic]
+		public static Module Current;
+		#endregion
+		#region Methods - Public
+		public static Module LoadModule(string name)
         {
             return Module.LoadModuleFile(name, SPath.Combine("Modules", name + ".dll"));
         }
@@ -129,14 +132,14 @@ namespace Serenity
         }
         public static Module GetModule(string name)
         {
-            if (Module.modules.ContainsKey(name))
-            {
-                return Module.modules[name];
-            }
-            else
-            {
-                return Module.LoadModule(name);
-            }
+			if (!string.IsNullOrEmpty(name) && Module.modules.ContainsKey(name))
+			{
+				return Module.modules[name];
+			}
+			else
+			{
+				return null;
+			}
         }
 		public ContentPage GetPage(string name)
 		{
@@ -170,13 +173,6 @@ namespace Serenity
             get
             {
                 return Module.modules.Count;
-            }
-        }
-        public static Module Current
-        {
-            get
-            {
-                return Module.current;
             }
         }
         #endregion

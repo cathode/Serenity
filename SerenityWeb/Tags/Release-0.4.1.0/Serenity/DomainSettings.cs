@@ -25,13 +25,7 @@ namespace Serenity
 		static DomainSettings()
 		{
 			DomainSettings.instances = new Dictionary<string, DomainSettings>();
-			DomainSettings root = new DomainSettings("root");
-			root.defaultResourceName.Value = "system";
-			root.defaultResourceClass.Value = "dynamic";
-			root.omitResourceClass.Value = false;
-			root.themeName.Value = SerenityInfo.SystemName;
-			root.documentRoot.Value = "Domains/Common";
-			DomainSettings.root = root;
+			DomainSettings.root = new DomainSettings("root");
 			DomainSettings.instances.Add(root.name, root);
 		}
 		#endregion
@@ -43,45 +37,33 @@ namespace Serenity
 		public DomainSettings(string name)
 		{
 			this.name = name;
-
-			DomainSettings parent = DomainSettings.GetParent(name);
-
-			if (parent == null)
-			{
-				this.hasParent = false;
-				this.parent = null;
-				this.defaultResourceName = new DomainSettingValue<string>();
-				this.defaultResourceClass = new DomainSettingValue<string>();
-				this.documentRoot = new DomainSettingValue<string>();
-				this.omitResourceClass = new DomainSettingValue<bool>();
-				this.themeName = new DomainSettingValue<string>();
-			}
-			else
-			{
-				this.parent = parent;
-				this.defaultResourceName = new DomainSettingValue<string>(this.parent.defaultResourceName);
-				this.defaultResourceClass = new DomainSettingValue<string>(this.parent.defaultResourceClass);
-				this.documentRoot = new DomainSettingValue<string>(this.parent.documentRoot);
-				this.omitResourceClass = new DomainSettingValue<bool>(this.parent.omitResourceClass);
-				this.themeName = new DomainSettingValue<string>(this.parent.themeName);
-			}
+			this.parent = DomainSettings.GetParent(name);
 		}
 		#endregion
 		#region Fields - Private
-		private readonly DomainSettingValue<string> defaultResourceName;
-		private readonly DomainSettingValue<string> defaultResourceClass;
-		private readonly DomainSettingValue<string> documentRoot;
-		private bool hasParent;
-		private readonly string name;
-		private DomainSettings parent;
-		private static readonly DomainSettings root;
+		private string defaultResourceClass;
+		private bool defaultResourceClassIsDefined = false;
+		private string defaultResourceName;
+		private bool defaultResourceNameIsDefined = false;
+		private string documentRoot;
+		private bool documentRootIsDefined = false;
 		private static readonly Dictionary<string, DomainSettings> instances;
-		private readonly DomainSettingValue<bool> omitResourceClass;
-		private readonly DomainSettingValue<string> themeName;
+		private readonly string name;
+		private bool omitResourceClass;
+		private bool omitResourceClassIsDefined = false;
+		private DomainSettings parent = null;
+		private static readonly DomainSettings root;
+		private string themeName;
+		private bool themeNameIsDefined = false;
 		#endregion
 		#region Fields - Public
 		[ThreadStatic]
 		public static DomainSettings Current;
+		public const string DefaultDefaultResourceClass = "static";
+		public const string DefaultDefaultResourceName = "default.html";
+		public const string DefaultDocumentRoot = "./Domains/Common/";
+		public const bool DefaultOmitResourceClass = false;
+		public const string DefaultThemeName = "system";
 		#endregion
 		#region Methods - Public
 		/// <summary>
@@ -126,7 +108,7 @@ namespace Serenity
 		/// <returns></returns>
 		public static DomainSettings GetBestMatch(string hostName, bool recurse)
 		{
-			if (string.IsNullOrEmpty(hostName) == false)
+			if (!string.IsNullOrEmpty(hostName))
 			{
 				if (DomainSettings.instances.ContainsKey(hostName) == true)
 				{
@@ -149,7 +131,7 @@ namespace Serenity
 		}
 		public static DomainSettings GetParent(string hostName)
 		{
-			if (string.IsNullOrEmpty(hostName) == false)
+			if (!string.IsNullOrEmpty(hostName))
 			{
 				string[] oldNames = hostName.Split('.');
 				string[] newNames = new string[oldNames.Length - 1];
@@ -228,21 +210,21 @@ namespace Serenity
 
 					if (section.ContainsEntry("DefaultResourceName"))
 					{
-						settings.defaultResourceName.Value = section["DefaultResourceName"].Value;
+						settings.DefaultResourceName = section["DefaultResourceName"].Value;
 					}
 					if (section.ContainsEntry("DefaultResourceClass"))
 					{
-						settings.defaultResourceClass.Value = section["DefaultResourceClass"].Value;
+						settings.DefaultResourceClass = section["DefaultResourceClass"].Value;
 					}
 					if (section.ContainsEntry("DocumentRoot"))
 					{
-						settings.documentRoot.Value = Path.GetFullPath(section["DocumentRoot"].Value);
+						settings.DocumentRoot = Path.GetFullPath(section["DocumentRoot"].Value);
 					}
 					if (section.ContainsEntry("OmitResourceClass"))
 					{
 						try
 						{
-							settings.omitResourceClass.Value = bool.Parse(section["OmitResourceClass"].Value);
+							settings.OmitResourceClass = bool.Parse(section["OmitResourceClass"].Value);
 						}
 						catch
 						{
@@ -250,7 +232,7 @@ namespace Serenity
 					}
 					if (section.ContainsEntry("ThemeName"))
 					{
-						settings.themeName.Value = section["ThemeName"].Value;
+						settings.ThemeName = section["ThemeName"].Value;
 					}
 				}
 			}
@@ -273,11 +255,6 @@ namespace Serenity
 			foreach (DomainSettings settings in DomainSettings.instances.Values)
 			{
 				settings.parent = DomainSettings.GetParent(settings.name);
-				settings.defaultResourceClass.Parent = settings.parent.defaultResourceClass;
-				settings.defaultResourceName.Parent = settings.parent.defaultResourceName;
-				settings.documentRoot.Parent = settings.parent.documentRoot;
-				settings.omitResourceClass.Parent = settings.parent.omitResourceClass;
-				settings.themeName.Parent = settings.parent.themeName;
 			}
 		}
 		#endregion
@@ -289,25 +266,106 @@ namespace Serenity
 				return DomainSettings.instances.Count;
 			}
 		}
-		public string DefaultResourceName
-		{
-			get
-			{
-				return this.defaultResourceName.Value;
-			}
-		}
 		public string DefaultResourceClass
 		{
 			get
 			{
-				return this.defaultResourceClass.Value;
+				if (this.defaultResourceClassIsDefined)
+				{
+					return this.defaultResourceClass;
+				}
+				else if (this.HasParent)
+				{
+					return this.parent.DefaultResourceClass;
+				}
+				else
+				{
+					return DomainSettings.DefaultDefaultResourceClass;
+				}
+			}
+			set
+			{
+				this.defaultResourceClassIsDefined = (value == null) ? false : true;
+				this.defaultResourceClass = value;
+			}
+		}
+		public bool DefaultResourceClassIsDefined
+		{
+			get
+			{
+				return this.defaultResourceClassIsDefined;
+			}
+			set
+			{
+				this.defaultResourceClassIsDefined = value;
+			}
+		}
+		public string DefaultResourceName
+		{
+			get
+			{
+				if (this.defaultResourceNameIsDefined)
+				{
+					return this.defaultResourceName;
+				}
+				else if (this.HasParent)
+				{
+					return this.parent.DefaultResourceName;
+				}
+				else
+				{
+					return DomainSettings.DefaultDefaultResourceName;
+				}
+			}
+			set
+			{
+				this.defaultResourceNameIsDefined = (value == null) ? false : true;
+				this.defaultResourceName = value;
+			}
+		}
+		public bool DefaultResourceNameIsDefined
+		{
+			get
+			{
+				return this.defaultResourceNameIsDefined;
+			}
+			set
+			{
+				this.defaultResourceNameIsDefined = value;
 			}
 		}
 		public string DocumentRoot
 		{
 			get
 			{
-				return this.documentRoot.Value;
+				if (this.documentRootIsDefined)
+				{
+					return this.documentRoot;
+				}
+				else if (this.HasParent)
+				{
+					return this.parent.DocumentRoot;
+				}
+				else
+				{
+					return DomainSettings.DefaultDocumentRoot;
+				}
+			}
+			set
+			{
+				this.documentRootIsDefined = (value == null) ? false : true;
+				this.documentRoot = value;
+			}
+		}
+		public bool DocumentRootIsDefined
+		{
+			get
+			{
+				return this.documentRootIsDefined;
+			}
+			set
+			{
+				this.documentRootIsDefined = value;
 			}
 		}
 		/// <summary>
@@ -317,7 +375,7 @@ namespace Serenity
 		{
 			get
 			{
-				return this.hasParent;
+				return (this.parent == null) ? false : true;
 			}
 		}
 		public string Name
@@ -331,14 +389,68 @@ namespace Serenity
 		{
 			get
 			{
-				return this.omitResourceClass.Value;
+				if (this.omitResourceClassIsDefined)
+				{
+					return this.omitResourceClass;
+				}
+				else if (this.HasParent)
+				{
+					return this.parent.OmitResourceClass;
+				}
+				else
+				{
+					return DomainSettings.DefaultOmitResourceClass;
+				}
+			}
+			set
+			{
+				this.omitResourceClassIsDefined = true;
+				this.omitResourceClass = value;
+			}
+		}
+		public bool OmitResourceClassIsDefined
+		{
+			get
+			{
+				return this.omitResourceClassIsDefined;
+			}
+			set
+			{
+				this.omitResourceClassIsDefined = value;
 			}
 		}
 		public string ThemeName
 		{
 			get
 			{
-				return this.themeName.Value;
+				if (this.themeNameIsDefined)
+				{
+					return this.themeName;
+				}
+				else if (this.HasParent)
+				{
+					return this.parent.ThemeName;
+				}
+				else
+				{
+					return DomainSettings.DefaultThemeName;
+				}
+			}
+			set
+			{
+				this.themeNameIsDefined = (value == null) ? false : true;
+				this.themeName = value;
+			}
+		}
+		public bool ThemeNameIsDefined
+		{
+			get
+			{
+				return this.themeNameIsDefined;
+			}
+			set
+			{
+				this.themeNameIsDefined = value;
 			}
 		}
 		#endregion
