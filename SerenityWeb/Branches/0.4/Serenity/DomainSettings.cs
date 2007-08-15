@@ -41,26 +41,26 @@ namespace Serenity
 		}
 		#endregion
 		#region Fields - Private
-		private string defaultResourceName;
-		private bool defaultResourceNameIsDefined = false;
 		private string defaultResourceClass;
 		private bool defaultResourceClassIsDefined = false;
+		private string defaultResourceName;
+		private bool defaultResourceNameIsDefined = false;
 		private string documentRoot;
 		private bool documentRootIsDefined = false;
-		private readonly string name;
-		private DomainSettings parent = null;
-		private static readonly DomainSettings root;
 		private static readonly Dictionary<string, DomainSettings> instances;
+		private readonly string name;
 		private bool omitResourceClass;
 		private bool omitResourceClassIsDefined = false;
+		private DomainSettings parent = null;
+		private static readonly DomainSettings root;
 		private string themeName;
 		private bool themeNameIsDefined = false;
 		#endregion
 		#region Fields - Public
 		[ThreadStatic]
 		public static DomainSettings Current;
-		public const string DefaultDefaultResourceName = "default.html";
 		public const string DefaultDefaultResourceClass = "static";
+		public const string DefaultDefaultResourceName = "default.html";
 		public const string DefaultDocumentRoot = "./Domains/Common/";
 		public const bool DefaultOmitResourceClass = false;
 		public const string DefaultThemeName = "system";
@@ -289,6 +289,17 @@ namespace Serenity
 				this.defaultResourceClass = value;
 			}
 		}
+		public bool DefaultResourceClassIsDefined
+		{
+			get
+			{
+				return this.defaultResourceClassIsDefined;
+			}
+			set
+			{
+				this.defaultResourceClassIsDefined = value;
+			}
+		}
 		public string DefaultResourceName
 		{
 			get
@@ -312,7 +323,17 @@ namespace Serenity
 				this.defaultResourceName = value;
 			}
 		}
-		
+		public bool DefaultResourceNameIsDefined
+		{
+			get
+			{
+				return this.defaultResourceNameIsDefined;
+			}
+			set
+			{
+				this.defaultResourceNameIsDefined = value;
+			}
+		}
 		public string DocumentRoot
 		{
 			get
@@ -334,6 +355,17 @@ namespace Serenity
 			{
 				this.documentRootIsDefined = (value == null) ? false : true;
 				this.documentRoot = value;
+			}
+		}
+		public bool DocumentRootIsDefined
+		{
+			get
+			{
+				return this.documentRootIsDefined;
+			}
+			set
+			{
+				this.documentRootIsDefined = value;
 			}
 		}
 		/// <summary>
@@ -376,6 +408,17 @@ namespace Serenity
 				this.omitResourceClass = value;
 			}
 		}
+		public bool OmitResourceClassIsDefined
+		{
+			get
+			{
+				return this.omitResourceClassIsDefined;
+			}
+			set
+			{
+				this.omitResourceClassIsDefined = value;
+			}
+		}
 		public string ThemeName
 		{
 			get
@@ -397,6 +440,17 @@ namespace Serenity
 			{
 				this.themeNameIsDefined = (value == null) ? false : true;
 				this.themeName = value;
+			}
+		}
+		public bool ThemeNameIsDefined
+		{
+			get
+			{
+				return this.themeNameIsDefined;
+			}
+			set
+			{
+				this.themeNameIsDefined = value;
 			}
 		}
 		#endregion
