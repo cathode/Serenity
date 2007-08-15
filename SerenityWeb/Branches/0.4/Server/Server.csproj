@@ -60,7 +60,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OperatingModes\DebugMode.cs" />
     <Compile Include="OperatingModes\ServerMode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -226,6 +225,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Domains\localhost.ini" />
+    <None Include="Domains\root.ini" />
     <None Include="Server.exe.manifest">
     </None>
     <None Include="Themes\system\Theme" />
