@@ -82,7 +82,6 @@
     <None Include="Cache\CachedStream.cs" />
     <Compile Include="ContentPage.cs" />
     <None Include="Data\Database.cs" />
-    <Compile Include="DomainSettingValue.cs" />
     <Compile Include="FileTypeEntry.cs" />
     <Compile Include="Hdf\HdfCollection.cs" />
     <Compile Include="Hdf\HdfDataset.cs" />

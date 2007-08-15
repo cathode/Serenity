@@ -129,14 +129,14 @@ namespace Serenity
         }
         public static Module GetModule(string name)
         {
-            if (Module.modules.ContainsKey(name))
-            {
-                return Module.modules[name];
-            }
-            else
-            {
-                return Module.LoadModule(name);
-            }
+			if (!string.IsNullOrEmpty(name) && Module.modules.ContainsKey(name))
+			{
+				return Module.modules[name];
+			}
+			else
+			{
+				return null;
+			}
         }
 		public ContentPage GetPage(string name)
 		{
