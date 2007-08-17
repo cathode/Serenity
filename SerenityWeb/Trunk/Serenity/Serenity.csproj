@@ -175,6 +175,9 @@
   <ItemGroup>
     <None Include="Presentation\indextest.hdf" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Themes\template\stylesheet.css" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

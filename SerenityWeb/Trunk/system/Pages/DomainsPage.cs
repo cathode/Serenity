@@ -15,6 +15,9 @@ using Serenity.Xml.Html;
 
 namespace Serenity.Pages
 {
+	/// <summary>
+	/// Provides a web administration page to add, remove, view, and edit Domain Settings.
+	/// </summary>
     public sealed class DomainsPage : ContentPage
     {
         public override void OnInitialization()

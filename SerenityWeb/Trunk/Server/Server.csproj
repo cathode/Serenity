@@ -229,9 +229,9 @@
     <Content Include="Domains\root.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Themes\blueish\stylesheet.css" />
     <None Include="Server.exe.manifest">
     </None>
-    <None Include="Themes\system\Theme" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
