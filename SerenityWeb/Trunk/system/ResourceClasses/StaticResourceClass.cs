@@ -1,15 +1,11 @@
-﻿/*
-Serenity - The next evolution of web server technology
-Serenity/ResourceClasses/staticResourceClass.cs
-Copyright © 2006-2007 Serenity Project (http://SerenityProject.net/)
-
-This file is protected by the terms and conditions of the
-Microsoft Community License (Ms-CL), a copy of which should
-have been distributed along with this software. If not,
-you may find the license information at the following URL:
-
-http://www.microsoft.com/resources/sharedsource/licensingbasics/communitylicense.mspx
-*/
+﻿/******************************************************************************
+ * Serenity - The next evolution of web server technology.                    *
+ * Copyright © 2006-2007 Serenity Project - http://SerenityProject.net/       *
+ *----------------------------------------------------------------------------*
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Permissive License (Ms-PL), a copy of which should have been included with *
+ * this distribution as License.txt.                                          *
+ *****************************************************************************/
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,24 +17,25 @@ using Serenity.Xml.Html;
 
 namespace Serenity.ResourceClasses
 {
-	internal sealed class staticResourceClass : ResourceClass
+	internal sealed class StaticResourceClass : ResourceClass
 	{
-		public staticResourceClass()
+		#region Constructors - Public
+		public StaticResourceClass()
 			: base("static")
 		{
 
 		}
+		#endregion
+		#region Methods - Public
 		public override void HandleContext(CommonContext context)
 		{
 			string resourceName;
 			string[] segments = context.Request.Url.Segments;
 			int n = 1;
 
-			if (!DomainSettings.Current.OmitEnvironment.Value)
-			{
-				n++;
-			}
-			if (!DomainSettings.Current.OmitResourceClass.Value)
+			DomainSettings settings = DomainSettings.GetBestMatch(context.Request.Url);
+
+			if (!settings.OmitResourceClass)
 			{
 				n++;
 			}
@@ -48,134 +45,123 @@ namespace Serenity.ResourceClasses
 				Array.Copy(segments, n, nameParts, 0, nameParts.Length);
 				resourceName = string.Join("", nameParts).ToLower();
 			}
-			else if (segments.Length == 3)
+			else if (segments.Length == 2)
 			{
 				resourceName = "";
 			}
 			else
 			{
-				resourceName = SerenityEnvironment.CurrentInstance.DefaultResourceName;
+				resourceName = DomainSettings.Current.DefaultResourceName;
 			}
 
 			if (resourceName == null)
 			{
 				// 500 Internal Server Error
-				context.Response.Status = StatusCode.Http500InternalServerError;
-				context.Response.Write("500 Internal Server Error");
+				ErrorHandler.Handle(context, StatusCode.Http500InternalServerError);
 				return;
 			}
 
-			string resourcePath = Path.Combine(SerenityEnvironment.CurrentInstance.StaticFilesDirectory,
-				SPath.SanitizePath(resourceName.TrimStart('/')));
+			string resourcePath = Path.GetFullPath(Path.Combine(DomainSettings.Current.DocumentRoot,
+				SPath.SanitizePath(resourceName.TrimStart('/'))));
 
-			Theme theme = SerenityEnvironment.CurrentInstance.Theme;
 
 			if (resourceName == "")
 			{
 				resourceName = "/";
 			}
+			else if (!resourceName.EndsWith("/") && !File.Exists(resourcePath))
+			{
+				resourceName += "/";
+			}
 
-			if (resourceName.EndsWith("/") == true)
+			if (resourceName.EndsWith("/"))
 			{
 				//Directory request
 				if (Directory.Exists(resourcePath) == true)
 				{
-					HtmlDocument Doc = new HtmlDocument();
-					Doc.BodyElement.Class = Theme.CurrentInstance.ContentA.Class;
+					CommonResponse response = context.Response;
 
-					Doc.AddStylesheet(Theme.CurrentInstance.StylesheetUrl);
-					Doc.AddStylesheet("/system/static/index.css");
-					Doc.Title = "Index of " + resourceName;
-					HtmlElement Div = Doc.BodyElement.AppendDivision("Index of " + resourceName, Theme.CurrentInstance.HeadingA);
-					string[] SubDirs = Directory.GetDirectories(resourcePath);
-					if ((SubDirs.Length > 0) || (resourceName != "/"))
+					response.WriteLine(Doctype.XHTML11.ToString());
+					response.WriteLine(@"<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+	<title>Index of " + resourceName + @"</title>
+	<link rel='stylesheet' type='text/css' href='/static/index.css' />
+</head>
+<body>
+	<div class='TitleMain'>Index of " + resourceName + @"</div>
+	<div class='Title'>Directories:</div>
+	<div class='List'>
+		<table>
+			<tr>
+				<th></th>
+				<th>Directory Name</th>
+				<th>Last Modified</th>
+			</tr>");
+					if (resourceName != "/")
 					{
-						Div = Doc.BodyElement.AppendDivision("Directories:", Theme.CurrentInstance.HeadingB);
-						Div = Doc.BodyElement.AppendDivision();
-						Div.AddClass("List");
-						string[] Columns = new string[3] { "", "Directory Name", "Last Modified" };
-						HtmlElement Table = Div.AppendTable(Columns);
-						Table.Class = Theme.CurrentInstance.AccentA.Class;
-						if (resourceName != "/")
+						string[] parts = resourceName.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+						string parentPath = "/static/" + string.Join("/", parts, 0, parts.Length - 1);
+						if (!parentPath.EndsWith("/"))
 						{
-							HtmlElement Row = Table.AppendTableRow();
-
-							HtmlElement E = Row.AppendTableCell();
-							E.AddClass("Icon");
-							E.AppendImage("/System/static/icons/folder.png");
-
-							E = Row.AppendTableCell();
-							string[] Parts = resourceName.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-							string Name = "/" + SerenityEnvironment.CurrentInstance.Key + "/static/" + string.Join("/", Parts, 0, Parts.Length - 1);
-							if (Name.EndsWith("/") == false)
-							{
-								Name += "/";
-							}
-							E.AppendAnchor(Name, "Parent Directory", Theme.CurrentInstance.Link);
-							E.AddClass("Name");
-							Row.AppendTableCell("- - -").AddClass("Time");
+							parentPath += "/";
 						}
-						foreach (string DirPath in SubDirs)
+						response.WriteLine(@"			<tr>
+				<td class='Icon'><img src='/static/icons/folder.png' alt='x' /></td>
+				<td class='Name'><a href='" + parentPath + @"'>Parent Directory</a></td>
+				<td class='Time'>- - -</td>
+			</tr>");
+
+					}
+					string[] dirs = Directory.GetDirectories(resourcePath);
+					if (dirs.Length > 0)
+					{
+						foreach (string dirPath in dirs)
 						{
-							HtmlElement Row = Table.AppendTableRow();
-
-							HtmlElement E = Row.AppendTableCell();
-							E.AddClass("Icon");
-							E.AppendImage("/System/static/icons/folder.png");
-
-							E = Row.AppendTableCell();
-							E.AppendAnchor(Path.GetFileName(DirPath) + "/", Path.GetFileName(DirPath), Theme.CurrentInstance.Link);
-							E.AddClass("Name");
-							Row.AppendTableCell(Directory.GetLastWriteTimeUtc(DirPath).ToString("s")).AddClass("Time");
+							string dirName = Path.GetFileName(dirPath);
+							response.Write(@"			<tr>
+				<td class='Icon'><img src='/static/icons/folder.png' alt='x' /></td>
+				<td class='Name'><a href='/static" + (resourceName.EndsWith("/") ? resourceName : resourceName + "/") + dirName + "'>" + dirName + @"</a></td>
+				<td class='Time'>" + Directory.GetLastWriteTimeUtc(Path.GetFullPath(SPath.Combine(resourcePath, dirName))).ToString() + @"</td>
+			</tr>");
 						}
 					}
-					string[] Files = Directory.GetFiles(resourcePath);
-					if (Files.Length > 0)
+					response.WriteLine(@"		</table>
+	</div>
+	<div class='Title'>Files:</div>
+	<div class='List'>
+		<table>
+			<tr>
+				<th></th>
+				<th>File Name</th>
+				<th>File Size</th>
+				<th>File Type</th>
+				<th>Last Modified</th>
+			</tr>");
+					string[] files = Directory.GetFiles(resourcePath);
+					foreach (string filePath in files)
 					{
-						Div = Doc.BodyElement.AppendDivision("Files:", Theme.CurrentInstance.HeadingB);
-						string[] Columns = new string[5] { "", "File Name", "File Size", "File Type", "Last Modified" };
-						Div = Doc.BodyElement.AppendDivision();
-						Div.AddClass("List");
-						HtmlElement Table = Div.AppendTable(Columns);
-						foreach (string FilePath in Files)
-						{
-							string ext = Path.GetExtension(FilePath).TrimStart('.');
-							string fileType = FileTypeRegistry.GetDescription(ext);
-							string fileIcon = "page_white";
-							
-							HtmlElement row = Table.AppendTableRow();
-
-							HtmlElement cell = row.AppendTableCell();
-							cell.Class = "Icon";
-							cell.AppendImage("/System/static/Icons/" + fileIcon + ".png");
-
-							cell = row.AppendTableCell();
-							cell.AppendAnchor(Path.GetFileName(FilePath), Path.GetFileName(FilePath), Theme.CurrentInstance.Link);
-							cell.Class = "Name";
-
-							row.AppendTableCell("Unknown").Class = "Size";
-							row.AppendTableCell(fileType).Class = "Type";
-							row.AppendTableCell(File.GetLastWriteTimeUtc(FilePath).ToString("s")).Class = "Time";
-						}
+						string fileName = Path.GetFileName(filePath);
+						FileInfo info = new FileInfo(filePath);
+						long fileSize = info.Length;
+						response.Write(@"
+			<tr>
+				<td class='Icon'><img src='/static/icons/" + FileTypeRegistry.GetIcon(Path.GetExtension(fileName)) + @".png' alt='x' /></td>
+				<td class='Name'><a href='/static" + resourceName + fileName + "'>" + fileName + @"</a></td>
+				<td class='Size'>" + fileSize.ToString() +@"</td>
+				<td class='Type'>" + FileTypeRegistry.GetDescription(Path.GetExtension(fileName)) + @"</td>
+				<td class='Time'>" + File.GetLastWriteTimeUtc(filePath).ToString() + @"</td>
+			</td>
+			</tr>");
 					}
-					HtmlElement FooterDiv = Doc.BodyElement.AppendDivision();
-					FooterDiv.AppendText("Powered by " + SerenityInfo.Name + " - " + SerenityInfo.Copyright);
-					FooterDiv.AppendBreak();
-					FooterDiv.AppendText("Icons by Fam - ");
-					FooterDiv.AppendAnchor("http://famfamfam.com/", "FamFamFam.com");
-					FooterDiv.AddClass("Footer");
-
-					context.Response.Status = StatusCode.Http200Ok;
-					context.Response.MimeType = MimeType.TextHtml;
-					context.Response.UseCompression = true;
-					//BR: Moved things around to make sure that the mimetype and others
-					//are getting set before we write anything out.
-					context.Response.Write(Doc.SaveMarkup());
+					response.Write(@"		</table>
+	</div>
+</body>
+</html>");
+					response.MimeType = MimeType.TextHtml;
 				}
 				else
 				{
-					context.Response.Status = StatusCode.Http404NotFound;
-					context.Response.Write("Requested resource does not exist.");
+					ErrorHandler.Handle(context, StatusCode.Http404NotFound);
 				}
 			}
 			else
@@ -198,10 +184,10 @@ namespace Serenity.ResourceClasses
 				}
 				else
 				{
-					context.Response.Status = StatusCode.Http404NotFound;
-					context.Response.Write("Requested resource does not exist.");
+					ErrorHandler.Handle(context, StatusCode.Http404NotFound, resourceName);
 				}
 			}
 		}
+		#endregion
 	}
 }

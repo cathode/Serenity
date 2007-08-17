@@ -13,20 +13,13 @@ using System.Text;
 
 using Serenity.IO;
 
-namespace Serenity.Presentation.Templates
+namespace Serenity.Web.Drivers
 {
-    public sealed class CsTemplateReader : Reader<CsTemplate>
+    public sealed class HttpWriter : Writer<CommonContext>
     {
-        #region Constructors - Public
-        public CsTemplateReader()
+        public override bool Write(Stream stream, CommonContext value)
         {
+            throw new Exception("The method or operation is not implemented.");
         }
-        #endregion
-        #region Methods - Public
-		public override CsTemplate Read(Stream stream, out bool result)
-		{
-			throw new Exception("The method or operation is not implemented.");
-		}
-        #endregion
-	}
+    }
 }

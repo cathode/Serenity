@@ -1,15 +1,11 @@
-﻿/*
-Serenity - The next evolution of web server technology
-Serenity/ResourceClasses/DynamicResourceClass.cs
-Copyright © 2006-2007 Serenity Project (http://SerenityProject.net/)
-
-This file is protected by the terms and conditions of the
-Microsoft Community License (Ms-CL), a copy of which should
-have been distributed along with this software. If not,
-you may find the license information at the following URL:
-
-http://www.microsoft.com/resources/sharedsource/licensingbasics/communitylicense.mspx
-*/
+﻿/******************************************************************************
+ * Serenity - The next evolution of web server technology.                    *
+ * Copyright © 2006-2007 Serenity Project - http://SerenityProject.net/       *
+ *----------------------------------------------------------------------------*
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Permissive License (Ms-PL), a copy of which should have been included with *
+ * this distribution as License.txt.                                          *
+ *****************************************************************************/
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,41 +16,48 @@ namespace Serenity.ResourceClasses
 {
 	internal class DynamicResourceClass : ResourceClass
 	{
-		public DynamicResourceClass()
-			: base("dynamic")
+		public DynamicResourceClass() : base("dynamic")
 		{
 		}
 		public override void HandleContext(CommonContext context)
 		{
-			ContentPage page;
+			ContentPage page = null;
 
-			// http://localhost/system/dynamic/system/default
+			// http://localhost/dynamic/system/default
 
-			if (context.Request.Url.Segments.Length > 1)
+			DomainSettings settings = DomainSettings.GetBestMatch(context.Request.Url);
+			int n = ((settings.OmitResourceClass) ? 1 : 2);
+			if (context.Request.Url.Segments.Length > n)
 			{
-				int n = 4;
-				if (DomainSettings.Current.OmitEnvironment.Value)
+				Module module = Module.GetModule(context.Request.Url.Segments[n].TrimEnd('/'));
+				if (module != null)
 				{
-					n--;
-				}
-				if (DomainSettings.Current.OmitResourceClass.Value)
-				{
-					n--;
-				}
-				string[] nameParts = new string[Math.Max(context.Request.Url.Segments.Length - n, 0)];
-				if (nameParts.Length > 0)
-				{
-					Array.Copy(context.Request.Url.Segments, n, nameParts, 0, nameParts.Length);
-					page = null; //SerenityModule.CurrentInstance.GetPage(string.Join("", nameParts).ToLower());
+					if (context.Request.Url.Segments.Length > n + 1)
+					{
+						string pageName = string.Join("", context.Request.Url.Segments, n + 1, context.Request.Url.Segments.Length - (n + 1));
+						page = module.GetPage(pageName);
+					}
+					else
+					{
+						page = module.DefaultPage;
+					}
 				}
 				else
 				{
-					page = null; //SerenityModule.CurrentInstance.DefaultPage;
+					page = null;
 				}
 			}
 			else
 			{
-				page = null; //SerenityModule.CurrentInstance.DefaultPage;
+				Module module = Module.GetModule(settings.DefaultResourceName);
+				if (module != null)
+				{
+					page = module.DefaultPage;
+				}
+				else
+				{
+					page = null;
+				}
 			}
 
 			if (page != null)

@@ -1,15 +1,11 @@
-﻿/*
-Serenity - The next evolution of web server technology
-
-Copyright © 2006-2007 Serenity Project (http://SerenityProject.net/)
-
-This file is protected by the terms and conditions of the
-Microsoft Community License (Ms-CL), a copy of which should
-have been distributed along with this software. If not,
-you may find the license information at the following URL:
-
-http://www.microsoft.com/resources/sharedsource/licensingbasics/communitylicense.mspx
-*/
+﻿/******************************************************************************
+ * Serenity - The next evolution of web server technology.                    *
+ * Copyright © 2006-2007 Serenity Project - http://SerenityProject.net/       *
+ *----------------------------------------------------------------------------*
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Permissive License (Ms-PL), a copy of which should have been included with *
+ * this distribution as License.txt.                                          *
+ *****************************************************************************/
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -38,10 +34,6 @@ namespace Serenity
 		/// The folder where domain settings are stored.
 		/// </summary>
 		Domains,
-		/// <summary>
-		/// The folder where environment data is stored.
-		/// </summary>
-		Environments,
 		/// <summary>
 		/// The folder where module data is stored.
 		/// </summary>
@@ -79,7 +71,6 @@ namespace Serenity
 
 			SPath.specialFolders[SpecialFolder.Configuration] = Path.GetFullPath(SPath.Combine(root, "Configuration"));
 			SPath.specialFolders[SpecialFolder.Domains] = Path.GetFullPath(SPath.Combine(root, "Domains"));
-			SPath.specialFolders[SpecialFolder.Environments] = Path.GetFullPath(SPath.Combine(root, "Environments"));
 			SPath.specialFolders[SpecialFolder.Logs] = Path.GetFullPath(SPath.Combine(root, "Logs"));
 			SPath.specialFolders[SpecialFolder.Modules] = Path.GetFullPath(SPath.Combine(root, "Modules"));
 			SPath.specialFolders[SpecialFolder.Root] = root;
@@ -149,14 +140,6 @@ namespace Serenity
 		{
 			return SPath.specialFiles[specialFile];
 		}
-		public static string GetEnvironmentFile(string name)
-		{
-			return SPath.Combine(SPath.EnvironmentsFolder, name, "Environment");
-		}
-		public static string GetEnvironmentDirectory(string name)
-		{
-			return SPath.Combine(SPath.EnvironmentsFolder, name);
-		}
 		public static string GetModuleFile(string name)
 		{
 			return SPath.Combine(SPath.ModulesFolder, name, name + ".dll");
@@ -165,13 +148,13 @@ namespace Serenity
 		{
 			return SPath.Combine(SPath.ModulesFolder, name);
 		}
-		public static string GetStaticFile(SerenityEnvironment environment, string name)
+		public static string GetStaticFile(string name)
 		{
-			return SPath.Combine(SPath.EnvironmentsFolder, environment.Key, name);
+			return SPath.Combine(DomainSettings.Current.DocumentRoot, name);
 		}
-		public static string GetLocalizedStaticFile(SerenityEnvironment environment, string name, CultureInfo ci)
+		public static string GetLocalizedStaticFile(string name, CultureInfo ci)
 		{
-			return SPath.Combine(SPath.EnvironmentsFolder, environment.Key, "static", ci.Name, name);
+			return SPath.Combine(DomainSettings.Current.DocumentRoot, ci.Name, name);
 		}
 		public static string GetThemeFile(string name)
 		{
@@ -195,16 +178,6 @@ namespace Serenity
 			get
 			{
 				return SPath.ResolveSpecialPath(SpecialFolder.Domains);
-			}
-		}
-		/// <summary>
-		/// Gets an absolute path to the directory where environments are stored.
-		/// </summary>
-		public static string EnvironmentsFolder
-		{
-			get
-			{
-				return SPath.ResolveSpecialPath(SpecialFolder.Environments);
 			}
 		}
 		/// <summary>

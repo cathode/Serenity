@@ -1,54 +1,46 @@
-/*
-Serenity - The next evolution of web server technology
-Serenity/Pages/DomainsPage.cs
-Copyright © 2006-2007 Serenity Project (http://SerenityProject.net/)
-
-This file is protected by the terms and conditions of the
-Microsoft Community License (Ms-CL), a copy of which should
-have been distributed along with this software. If not,
-you may find the license information at the following URL:
-
-http://www.microsoft.com/resources/sharedsource/licensingbasics/communitylicense.mspx
-*/
+/******************************************************************************
+ * Serenity - The next evolution of web server technology.                    *
+ * Copyright © 2006-2007 Serenity Project - http://SerenityProject.net/       *
+ *----------------------------------------------------------------------------*
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Permissive License (Ms-PL), a copy of which should have been included with *
+ * this distribution as License.txt.                                          *
+ *****************************************************************************/
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 using Serenity.Web;
-using Serenity.Xml;
+using Serenity.Xml.Html;
 
 namespace Serenity.Pages
 {
     public sealed class DomainsPage : ContentPage
     {
-        private IEnumerable<XmlNode> GetItemList(string[] items, XmlDocument doc)
-        {
-            if (items != null)
-            {
-                foreach (string item in items)
-                {
-                    yield return doc.CreateElement("Item", item);
-                }
-            }
-        }
         public override void OnInitialization()
         {
             
         }
-        public override void OnRequest(Serenity.Web.CommonContext context)
+        public override void OnRequest(CommonContext context)
         {
-            DomainSettings settings = DomainSettings.Current;
-
             CommonResponse response = context.Response;
 
-            if (context.Request.RequestData.Contains("domain"))
-            {
-                settings = DomainSettings.GetBestMatch(context.Request.RequestData["domain"].ReadAllText());
-            }
-
-            response.Write("Working with domainsettings: " + settings.Name);
-
-            response.MimeType = MimeType.ApplicationXml;
+			response.WriteLine(Doctype.XHTML11.ToString());
+			response.WriteLine(@"<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+	<title>Domain Configuration Panel</title>
+	<link rel='stylesheet' type='text/css' href='/theme/stylesheet' />
+</head>
+<body class='ContentA'>
+	<div class='header'>
+		<h2 class='HeadingA'>Domain Configuration Panel</h2>
+	</div>
+	<div class='setting'>
+		" + @"
+	</div>
+</body>
+</html>");
+            response.MimeType = MimeType.TextHtml;
         }
         public override void OnShutdown()
         {

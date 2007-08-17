@@ -1,15 +1,11 @@
-/*
-Serenity - The next evolution of web server technology
-
-Copyright © 2006-2007 Serenity Project (http://SerenityProject.net/)
-
-This file is protected by the terms and conditions of the
-Microsoft Community License (Ms-CL), a copy of which should
-have been distributed along with this software. If not,
-you may find the license information at the following URL:
-
-http://www.microsoft.com/resources/sharedsource/licensingbasics/communitylicense.mspx
-*/
+/******************************************************************************
+ * Serenity - The next evolution of web server technology.                    *
+ * Copyright © 2006-2007 Serenity Project - http://SerenityProject.net/       *
+ *----------------------------------------------------------------------------*
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Permissive License (Ms-PL), a copy of which should have been included with *
+ * this distribution as License.txt.                                          *
+ *****************************************************************************/
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,25 +30,28 @@ namespace Serenity
         }
         #endregion
         #region Fields - Private
-        [ThreadStatic]
-        private static Module current;
+        
         private static Dictionary<string, Module> modules;
         private readonly string name;
         private Dictionary<string, ContentPage> pages;
         private string title;
         private ContentPage defaultPage;
         #endregion
-        #region Methods - Private
-        private static Module LoadModule(string name)
+		#region Fields - Public
+		[ThreadStatic]
+		public static Module Current;
+		#endregion
+		#region Methods - Public
+		public static Module LoadModule(string name)
         {
-            return Module.LoadModuleFile(SPath.Combine("Modules", name + ".dll"), name);
+            return Module.LoadModuleFile(name, SPath.Combine("Modules", name + ".dll"));
         }
-        private static Module LoadModuleFile(string path, string name)
+        public static Module LoadModuleFile(string name, string assemblyPath)
         {
             string title = "Untitled";
             ContentPage defaultPage = null;
 
-            Assembly moduleAsm = Assembly.LoadFile(Path.GetFullPath(path));
+            Assembly moduleAsm = Assembly.LoadFile(Path.GetFullPath(assemblyPath));
 
             object[] moduleAttributes = moduleAsm.GetCustomAttributes(true);
             foreach (object attrib in moduleAttributes)
@@ -105,13 +104,23 @@ namespace Serenity
                 return module;
             }
         }
-        #endregion
-        #region Methods - Public
+		public static bool AddModule(Module module)
+		{
+			if (module != null && !Module.modules.ContainsKey(module.Name))
+			{
+				Module.modules.Add(module.Name, module);
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
         public void AddPage(ContentPage page)
         {
             if (!this.pages.ContainsKey(page.Name))
             {
-                this.pages.Add(page.Name, page);
+                this.pages.Add(page.SystemName, page);
             }
         }
         public void AddPages(IEnumerable<ContentPage> pages)
@@ -123,35 +132,35 @@ namespace Serenity
         }
         public static Module GetModule(string name)
         {
-            if (Module.modules.ContainsKey(name))
-            {
-                return Module.modules[name];
-            }
-            else
-            {
-                return Module.LoadModule(name);
-            }
+			if (!string.IsNullOrEmpty(name) && Module.modules.ContainsKey(name))
+			{
+				return Module.modules[name];
+			}
+			else
+			{
+				return null;
+			}
         }
-        public static void LoadAllModules()
-        {
-            string[] paths = Directory.GetFiles(SPath.ModulesFolder);
-
-            foreach (string path in paths)
-            {
-                if (Path.GetExtension(path).Equals(".dll"))
-                {
-                    Module m = Module.GetModule(Path.GetFileNameWithoutExtension(path));
-
-                    if ((m != null) && (!Module.modules.ContainsKey(m.name)))
-                    {
-                        Module.modules.Add(m.name, m);
-                    }
-
-                }
-            }
-        }
+		public ContentPage GetPage(string name)
+		{
+			if (this.pages.ContainsKey(name))
+			{
+				return this.pages[name];
+			}
+			else
+			{
+				return null;
+			}
+		}
         #endregion
         #region Properties - Public
+		public ContentPage DefaultPage
+		{
+			get
+			{
+				return this.defaultPage;
+			}
+		}
         public string Name
         {
             get
@@ -164,13 +173,6 @@ namespace Serenity
             get
             {
                 return Module.modules.Count;
-            }
-        }
-        public static Module Current
-        {
-            get
-            {
-                return Module.current;
             }
         }
         #endregion

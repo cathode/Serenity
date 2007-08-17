@@ -1,15 +1,11 @@
-/*
-Serenity - The next evolution of web server technology
-
-Copyright © 2006-2007 Serenity Project (http://SerenityProject.net/)
-
-This file is protected by the terms and conditions of the
-Microsoft Community License (Ms-CL), a copy of which should
-have been distributed along with this software. If not,
-you may find the license information at the following URL:
-
-http://www.microsoft.com/resources/sharedsource/licensingbasics/communitylicense.mspx
-*/
+/******************************************************************************
+ * Serenity - The next evolution of web server technology.                    *
+ * Copyright © 2006-2007 Serenity Project - http://SerenityProject.net/       *
+ *----------------------------------------------------------------------------*
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Permissive License (Ms-PL), a copy of which should have been included with *
+ * this distribution as License.txt.                                          *
+ *****************************************************************************/
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -96,7 +92,7 @@ namespace Serenity.Themes
         {
             get
             {
-                return HexEncoding.Convert(new byte[] { this.red, this.green, this.blue });
+                return HexEncoder.Convert(new byte[] { this.red, this.green, this.blue });
             }
             set
             {
@@ -117,7 +113,7 @@ namespace Serenity.Themes
                 }
                 else if (Parts.Length == 1)
                 {
-                    byte[] Values = HexEncoding.Convert(value);
+                    byte[] Values = HexEncoder.Convert(value);
                     if (Values.Length == 3)
                     {
                         this.red = Values[0];

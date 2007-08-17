@@ -1,15 +1,11 @@
-/*
-Serenity - The next evolution of web server technology
-
-Copyright © 2006-2007 Serenity Project (http://SerenityProject.net/)
-
-This file is protected by the terms and conditions of the
-Microsoft Community License (Ms-CL), a copy of which should
-have been distributed along with this software. If not,
-you may find the license information at the following URL:
-
-http://www.microsoft.com/resources/sharedsource/licensingbasics/communitylicense.mspx
-*/
+/******************************************************************************
+ * Serenity - The next evolution of web server technology.                    *
+ * Copyright © 2006-2007 Serenity Project - http://SerenityProject.net/       *
+ *----------------------------------------------------------------------------*
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Permissive License (Ms-PL), a copy of which should have been included with *
+ * this distribution as License.txt.                                          *
+ *****************************************************************************/
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,18 +16,11 @@ namespace Serenity
 {
     public struct FileTypeEntry
     {
-        #region Constructors - Internal
-        internal FileTypeEntry(string description, MimeType mimeType, bool compress)
-        {
-            this.useCompression = compress;
-            this.description = description;
-            this.mimeType = mimeType;
-        }
-        #endregion
         #region Fields - Private
-        private readonly string description;
-        private readonly MimeType mimeType;
-        private readonly bool useCompression;
+        private string description;
+		private string icon;
+        private MimeType mimeType;
+        private bool useCompression;
         #endregion
         #region Properties - Public
         public string Description
@@ -40,13 +29,32 @@ namespace Serenity
             {
                 return this.description;
             }
+			internal set
+			{
+				this.description = value;
+			}
         }
+		public string Icon
+		{
+			get
+			{
+				return this.icon;
+			}
+			internal set
+			{
+				this.icon = value;
+			}
+		}
         public MimeType MimeType
         {
             get
             {
                 return this.mimeType;
             }
+			internal set
+			{
+				this.mimeType = value;
+			}
         }
         public bool UseCompression
         {
@@ -54,6 +62,10 @@ namespace Serenity
             {
                 return this.useCompression;
             }
+			internal set
+			{
+				this.useCompression = value;
+			}
         }
         #endregion
     }

@@ -34,27 +34,21 @@ namespace Serenity.Web
         public virtual void HandleContext(CommonContext context)
         {
             Uri url = context.Request.Url;
+			if (DomainSettings.Current == null)
+			{
+				DomainSettings.Current = DomainSettings.GetBestMatch(url);
+			}
+			DomainSettings settings = DomainSettings.Current;
 
-            DomainSettings.Current = DomainSettings.GetBestMatch(url);
 
-            DomainSettings settings = DomainSettings.Current;
-
-            if ((settings.OmitEnvironment.Value) || (url.Segments.Length < 2))
-            {
-                SerenityEnvironment.CurrentInstance = SerenityEnvironment.GetInstance(settings.DefaultEnvironment.Value);
-            }
-            else
-            {
-                SerenityEnvironment.CurrentInstance = SerenityEnvironment.GetInstance(url.Segments[1].TrimEnd('/').ToLower());
-            }
             ResourceClass resourceClass;
-            if ((DomainSettings.Current.OmitResourceClass.Value) || ((url.Segments.Length < 3) && (!settings.OmitEnvironment.Value)))
+            if ((settings.OmitResourceClass) || (url.Segments.Length < 2))
             {
-                resourceClass = ResourceClass.GetResourceClass(SerenityEnvironment.CurrentInstance.DefaultResourceClass.ToLower());
+                resourceClass = ResourceClass.GetResourceClass(settings.DefaultResourceClass);
             }
             else
             {
-                resourceClass = ResourceClass.GetResourceClass(url.Segments[2].TrimEnd('/').ToLower());
+                resourceClass = ResourceClass.GetResourceClass(url.Segments[1].TrimEnd('/').ToLower());
             }
             if (resourceClass != null)
             {

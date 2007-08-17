@@ -1,15 +1,12 @@
-﻿/*
-Serenity - The next evolution of web server technology
-
-Copyright © 2006-2007 Serenity Project (http://SerenityProject.net/)
-
-This file is protected by the terms and conditions of the
-Microsoft Community License (Ms-CL), a copy of which should
-have been distributed along with this software. If not,
-you may find the license information at the following URL:
-
-http://www.microsoft.com/resources/sharedsource/licensingbasics/communitylicense.mspx
-*/
+﻿/******************************************************************************
+ * Serenity - The next evolution of web server technology.                    *
+ * Copyright © 2006-2007 Serenity Project - http://SerenityProject.net/       *
+ *----------------------------------------------------------------------------*
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Permissive License (Ms-PL), a copy of which should have been included with *
+ * this distribution as License.txt.                                          *
+ *****************************************************************************/
+using LibINI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,15 +19,14 @@ namespace Serenity
 	/// <summary>
 	/// Represents a collection of settings that are specific to a domain name.
 	/// </summary>
-	[Serializable]
 	public sealed class DomainSettings
 	{
 		#region Constructors - Private
 		static DomainSettings()
 		{
-			DomainSettings.settings = new Dictionary<string, DomainSettings>();
-			DomainSettings.root = DomainSettings.CreateDefaultRoot();
-			DomainSettings.settings.Add("", root);
+			DomainSettings.instances = new Dictionary<string, DomainSettings>();
+			DomainSettings.root = new DomainSettings("root");
+			DomainSettings.instances.Add(root.name, root);
 		}
 		#endregion
 		#region Constructors - Public
@@ -41,58 +37,33 @@ namespace Serenity
 		public DomainSettings(string name)
 		{
 			this.name = name;
-
-			DomainSettings parent = DomainSettings.GetParent(name);
-
-			if (parent == null)
-			{
-				this.hasParent = false;
-				this.parent = null;
-				this.defaultEnvironment = new DomainSettingValue<string>();
-				this.omitEnvironment = new DomainSettingValue<bool>();
-				this.omitResourceClass = new DomainSettingValue<bool>();
-				this.compressionThreshhold = new DomainSettingValue<int>();
-			}
-			else
-			{
-				this.parent = parent;
-				this.defaultEnvironment = new DomainSettingValue<string>(this.parent.DefaultEnvironment);
-				this.omitEnvironment = new DomainSettingValue<bool>(this.parent.omitEnvironment);
-				this.omitResourceClass = new DomainSettingValue<bool>(this.parent.omitResourceClass);
-				this.compressionThreshhold = new DomainSettingValue<int>(this.parent.CompressionThreshhold);
-			}
+			this.parent = DomainSettings.GetParent(name);
 		}
 		#endregion
 		#region Fields - Private
-		[NonSerialized]
-		[ThreadStatic]
-		private static DomainSettings current;
-		[NonSerialized]
-		private bool hasParent;
+		private string defaultResourceClass;
+		private bool defaultResourceClassIsDefined = false;
+		private string defaultResourceName;
+		private bool defaultResourceNameIsDefined = false;
+		private string documentRoot;
+		private bool documentRootIsDefined = false;
+		private static readonly Dictionary<string, DomainSettings> instances;
 		private readonly string name;
-		[NonSerialized]
-		private readonly DomainSettings parent;
-		[NonSerialized]
-		private static DomainSettings root;
-		[NonSerialized]
-		private static readonly Dictionary<string, DomainSettings> settings;
+		private bool omitResourceClass;
+		private bool omitResourceClassIsDefined = false;
+		private DomainSettings parent = null;
+		private static readonly DomainSettings root;
+		private string themeName;
+		private bool themeNameIsDefined = false;
 		#endregion
 		#region Fields - Public
-		private readonly DomainSettingValue<string> defaultEnvironment;
-		private readonly DomainSettingValue<bool> omitEnvironment;
-		private readonly DomainSettingValue<bool> omitResourceClass;
-		private readonly DomainSettingValue<int> compressionThreshhold;
-		#endregion
-		#region Methods - Private
-		private static DomainSettings CreateDefaultRoot()
-		{
-			DomainSettings root = new DomainSettings("");
-			root.defaultEnvironment.Value = "system";
-			root.compressionThreshhold.Value = 8192;
-			root.omitEnvironment.Value = false;
-			root.omitResourceClass.Value = false;
-			return root;
-		}
+		[ThreadStatic]
+		public static DomainSettings Current;
+		public const string DefaultDefaultResourceClass = "static";
+		public const string DefaultDefaultResourceName = "default.html";
+		public const string DefaultDocumentRoot = "./Domains/Common/";
+		public const bool DefaultOmitResourceClass = false;
+		public const string DefaultThemeName = "system";
 		#endregion
 		#region Methods - Public
 		/// <summary>
@@ -137,11 +108,11 @@ namespace Serenity
 		/// <returns></returns>
 		public static DomainSettings GetBestMatch(string hostName, bool recurse)
 		{
-			if (string.IsNullOrEmpty(hostName) == false)
+			if (!string.IsNullOrEmpty(hostName))
 			{
-				if (DomainSettings.settings.ContainsKey(hostName) == true)
+				if (DomainSettings.instances.ContainsKey(hostName) == true)
 				{
-					return DomainSettings.settings[hostName];
+					return DomainSettings.instances[hostName];
 				}
 				else if (recurse == true)
 				{
@@ -160,15 +131,15 @@ namespace Serenity
 		}
 		public static DomainSettings GetParent(string hostName)
 		{
-			if (string.IsNullOrEmpty(hostName) == false)
+			if (!string.IsNullOrEmpty(hostName))
 			{
 				string[] oldNames = hostName.Split('.');
 				string[] newNames = new string[oldNames.Length - 1];
 				Array.Copy(oldNames, newNames, newNames.Length);
 				string newHostName = string.Join(".", newNames);
-				if (DomainSettings.settings.ContainsKey(newHostName) == true)
+				if (DomainSettings.instances.ContainsKey(newHostName) == true)
 				{
-					return DomainSettings.settings[newHostName];
+					return DomainSettings.instances[newHostName];
 				}
 				else
 				{
@@ -184,22 +155,19 @@ namespace Serenity
 		{
 			string domainPath = SPath.ResolveSpecialPath(SpecialFolder.Domains);
 			DomainSettings oldRoot = DomainSettings.root;
-			DomainSettings.settings.Clear();
+			DomainSettings.instances.Clear();
 			if (Directory.Exists(domainPath))
 			{
 				string[] files = Directory.GetFiles(domainPath);
 				foreach (string path in files)
 				{
-					DomainSettings settings = DomainSettings.Load(path);
+					DomainSettings settings = DomainSettings.Load(Path.GetFileNameWithoutExtension(path));
 					if (settings != null)
 					{
-						DomainSettings.settings.Add(settings.name, settings);
+						DomainSettings.instances.Add(settings.name, settings);
 					}
 				}
-				if (DomainSettings.settings.ContainsKey(""))
-				{
-					DomainSettings.root = DomainSettings.settings[""];
-				}
+				DomainSettings.RecomputeRelationships();
 				return true;
 			}
 			else
@@ -209,45 +177,72 @@ namespace Serenity
 		}
 		public static bool SaveAll()
 		{
-			foreach (DomainSettings ds in DomainSettings.settings.Values)
+			foreach (DomainSettings ds in DomainSettings.instances.Values)
 			{
 				DomainSettings.Save(ds);
 			}
 
 			return true;
 		}
-		public static DomainSettings Load(string path)
+		public static DomainSettings Load(string name)
 		{
-			//start with null, thats what is returned if it couldnt be loaded.
-			DomainSettings result = null;
+			DomainSettings settings = null;
+			string path = Path.GetFullPath(SPath.Combine(SPath.DomainsFolder, name + ".ini"));
 
 			if (File.Exists(path))
 			{
-				using (FileStream fs = File.Open(path, FileMode.Open))
+				if (DomainSettings.instances.ContainsKey(name))
 				{
-					BinaryFormatter formatter = new BinaryFormatter();
+					settings = DomainSettings.instances[name];
+				}
+				else
+				{
+					settings = new DomainSettings(name);
+				}
+				IniFile file = new IniFile(path);
+				file.CaseSensitiveRetrieval = false;
 
-					object settings = formatter.Deserialize(fs);
+				file.Load();
 
-					if (settings is DomainSettings)
+				if (file.ContainsSection("DomainSettings"))
+				{
+					IniSection section = file["DomainSettings"];
+
+					if (section.ContainsEntry("DefaultResourceName"))
 					{
-						result = (DomainSettings)settings;
+						settings.DefaultResourceName = section["DefaultResourceName"].Value;
+					}
+					if (section.ContainsEntry("DefaultResourceClass"))
+					{
+						settings.DefaultResourceClass = section["DefaultResourceClass"].Value;
+					}
+					if (section.ContainsEntry("DocumentRoot"))
+					{
+						settings.DocumentRoot = Path.GetFullPath(section["DocumentRoot"].Value);
+					}
+					if (section.ContainsEntry("OmitResourceClass"))
+					{
+						try
+						{
+							settings.OmitResourceClass = bool.Parse(section["OmitResourceClass"].Value);
+						}
+						catch
+						{
+						}
+					}
+					if (section.ContainsEntry("ThemeName"))
+					{
+						settings.ThemeName = section["ThemeName"].Value;
 					}
 				}
 			}
-			return result;
+			return settings;
 		}
 		public static bool Save(DomainSettings settings)
 		{
 			if (Directory.Exists(SPath.ResolveSpecialPath(SpecialFolder.Domains)))
 			{
-				using (FileStream fs = File.Open(Path.Combine(SPath.DomainsFolder, settings.name + ".ds"), FileMode.Create))
-				{
-					BinaryFormatter formatter = new BinaryFormatter();
 
-					formatter.Serialize(fs, settings);
-					fs.Close();
-				}
 				return true;
 			}
 			else
@@ -255,32 +250,122 @@ namespace Serenity
 				return false;
 			}
 		}
-		#endregion
-		#region Properties - Public
-		public DomainSettingValue<int> CompressionThreshhold
+		public static void RecomputeRelationships()
 		{
-			get
+			foreach (DomainSettings settings in DomainSettings.instances.Values)
 			{
-				return this.compressionThreshhold;
+				settings.parent = DomainSettings.GetParent(settings.name);
 			}
 		}
-
-		public static DomainSettings Current
+		#endregion
+		#region Properties - Public
+		public static int Count
 		{
 			get
 			{
-				return DomainSettings.current;
+				return DomainSettings.instances.Count;
+			}
+		}
+		public string DefaultResourceClass
+		{
+			get
+			{
+				if (this.defaultResourceClassIsDefined)
+				{
+					return this.defaultResourceClass;
+				}
+				else if (this.HasParent)
+				{
+					return this.parent.DefaultResourceClass;
+				}
+				else
+				{
+					return DomainSettings.DefaultDefaultResourceClass;
+				}
 			}
 			set
 			{
-				DomainSettings.current = value;
+				this.defaultResourceClassIsDefined = (value == null) ? false : true;
+				this.defaultResourceClass = value;
 			}
 		}
-		public DomainSettingValue<string> DefaultEnvironment
+		public bool DefaultResourceClassIsDefined
 		{
 			get
 			{
-				return this.defaultEnvironment;
+				return this.defaultResourceClassIsDefined;
+			}
+			set
+			{
+				this.defaultResourceClassIsDefined = value;
+			}
+		}
+		public string DefaultResourceName
+		{
+			get
+			{
+				if (this.defaultResourceNameIsDefined)
+				{
+					return this.defaultResourceName;
+				}
+				else if (this.HasParent)
+				{
+					return this.parent.DefaultResourceName;
+				}
+				else
+				{
+					return DomainSettings.DefaultDefaultResourceName;
+				}
+			}
+			set
+			{
+				this.defaultResourceNameIsDefined = (value == null) ? false : true;
+				this.defaultResourceName = value;
+			}
+		}
+		public bool DefaultResourceNameIsDefined
+		{
+			get
+			{
+				return this.defaultResourceNameIsDefined;
+			}
+			set
+			{
+				this.defaultResourceNameIsDefined = value;
+			}
+		}
+		public string DocumentRoot
+		{
+			get
+			{
+				if (this.documentRootIsDefined)
+				{
+					return this.documentRoot;
+				}
+				else if (this.HasParent)
+				{
+					return this.parent.DocumentRoot;
+				}
+				else
+				{
+					return DomainSettings.DefaultDocumentRoot;
+				}
+			}
+			set
+			{
+				this.documentRootIsDefined = (value == null) ? false : true;
+				this.documentRoot = value;
+			}
+		}
+		public bool DocumentRootIsDefined
+		{
+			get
+			{
+				return this.documentRootIsDefined;
+			}
+			set
+			{
+				this.documentRootIsDefined = value;
 			}
 		}
 		/// <summary>
@@ -290,7 +375,7 @@ namespace Serenity
 		{
 			get
 			{
-				return this.hasParent;
+				return (this.parent == null) ? false : true;
 			}
 		}
 		public string Name
@@ -300,18 +385,72 @@ namespace Serenity
 				return this.name;
 			}
 		}
-		public DomainSettingValue<bool> OmitEnvironment
+		public bool OmitResourceClass
 		{
 			get
 			{
-				return this.omitEnvironment;
+				if (this.omitResourceClassIsDefined)
+				{
+					return this.omitResourceClass;
+				}
+				else if (this.HasParent)
+				{
+					return this.parent.OmitResourceClass;
+				}
+				else
+				{
+					return DomainSettings.DefaultOmitResourceClass;
+				}
+			}
+			set
+			{
+				this.omitResourceClassIsDefined = true;
+				this.omitResourceClass = value;
 			}
 		}
-		public DomainSettingValue<bool> OmitResourceClass
+		public bool OmitResourceClassIsDefined
 		{
 			get
 			{
-				return this.omitResourceClass;
+				return this.omitResourceClassIsDefined;
+			}
+			set
+			{
+				this.omitResourceClassIsDefined = value;
+			}
+		}
+		public string ThemeName
+		{
+			get
+			{
+				if (this.themeNameIsDefined)
+				{
+					return this.themeName;
+				}
+				else if (this.HasParent)
+				{
+					return this.parent.ThemeName;
+				}
+				else
+				{
+					return DomainSettings.DefaultThemeName;
+				}
+			}
+			set
+			{
+				this.themeNameIsDefined = (value == null) ? false : true;
+				this.themeName = value;
+			}
+		}
+		public bool ThemeNameIsDefined
+		{
+			get
+			{
+				return this.themeNameIsDefined;
+			}
+			set
+			{
+				this.themeNameIsDefined = value;
 			}
 		}
 		#endregion
