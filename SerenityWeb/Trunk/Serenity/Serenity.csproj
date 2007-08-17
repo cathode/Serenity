@@ -92,6 +92,7 @@
     <Compile Include="Hdf\HdfWriter.cs" />
     <Compile Include="Hdf\HdfWriterSettings.cs" />
     <Compile Include="Module.cs" />
+    <Compile Include="Themes\Theme.cs" />
     <Compile Include="Web\ContextHandler.cs" />
     <Compile Include="MasterPage.cs" />
     <Compile Include="Page.cs" />
@@ -106,21 +107,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Multiton.cs" />
     <Compile Include="DomainSettings.cs" />
-    <Compile Include="Themes\Border.cs" />
-    <Compile Include="Themes\BorderSide.cs" />
-    <Compile Include="Themes\BorderType.cs" />
-    <Compile Include="Themes\Box.cs" />
-    <Compile Include="Themes\IStyleNode.cs" />
-    <Compile Include="Themes\Margin.cs" />
-    <Compile Include="Themes\Padding.cs" />
-    <Compile Include="Themes\Style.cs" />
-    <Compile Include="Themes\StyleType.cs" />
-    <Compile Include="Themes\TextDirection.cs" />
-    <Compile Include="Themes\Unit.cs" />
-    <Compile Include="Themes\Width.cs" />
     <Compile Include="TryResult.cs" />
-    <Compile Include="Themes\Color.cs" />
-    <Compile Include="Themes\Theme.cs" />
     <None Include="Users\SingleSignOn\SsoClient.cs" />
     <Compile Include="Web\CommonContext.cs" />
     <None Include="Web\Controls\Control.cs" />
@@ -174,9 +161,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Presentation\indextest.hdf" />
+    <None Include="Themes\template\theme.ini" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Themes\template\stylesheet.css" />
+    <Content Include="Themes\template\stylesheet.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
