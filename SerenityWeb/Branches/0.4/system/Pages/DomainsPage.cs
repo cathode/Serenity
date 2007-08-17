@@ -11,39 +11,35 @@ using System.Collections.Generic;
 using System.Text;
 
 using Serenity.Web;
-using Serenity.Xml;
+using Serenity.Xml.Html;
 
 namespace Serenity.Pages
 {
     public sealed class DomainsPage : ContentPage
     {
-        private IEnumerable<XmlNode> GetItemList(string[] items, XmlDocument doc)
-        {
-            if (items != null)
-            {
-                foreach (string item in items)
-                {
-                    yield return doc.CreateElement("Item", item);
-                }
-            }
-        }
         public override void OnInitialization()
         {
             
         }
-        public override void OnRequest(Serenity.Web.CommonContext context)
+        public override void OnRequest(CommonContext context)
         {
-            DomainSettings settings = DomainSettings.GetBestMatch(context.Request.Url);
-
             CommonResponse response = context.Response;
 
-            if (context.Request.RequestData.Contains("domain"))
-            {
-                settings = DomainSettings.GetBestMatch(context.Request.RequestData["domain"].ReadAllText());
-            }
-
-            response.Write("Working with domainsettings: " + settings.Name);
-
+			response.WriteLine(Doctype.XHTML11.ToString());
+			response.WriteLine(@"<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+	<title>Domain Configuration Panel</title>
+	<link rel='stylesheet' type='text/css' href='/theme/stylesheet' />
+</head>
+<body class='ContentA'>
+	<div class='header'>
+		<h2 class='HeadingA'>Domain Configuration Panel</h2>
+	</div>
+	<div class='setting'>
+		" + @"
+	</div>
+</body>
+</html>");
             response.MimeType = MimeType.TextHtml;
         }
         public override void OnShutdown()
