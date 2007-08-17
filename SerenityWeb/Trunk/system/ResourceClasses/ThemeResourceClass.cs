@@ -22,11 +22,7 @@ namespace Serenity.ResourceClasses
         }
         public override void HandleContext(Serenity.Web.CommonContext context)
         {
-            CommonResponse response = context.Response;
-            response.Write(Themes.Theme.DefaultInstance.StylesheetContent);
-            response.Status = StatusCode.Http200Ok;
-            response.MimeType = MimeType.TextCss;
-            response.UseCompression = true;
+			ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
         }
     }
 }

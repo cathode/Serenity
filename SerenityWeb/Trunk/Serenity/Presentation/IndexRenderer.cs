@@ -21,7 +21,7 @@ namespace Serenity.Presentation
     /// </summary>
     public class IndexRenderer
     {
-        public HtmlElement RenderIndexSet(HdfDataset dataset)
+        public string RenderIndexSet(HdfDataset dataset)
         {
             dataset.IsCaseSensitive = false;
             //string resourceName = dataset["title"].Value;

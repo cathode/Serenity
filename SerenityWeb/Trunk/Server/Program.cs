@@ -56,31 +56,6 @@ namespace Server
 			DomainSettings.LoadAll();
 
 			//(Temporary) Runs the server.
-			Theme theme = new Theme(SerenityInfo.SystemName);
-			theme.AccentA.TextColor.Value = "114 124 163";
-			theme.AccentB.TextColor.Value = "159 184 205";
-			theme.AccentC.TextColor.Value = "210 218 122";
-			theme.AccentD.TextColor.Value = "250 218 122";
-			theme.AccentE.TextColor.Value = "184 132 114";
-			theme.AccentF.TextColor.Value = "145 115 106";
-			theme.ContentA.TextColor.Value = "0 0 0";
-			theme.ContentA.BackgroundColor.Value = "251 251 251";
-			theme.ContentB.TextColor.Value = "70 70 83";
-			theme.ContentB.BackgroundColor.Value = "231 243 246";
-
-			Border border = theme.HeadingA.Border;
-
-			border.Top.BorderType = BorderType.Dotted;
-			border.Top.Width.Value = 1;
-
-			border.Left.BorderType = BorderType.Dotted;
-			border.Left.Width.Value = 1;
-
-			theme.HeadingA.Padding.Top.Value = 8;
-			theme.HeadingA.Padding.Left.Value = 16;
-
-			Theme.SystemInstance = theme;
-
 			foreach (KeyValuePair<string, string> pair in config.Modules)
 			{
 				string name = pair.Key;
@@ -91,7 +66,7 @@ namespace Server
 			Log.Write(string.Format("Loaded: {0} domains, {1} modules, {2} themes.",
 				DomainSettings.Count,
 				Module.ModuleCount,
-				Theme.Instances.Length), LogMessageLevel.Info);
+				0), LogMessageLevel.Info);
 			WebDriverSettings settings = new WebDriverSettings();
 			settings.Block = config.BlockingIO;
 			settings.ContextHandler = new ContextHandler();

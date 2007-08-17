@@ -20,15 +20,9 @@ namespace Serenity.Pages
 {
     public sealed class DefaultPage : ContentPage
     {
-        public override void OnRequest(CommonContext Context)
+        public override void OnRequest(CommonContext context)
         {
-            HtmlDocument Doc = new HtmlDocument();
-            HtmlElement P = Doc.BodyElement.AppendParagraph();
-            P.AppendText("Welcome to the Serenity default page.");
-            P.AppendBreak();
-            P.AppendAnchor("http://serenityproject.net/", "Project Homepage");
-            Context.Response.Write(Doc.SaveMarkup());
-            Context.Response.MimeType = MimeType.TextHtml;
+			ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
         }
         public override ContentPage CreateInstance()
         {

@@ -19,7 +19,7 @@ namespace Serenity.Web.Drivers
 	{
 		public HttpReader(WebDriver driver)
 		{
-
+			this.driver = driver;
 		}
 		private WebDriver driver;
 		public override CommonContext Read(byte[] buffer, out bool result)

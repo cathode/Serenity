@@ -129,26 +129,12 @@
     <Compile Include="Web\CommonResponse.cs" />
     <Compile Include="Web\Drivers\HttpDriver.cs" />
     <Compile Include="Web\Drivers\WebDriver.cs" />
-    <Compile Include="Xml\Html\Doctype.cs" />
     <Compile Include="Web\Drivers\WebDriverSettings.cs" />
     <None Include="Users\User.cs" />
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="Xml\Html\HtmlDocument.cs" />
-    <Compile Include="Xml\Html\HtmlElement.cs" />
-    <Compile Include="Xml\XmlAttribute.cs" />
-    <Compile Include="Xml\XmlCharacterData.cs" />
-    <Compile Include="Xml\XmlComment.cs" />
-    <Compile Include="Xml\XmlDocument.cs" />
-    <Compile Include="Xml\XmlElement.cs" />
-    <None Include="Xml\XmlException.cs" />
-    <Compile Include="Xml\XmlNode.cs" />
-    <Compile Include="Xml\XmlNodeCollection.cs" />
-    <Compile Include="Xml\XmlPreprocessorDirective.cs" />
-    <Compile Include="Xml\XmlReader.cs" />
-    <Compile Include="Xml\XmlTextNode.cs" />
-    <Compile Include="Xml\XmlWriter.cs" />
+    <Compile Include="Xml\Html\Doctype.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\WShelley.public.snk">
