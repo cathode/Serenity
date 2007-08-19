@@ -32,20 +32,41 @@ namespace Serenity.Web
         }
         #endregion
         #region Fields - Private
-        private List<byte> outputBuffer = new List<byte>();
+		private CommonContext context;
+		private HeaderCollection headers = new HeaderCollection();
+		private bool lockFlushes = false;
+		private bool lockWrites = false;
         private MimeType mimeType = MimeType.Default;
-        private HeaderCollection headers = new HeaderCollection();
-        private CommonContext context;
+		private List<byte> outputBuffer = new List<byte>();
+		private bool useChunkedTransferEncoding = false;
         private bool useCompression = false;
-        private bool useChunkedTransferEncoding = false;
         #endregion
         #region Fields - Public
         public StatusCode Status;
         #endregion
-        #region Methods - Public
+		#region Methods - Internal
+		/// <summary>
+		/// Prevents the output buffer from being flushed.
+		/// </summary>
+		/// <param name="lockWrites">Determines if writes are prevented in addition to flushes.</param>
+		internal void LockOutputBuffer(bool lockWrites)
+		{
+			this.lockFlushes = true;
+			this.lockWrites = lockWrites;
+		}
+		/// <summary>
+		/// Performs the opposite of CommonResponse.LockOutputBuffer(bool).
+		/// </summary>
+		internal void UnlockOutputBuffer()
+		{
+			this.lockFlushes = false;
+			this.lockWrites = false;
+		}
+		#endregion
+		#region Methods - Public
 		public void ClearOutputBuffer()
 		{
-			this.outputBuffer = new List<byte>();
+			this.outputBuffer.Clear();
 		}
         /// <summary>
         /// Causes the currently buffered data to be written to the underlying client socket, then clears the Buffer.
@@ -54,11 +75,19 @@ namespace Serenity.Web
         /// <returns>The number of bytes flushed, or -1 if an error occurred.</returns>
         public int Flush()
         {
-            //if (this.context.Driver.WriteContext(this.context.Socket, this.context))
-            //{
+			if (!this.lockFlushes)
+			{
+				//if (this.context.Driver.WriteContext(this.context.Socket, this.context))
+				//{
 
-            //}
-            return -1;
+				//}
+				//not implemented yet.
+				return -1;
+			}
+			else
+			{
+				return -1;
+			}
         }
         /// <summary>
         /// Writes a series of bytes to the output buffer.
@@ -67,7 +96,7 @@ namespace Serenity.Web
         /// <returns>The number of bytes written, or -1 if an error occurred.</returns>
         public int Write(byte[] value)
         {
-            if (value != null)
+            if ((value != null) && (!this.lockWrites))
             {
                 this.outputBuffer.AddRange(value);
                 return value.Length;

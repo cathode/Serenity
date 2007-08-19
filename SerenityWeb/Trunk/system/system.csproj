@@ -67,6 +67,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ContentPages\Default.xml" />
+    <Content Include="Pages\AdminPanel.xml" />
+    <Content Include="Pages\AdminPanel.xslt" />
     <Content Include="system.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

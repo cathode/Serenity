@@ -22,6 +22,14 @@ namespace Serenity.ResourceClasses
         }
         public override void HandleContext(Serenity.Web.CommonContext context)
         {
+			if (context.Request.Url.Segments.Length > 1)
+			{
+
+			}
+			else
+			{
+
+			}
 			ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
         }
     }
