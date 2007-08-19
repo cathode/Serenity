@@ -65,7 +65,7 @@ namespace Server
 
 			Log.Write(string.Format("Loaded: {0} domains, {1} modules, {2} themes.",
 				DomainSettings.Count,
-				Module.ModuleCount,
+				Module.LoadedCount,
 				0), LogMessageLevel.Info);
 			WebDriverSettings settings = new WebDriverSettings();
 			settings.Block = config.BlockingIO;

@@ -30,7 +30,7 @@ namespace Serenity
         }
         #endregion
         #region Fields - Private
-        
+		private Assembly assembly;
         private static Dictionary<string, Module> modules;
         private readonly string name;
         private Dictionary<string, ContentPage> pages;
@@ -87,7 +87,9 @@ namespace Serenity
             }
             if (pages.Count == 0)
             {
-                return new Module(name);
+				Module module = new Module(name);
+				module.assembly = moduleAsm;
+				return module;
             }
             else
             {
@@ -97,6 +99,7 @@ namespace Serenity
                 }
 
                 Module module = new Module(name);
+				module.assembly = moduleAsm;
                 module.title = title;
                 module.defaultPage = defaultPage;
                 module.AddPages(pages);
@@ -168,7 +171,7 @@ namespace Serenity
                 return this.name;
             }
         }
-        public static int ModuleCount
+        public static int LoadedCount
         {
             get
             {

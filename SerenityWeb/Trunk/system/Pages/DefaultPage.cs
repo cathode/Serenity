@@ -22,7 +22,7 @@ namespace Serenity.Pages
     {
         public override void OnRequest(CommonContext context)
         {
-			ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
+			context.Response.WriteLine("This Page has not yet been implemented!");
         }
         public override ContentPage CreateInstance()
         {
