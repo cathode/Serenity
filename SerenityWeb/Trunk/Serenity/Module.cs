@@ -36,6 +36,7 @@ namespace Serenity
         private Dictionary<string, ContentPage> pages;
         private string title;
         private ContentPage defaultPage;
+        private string resourceNamespace;
         #endregion
 		#region Methods - Public
 		public static Module LoadModule(string name)
@@ -48,6 +49,8 @@ namespace Serenity
             ContentPage defaultPage = null;
 
             Assembly moduleAsm = Assembly.LoadFile(Path.GetFullPath(assemblyPath));
+
+            string resourceNamespace = moduleAsm.GetName().Name + ".Resources.";
 
             object[] moduleAttributes = moduleAsm.GetCustomAttributes(true);
             foreach (object attrib in moduleAttributes)
@@ -64,6 +67,14 @@ namespace Serenity
                 {
                     ModuleDefaultPageAttribute defaultPageAttribute = (ModuleDefaultPageAttribute)attrib;
                     defaultPage = (ContentPage)moduleAsm.CreateInstance(defaultPageAttribute.TypeName);
+                    break;
+                }
+            }
+            foreach (object attrib in moduleAttributes)
+            {
+                if (attrib is ModuleResourceNamespaceAttribute)
+                {
+                    resourceNamespace = ((ModuleResourceNamespaceAttribute)attrib).ResourceNamespace;
                     break;
                 }
             }
@@ -98,6 +109,7 @@ namespace Serenity
 				module.assembly = moduleAsm;
                 module.title = title;
                 module.defaultPage = defaultPage;
+                module.resourceNamespace = resourceNamespace;
                 module.AddPages(pages);
 
                 return module;
@@ -179,6 +191,13 @@ namespace Serenity
             get
             {
                 return Module.modules.Count;
+            }
+        }
+        public string ResourceNamespace
+        {
+            get
+            {
+                return this.resourceNamespace;
             }
         }
         #endregion

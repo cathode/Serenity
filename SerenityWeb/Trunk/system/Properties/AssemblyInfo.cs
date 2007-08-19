@@ -8,3 +8,4 @@ using Serenity.Attributes;
 [assembly: AssemblyDescription("System Module for Serenity")]
 [assembly: ModuleTitle("system")]
 [assembly: ModuleDefaultPage("Serenity.Pages.DefaultPage")]
+[assembly: ModuleResourceNamespace("Serenity.Resources.")]

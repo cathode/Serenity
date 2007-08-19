@@ -31,4 +31,13 @@ namespace Serenity.Attributes
         }
         public readonly string TypeName;
     }
+    [AttributeUsage(AttributeTargets.Assembly)]
+    public sealed class ModuleResourceNamespaceAttribute : Attribute
+    {
+        public ModuleResourceNamespaceAttribute(string resourceNamespace)
+        {
+            this.ResourceNamespace = resourceNamespace;
+        }
+        public readonly string ResourceNamespace;
+    }
 }

@@ -37,6 +37,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -67,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ContentPages\Default.xml" />
+    <EmbeddedResource Include="Resources\smellyhippy.JPG" />
     <Content Include="Pages\AdminPanel.xml" />
     <Content Include="Pages\AdminPanel.xslt" />
     <Content Include="system.xml" />
