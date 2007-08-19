@@ -37,10 +37,6 @@ namespace Serenity
         private string title;
         private ContentPage defaultPage;
         #endregion
-		#region Fields - Public
-		[ThreadStatic]
-		public static Module Current;
-		#endregion
 		#region Methods - Public
 		public static Module LoadModule(string name)
         {
@@ -157,6 +153,13 @@ namespace Serenity
 		}
         #endregion
         #region Properties - Public
+		public Assembly Assembly
+		{
+			get
+			{
+				return this.assembly;
+			}
+		}
 		public ContentPage DefaultPage
 		{
 			get
