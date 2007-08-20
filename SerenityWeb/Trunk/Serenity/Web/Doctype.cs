@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Serenity.Xml.Html
+namespace Serenity.Web
 {
     /// <summary>
     /// Provides object-oriented access to a Document Type Declaration

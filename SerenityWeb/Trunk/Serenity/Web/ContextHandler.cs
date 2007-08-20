@@ -17,12 +17,11 @@ using System.Text;
 
 using Serenity.Themes;
 using Serenity.Web;
-using Serenity.Xml.Html;
 
 namespace Serenity.Web
 {
     /// <summary>
-    /// Defines a method which handle incoming CommonContexts by directing them to the proper resource class.
+    /// Provides a handler for incoming CommonContexts by directing them to the proper resource class.
     /// </summary>
     public class ContextHandler
     {

@@ -12,16 +12,26 @@ using System.Text;
 
 namespace Serenity.Attributes
 {
+	/// <summary>
+	/// Provides a way to specify the title of a module.
+	/// </summary>
     [AttributeUsage(AttributeTargets.Assembly)]
     public sealed class ModuleTitleAttribute : Attribute
 	{
 		#region Constructors - Public
+		/// <summary>
+		/// Initializes a new instance of the ModuleTitleAttribute class.
+		/// </summary>
+		/// <param name="title"></param>
 		public ModuleTitleAttribute(string title)
         {
             this.Title = title;
 		}
 		#endregion
 		#region Fields - Public
+		/// <summary>
+		/// Holds the title of the module.
+		/// </summary>
 		public readonly string Title;
 		#endregion
 	}

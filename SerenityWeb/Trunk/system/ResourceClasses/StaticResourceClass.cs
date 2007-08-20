@@ -13,7 +13,6 @@ using System.Text;
 
 using Serenity.Themes;
 using Serenity.Web;
-using Serenity.Xml.Html;
 
 namespace Serenity.ResourceClasses
 {

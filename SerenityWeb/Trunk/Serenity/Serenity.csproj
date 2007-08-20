@@ -85,22 +85,11 @@
     <Compile Include="ContentPage.cs" />
     <None Include="Data\Database.cs" />
     <Compile Include="FileTypeEntry.cs" />
-    <Compile Include="Hdf\HdfCollection.cs" />
-    <Compile Include="Hdf\HdfDataset.cs" />
-    <Compile Include="Hdf\HdfElement.cs" />
-    <Compile Include="Hdf\HdfPath.cs" />
-    <Compile Include="Hdf\HdfReader.cs" />
-    <Compile Include="Hdf\HdfReaderSettings.cs" />
-    <Compile Include="Hdf\HdfWriter.cs" />
-    <Compile Include="Hdf\HdfWriterSettings.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Themes\Theme.cs" />
     <Compile Include="Web\ContextHandler.cs" />
     <Compile Include="MasterPage.cs" />
     <Compile Include="Page.cs" />
-    <Compile Include="Presentation\IndexRenderer.cs" />
-    <Compile Include="Presentation\Templates\CsTemplate.cs" />
-    <Compile Include="Presentation\Templates\CsTemplateReader.cs" />
     <Compile Include="SerenityInfo.cs" />
     <Compile Include="ResourceClass.cs" />
     <Compile Include="FileTypeRegistry.cs" />
@@ -136,19 +125,17 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="Xml\Html\Doctype.cs" />
+    <Compile Include="Web\Doctype.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\WShelley.public.snk">
       <Link>WShelley.public.snk</Link>
     </None>
-    <None Include="Presentation\IndexTemplate.cst" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Presentation\indextest.hdf" />
     <None Include="Themes\template\theme.ini" />
   </ItemGroup>
   <ItemGroup>

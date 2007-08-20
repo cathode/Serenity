@@ -13,8 +13,6 @@ using System.Text;
 using Serenity;
 using Serenity.Web;
 using Serenity.Web.Drivers;
-using Serenity.Xml;
-using Serenity.Xml.Html;
 
 namespace Serenity.Pages
 {

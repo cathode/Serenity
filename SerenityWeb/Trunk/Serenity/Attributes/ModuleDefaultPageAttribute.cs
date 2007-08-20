@@ -12,6 +12,10 @@ using System.Text;
 
 namespace Serenity.Attributes
 {
+	/// <summary>
+	///	Provides a way to specify a title for a module. The assembly title could contain a longer,
+	/// more complete name, and/or one that contains characters not allowed in a normal name.
+	/// </summary>
 	[AttributeUsage(AttributeTargets.Assembly)]
 	public sealed class ModuleDefaultPageAttribute : Attribute
 	{
