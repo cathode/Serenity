@@ -49,12 +49,17 @@ namespace Serenity.ResourceClasses
                     if (foundResourceName != "")
                     {
                         Stream resourceStream = null;
-                        try
-                        {
-                            resourceStream = module.Assembly.GetManifestResourceStream(foundResourceName);
-                            readBuffer = new byte[resourceStream.Length];
-                            resourceStream.Read(readBuffer, 0, readBuffer.Length);
-                        }
+						try
+						{
+							resourceStream = module.Assembly.GetManifestResourceStream(foundResourceName);
+							readBuffer = new byte[resourceStream.Length];
+							resourceStream.Read(readBuffer, 0, readBuffer.Length);
+							context.Response.MimeType = FileTypeRegistry.GetMimeType(Path.GetExtension(foundResourceName.TrimStart('.')));
+						}
+						catch
+						{
+							ErrorHandler.Handle(context, StatusCode.Http500InternalServerError);
+						}
                         finally
                         {
                             if (resourceStream != null)
@@ -67,10 +72,14 @@ namespace Serenity.ResourceClasses
                 }
             }
 
-            if (readBuffer != null)
-                context.Response.Write(readBuffer);
-            else
-                ErrorHandler.Handle(context, StatusCode.Http404NotFound);
+			if (readBuffer != null)
+			{
+				context.Response.Write(readBuffer);
+			}
+			else
+			{
+				ErrorHandler.Handle(context, StatusCode.Http404NotFound);
+			}
 		}
 	}
 }

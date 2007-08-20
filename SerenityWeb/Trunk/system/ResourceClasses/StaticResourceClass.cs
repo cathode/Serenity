@@ -43,11 +43,11 @@ namespace Serenity.ResourceClasses
 			{
 				string[] nameParts = new string[segments.Length - n];
 				Array.Copy(segments, n, nameParts, 0, nameParts.Length);
-				resourceName = string.Join("", nameParts).ToLower();
+				resourceName = string.Join(string.Empty, nameParts).ToLower();
 			}
 			else if (segments.Length == 2)
 			{
-				resourceName = "";
+				resourceName = string.Empty;
 			}
 			else
 			{
@@ -65,7 +65,7 @@ namespace Serenity.ResourceClasses
 				SPath.SanitizePath(resourceName.TrimStart('/'))));
 
 
-			if (resourceName == "")
+			if (resourceName == string.Empty)
 			{
 				resourceName = "/";
 			}
