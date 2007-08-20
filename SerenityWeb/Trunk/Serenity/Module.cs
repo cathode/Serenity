@@ -57,7 +57,7 @@ namespace Serenity
             {
                 if (attrib is ModuleTitleAttribute)
                 {
-                    title = ((ModuleTitleAttribute)attrib).Name;
+                    title = ((ModuleTitleAttribute)attrib).Title;
                     break;
                 }
             }

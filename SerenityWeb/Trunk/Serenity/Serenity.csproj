@@ -77,9 +77,11 @@
     <Reference Include="System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\Module.cs" />
+    <Compile Include="Attributes\ModuleTitleAttribute.cs" />
     <None Include="Cache\CacheManager.cs" />
     <None Include="Cache\CachedStream.cs" />
+    <Compile Include="Attributes\ModuleDefaultPageAttribute.cs" />
+    <Compile Include="Attributes\ModuleResourceNamespaceAttribute.cs" />
     <Compile Include="ContentPage.cs" />
     <None Include="Data\Database.cs" />
     <Compile Include="FileTypeEntry.cs" />

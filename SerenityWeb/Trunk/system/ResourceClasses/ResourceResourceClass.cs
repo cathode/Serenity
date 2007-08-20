@@ -37,7 +37,7 @@ namespace Serenity.ResourceClasses
                 if (module != null)
                 {
                     string resourceName = module.ResourceNamespace + string.Join("", context.Request.Url.Segments, n + 1, context.Request.Url.Segments.Length - (n + 1));
-                    string foundResourceName = string.Empty;
+                    string foundResourceName = "";
                     foreach (string existingResourceName in module.Assembly.GetManifestResourceNames())
                     {
                         if (existingResourceName.ToLower() == resourceName.ToLower())
@@ -46,7 +46,7 @@ namespace Serenity.ResourceClasses
                             break;
                         }
                     }
-                    if (foundResourceName != string.Empty)
+                    if (foundResourceName != "")
                     {
                         Stream resourceStream = null;
                         try
