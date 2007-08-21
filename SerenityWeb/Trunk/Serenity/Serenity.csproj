@@ -82,6 +82,8 @@
     <None Include="Cache\CachedStream.cs" />
     <Compile Include="Attributes\ModuleDefaultPageAttribute.cs" />
     <Compile Include="Attributes\ModuleResourceNamespaceAttribute.cs" />
+    <Compile Include="Collections\ModuleCollection.cs" />
+    <Compile Include="Collections\ContentPageCollection.cs" />
     <Compile Include="ContentPage.cs" />
     <None Include="Data\Database.cs" />
     <Compile Include="FileTypeEntry.cs" />
@@ -136,6 +138,7 @@
     <None Include="..\WShelley.public.snk">
       <Link>WShelley.public.snk</Link>
     </None>
+    <None Include="Themes\blue\theme.ini" />
     <Content Include="Configuration\Serenity.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

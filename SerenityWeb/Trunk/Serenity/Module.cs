@@ -200,6 +200,13 @@ namespace Serenity
                 return this.resourceNamespace;
             }
         }
+		public string SystemName
+		{
+			get
+			{
+				return this.Name.ToLower();
+			}
+		}
         #endregion
     }
 }
