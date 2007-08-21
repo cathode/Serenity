@@ -48,6 +48,24 @@ namespace Serenity.Web.Drivers
 		}
 		#endregion
 		#region Methods - Protected
+		protected override void RecieveCallback(IAsyncResult ar)
+		{
+			if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
+			{
+				WebDriverState state = ar.AsyncState as WebDriverState;
+				state.WorkSocket.EndReceive(ar);
+				state.Signal.Set();
+			}
+			else if (ar.AsyncState is Socket)
+			{
+				Socket socket = ar.AsyncState as Socket;
+				socket.EndReceive(ar);
+				if (socket.Available > 0)
+				{
+					
+				}
+			}
+		}
 		protected override bool WriteHeaders(Socket socket, CommonContext context)
 		{
 			if (socket != null && socket.Connected)

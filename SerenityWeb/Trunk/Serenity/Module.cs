@@ -117,9 +117,9 @@ namespace Serenity
         }
 		public static bool AddModule(Module module)
 		{
-			if (module != null && !Module.modules.ContainsKey(module.Name))
+			if (module != null && !Module.modules.ContainsKey(module.Name.ToLower()))
 			{
-				Module.modules.Add(module.Name, module);
+				Module.modules.Add(module.Name.ToLower(), module);
 				return true;
 			}
 			else
@@ -129,7 +129,7 @@ namespace Serenity
 		}
         public void AddPage(ContentPage page)
         {
-            if (!this.pages.ContainsKey(page.Name))
+            if (!this.pages.ContainsKey(page.SystemName))
             {
                 this.pages.Add(page.SystemName, page);
             }
@@ -143,9 +143,9 @@ namespace Serenity
         }
         public static Module GetModule(string name)
         {
-			if (!string.IsNullOrEmpty(name) && Module.modules.ContainsKey(name))
+			if (!string.IsNullOrEmpty(name) && Module.modules.ContainsKey(name.ToLower()))
 			{
-				return Module.modules[name];
+				return Module.modules[name.ToLower()];
 			}
 			else
 			{
@@ -154,9 +154,9 @@ namespace Serenity
         }
 		public ContentPage GetPage(string name)
 		{
-			if (this.pages.ContainsKey(name))
+			if (this.pages.ContainsKey(name.ToLower()))
 			{
-				return this.pages[name];
+				return this.pages[name.ToLower()];
 			}
 			else
 			{

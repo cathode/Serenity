@@ -86,6 +86,13 @@
     <None Include="Data\Database.cs" />
     <Compile Include="FileTypeEntry.cs" />
     <Compile Include="Module.cs" />
+    <Compile Include="Pages\DefaultPage.cs" />
+    <Compile Include="Pages\DomainsPage.cs" />
+    <Compile Include="Pages\SystemMaster.cs" />
+    <Compile Include="ResourceClasses\DynamicResourceClass.cs" />
+    <Compile Include="ResourceClasses\ResourceResourceClass.cs" />
+    <Compile Include="ResourceClasses\StaticResourceClass.cs" />
+    <Compile Include="ResourceClasses\ThemeResourceClass.cs" />
     <Compile Include="Themes\Theme.cs" />
     <Compile Include="Web\ContextHandler.cs" />
     <Compile Include="MasterPage.cs" />
@@ -99,7 +106,6 @@
     <Compile Include="Multiton.cs" />
     <Compile Include="DomainSettings.cs" />
     <Compile Include="TryResult.cs" />
-    <None Include="Users\SingleSignOn\SsoClient.cs" />
     <Compile Include="Web\CommonContext.cs" />
     <None Include="Web\Controls\Control.cs" />
     <Compile Include="Web\Drivers\AsyncHttpReader.cs" />
@@ -121,7 +127,6 @@
     <Compile Include="Web\Drivers\HttpDriver.cs" />
     <Compile Include="Web\Drivers\WebDriver.cs" />
     <Compile Include="Web\Drivers\WebDriverSettings.cs" />
-    <None Include="Users\User.cs" />
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
@@ -131,14 +136,81 @@
     <None Include="..\WShelley.public.snk">
       <Link>WShelley.public.snk</Link>
     </None>
+    <Content Include="Configuration\Serenity.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Configuration\FileTypeRegistry.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Domains\root.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Domains\localhost.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Themes\template\theme.ini" />
+    <Content Include="Themes\template\theme.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\icons\arrow_down.png" />
+    <EmbeddedResource Include="Resources\icons\arrow_up.png" />
+    <EmbeddedResource Include="Resources\icons\folder.png" />
+    <EmbeddedResource Include="Resources\icons\page_white.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_acrobat.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_actionscript.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_c.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_cd.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_code.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_code_red.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_coldfusion.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_compressed.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_cplusplus.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_csharp.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_cup.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_database.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_delete.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_dvd.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_excel.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_flash.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_freehand.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_gear.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_h.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_key.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_lightning.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_link.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_office.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_paint.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_paintbrush.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_paste.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_php.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_picture.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_powerpoint.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_ruby.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_stack.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_star.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_swoosh.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_text.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_tux.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_vector.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_visualstudio.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_word.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_wrench.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_zip.png" />
+    <EmbeddedResource Include="Resources\index.css" />
+    <Content Include="Domains\Common\default.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Pages\AdminPanel.xml" />
+    <Content Include="Pages\AdminPanel.xslt" />
+    <Content Include="Themes\blue\stylesheet.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Themes\template\stylesheet.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
