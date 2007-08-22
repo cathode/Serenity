@@ -17,7 +17,7 @@ namespace Serenity
     /// <summary>
     /// Provides the base class for dynamic resources.
     /// </summary>
-    public abstract class Page
+    public abstract class Page : Resource
     {
         #region Methods - Public
         /// <summary>
@@ -41,23 +41,6 @@ namespace Serenity
         /// </summary>
         public virtual void OnShutdown()
         {
-        }
-        #endregion
-        #region Properties - Public
-        
-        /// <summary>
-        /// When overridden in a derived class, gets the name of the current Page.
-        /// </summary>
-        public abstract string Name
-        {
-            get;
-        }
-        public string SystemName
-        {
-            get
-            {
-                return this.Name.ToLower();
-            }
         }
         #endregion
     }

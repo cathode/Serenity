@@ -84,6 +84,7 @@
     <Compile Include="Attributes\ModuleResourceNamespaceAttribute.cs" />
     <Compile Include="Collections\ModuleCollection.cs" />
     <Compile Include="Collections\ContentPageCollection.cs" />
+    <Compile Include="Collections\Generic\ResourceTree.cs" />
     <Compile Include="ContentPage.cs" />
     <None Include="Data\Database.cs" />
     <Compile Include="FileTypeEntry.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Pages\DefaultPage.cs" />
     <Compile Include="Pages\DomainsPage.cs" />
     <Compile Include="Pages\SystemMaster.cs" />
+    <Compile Include="Resource.cs" />
     <Compile Include="ResourceClasses\DynamicResourceClass.cs" />
     <Compile Include="ResourceClasses\ResourceResourceClass.cs" />
     <Compile Include="ResourceClasses\StaticResourceClass.cs" />
