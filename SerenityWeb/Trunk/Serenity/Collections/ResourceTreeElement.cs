@@ -13,17 +13,34 @@ using System.Text;
 
 namespace Serenity.Collections
 {
+	/// <summary>
+	/// Represents an element within a ResourceTree, which can contain children.
+	/// </summary>
 	public class ResourceTreeElement : IEnumerable<ResourceTreeElement>
 	{
+		#region Constructors - Public
+		/// <summary>
+		/// Initializes a new instance of the ResourceTreeElement class.
+		/// </summary>
 		public ResourceTreeElement()
 		{
 
 		}
+		public ResourceTreeElement(Resource value)
+		{
+			this.value = value;
+		}
+		#endregion
 		#region Fields - Private
-		private List<ResourceTreeElement> children = new List<ResourceTreeElement>();
+		private ResourceCollection children = new ResourceCollection();
 		private Resource value;
 		#endregion
 		#region Methods - Public
+		/// <summary>
+		/// Gets a generic enumerator for the current ResourceTreeElement,
+		/// and allows enumeration over direct children.
+		/// </summary>
+		/// <returns></returns>
 		public IEnumerator<ResourceTreeElement> GetEnumerator()
 		{
 			foreach (ResourceTreeElement item in this.children)
@@ -33,6 +50,9 @@ namespace Serenity.Collections
 		}
 		#endregion
 		#region Properties - Public
+		/// <summary>
+		/// Gets the number of elements that are direct descendants of the current ResourceTreeElement.
+		/// </summary>
 		public int Count
 		{
 			get
@@ -40,28 +60,9 @@ namespace Serenity.Collections
 				return this.children.Count;
 			}
 		}
-		/*
-		public int DeepCount
-		{
-			get
-			{
-				if (this.Count > 0)
-				{
-					int n = this.Count;
-					foreach (ResourceTreeElement<T> branch in this.branches)
-					{
-						n += branch.DeepBranchCount;
-					}
-					return n;
-				}
-				else
-				{
-
-					return 0;
-				}
-			}
-		}
-		 */
+		/// <summary>
+		/// Gets the Resource located at the current ResourceTreeElement.
+		/// </summary>
 		public Resource Value
 		{
 			get
@@ -75,6 +76,10 @@ namespace Serenity.Collections
 		}
 		#endregion
 		#region IEnumerable Members
+		/// <summary>
+		/// Gets a nongeneric enumerator.
+		/// </summary>
+		/// <returns></returns>
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return this.GetEnumerator();

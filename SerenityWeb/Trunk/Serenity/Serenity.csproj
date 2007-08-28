@@ -99,6 +99,7 @@
     <Compile Include="ResourceClasses\ResourceResourceClass.cs" />
     <Compile Include="ResourceClasses\StaticResourceClass.cs" />
     <Compile Include="ResourceClasses\ThemeResourceClass.cs" />
+    <Compile Include="StaticResource.cs" />
     <Compile Include="Themes\Theme.cs" />
     <Compile Include="Web\ContextHandler.cs" />
     <Compile Include="MasterPage.cs" />

@@ -13,12 +13,29 @@ using System.Text;
 
 namespace Serenity.Collections
 {
+	/// <summary>
+	/// Represents a tree of resources.
+	/// </summary>
 	public abstract class ResourceTree : ResourceTreeElement
 	{
+		#region Methods - Public
+		/// <summary>
+		/// Initializes a new instance of the ResourceTree class.
+		/// </summary>
 		public ResourceTree()
 		{
 
 		}
+		#endregion
+		#region Fields - Private
+
+		#endregion
+		#region Methods - Public
+		public bool AddResource(string relativeUri, Resource resource)
+		{
+			return false;
+		}
+		#endregion
 	}
 	
 }

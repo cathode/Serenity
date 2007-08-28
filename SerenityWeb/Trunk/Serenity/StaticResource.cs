@@ -8,16 +8,11 @@
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Text;
 
-namespace Serenity.Collections
+namespace Serenity
 {
-	public sealed class ResourceCollection : KeyedCollection<string, Resource>
+	public sealed class StaticResource : Resource
 	{
-		protected override string GetKeyForItem(Resource item)
-		{
-			return item.SystemName;
-		}
 	}
 }
