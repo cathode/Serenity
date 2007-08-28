@@ -120,6 +120,7 @@
     <Compile Include="Web\Drivers\WebDriverStatus.cs" />
     <Compile Include="Web\ErrorHandler.cs" />
     <Compile Include="Web\MimeType.cs" />
+    <Compile Include="Web\Services\WebService.cs" />
     <Compile Include="Web\StatusCode.cs" />
     <Compile Include="Web\Drivers\DriverInfo.cs" />
     <Compile Include="Web\Header.cs" />
