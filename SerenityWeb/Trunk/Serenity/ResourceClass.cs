@@ -19,7 +19,7 @@ namespace Serenity
 	/// Represents a Resource Class, which is an organizational and functional unit
 	/// that assists in the processing of requests.
 	/// </summary>
-    public abstract class ResourceClass
+    public abstract class ResourceClass : Resource
     {
         #region Constructors - Private
         static ResourceClass()
@@ -38,7 +38,6 @@ namespace Serenity
         }
         #endregion
         #region Fields - Private
-        private readonly string name;
         private static Dictionary<string, ResourceClass> resourceClasses;
         #endregion
         #region Methods - Public
@@ -60,7 +59,7 @@ namespace Serenity
             }
             else
             {
-                return new ResourceClass.DefaultImplementation();
+				return null;
             }
         }
 		/// <summary>
@@ -78,18 +77,6 @@ namespace Serenity
             else
             {
                 return false;
-            }
-        }
-        #endregion
-        #region Properties - Public
-		/// <summary>
-		/// Gets the name of the current ResourceClass.
-		/// </summary>
-        public string Name
-        {
-            get
-            {
-                return this.name;
             }
         }
         #endregion

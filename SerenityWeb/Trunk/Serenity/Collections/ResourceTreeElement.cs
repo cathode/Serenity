@@ -32,7 +32,7 @@ namespace Serenity.Collections
 		}
 		#endregion
 		#region Fields - Private
-		private ResourceCollection children = new ResourceCollection();
+		private List<ResourceTreeElement> children = new List<ResourceTreeElement>();
 		private Resource value;
 		#endregion
 		#region Methods - Public

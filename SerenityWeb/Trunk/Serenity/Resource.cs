@@ -10,14 +10,29 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Serenity.Web;
+
 namespace Serenity
 {
+	/// <summary>
+	/// Provides a base class that all web-accessible resources must inherit from.
+	/// </summary>
 	public abstract class Resource
 	{
 		#region Fields - Protected
+		/// <summary>
+		/// Holds the name of the resource.
+		/// </summary>
 		protected string name;
 		#endregion
 		#region Properties - Public
+		public virtual MimeType MimeType
+		{
+			get
+			{
+				return MimeType.Default;
+			}
+		}
 		/// <summary>
 		/// Gets or sets the name of the current Resource.
 		/// </summary>
@@ -32,6 +47,9 @@ namespace Serenity
 				this.name = value;
 			}
 		}
+		/// <summary>
+		/// Gets the name of the resource in a form that can be "safely" used.
+		/// </summary>
 		public string SystemName
 		{
 			get
