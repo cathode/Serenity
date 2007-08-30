@@ -66,7 +66,7 @@ namespace Serenity
                 if (attrib is ModuleDefaultPageAttribute)
                 {
                     ModuleDefaultPageAttribute defaultPageAttribute = (ModuleDefaultPageAttribute)attrib;
-                    defaultPage = (ContentPage)moduleAsm.CreateInstance(defaultPageAttribute.TypeName);
+                    defaultPage = (ContentPage)moduleAsm.CreateInstance(defaultPageAttribute.Name);
                     break;
                 }
             }

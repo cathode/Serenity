@@ -82,9 +82,9 @@
     <None Include="Cache\CachedStream.cs" />
     <Compile Include="Attributes\ModuleDefaultPageAttribute.cs" />
     <Compile Include="Attributes\ModuleResourceNamespaceAttribute.cs" />
-    <Compile Include="Collections\ModuleCollection.cs" />
-    <Compile Include="Collections\ContentPageCollection.cs" />
-    <Compile Include="Collections\ResourceCollection.cs" />
+    <None Include="Collections\ModuleCollection.cs" />
+    <None Include="Collections\ContentPageCollection.cs" />
+    <None Include="Collections\ResourceCollection.cs" />
     <Compile Include="Collections\ResourceTree.cs" />
     <Compile Include="Collections\ResourceTreeElement.cs" />
     <Compile Include="ContentPage.cs" />
@@ -123,6 +123,7 @@
     <Compile Include="Web\Drivers\WebDriverStatus.cs" />
     <Compile Include="Web\ErrorHandler.cs" />
     <Compile Include="Web\MimeType.cs" />
+    <Compile Include="Web\Services\WebMethodAttribute.cs" />
     <Compile Include="Web\Services\WebService.cs" />
     <Compile Include="Web\StatusCode.cs" />
     <Compile Include="Web\Drivers\DriverInfo.cs" />

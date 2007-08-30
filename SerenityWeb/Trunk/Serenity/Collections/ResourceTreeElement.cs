@@ -18,21 +18,22 @@ namespace Serenity.Collections
 	/// </summary>
 	public class ResourceTreeElement : IEnumerable<ResourceTreeElement>
 	{
-		#region Constructors - Public
+		#region Constructors - Private
+		internal ResourceTreeElement()
+		{
+		}
 		/// <summary>
 		/// Initializes a new instance of the ResourceTreeElement class.
 		/// </summary>
-		public ResourceTreeElement()
-		{
-
-		}
-		public ResourceTreeElement(Resource value)
+		internal ResourceTreeElement(Resource value, ResourceTree tree)
 		{
 			this.value = value;
+			this.tree = tree;
 		}
 		#endregion
 		#region Fields - Private
 		private List<ResourceTreeElement> children = new List<ResourceTreeElement>();
+		private ResourceTree tree;
 		private Resource value;
 		#endregion
 		#region Methods - Public

@@ -31,6 +31,12 @@ namespace Serenity.Collections
 
 		#endregion
 		#region Methods - Public
+		/// <summary>
+		/// Adds a resource to the current ResourceTree.
+		/// </summary>
+		/// <param name="relativeUri"></param>
+		/// <param name="resource"></param>
+		/// <returns></returns>
 		public bool AddResource(string relativeUri, Resource resource)
 		{
 			return false;

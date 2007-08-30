@@ -13,20 +13,26 @@ using System.Text;
 namespace Serenity.Attributes
 {
 	/// <summary>
-	///	Provides a way to specify a title for a module. The assembly title could contain a longer,
-	/// more complete name, and/or one that contains characters not allowed in a normal name.
+	///	Provides a way to specify the default page of a given Module.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Assembly)]
 	public sealed class ModuleDefaultPageAttribute : Attribute
 	{
 		#region Constructors - Public
-		public ModuleDefaultPageAttribute(string typeName)
+		/// <summary>
+		/// Initializes a new instance of the ModuleDefaultPageAttribute class.
+		/// </summary>
+		/// <param name="typeName"></param>
+		public ModuleDefaultPageAttribute(string name)
 		{
-			this.TypeName = typeName;
+			this.Name = name;
 		}
 		#endregion
 		#region Fields - Public
-		public readonly string TypeName;
+		/// <summary>
+		/// Holds the name of the default page for a Module. This field is read-only.
+		/// </summary>
+		public readonly string Name;
 		#endregion
 	}
 }
