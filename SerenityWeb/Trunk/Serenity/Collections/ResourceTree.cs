@@ -16,7 +16,7 @@ namespace Serenity.Collections
 	/// <summary>
 	/// Represents a tree of resources.
 	/// </summary>
-	public abstract class ResourceTree : ResourceTreeElement
+	public sealed class ResourceTree
 	{
 		#region Methods - Public
 		/// <summary>
@@ -28,7 +28,15 @@ namespace Serenity.Collections
 		}
 		#endregion
 		#region Fields - Private
-
+		#endregion
+		#region Indexers - Public
+		public ResourceTreeElement this[string name]
+		{
+			get
+			{
+				return null;
+			}
+		}
 		#endregion
 		#region Methods - Public
 		/// <summary>

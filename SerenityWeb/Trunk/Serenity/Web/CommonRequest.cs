@@ -29,7 +29,6 @@ namespace Serenity.Web
         }
         #endregion
         #region Fields - Private
-        private int clientCertificateError;
         private Encoding contentEncoding;
         private int contentLength;
         private MimeType contentType;
@@ -55,17 +54,6 @@ namespace Serenity.Web
         private string userPrimaryLanguage;
         #endregion
         #region Properties - Public
-        public int ClientCertificateError
-        {
-            get
-            {
-                return this.clientCertificateError;
-            }
-            internal set
-            {
-                this.clientCertificateError = value;
-            }
-        }
         public Encoding ContentEncoding
         {
             get
@@ -310,6 +298,5 @@ namespace Serenity.Web
             }
         }
         #endregion
-
     }
 }

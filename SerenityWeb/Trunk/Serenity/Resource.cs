@@ -26,6 +26,9 @@ namespace Serenity
 		protected string name;
 		#endregion
 		#region Properties - Public
+		/// <summary>
+		/// Gets the MimeType that should be used to describe the content of the current Resource.
+		/// </summary>
 		public virtual MimeType MimeType
 		{
 			get

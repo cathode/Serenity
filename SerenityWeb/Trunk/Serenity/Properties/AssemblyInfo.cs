@@ -20,5 +20,6 @@ using Serenity.Attributes;
 [assembly: AssemblyDescription("Core Class Library")]
 [assembly: ComVisible(false)]
 
-[assembly: ModuleTitle("System")]
-//[assembly: ModuleDefaultPage(typeof(Serenity.Pages.DefaultPage))]
+[assembly: ModuleDefaultPage("default")]
+[assembly: ModuleTitle("Serenity")]
+[assembly: ModuleResourceNamespace("Serenity.Resources.")]

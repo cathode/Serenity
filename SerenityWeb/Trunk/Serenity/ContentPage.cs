@@ -17,7 +17,16 @@ namespace Serenity
 	/// </summary>
 	public abstract class ContentPage : Page
 	{
+		/// <summary>
+		/// When overridden in a derived class, creates an instance of the derived class,
+		/// if the current ContentPage is not threadsafe.
+		/// </summary>
+		/// <returns></returns>
 		public abstract ContentPage CreateInstance();
+		/// <summary>
+		/// Creates an instance of the MasterPage associated with the current ContentPage.
+		/// </summary>
+		/// <returns></returns>
 		public virtual MasterPage CreateMasterPageInstance()
 		{
 			return null;

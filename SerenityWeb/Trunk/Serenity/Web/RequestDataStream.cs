@@ -19,23 +19,27 @@ namespace Serenity.Web
 	public sealed class RequestDataStream : Stream
 	{
 		#region Constructors - Internal
-		internal RequestDataStream(string Name, byte[] Contents)
+		internal RequestDataStream(string name) : this(name, null)
 		{
-			this._Name = Name;
-			if (Contents != null)
+		}
+		internal RequestDataStream(string name, byte[] contents)
+		{
+			this.name = name;
+			if (contents != null)
 			{
-				this._Contents = Contents;
+				this.contents = contents;
 			}
 			else
 			{
-				this._Contents = new byte[0];
+				this.contents = new byte[0];
 			}
 		}
 		#endregion
 		#region Fields - Private
-		private byte[] _Contents;
-		private string _Name;
-		private long _Position = 0;
+		private byte[] contents;
+		private MimeType mimeType;
+		private string name;
+		private long position = 0;
 		#endregion
 		#region Methods - Public
 		/// <summary>
@@ -61,11 +65,11 @@ namespace Serenity.Web
 			int Index = Offset;
 			while ((Index < Buffer.Length) || (ReadCount <= Count))
 			{
-				Buffer[ReadCount] = this._Contents[Index];
+				Buffer[ReadCount] = this.contents[Index];
 				Index++;
 				ReadCount++;
 			}
-			this._Position += ReadCount;
+			this.position += ReadCount;
 			return ReadCount;
 		}
 		/// <summary>
@@ -74,9 +78,9 @@ namespace Serenity.Web
 		/// <returns></returns>
 		public byte[] ReadAll()
 		{
-			this._Position = this._Contents.Length - 1;
-			byte[] Result = new byte[this._Contents.Length];
-			this._Contents.CopyTo(Result, 0);
+			this.position = this.contents.Length - 1;
+			byte[] Result = new byte[this.contents.Length];
+			this.contents.CopyTo(Result, 0);
 			return Result;
 		}
 		/// <summary>
@@ -85,8 +89,8 @@ namespace Serenity.Web
 		/// <returns></returns>
 		public string ReadAllText()
 		{
-			this._Position = this._Contents.Length - 1;
-			return Encoding.Default.GetString(this._Contents);
+			this.position = this.contents.Length - 1;
+			return Encoding.Default.GetString(this.contents);
 		}
 		/// <summary>
 		/// Reads the entire stream into a string, starting at the beginning and using the specified text encoding.
@@ -95,8 +99,8 @@ namespace Serenity.Web
 		/// <returns></returns>
 		public string ReadAllText(Encoding ReadEncoding)
 		{
-			this._Position = this._Contents.Length - 1;
-			return ReadEncoding.GetString(this._Contents);
+			this.position = this.contents.Length - 1;
+			return ReadEncoding.GetString(this.contents);
 		}
 		/// <summary>
 		/// Reads a number of bytes and returns them as a string, using the default text encoding.
@@ -128,7 +132,7 @@ namespace Serenity.Web
 			byte[] Result = new byte[this.Length - this.Position];
 			for (int I = (int)this.Position, N = 0; I < this.Length; I++, N++)
 			{
-				Result[N] = this._Contents[I];
+				Result[N] = this.contents[I];
 			}
 			return Result;
 		}
@@ -165,15 +169,15 @@ namespace Serenity.Web
 			switch (Origin)
 			{
 				case SeekOrigin.Begin:
-					this._Position = Offset;
+					this.position = Offset;
 					break;
 
 				case SeekOrigin.Current:
-					this._Position += Offset;
+					this.position += Offset;
 					break;
 
 				case SeekOrigin.End:
-					this._Position = this._Contents.Length - Offset;
+					this.position = this.contents.Length - Offset;
 					break;
 			}
 			return 0;
@@ -240,7 +244,21 @@ namespace Serenity.Web
 		{
 			get
 			{
-				return this._Contents.LongLength;
+				return this.contents.LongLength;
+			}
+		}
+		/// <summary>
+		/// Gets or sets the mime-type associated with the current RequestDataStream.
+		/// </summary>
+		public MimeType MimeType
+		{
+			get
+			{
+				return this.mimeType;
+			}
+			set
+			{
+				this.mimeType = value;
 			}
 		}
 		/// <summary>
@@ -250,11 +268,11 @@ namespace Serenity.Web
 		{
 			get
 			{
-				return this._Name;
+				return this.name;
 			}
 			internal set
 			{
-				this._Name = value;
+				this.name = value;
 			}
 		}
 		/// <summary>
@@ -264,13 +282,13 @@ namespace Serenity.Web
 		{
 			get
 			{
-				return this._Position;
+				return this.position;
 			}
 			set
 			{
 				if (value >= 0)
 				{
-					this._Position = value;
+					this.position = value;
 				}
 			}
 		}

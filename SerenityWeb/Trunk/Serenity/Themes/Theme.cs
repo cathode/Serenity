@@ -12,6 +12,10 @@ using System.Text;
 
 namespace Serenity.Themes
 {
+	/// <summary>
+	/// Represents a theme; a collection of styling properties and display information
+	/// that can be applied universally to any themeable resource.
+	/// </summary>
 	public sealed class Theme
 	{
 		private string author;

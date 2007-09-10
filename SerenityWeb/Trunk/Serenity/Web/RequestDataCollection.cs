@@ -27,9 +27,16 @@ namespace Serenity.Web
 		/// <returns>The created RequestDataStream.</returns>
 		public RequestDataStream AddDataStream(string name, byte[] data)
 		{
-			RequestDataStream stream = new RequestDataStream(name, data);
-			this.Add(stream);
-			return stream;
+			if (!this.Contains(name))
+			{
+				RequestDataStream stream = new RequestDataStream(name, data);
+				this.Add(stream);
+				return stream;
+			}
+			else
+			{
+				return null;
+			}
 		}
 		#endregion
 		#region Methods - Protected

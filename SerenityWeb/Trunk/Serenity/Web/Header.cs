@@ -18,17 +18,21 @@ namespace Serenity.Web
     public sealed class Header
     {
         #region Constructors - Public
-        public Header(string name, string primaryValue)
+		/// <summary>
+		/// Initializes a new instance of the Header class.
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="value"></param>
+        public Header(string name, string value)
         {
             this.name = name;
-            this.primaryValue = primaryValue;
-            this.secondaryValues = new List<string>();
+            this.primaryValue = value;
         }
         #endregion
         #region Fields - Private
         private readonly string name;
         private bool complex = false;
-        private List<string> secondaryValues;
+		private List<string> secondaryValues = new List<string>();
         private string primaryValue;
         #endregion
         #region Indexers - Public

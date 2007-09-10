@@ -115,8 +115,6 @@
     <Compile Include="TryResult.cs" />
     <Compile Include="Web\CommonContext.cs" />
     <None Include="Web\Controls\Control.cs" />
-    <Compile Include="Web\Drivers\AsyncHttpReader.cs" />
-    <Compile Include="Web\Drivers\AsyncHttpWriter.cs" />
     <Compile Include="Web\Drivers\HttpReader.cs" />
     <Compile Include="Web\Drivers\HttpWriter.cs" />
     <Compile Include="Web\Drivers\WebDriverState.cs" />
@@ -210,8 +208,6 @@
     <Content Include="Domains\Common\default.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Pages\AdminPanel.xml" />
-    <Content Include="Pages\AdminPanel.xslt" />
     <Content Include="Themes\blueish\stylesheet.css" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

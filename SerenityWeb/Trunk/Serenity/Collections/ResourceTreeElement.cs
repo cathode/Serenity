@@ -32,10 +32,12 @@ namespace Serenity.Collections
 		}
 		#endregion
 		#region Fields - Private
+		private ResourceTreeElement parent = null;
 		private List<ResourceTreeElement> children = new List<ResourceTreeElement>();
 		private ResourceTree tree;
 		private Resource value;
 		#endregion
+		
 		#region Methods - Public
 		/// <summary>
 		/// Gets a generic enumerator for the current ResourceTreeElement,
@@ -64,7 +66,7 @@ namespace Serenity.Collections
 		/// <summary>
 		/// Gets the Resource located at the current ResourceTreeElement.
 		/// </summary>
-		public Resource Value
+		public virtual Resource Value
 		{
 			get
 			{
