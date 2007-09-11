@@ -186,58 +186,64 @@ namespace Serenity
 		}
 		public static DomainSettings Load(string name)
 		{
-			DomainSettings settings = null;
 			string path = Path.GetFullPath(SPath.Combine(SPath.DomainsFolder, name + ".ini"));
 
-			if (File.Exists(path))
-			{
-				if (DomainSettings.instances.ContainsKey(name))
-				{
-					settings = DomainSettings.instances[name];
-				}
-				else
-				{
-					settings = new DomainSettings(name);
-				}
-				IniFile file = new IniFile(path);
-				file.CaseSensitiveRetrieval = false;
-
-				file.Load();
-
-				if (file.ContainsSection("DomainSettings"))
-				{
-					IniSection section = file["DomainSettings"];
-
-					if (section.ContainsEntry("DefaultResourceName"))
-					{
-						settings.DefaultResourceName = section["DefaultResourceName"].Value;
-					}
-					if (section.ContainsEntry("DefaultResourceClass"))
-					{
-						settings.DefaultResourceClass = section["DefaultResourceClass"].Value;
-					}
-					if (section.ContainsEntry("DocumentRoot"))
-					{
-						settings.DocumentRoot = Path.GetFullPath(section["DocumentRoot"].Value);
-					}
-					if (section.ContainsEntry("OmitResourceClass"))
-					{
-						try
-						{
-							settings.OmitResourceClass = bool.Parse(section["OmitResourceClass"].Value);
-						}
-						catch
-						{
-						}
-					}
-					if (section.ContainsEntry("ThemeName"))
-					{
-						settings.ThemeName = section["ThemeName"].Value;
-					}
-				}
-			}
-			return settings;
+            return DomainSettings.LoadFile(path);
 		}
+        public static DomainSettings LoadFile(string path)
+        {
+            DomainSettings settings = null;
+
+            if (File.Exists(path))
+            {
+                string name = Path.GetFileNameWithoutExtension(path);
+                if (DomainSettings.instances.ContainsKey(name))
+                {
+                    settings = DomainSettings.instances[name];
+                }
+                else
+                {
+                    settings = new DomainSettings(name);
+                }
+                IniFile file = new IniFile(path);
+                file.CaseSensitiveRetrieval = false;
+
+                file.Load();
+
+                if (file.ContainsSection("DomainSettings"))
+                {
+                    IniSection section = file["DomainSettings"];
+
+                    if (section.ContainsEntry("DefaultResourceName"))
+                    {
+                        settings.DefaultResourceName = section["DefaultResourceName"].Value;
+                    }
+                    if (section.ContainsEntry("DefaultResourceClass"))
+                    {
+                        settings.DefaultResourceClass = section["DefaultResourceClass"].Value;
+                    }
+                    if (section.ContainsEntry("DocumentRoot"))
+                    {
+                        settings.DocumentRoot = Path.GetFullPath(section["DocumentRoot"].Value);
+                    }
+                    if (section.ContainsEntry("OmitResourceClass"))
+                    {
+                        try
+                        {
+                            settings.OmitResourceClass = bool.Parse(section["OmitResourceClass"].Value);
+                        }
+                        catch
+                        {
+                        }
+                    }
+                    if (section.ContainsEntry("ThemeName"))
+                    {
+                        settings.ThemeName = section["ThemeName"].Value;
+                    }
+                }
+            }
+            return settings;
+        }
 		public static bool Save(DomainSettings settings)
 		{
 			if (Directory.Exists(SPath.ResolveSpecialPath(SpecialFolder.Domains)))

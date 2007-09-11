@@ -18,18 +18,17 @@ namespace Serenity.Pages
 {
     public sealed class DefaultPage : ContentPage
     {
-        public override void OnRequest(CommonContext context)
-        {
-			context.Response.WriteLine("This Page has not yet been implemented!");
-        }
+        #region Methods - Public
         public override ContentPage CreateInstance()
         {
             return new DefaultPage();
         }
-        public override MasterPage CreateMasterPageInstance()
+        public override void OnRequest(CommonContext context)
         {
-            return new SystemMaster();
+            context.Response.WriteLine("This Page has not yet been implemented!");
         }
+        #endregion
+        #region Properties - Public
         public override string Name
         {
             get
@@ -37,5 +36,6 @@ namespace Serenity.Pages
                 return "Default";
             }
         }
+        #endregion
     }
 }

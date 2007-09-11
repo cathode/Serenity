@@ -45,7 +45,7 @@ namespace Serenity
         }
         public static Module LoadModuleFile(string name, string assemblyPath)
         {
-            string title = "Untitled";
+			string title = name;
             ContentPage defaultPage = null;
 
             Assembly moduleAsm = Assembly.LoadFile(Path.GetFullPath(assemblyPath));
