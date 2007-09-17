@@ -205,10 +205,9 @@ namespace Serenity
                 {
                     settings = new DomainSettings(name);
                 }
-                IniFile file = new IniFile(path);
-                file.CaseSensitiveRetrieval = false;
-
-                file.Load();
+                LibINI.IO.IniReader reader = new LibINI.IO.IniReader(LibINI.IO.IniReaderSettings.Win32Style);
+                IniFile file = reader.Read(File.OpenRead(path));
+                file.IsCaseSensitive = false;
 
                 if (file.ContainsSection("DomainSettings"))
                 {
@@ -216,29 +215,23 @@ namespace Serenity
 
                     if (section.ContainsEntry("DefaultResourceName"))
                     {
-                        settings.DefaultResourceName = section["DefaultResourceName"].Value;
+                        settings.DefaultResourceName = (string)section["DefaultResourceName"].Value.Value;
                     }
                     if (section.ContainsEntry("DefaultResourceClass"))
                     {
-                        settings.DefaultResourceClass = section["DefaultResourceClass"].Value;
+                        settings.DefaultResourceClass = (string)section["DefaultResourceClass"].Value.Value;
                     }
                     if (section.ContainsEntry("DocumentRoot"))
                     {
-                        settings.DocumentRoot = Path.GetFullPath(section["DocumentRoot"].Value);
+                        settings.DocumentRoot = Path.GetFullPath((string)section["DocumentRoot"].Value.Value);
                     }
                     if (section.ContainsEntry("OmitResourceClass"))
                     {
-                        try
-                        {
-                            settings.OmitResourceClass = bool.Parse(section["OmitResourceClass"].Value);
-                        }
-                        catch
-                        {
-                        }
+                        settings.OmitResourceClass = (bool)section["OmitResourceClass"].Value.Value;
                     }
                     if (section.ContainsEntry("ThemeName"))
                     {
-                        settings.ThemeName = section["ThemeName"].Value;
+                        settings.ThemeName = section["ThemeName"].Value.Value as string;
                     }
                 }
             }

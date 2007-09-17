@@ -6,11 +6,12 @@
  * Permissive License (Ms-PL), a copy of which should have been included with *
  * this distribution as License.txt.                                          *
  *****************************************************************************/
+using LibINI;
+using LibINI.IO;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
-
-using LibINI;
 
 using Serenity.Web;
 
@@ -31,68 +32,64 @@ namespace Serenity
 		#region Methods - Public
 		public static void Initialize()
 		{
-			
             FileTypeRegistry.entries = new Dictionary<string, FileTypeEntry>();
-            IniFile file = new IniFile(SPath.ResolveSpecialPath(SpecialFile.FileTypeRegistry));
-			file.CaseSensitiveRetrieval = false;
-			file.Load();
+            IniReader reader = new IniReader(IniReaderSettings.Win32Style);
+            bool result = false;
+            IniFile file = reader.Read(File.OpenRead(SPath.ResolveSpecialPath(SpecialFile.FileTypeRegistry)), out result);
 
-            foreach (IniSection section in file)
+            if (result)
             {
-                string description, extension, icon;
-				MimeType mimeType;
-                bool useCompression;
+                file.IsCaseSensitive = false;
 
-                extension = section.Name;
-                if (!string.IsNullOrEmpty(extension))
+                foreach (IniSection section in file)
                 {
-                    if (section.ContainsEntry("Description"))
-                    {
-                        description = section["Description"].Value.Trim('"');
-                    }
-                    else
-                    {
-                        description = extension + " file";
-                    }
+                    string description, extension, icon;
+                    MimeType mimeType;
+                    bool useCompression;
 
-					if (section.ContainsEntry("MimeType"))
+                    extension = section.Name;
+                    if (!string.IsNullOrEmpty(extension))
                     {
-						string mt = section["MimeType"].Value.Trim('"');
-						mimeType = MimeType.FromString(mt);
-                    }
-                    else
-                    {
-						mimeType = MimeType.Default;
-                    }
-                    if (section.ContainsEntry("Compress"))
-                    {
-                        try
+                        if (section.ContainsEntry("Description"))
                         {
-                            useCompression = bool.Parse(section["Compress"].Value.Trim('"'));
+                            description = (string)section["Description"].Value.Value;
                         }
-                        catch
+                        else
+                        {
+                            description = extension + " file";
+                        }
+
+                        if (section.ContainsEntry("MimeType"))
+                        {
+                            mimeType = MimeType.FromString((string)section["MimeType"].Value.Value);
+                        }
+                        else
+                        {
+                            mimeType = MimeType.Default;
+                        }
+                        if (section.ContainsEntry("Compress"))
+                        {
+                            useCompression = (bool)section["Compress"].Value.Value;
+                        }
+                        else
                         {
                             useCompression = false;
                         }
+                        if (section.ContainsEntry("Icon"))
+                        {
+                            icon = (string)section["Icon"].Value.Value;
+                        }
+                        else
+                        {
+                            icon = "page_white";
+                        }
+                        FileTypeEntry typeEntry = new FileTypeEntry();
+                        typeEntry.Description = description;
+                        typeEntry.Icon = icon;
+                        typeEntry.MimeType = mimeType;
+                        typeEntry.UseCompression = useCompression;
+                        FileTypeRegistry.entries.Add(extension, typeEntry);
                     }
-                    else
-                    {
-                        useCompression = false;
-                    }
-					if (section.ContainsEntry("Icon"))
-					{
-						icon = section["Icon"].Value.Trim('"');
-					}
-					else
-					{
-						icon = "page_white";
-					}
-					FileTypeEntry typeEntry = new FileTypeEntry();
-					typeEntry.Description = description;
-					typeEntry.Icon = icon;
-					typeEntry.MimeType = mimeType;
-					typeEntry.UseCompression = useCompression;
-					FileTypeRegistry.entries.Add(extension, typeEntry);
                 }
             }
 		}

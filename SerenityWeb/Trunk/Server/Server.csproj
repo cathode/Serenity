@@ -51,15 +51,6 @@
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LibINI, Version=1.4.0.0, Culture=neutral, PublicKeyToken=aafe07b9ddf0a2a4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\LibINI.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">
@@ -73,14 +64,25 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Server.exe.manifest">
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="LibINI, Version=1.5.0.0, Culture=neutral, PublicKeyToken=aafe07b9ddf0a2a4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\LibINI.dll</HintPath>
+    </Reference>
+    <Reference Include="SPCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=aafe07b9ddf0a2a4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\SPCore.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Serenity\Serenity.csproj">
       <Project>{2013CDED-1043-4FF6-A080-9B3C9BD7B140}</Project>
       <Name>Serenity</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Server.exe.manifest">
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

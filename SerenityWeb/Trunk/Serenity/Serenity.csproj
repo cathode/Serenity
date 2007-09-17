@@ -64,19 +64,6 @@
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LibINI, Version=1.4.0.0, Culture=neutral, PublicKeyToken=aafe07b9ddf0a2a4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\LibINI.dll</HintPath>
-    </Reference>
-    <Reference Include="SPCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=aafe07b9ddf0a2a4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\SPCore.dll</HintPath>
-    </Reference>
-    <Reference Include="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-    <Reference Include="System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-    <Reference Include="System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Attributes\ModuleTitleAttribute.cs" />
     <None Include="Cache\CacheManager.cs" />
     <None Include="Cache\CachedStream.cs" />
@@ -209,6 +196,17 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Themes\blueish\stylesheet.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="LibINI, Version=1.5.1.0, Culture=neutral, PublicKeyToken=aafe07b9ddf0a2a4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\LibINI.dll</HintPath>
+    </Reference>
+    <Reference Include="SPCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=aafe07b9ddf0a2a4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\SPCore.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
