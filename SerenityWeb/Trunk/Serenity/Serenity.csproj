@@ -99,7 +99,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Multiton.cs" />
     <Compile Include="DomainSettings.cs" />
-    <Compile Include="TryResult.cs" />
     <Compile Include="Web\CommonContext.cs" />
     <None Include="Web\Controls\Control.cs" />
     <Compile Include="Web\Drivers\HttpReader.cs" />
