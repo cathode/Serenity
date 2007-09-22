@@ -160,20 +160,14 @@ namespace Serenity.Web.Drivers
 						if (hasContentLength && !hasTransferEncoding)
 						{
 							ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
-							result = true;
-							return context;
 						}
 						else if (hasTransferEncoding && !hasContentLength)
 						{
 							ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
-							result = true;
-							return context;
 						}
 						else
 						{
 							ErrorHandler.Handle(context, StatusCode.Http400BadRequest, "Content-Length and Transfer-Encoding headers cannot exist in the same request.");
-							result = true;
-							return context;
 						}
 					}
 					else

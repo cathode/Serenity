@@ -33,13 +33,13 @@ namespace Serenity.Web.Drivers
 		/// <param name="bufferSize"></param>
 		public WebDriverState(int bufferSize)
 		{
-			this.Buffer = new byte[bufferSize];
+			this.buffer = new byte[bufferSize];
 		}
 		#endregion
 		#region Fields - Private
-		private byte[] buffer = new byte[DefaultBufferSize];
+		private byte[] buffer;
+        private ManualResetEvent signal = new ManualResetEvent(false);
 		private Socket workSocket;
-		private ManualResetEvent signal = new ManualResetEvent(false);
 		#endregion
 		#region Fields - Public
 		/// <summary>
@@ -83,6 +83,10 @@ namespace Serenity.Web.Drivers
 			{
 				return this.signal;
 			}
+            set
+            {
+                this.signal = value;
+            }
 		}
 		/// <summary>
 		/// Gets or sets the socket, used to perform operations on, associated with the

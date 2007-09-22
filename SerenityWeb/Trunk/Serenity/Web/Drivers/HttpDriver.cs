@@ -52,18 +52,24 @@ namespace Serenity.Web.Drivers
 		{
 			if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
 			{
-				WebDriverState state = ar.AsyncState as WebDriverState;
-				state.WorkSocket.EndReceive(ar);
-				state.Signal.Set();
-			}
-			else if (ar.AsyncState is Socket)
-			{
-				Socket socket = ar.AsyncState as Socket;
-				socket.EndReceive(ar);
-				if (socket.Available > 0)
-				{
-					
-				}
+                WebDriverState state = (WebDriverState)ar.AsyncState;
+                Socket socket = state.WorkSocket;
+                socket.EndReceive(ar);
+
+                int available = socket.Available;
+                if (available > 0)
+                {
+                    WebDriverState newState = new WebDriverState(state.Buffer.Length + socket.Available);
+                    state.Buffer.CopyTo(newState.Buffer, 0);
+                    newState.Signal = state.Signal;
+                    newState.WorkSocket = state.WorkSocket;
+                    socket.BeginReceive(newState.Buffer, state.Buffer.Length, available,
+                        SocketFlags.None, new AsyncCallback(this.RecieveCallback), newState);
+                }
+                else
+                {
+                    state.Signal.Set();
+                }
 			}
 		}
 		protected override bool WriteHeaders(Socket socket, CommonContext context)
@@ -130,26 +136,26 @@ namespace Serenity.Web.Drivers
 		#region Methods - Public
 		public override bool ReadContext(Socket socket, out CommonContext context)
 		{
-			if (socket.Available == 0)
-			{
-				int waits = 0;
-				while (socket.Available == 0 && waits < 100)
-				{
-					Thread.Sleep(1);
-					waits++;
-				}
-				if (socket.Available == 0)
-				{
-					context = null;
-					return false;
-				}
-			}
-			
 			context = new CommonContext(this);
 			byte[] buffer = new byte[socket.Available];
 
 			if (this.Settings.Block)
 			{
+                if (socket.Available == 0)
+                {
+                    int waits = 0;
+                    while (socket.Available == 0 && waits < 100)
+                    {
+                        Thread.Sleep(1);
+                        waits++;
+                    }
+                    if (socket.Available == 0)
+                    {
+                        context = null;
+                        return false;
+                    }
+                }
+
 				List<byte> listBuffer = new List<byte>();
 				while (socket.Available > 0)
 				{
@@ -158,29 +164,38 @@ namespace Serenity.Web.Drivers
 					listBuffer.AddRange(buffer);
 				}
 				buffer = listBuffer.ToArray();
+
+                HttpReader reader = new HttpReader(this);
+                bool result;
+                context = reader.Read(buffer, out result);
+                if (result)
+                {
+                    return true;
+                }
+                else
+                {
+                    context = null;
+                    return false;
+                }
 			}
 			else
 			{
+                context = new CommonContext(this);
+
 				WebDriverState state = new WebDriverState();
 				state.Buffer = buffer;
 				state.WorkSocket = socket;
-				state.Signal.Reset();
+
+                state.Signal.Reset();
+
 				socket.BeginReceive(state.Buffer, 0, state.Buffer.Length,
 					SocketFlags.None, new AsyncCallback(this.RecieveCallback), state);
-				state.Signal.WaitOne();
+
+                state.Signal.WaitOne();
+
+                return true;
 			}
-			HttpReader reader = new HttpReader(this);
-			bool result;
-			context = reader.Read(buffer, out result);
-			if (result)
-			{
-				return true;
-			}
-			else
-			{
-				context = null;
-				return false;
-			}
+			
 		}
 		#endregion
 	}

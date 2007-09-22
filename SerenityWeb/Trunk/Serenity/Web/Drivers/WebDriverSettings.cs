@@ -18,20 +18,23 @@ namespace Serenity.Web.Drivers
 	public sealed class WebDriverSettings
 	{
 		#region Fields - Private
-		private bool blockingMode;
+		private bool block;
 		private ContextHandler contextHandler;
 		private IEnumerable<ushort> ports;
 		#endregion
 		#region Properties - Public
+        /// <summary>
+        /// Gets or sets a value that determines if the WebDriver should use blocking or non-blocking I/O operations.
+        /// </summary>
 		public bool Block
 		{
 			get
 			{
-				return this.blockingMode;
+				return this.block;
 			}
 			set
 			{
-				this.blockingMode = value;
+				this.block = value;
 			}
 		}
 		/// <summary>
