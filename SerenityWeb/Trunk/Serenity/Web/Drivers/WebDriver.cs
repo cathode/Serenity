@@ -125,7 +125,7 @@ namespace Serenity.Web.Drivers
 				state.WorkSocket.EndSend(ar);
 			}
 		}
-		protected bool WriteContent(Socket socket, CommonContext context)
+		protected virtual bool WriteContent(Socket socket, CommonContext context)
 		{
 			if (this.Settings.Block)
 			{

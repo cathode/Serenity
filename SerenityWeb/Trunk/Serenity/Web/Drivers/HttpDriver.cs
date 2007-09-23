@@ -168,6 +168,7 @@ namespace Serenity.Web.Drivers
                 HttpReader reader = new HttpReader(this);
                 bool result;
                 context = reader.Read(buffer, out result);
+                
                 if (result)
                 {
                     return true;
@@ -192,8 +193,18 @@ namespace Serenity.Web.Drivers
 					SocketFlags.None, new AsyncCallback(this.RecieveCallback), state);
 
                 state.Signal.WaitOne();
+                bool result = false;
+                context = new HttpReader(this).Read(state.Buffer, out result);
 
-                return true;
+                if (result)
+                {
+                    return true;
+                }
+                else
+                {
+                    context = null;
+                    return false;
+                }
 			}
 			
 		}

@@ -36,7 +36,7 @@ namespace Serenity.ResourceClasses
                 Module module = Module.GetModule(context.Request.Url.Segments[n].TrimEnd('/'));
                 if (module != null)
                 {
-                    string resourceName = module.ResourceNamespace + string.Join("", context.Request.Url.Segments, n + 1, context.Request.Url.Segments.Length - (n + 1));
+                    string resourceName = module.ResourceNamespace + string.Join("", context.Request.Url.Segments, n + 1, context.Request.Url.Segments.Length - (n + 1)).Replace('/', '.');
                     string foundResourceName = "";
                     foreach (string existingResourceName in module.Assembly.GetManifestResourceNames())
                     {
@@ -54,7 +54,8 @@ namespace Serenity.ResourceClasses
 							resourceStream = module.Assembly.GetManifestResourceStream(foundResourceName);
 							readBuffer = new byte[resourceStream.Length];
 							resourceStream.Read(readBuffer, 0, readBuffer.Length);
-							context.Response.MimeType = FileTypeRegistry.GetMimeType(Path.GetExtension(foundResourceName.TrimStart('.')));
+                            string ext = Path.GetExtension(foundResourceName).TrimStart('.');
+							context.Response.MimeType = FileTypeRegistry.GetMimeType(ext);
 						}
 						catch
 						{

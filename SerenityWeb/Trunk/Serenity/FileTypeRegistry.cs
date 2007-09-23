@@ -100,7 +100,7 @@ namespace Serenity
 		public static bool GetCompressionUsage(string extension)
 		{
 			extension = extension.ToLower().TrimStart('.');
-			if (FileTypeRegistry.entries.ContainsKey(extension) == true)
+			if (FileTypeRegistry.entries.ContainsKey(extension))
 			{
 				return FileTypeRegistry.entries[extension].UseCompression;
 			}
@@ -113,7 +113,7 @@ namespace Serenity
 		public static string GetDescription(string extension)
 		{
 			extension = extension.ToLower().TrimStart('.');
-			if (FileTypeRegistry.entries.ContainsKey(extension) == true)
+			if (FileTypeRegistry.entries.ContainsKey(extension))
 			{
 				return FileTypeRegistry.entries[extension].Description;
 			}
@@ -126,7 +126,7 @@ namespace Serenity
 		public static FileTypeEntry GetEntry(string extension)
 		{
 			extension = extension.ToLower().TrimStart('.');
-			if (FileTypeRegistry.entries.ContainsKey(extension) == true)
+			if (FileTypeRegistry.entries.ContainsKey(extension))
 			{
 				return FileTypeRegistry.entries[extension];
 			}
@@ -150,7 +150,7 @@ namespace Serenity
 		public static MimeType GetMimeType(string extension)
 		{
 			extension = extension.ToLower().TrimStart('.');
-			if (FileTypeRegistry.entries.ContainsKey(extension) == true)
+			if (FileTypeRegistry.entries.ContainsKey(extension))
 			{
 				return FileTypeRegistry.entries[extension].MimeType;
 			}

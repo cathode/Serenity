@@ -25,8 +25,11 @@ namespace Serenity.ResourceClasses
 
 		}
 		#endregion
-		#region Methods - Public
-		public override void HandleContext(CommonContext context)
+        #region Fields - Private
+        private const string Prefix = "/resource/serenity/";
+        #endregion
+        #region Methods - Public
+        public override void HandleContext(CommonContext context)
 		{
 			string resourceName;
 			string[] segments = context.Request.Url.Segments;
@@ -84,7 +87,7 @@ namespace Serenity.ResourceClasses
 					response.WriteLine(@"<html xmlns='http://www.w3.org/1999/xhtml'>
 <head>
 	<title>Index of " + resourceName + @"</title>
-	<link rel='stylesheet' type='text/css' href='/static/index.css' />
+	<link rel='stylesheet' type='text/css' href='" + StaticResourceClass.Prefix + @"index.css' />
 </head>
 <body>
 	<div class='TitleMain'>Index of " + resourceName + @"</div>
@@ -105,7 +108,7 @@ namespace Serenity.ResourceClasses
 							parentPath += "/";
 						}
 						response.WriteLine(@"			<tr>
-				<td class='Icon'><img src='/static/icons/folder.png' alt='x' /></td>
+				<td class='Icon'><img src='" + StaticResourceClass.Prefix + @"folder.png' alt='x' /></td>
 				<td class='Name'><a href='" + parentPath + @"'>Parent Directory</a></td>
 				<td class='Time'>- - -</td>
 			</tr>");
@@ -118,7 +121,7 @@ namespace Serenity.ResourceClasses
 						{
 							string dirName = Path.GetFileName(dirPath);
 							response.Write(@"			<tr>
-				<td class='Icon'><img src='/static/icons/folder.png' alt='x' /></td>
+				<td class='Icon'><img src='" + StaticResourceClass.Prefix + @"folder.png' alt='x' /></td>
 				<td class='Name'><a href='/static" + (resourceName.EndsWith("/") ? resourceName : resourceName + "/") + dirName + "'>" + dirName + @"</a></td>
 				<td class='Time'>" + Directory.GetLastWriteTimeUtc(Path.GetFullPath(SPath.Combine(resourcePath, dirName))).ToString() + @"</td>
 			</tr>");
@@ -144,7 +147,7 @@ namespace Serenity.ResourceClasses
 						long fileSize = info.Length;
 						response.Write(@"
 			<tr>
-				<td class='Icon'><img src='/static/icons/" + FileTypeRegistry.GetIcon(Path.GetExtension(fileName)) + @".png' alt='x' /></td>
+				<td class='Icon'><img src='" + StaticResourceClass.Prefix + FileTypeRegistry.GetIcon(Path.GetExtension(fileName)) + @".png' alt='x' /></td>
 				<td class='Name'><a href='/static" + resourceName + fileName + "'>" + fileName + @"</a></td>
 				<td class='Size'>" + fileSize.ToString() +@"</td>
 				<td class='Type'>" + FileTypeRegistry.GetDescription(Path.GetExtension(fileName)) + @"</td>

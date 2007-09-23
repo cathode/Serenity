@@ -45,7 +45,7 @@ namespace Serenity.Web
 			string[] parts = mimeType.Split('/');
 			if (parts.Length == 2)
 			{
-				return new MimeType(parts[0], parts[1]);
+				return new MimeType(parts[0].Trim('"', ' '), parts[1].Trim('"', ' '));
 			}
 			else
 			{
