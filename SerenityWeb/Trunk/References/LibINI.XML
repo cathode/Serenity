@@ -152,6 +152,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:LibINI.IniSection.Merge(LibINI.IniSection[])">
+            <summary>
+            Combines two or more IniSections and returns a new IniSection containing the combined result.
+            </summary>
+            <param name="sections"></param>
+            <returns></returns>
+        </member>
         <member name="M:LibINI.IniSection.RemoveEntry(LibINI.IniEntry)">
             <summary>
             Removes an IniEntry from the current IniSection.
@@ -200,6 +207,11 @@
         <member name="P:LibINI.IniSection.EntryCount">
             <summary>
             Gets the number of IniEntries in the current IniSection.
+            </summary>
+        </member>
+        <member name="P:LibINI.IniSection.EntryNames">
+            <summary>
+            Gets a string array containing the names of all the entries contained in the current IniSection.
             </summary>
         </member>
         <member name="P:LibINI.IniSection.File">
@@ -310,16 +322,15 @@
         <member name="M:LibINI.IniFile.AddEntry(LibINI.IniSection,LibINI.IniEntry)">
             <summary>
             Adds an IniEntry to an IniSection. If the specified IniSection does not
-            exist in the current File, it will be added.
+            exist in the current IniFile, it will be added.
             </summary>
             <param name="section">The IniSection to add to.</param>
             <param name="entry">The IniEntry to be added.</param>
         </member>
         <member name="M:LibINI.IniFile.AddEntry(System.String,LibINI.IniEntry)">
             <summary>
-            Adds an IniEntry to an IniSection. If the specified IniSection does not
-            exist in the current File object's list of IniSection objects,
-            it will be created.
+            Adds an IniEntry to an IniSection. If no IniSection is found with the supplied name,
+            a new section will be created.
             </summary>
             <param name="section">The name of the IniSection to add to.</param>
             <param name="entry">The IniEntry to add.</param>
@@ -444,6 +455,20 @@
             <param name="value">The value to validate.</param>
             <returns>False if the value paramater contains any invalid chars.</returns>
         </member>
+        <member name="M:LibINI.IniFile.Merge(LibINI.IniFile[])">
+            <summary>
+            Merges any number of IniFiles into the current IniFile.
+            </summary>
+            <param name="files"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LibINI.IniFile.MergeFiles(System.String[])">
+            <summary>
+            Merges any number of INI-format files into the current IniFile.
+            </summary>
+            <param name="filePaths"></param>
+            <returns></returns>
+        </member>
         <member name="M:LibINI.IniFile.RemoveEntry(LibINI.IniSection,LibINI.IniEntry)">
             <summary>
             Removes an IniEntry from a specified IniSection.
@@ -496,11 +521,19 @@
         </member>
         <member name="P:LibINI.IniFile.Item(System.String)">
             <summary>
-            Gets or sets an IniSection in the current File.
-            When setting an IniSection that does not exist in the current File, it will be added.
-            When getting an IniSection that does not exist in the current File, a null will be returned.
+            Gets an IniSection by it's name from the current IniFile. If no IniSection is found,
+            a value of null is returned.
             </summary>
-            <param name="name">The name of the IniSection to get or set.</param>
+            <param name="name">The name of the IniSection to get.</param>
+        </member>
+        <member name="P:LibINI.IniFile.Item(System.String,System.String)">
+            <summary>
+            Gets an IniEntry by it's name and section name from the current IniFile. If the IniEntry
+            is not found, a value of null is returned.
+            </summary>
+            <param name="section"></param>
+            <param name="entry"></param>
+            <returns></returns>
         </member>
         <member name="P:LibINI.IniFile.IsCaseSensitive">
             <summary>
@@ -516,12 +549,17 @@
         <member name="P:LibINI.IniFile.DefaultSection">
             <summary>
             Gets a pseudo-IniSection that is used to hold any IniEntry objects
-            that are not actually placed in an IniSection.
+            that are not actually placed in an IniSection. (Used to support legacy INI.)
             </summary>
         </member>
         <member name="P:LibINI.IniFile.SectionCount">
             <summary>
-            Gets the total number of IniSections contained in the current File.
+            Gets the total number of IniSections contained in the current IniFile.
+            </summary>
+        </member>
+        <member name="P:LibINI.IniFile.SectionNames">
+            <summary>
+            Gets a string array containing the names of all the sections in the current IniFile.
             </summary>
         </member>
         <member name="T:LibINI.IO.IniEntryDuplicationHandlingMethod">
