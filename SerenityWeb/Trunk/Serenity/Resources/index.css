@@ -33,7 +33,7 @@ td, th
 	border-bottom: 1px dotted;
 	border-right: 1px dotted;
 }
-.Icon
+.icon
 {
 	width: 20px;
 }
@@ -49,11 +49,11 @@ td, th
 {
 	width: 160px;
 }
-.List
+.group
 {
 	margin-left: 32px;
 }
-.Title, .TitleMain
+.group_heading, .main_heading
 {
 	margin-top: 32px;
 	
@@ -66,13 +66,13 @@ td, th
 	border-top: 2px solid #DFDFDF;
 	border-left: 2px solid #DFDFDF;
 }
-.TitleMain
+.main_heading
 {
 	letter-spacing: 2px;
 	font-size: x-large;
 	margin-top: 8px;
 }
-.Footer
+.footer
 {
 	margin-top: 32px;
 	

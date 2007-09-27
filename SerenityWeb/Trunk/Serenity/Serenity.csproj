@@ -193,6 +193,8 @@
     <Content Include="Domains\Common\default.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Resources\index.xslt" />
+    <EmbeddedResource Include="Resources\indextest.xml" />
     <Content Include="Themes\blueish\stylesheet.css" />
   </ItemGroup>
   <ItemGroup>

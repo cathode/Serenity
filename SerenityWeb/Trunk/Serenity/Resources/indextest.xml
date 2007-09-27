@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml-stylesheet type="text/xsl" href="/resource/serenity/index.xslt" ?>
+<index>
+	<meta>
+		<location>/static/</location>
+	</meta>
+	<group name="Directories">
+		<column id="name"  name="Directory Name" class="name" />
+		<column id="time" name="Last Modified" class="time" />
+		<item icon="folder">
+			<value link="/">Parent Folder</value>
+			<value>- - -</value>
+		</item>
+	</group>
+	<group name="Files">
+		<column id="name" name="File Name" class="name" />
+		<column id="size" name="Size (Bytes)" class="size" />
+		<column id="kind" name="Kind" class="kind" />
+		<column id="time" name="Last Modified" class="time" />
+		<item icon="page_white">
+			<value link="SomeFile.txt">SomeFile.txt</value>
+			<value>1024</value>
+			<value>Text File</value>
+			<value>2007-09-26T21:00:00</value>
+		</item>
+	</group>
+</index>
