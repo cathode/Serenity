@@ -5,18 +5,22 @@
 		<html xmlns='http://www.w3.org/1999/xhtml'>
 			<head>
 				<title>
-					Index of <xsl:value-of select='index/meta/location'/>
+					Index of <xsl:value-of select='index/location' />
 				</title>
 				<link rel='stylesheet' type='text/css' href='/resource/serenity/index.css' />
-				<!--
-				<xsl:for-each select='index/meta/stylesheet'>
-					<link rel='stylesheet' type='text/css' href=''/>
+				<xsl:for-each select='index/presentation/stylesheet'>
+					<xsl:element name='link'>
+						<xsl:attribute name='rel'>stylesheet</xsl:attribute>
+						<xsl:attribute name='type'>text/css</xsl:attribute>
+						<xsl:attribute name='href'>
+							<xsl:value-of select='.' />
+						</xsl:attribute>
+					</xsl:element>
 				</xsl:for-each>
-				-->
 			</head>
 			<body>
 				<div class='main_heading'>
-					Index of <xsl:value-of select='index/meta/location' />
+					Index of <xsl:value-of select='index/location' />
 				</div>
 				<xsl:for-each select='index/group'>
 					<div class='group_heading'>
@@ -25,16 +29,22 @@
 					<table class='group'>
 						<tr>
 							<th class='icon' />
-							<xsl:for-each select='column'>
-								<th class=''>
+							<xsl:for-each select='field'>
+								<xsl:element name='th'>
+									<xsl:attribute name='class'>
+										<xsl:value-of select='@id' />
+									</xsl:attribute>
 									<xsl:value-of select='@name' />
-								</th>
+								</xsl:element>
 							</xsl:for-each>
 						</tr>
 						<xsl:for-each select='item'>
 							<tr>
 								<td>
-									<img alt='x' class='icon' src='/resource/serenity/icons/page_white.png' />
+									<xsl:element name='img'>
+										<xsl:attribute name='alt'>x</xsl:attribute>
+										<xsl:attribute name='src'>/resource/serenity/icons/<xsl:value-of select='@icon' />.png</xsl:attribute>
+									</xsl:element>
 								</td>
 								<xsl:for-each select='value'>
 									<td>

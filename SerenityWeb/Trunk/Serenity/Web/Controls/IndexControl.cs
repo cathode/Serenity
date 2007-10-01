@@ -8,21 +8,34 @@
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
 
 namespace Serenity.Web.Controls
 {
-    public abstract class Control
+    public sealed class IndexControl : Control
     {
-        #region Methods - Public
-        public abstract byte[] Render(CommonContext context);
-        public void RenderToStream(CommonContext context, Stream stream)
-        {
-            byte[] content = this.Render(context);
+        private string location = "/";
 
-            stream.Write(content, 0, content.Length);
+        #region Methods - Public
+        public override byte[] Render(CommonContext context)
+        {
+            return Indexer.Standard.Generate(context);
         }
         #endregion
+
+        public string Location
+        {
+            get
+            {
+                return this.location;
+            }
+            set
+            {
+                if (!string.IsNullOrEmpty(value))
+                {
+                    this.location = value;
+                }
+            }
+        }
     }
 }
