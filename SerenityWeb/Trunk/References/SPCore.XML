@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SPCore</name>
+    </assembly>
+    <members>
+        <member name="T:Serenity.HexEncoder">
+            <summary>
+            Provides static methods to convert and translate arrays of bytes or strings to and from hexadecimal.
+            </summary>
+        </member>
+        <member name="M:Serenity.HexEncoder.Convert(System.Char[])">
+            <summary>
+            Returns an array of bytes representing the hex input.
+            </summary>
+            <param name="input">The hex input as a char array.</param>
+            <returns>An array of bytes representing the hex input.</returns>
+        </member>
+        <member name="M:Serenity.HexEncoder.Convert(System.String)">
+            <summary>
+            Returns an array of bytes representing the hex input.
+            </summary>
+            <param name="input">The hex input as a string.</param>
+            <returns>An array of bytes representing the hex input.</returns>
+        </member>
+        <member name="M:Serenity.HexEncoder.Convert(System.Byte[])">
+            <summary>
+            Returns a string containing the supplied bytes as hex.
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.HexEncoder.Convert(System.Byte)">
+            <summary>
+            Returns a string containing the supplied byte as hex.
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.HexEncoder.Validate(System.Char)">
+            <summary>
+            Determines if a specific char is a valid hexadecimal character.
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.HexEncoder.Validate(System.Char[])">
+            <summary>
+            Determines if all the chars in the supplied char array are valid hexadecimal characters.
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.HexEncoder.Validate(System.String)">
+            <summary>
+            Determines if the contents of the supplied string are all valid hexadecimal characters.
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Serenity.IO.Writer`1">
+            <summary>
+            Provides an abstract base class for objects that write objects of a specific type to a stream.
+            </summary>
+            <typeparam name="T">The type of object that will be written.</typeparam>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.Dispose">
+            <summary>
+            When overridden in a derived class, performs cleanup and freeing
+            of any unmanaged resources that may have been used by the current Writer.
+            </summary>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.EncodeLengthPrefixedData(System.Byte[])">
+            <summary>
+            Encodes a byte array as length-prefixed data.
+            </summary>
+            <param name="input">The data to encode.</param>
+            <returns>The encoded data.</returns>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.EncodeLengthPrefixedString(System.String)">
+            <summary>
+            Encodes a string as length-prefixed data.
+            </summary>
+            <param name="input">The string to encode.</param>
+            <returns>The encoded data.</returns>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.Write(System.IO.Stream,`0)">
+            <summary>
+            When overridden in a derived class, writes the supplied T to the supplied Stream.
+            </summary>
+            <param name="stream">The stream to be written to.</param>
+            <param name="value">The object to write to the stream.</param>
+            <remarks>
+            The supplied Stream must support writing.
+            </remarks>
+        </member>
+        <member name="P:Serenity.IO.Writer`1.IsReusable">
+            <summary>
+            Gets or sets a value which determines if the current Writer is reusable,
+            e.g., multiple calls to the Write method can be made to the same Reader.
+            </summary>
+        </member>
+        <member name="T:Serenity.IO.Reader`1">
+            <summary>
+            Provides an abstract base class for objects that read objects of a
+            specific type from a stream.
+            </summary>
+            <typeparam name="T">The type of object that will be read.</typeparam>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.DecodeLengthPrefixedData(System.Byte[])">
+            <summary>
+            Decodes a length-prefixed data block from the supplied byte array.
+            </summary>
+            <param name="input">The byte array to process.</param>
+            <returns>The decoded byte array.</returns>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.DecodeLengthPrefixedString(System.Byte[])">
+            <summary>
+            Decodes a length-prefixed string from the supplied byte array.
+            </summary>
+            <param name="input">The byte array to process.</param>
+            <returns>The decoded string.</returns>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.Dispose">
+            <summary>
+            When overridden in a derived class, performs cleanup and freeing
+            of any unmanaged resources that may have been used by the current
+            Reader.
+            </summary>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.Read(System.Byte[])">
+            <summary>
+            Reads and returns a T from the supplied array of bytes.
+            </summary>
+            <param name="bytes">bytes to read a T from.</param>
+            <returns>A T read from the supplied byte array.</returns>
+            <remarks>The supplied stream must support reading.</remarks>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.Read(System.Byte[],System.Boolean@)">
+            <summary>
+            Reads and returns a T from the supplied array of bytes,
+            and indicates if the reading operation succeeded.
+            </summary>
+            <param name="bytes">The bytes to read a T from.</param>
+            <param name="result">When this method returns, result will indicate
+            whether the read operation succeeded or failed.</param>
+            <returns>A T read from the supplied byte array.</returns>
+            <remarks>The supplied stream must support reading.</remarks>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.Read(System.IO.Stream)">
+            <summary>
+            Reads and returns a T from the supplied stream.
+            </summary>
+            <param name="stream">The stream to read the T from.</param>
+            <returns>A T read from the supplied Stream.</returns>
+            <remarks>The supplied stream must support reading.</remarks>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.Read(System.IO.Stream,System.Boolean@)">
+            <summary>
+            When overridden in a derived class, reads and returns a T from the
+            supplied Stream.
+            </summary>
+            <param name="stream">The stream to read the T from.</param>
+            <param name="result">When this method returns, result will indicate
+            whether the read operation succeeded or failed.</param>
+            <returns>A T read from the supplied Stream.</returns>
+            <remarks>The supplied stream must support reading.</remarks>
+        </member>
+        <member name="P:Serenity.IO.Reader`1.IsReusable">
+            <summary>
+            Gets or sets a value which determines if the current Reader is reusable,
+            e.g., multiple calls to the Read method can be made to the same Reader.
+            </summary>
+        </member>
+    </members>
+</doc>

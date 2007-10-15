@@ -19,7 +19,7 @@ namespace Serenity.Web.Controls
         #region Methods - Public
         public override byte[] Render(CommonContext context)
         {
-            return Indexer.Standard.Generate(context);
+            return Indexer.Standard.Generate(this.location);
         }
         #endregion
 
