@@ -3,7 +3,7 @@
  * Copyright © 2006-2007 Serenity Project - http://SerenityProject.net/       *
  *----------------------------------------------------------------------------*
  * This software is released under the terms and conditions of the Microsoft  *
- * Permissive License (Ms-PL), a copy of which should have been included with *
+ * Public License (Ms-PL), a copy of which should have been included with     *
  * this distribution as License.txt.                                          *
  *****************************************************************************/
 using System;
@@ -35,6 +35,7 @@ namespace Serenity.Web.Drivers
 		~WebDriver()
 		{
 			this.ListeningSocket.Close();
+			((IDisposable)this.ListeningSocket).Dispose();
 		}
 		#endregion
 		#region Fields - Private

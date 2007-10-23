@@ -3,7 +3,7 @@
  * Copyright © 2006-2007 Serenity Project - http://SerenityProject.net/       *
  *----------------------------------------------------------------------------*
  * This software is released under the terms and conditions of the Microsoft  *
- * Permissive License (Ms-PL), a copy of which should have been included with *
+ * Public License (Ms-PL), a copy of which should have been included with     *
  * this distribution as License.txt.                                          *
  *****************************************************************************/
 using System;
@@ -67,26 +67,11 @@ namespace Serenity.Web.Drivers
 			}
 			set
 			{
-				if (value != null && value.Length > WebDriverState.MinBufferSize)
+				if (value != null && value.Length >= WebDriverState.MinBufferSize && value.Length <= WebDriverState.MaxBufferSize)
 				{
 					this.buffer = value;
 				}
 			}
-		}
-		/// <summary>
-		/// Gets the ManualResetEvent, used to assist in syncronization, associated
-		/// with the current WebDriverState.
-		/// </summary>
-		public ManualResetEvent Signal
-		{
-			get
-			{
-				return this.signal;
-			}
-            set
-            {
-                this.signal = value;
-            }
 		}
 		/// <summary>
 		/// Gets or sets the socket, used to perform operations on, associated with the

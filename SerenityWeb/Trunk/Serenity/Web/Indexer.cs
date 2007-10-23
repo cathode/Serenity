@@ -3,7 +3,7 @@
  * Copyright © 2006-2007 Serenity Project - http://SerenityProject.net/       *
  *----------------------------------------------------------------------------*
  * This software is released under the terms and conditions of the Microsoft  *
- * Permissive License (Ms-PL), a copy of which should have been included with *
+ * Public License (Ms-PL), a copy of which should have been included with     *
  * this distribution as License.txt.                                          *
  *****************************************************************************/
 using System;
@@ -48,7 +48,7 @@ namespace Serenity.Web
         }
         #endregion
         #region Fields - Private
-        private static Indexer standard = new Indexer();
+        private static Indexer defaultIndexer = new Indexer();
         #endregion
         #region Methods - Public
         public byte[] Generate(string location)
@@ -64,16 +64,18 @@ namespace Serenity.Web
             writer.WriteStartElement("group");
 
             writer.WriteEndDocument();
+			writer.Flush();
+			writer.Close();
 
             return Encoding.UTF8.GetBytes(output.ToString());
         }
         #endregion
         #region Properties - Public
-        public static Indexer Standard
+        public static Indexer DefaultIndexer
         {
             get
             {
-                return Indexer.standard;
+                return Indexer.defaultIndexer;
             }
         }
         #endregion

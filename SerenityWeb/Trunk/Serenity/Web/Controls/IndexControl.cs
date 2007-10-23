@@ -3,7 +3,7 @@
  * Copyright © 2006-2007 Serenity Project - http://SerenityProject.net/       *
  *----------------------------------------------------------------------------*
  * This software is released under the terms and conditions of the Microsoft  *
- * Permissive License (Ms-PL), a copy of which should have been included with *
+ * Public License (Ms-PL), a copy of which should have been included with     *
  * this distribution as License.txt.                                          *
  *****************************************************************************/
 using System;
@@ -19,7 +19,7 @@ namespace Serenity.Web.Controls
         #region Methods - Public
         public override byte[] Render(CommonContext context)
         {
-            return Indexer.Standard.Generate(this.location);
+            return Indexer.DefaultIndexer.Generate(this.location);
         }
         #endregion
 

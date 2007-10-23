@@ -3,7 +3,7 @@
  * Copyright © 2006-2007 Serenity Project - http://SerenityProject.net/       *
  *----------------------------------------------------------------------------*
  * This software is released under the terms and conditions of the Microsoft  *
- * Permissive License (Ms-PL), a copy of which should have been included with *
+ * Public License (Ms-PL), a copy of which should have been included with     *
  * this distribution as License.txt.                                          *
  *****************************************************************************/
 using System;
@@ -19,7 +19,7 @@ namespace Serenity.Web.Drivers
 	/// Provides a WebDriver implementation that provides support for the HTTP protocol.
 	/// This class cannot be inherited.
 	/// </summary>
-	public class HttpDriver : WebDriver
+	public sealed class HttpDriver : WebDriver
 	{
 		#region Constructors - Public
 		/// <summary>
@@ -61,14 +61,9 @@ namespace Serenity.Web.Drivers
                 {
                     WebDriverState newState = new WebDriverState(state.Buffer.Length + socket.Available);
                     state.Buffer.CopyTo(newState.Buffer, 0);
-                    newState.Signal = state.Signal;
                     newState.WorkSocket = state.WorkSocket;
                     socket.BeginReceive(newState.Buffer, state.Buffer.Length, available,
                         SocketFlags.None, new AsyncCallback(this.RecieveCallback), newState);
-                }
-                else
-                {
-                    state.Signal.Set();
                 }
 			}
 		}
@@ -187,13 +182,11 @@ namespace Serenity.Web.Drivers
 				state.Buffer = buffer;
 				state.WorkSocket = socket;
 
-                state.Signal.Reset();
-
-				socket.BeginReceive(state.Buffer, 0, state.Buffer.Length,
+				IAsyncResult asyncResult = socket.BeginReceive(state.Buffer, 0, state.Buffer.Length,
 					SocketFlags.None, new AsyncCallback(this.RecieveCallback), state);
+				asyncResult.AsyncWaitHandle.WaitOne();
 
-                state.Signal.WaitOne();
-                bool result = false;
+                bool result;
                 context = new HttpReader(this).Read(state.Buffer, out result);
 
                 if (result)

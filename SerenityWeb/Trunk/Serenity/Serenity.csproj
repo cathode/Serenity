@@ -204,7 +204,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\LibINI.dll</HintPath>
     </Reference>
-    <Reference Include="SPCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=aafe07b9ddf0a2a4, processorArchitecture=MSIL">
+    <Reference Include="SPCore, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aafe07b9ddf0a2a4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\SPCore.dll</HintPath>
     </Reference>
