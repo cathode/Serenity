@@ -252,7 +252,7 @@ namespace Serenity.Web
                 url = value;
             }
         }
-        
+
         public string UserAgent
         {
             get

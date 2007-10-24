@@ -14,21 +14,21 @@ using Serenity.Web;
 
 namespace Serenity.Pages
 {
-	/// <summary>
-	/// Provides a web administration page to add, remove, view, and edit Domain Settings.
-	/// </summary>
+    /// <summary>
+    /// Provides a web administration page to add, remove, view, and edit Domain Settings.
+    /// </summary>
     public sealed class DomainsPage : ContentPage
     {
         public override void OnInitialization()
         {
-            
+
         }
         public override void OnRequest(CommonContext context)
         {
             CommonResponse response = context.Response;
 
-			response.WriteLine(Doctype.XHTML11.ToString());
-			response.WriteLine(@"<html xmlns='http://www.w3.org/1999/xhtml'>
+            response.WriteLine(Doctype.XHTML11.ToString());
+            response.WriteLine(@"<html xmlns='http://www.w3.org/1999/xhtml'>
 <head>
 	<title>Domain Configuration Panel</title>
 	<link rel='stylesheet' type='text/css' href='/theme/stylesheet' />
@@ -46,7 +46,7 @@ namespace Serenity.Pages
         }
         public override void OnShutdown()
         {
-            
+
         }
 
         public override string Name

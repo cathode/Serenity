@@ -15,348 +15,359 @@ using System.Threading;
 
 namespace Serenity.Web.Drivers
 {
-	/// <summary>
-	/// Provides a mechanism for recieving and responding to requests from clients (browsers).
-	/// </summary>
-	public abstract class WebDriver
-	{
-		#region Constructors - Protected
-		/// <summary>
-		/// Initializes a new instance of the WebDriver class.
-		/// </summary>
-		/// <param name="contextHandler">A ContextHandler which handles
-		/// incoming CommonContext objects.</param>
-		protected WebDriver(WebDriverSettings settings)
-		{
-			this.settings = settings;
-		}
-		#endregion
-		#region Destructor
-		~WebDriver()
-		{
-			this.ListeningSocket.Close();
-			((IDisposable)this.ListeningSocket).Dispose();
-		}
-		#endregion
-		#region Fields - Private
-		private Socket listeningSocket;
-		private DriverInfo info;
-		private WebDriverSettings settings;
-		private WebDriverStatus status = WebDriverStatus.None;
-		#endregion
-		#region Methods - Protected
-		protected virtual void AcceptCallback(IAsyncResult ar)
-		{
-			if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
-			{
-				WebDriverState state = (WebDriverState)ar.AsyncState;
+    /// <summary>
+    /// Provides a mechanism for recieving and responding to requests from clients (browsers).
+    /// </summary>
+    public abstract class WebDriver : IDisposable
+    {
+        #region Constructors - Protected
+        /// <summary>
+        /// Initializes a new instance of the WebDriver class.
+        /// </summary>
+        /// <param name="contextHandler">A ContextHandler which handles
+        /// incoming CommonContext objects.</param>
+        protected WebDriver(WebDriverSettings settings)
+        {
+            this.settings = settings;
+        }
+        #endregion
+        #region Fields - Private
+        private bool isDisposed = false;
+        private DriverInfo info;
+        private Socket listeningSocket;
+        private WebDriverSettings settings;
+        private WebDriverStatus status = WebDriverStatus.None;
+        #endregion
+        #region Methods - Protected
+        protected virtual void AcceptCallback(IAsyncResult ar)
+        {
+            if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
+            {
+                WebDriverState state = (WebDriverState)ar.AsyncState;
                 Socket workSocket = state.WorkSocket;
                 Socket socket = workSocket.EndAccept(ar);
-				workSocket.BeginAccept(new AsyncCallback(this.AcceptCallback), state);
+                workSocket.BeginAccept(new AsyncCallback(this.AcceptCallback), state);
 
-                this.HandleAcceptedSocket(socket);
-			}
-			else
-			{
-				return;
-			}
-			
-		}
-		/// <summary>
-		/// Provides a callback method to use for an async socket disconnection.
-		/// </summary>
-		/// <param name="ar"></param>
-		protected virtual void DisconnectCallback(IAsyncResult ar)
-		{
-			if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
-			{
-				WebDriverState state = ar.AsyncState as WebDriverState;
-				state.WorkSocket.EndDisconnect(ar);
-			}
-		}
-		protected virtual void HandleAcceptedSocket(object socket)
-		{
-			this.HandleAcceptedSocket(socket as Socket);
-		}
-		protected virtual void HandleAcceptedSocket(Socket socket)
-		{
-			if (socket != null)
-			{
-				CommonContext context = new CommonContext(this);
-				context.Socket = socket;
+                //this.HandleAcceptedSocket(socket);
+            }
+            else
+            {
+                return;
+            }
 
-				if (this.ReadContext(socket, out context) && context != null)
-				{
-					this.Settings.ContextHandler.HandleContext(context);
+        }
+        /// <summary>
+        /// Provides a callback method to use for an async socket disconnection.
+        /// </summary>
+        /// <param name="ar"></param>
+        protected virtual void DisconnectCallback(IAsyncResult ar)
+        {
+            if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
+            {
+                WebDriverState state = ar.AsyncState as WebDriverState;
+                state.WorkSocket.EndDisconnect(ar);
+            }
+        }
+        /// <summary>
+        /// When overridden in a derived class, performs the actual releasing
+        /// and cleaning up of unmanaged resources used by the current object.
+        /// </summary>
+        /// <param name="disposing">Indicates if disposal of the current
+        /// object is actually desired.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+        }
+        protected virtual void RecieveCallback(IAsyncResult ar)
+        {
+            if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
+            {
+                WebDriverState state = ar.AsyncState as WebDriverState;
+                state.WorkSocket.EndReceive(ar);
+            }
+        }
+        protected virtual void SendCallback(IAsyncResult ar)
+        {
+            if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
+            {
+                WebDriverState state = ar.AsyncState as WebDriverState;
+                state.WorkSocket.EndSend(ar);
+            }
+        }
+        /// <summary>
+        /// Checks if the current WebDriver is disposed and throws an
+        /// ObjectDisposedException if necessary.
+        /// </summary>
+        protected void CheckDisposal()
+        {
+            if (this.IsDisposed)
+            {
+                throw new ObjectDisposedException(this.GetType().FullName);
+            }
+        }
+        #endregion
+        #region Methods - Public
+        public virtual IAsyncResult BeginRecieveContext(Socket socket, AsyncCallback callback, object state)
+        {
+            throw new NotSupportedException();
+        }
+        public virtual IAsyncResult BeginSendContext(Socket socket, CommonContext context, AsyncCallback callback, object state)
+        {
+            throw new NotSupportedException();
+        }
+        /// <summary>
+        /// Releases any unmanaged resources used by the current object.
+        /// </summary>
+        public void Dispose()
+        {
+            this.Dispose(true);
+            this.isDisposed = true;
+            GC.SuppressFinalize(this);
+        }
+        public virtual CommonContext EndRecieveContext(IAsyncResult result)
+        {
+            throw new NotSupportedException();
+        }
+        public virtual void EndSendContext(IAsyncResult result)
+        {
+            throw new NotSupportedException();
+        }
+        /// <summary>
+        /// Creates and binds the listening socket, preparing the WebDriver so that it can be started.
+        /// </summary>
+        public virtual bool Initialize()
+        {
+            if (this.status < WebDriverStatus.Initialized)
+            {
+                this.ListeningSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
 
-					if (!this.WriteContext(socket, context))
-					{
-						Log.Write("Failed to write context", LogMessageLevel.Warning);
-					}
-				}
-				else
-				{
-					Log.Write("Failed to read context", LogMessageLevel.Warning);
-				}
-				
-				if (this.Settings.Block)
-				{
-					socket.Disconnect(false);
-				}
-				else
-				{
-					socket.BeginDisconnect(false, new AsyncCallback(this.DisconnectCallback), socket);
-				}
-				socket.Close();
-			}
-		}
-		protected virtual void RecieveCallback(IAsyncResult ar)
-		{
-			if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
-			{
-				WebDriverState state = ar.AsyncState as WebDriverState;
-				state.WorkSocket.EndReceive(ar);
-			}
-		}
-		protected virtual void SendCallback(IAsyncResult ar)
-		{
-			if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
-			{
-				WebDriverState state = ar.AsyncState as WebDriverState;
-				state.WorkSocket.EndSend(ar);
-			}
-		}
-		protected virtual bool WriteContent(Socket socket, CommonContext context)
-		{
-			if (this.Settings.Block)
-			{
-				socket.Send(context.Response.OutputBuffer);
-				context.Response.ClearOutputBuffer();
-			}
-			else
-			{
-				socket.BeginSend(context.Response.OutputBuffer, 0, context.Response.OutputBuffer.Length, SocketFlags.None, new AsyncCallback(this.SendCallback), socket);
-			}
-			return true;
+                foreach (ushort port in this.Settings.Ports)
+                {
+                    //TODO: Try and add some input-checking to avoid try/catch usage.
+                    try
+                    {
+                        this.ListeningSocket.Bind(new IPEndPoint(IPAddress.Any, port));
+                        break;
+                    }
+                    catch
+                    {
+                    }
+                }
+                if (this.ListeningSocket.IsBound)
+                {
+                    //TODO: Log "socket bind succeded" informative message.
+                    this.status = WebDriverStatus.Initialized;
+                    return true;
+                }
+                else
+                {
+                    //TODO: Log "socket bind failed" error message.
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public abstract CommonContext RecieveContext(Socket socket);
+        /// <summary>
+        /// Starts the WebDriver.
+        /// </summary>
+        public virtual bool Start()
+        {
+            if (this.Status >= WebDriverStatus.Initialized)
+            {
+                this.Status = WebDriverStatus.Started;
+                this.ListeningSocket.Listen(10);
 
-		}
-		protected abstract bool WriteHeaders(Socket socket, CommonContext context);
-		#endregion
-		#region Methods - Public
-		/// <summary>
-		/// Creates and binds the listening socket, preparing the WebDriver so that it can be started.
-		/// </summary>
-		public virtual bool Initialize()
-		{
-			if (this.status < WebDriverStatus.Initialized)
-			{
-				this.ListeningSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
 
-				foreach (ushort port in this.Settings.Ports)
-				{
-					try
-					{
-						this.ListeningSocket.Bind(new IPEndPoint(IPAddress.Any, port));
-						break;
-					}
-					catch
-					{
-					}
-				}
-				if (this.ListeningSocket.IsBound)
-				{
-					Log.Write("Listening socket bound to port " + this.ListeningPort.ToString(), LogMessageLevel.Info);
-					this.status = WebDriverStatus.Initialized;
-					return true;
-				}
-				else
-				{
-					Log.Write("Failed to bind listening socket to any port!", LogMessageLevel.Warning);
-					return false;
-				}
-			}
-			else
-			{
-				return false;
-			}
-		}
-		public abstract bool ReadContext(Socket socket, out CommonContext context);
-		/// <summary>
-		/// Starts the WebDriver.
-		/// </summary>
-		public virtual bool Start()
-		{
-			if (this.Status >= WebDriverStatus.Initialized)
-			{
-				this.Status = WebDriverStatus.Started;
-				this.ListeningSocket.Listen(10);
+                while (this.Status == WebDriverStatus.Started)
+                {
+                    this.ListeningSocket.Accept();
+                    //this.HandleAcceptedSocket();
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// Stops the WebDriver.
+        /// </summary>
+        public virtual bool Stop()
+        {
+            if (this.status == WebDriverStatus.Started)
+            {
+                this.status = WebDriverStatus.Stopped;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public abstract bool SendContext(Socket socket, CommonContext context);
+        #endregion
+        #region Properties - Protected
+        protected Socket ListeningSocket
+        {
+            get
+            {
+                return this.listeningSocket;
+            }
+            set
+            {
+                this.listeningSocket = value;
+            }
+        }
+        #endregion
+        #region Properties - Public
+        /// <summary>
+        /// Gets an indicator of the current WebDriver's level of support for
+        /// recieving in an asynchronous manner.
+        /// </summary>
+        /// <remarks>Returns false always unless overridden in a derived class.
+        /// </remarks>
+        public virtual bool CanRecieveAsync
+        {
+            get
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// Gets an indicator of the current WebDriver's level of support for
+        /// sending in an asynchronous manner.
+        /// </summary>
+        /// <remarks>Returns false always unless overridden in a derived class.
+        /// </remarks>
+        public virtual bool CanSendAsync
+        {
+            get
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// Gets a DriverInfo object which contains information about the
+        /// current WebDriver.
+        /// </summary>
+        public DriverInfo Info
+        {
+            get
+            {
+                return this.info;
+            }
+            protected set
+            {
+                this.info = value;
+            }
+        }
+        /// <summary>
+        /// Gets an indication of whether the current object has already been
+        /// disposed (cleaned up) or not.
+        /// </summary>
+        public bool IsDisposed
+        {
+            get
+            {
+                return this.isDisposed;
+            }
+        }
+        /// <summary>
+        /// Gets a value that indicates whether the current WebDriver has been
+        /// initialized yet.
+        /// </summary>
+        public bool IsInitialized
+        {
+            get
+            {
+                if (this.status >= WebDriverStatus.Initialized)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+        /// <summary>
+        /// Gets a boolean value that indicates whether the current WebDriver
+        /// is in a started status.
+        /// </summary>
+        public bool IsStarted
+        {
+            get
+            {
+                if (this.status == WebDriverStatus.Started)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+        /// <summary>
+        /// Gets a boolean value that indicates whether the current WebDriver
+        /// is in a stopped status.
+        /// </summary>
+        public bool IsStopped
+        {
+            get
+            {
+                if (this.status == WebDriverStatus.Stopped)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+        /// <summary>
+        /// Gets the port number that the current WebDriver is listening on
+        /// for incoming connections.
+        /// </summary>
+        public ushort ListeningPort
+        {
+            get
+            {
+                this.CheckDisposal();
 
-				if (this.Settings.Block)
-				{
-					while (this.Status == WebDriverStatus.Started)
-					{
-						ThreadPool.QueueUserWorkItem(new WaitCallback(this.HandleAcceptedSocket), this.ListeningSocket.Accept());
-					}
-					return true;
-				}
-				else
-				{
-					WebDriverState state = new WebDriverState();
-					state.WorkSocket = this.ListeningSocket;
-					this.ListeningSocket.BeginAccept(new AsyncCallback(this.AcceptCallback), state);
-
-					return true;
-				}
-			}
-			else
-			{
-				return false;
-			}
-		}
-		/// <summary>
-		/// Stops the WebDriver.
-		/// </summary>
-		public virtual bool Stop()
-		{
-			if (this.status == WebDriverStatus.Started)
-			{
-				this.status = WebDriverStatus.Stopped;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		public virtual bool WriteContext(Socket socket, CommonContext context)
-		{
-			if (!context.HeadersWritten)
-			{
-				context.HeadersWritten = this.WriteHeaders(socket, context);
-			}
-
-			bool ret = false;
-
-			if (context.HeadersWritten)
-			{
-				ret = this.WriteContent(socket, context);
-			}
-			return ret;
-		}
-		#endregion
-		#region Properties - Protected
-		protected Socket ListeningSocket
-		{
-			get
-			{
-				return this.listeningSocket;
-			}
-			set
-			{
-				this.listeningSocket = value;
-			}
-		}
-		#endregion
-		#region Properties - Public
-		/// <summary>
-		/// Gets a DriverInfo object which contains information about the current WebDriver.
-		/// </summary>
-		public DriverInfo Info
-		{
-			get
-			{
-				return this.info;
-			}
-			protected set
-			{
-				this.info = value;
-			}
-		}
-		/// <summary>
-		/// Gets a value that indicates whether the current WebDriver has been initialized yet.
-		/// </summary>
-		public bool IsInitialized
-		{
-			get
-			{
-				if (this.status >= WebDriverStatus.Initialized)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			}
-		}
-		/// <summary>
-		/// Gets a boolean value that indicates whether the current WebDriver is in a started status.
-		/// </summary>
-		public bool IsStarted
-		{
-			get
-			{
-				if (this.status == WebDriverStatus.Started)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			}
-		}
-		/// <summary>
-		/// Gets a boolean value that indicates whether the current WebDriver is in a stopped status.
-		/// </summary>
-		public bool IsStopped
-		{
-			get
-			{
-				if (this.status == WebDriverStatus.Stopped)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			}
-		}
-		/// <summary>
-		/// Gets the port number that the current WebDriver is listening on for incoming connections.
-		/// </summary>
-		public ushort ListeningPort
-		{
-			get
-			{
-				return (ushort)((IPEndPoint)this.listeningSocket.LocalEndPoint).Port;
-			}
-		}
-		/// <summary>
-		/// Gets the WebDriverSettings which determine the behaviour of the current WebDriver.
-		/// </summary>
-		public WebDriverSettings Settings
-		{
-			get
-			{
-				return this.settings;
-			}
-		}
-		/// <summary>
-		/// Gets the status of the current WebDriver.
-		/// </summary>
-		public WebDriverStatus Status
-		{
-			get
-			{
-				return this.status;
-			}
-			protected set
-			{
-				this.status = value;
-			}
-		}
-		#endregion
-	}
+                return (ushort)((IPEndPoint)this.listeningSocket.LocalEndPoint).Port;
+            }
+        }
+        /// <summary>
+        /// Gets the WebDriverSettings which determine the behaviour of the
+        /// current WebDriver.
+        /// </summary>
+        public WebDriverSettings Settings
+        {
+            get
+            {
+                return this.settings;
+            }
+        }
+        /// <summary>
+        /// Gets the status of the current WebDriver.
+        /// </summary>
+        public WebDriverStatus Status
+        {
+            get
+            {
+                return this.status;
+            }
+            protected set
+            {
+                this.status = value;
+            }
+        }
+        #endregion
+    }
 }

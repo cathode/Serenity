@@ -12,9 +12,9 @@ using System.Text;
 
 namespace Serenity.Web.Services
 {
-	/// <summary>
-	/// Provides a base class for web services.
-	/// </summary>
+    /// <summary>
+    /// Provides a base class for web services.
+    /// </summary>
     public abstract class WebService : Resource
     {
 

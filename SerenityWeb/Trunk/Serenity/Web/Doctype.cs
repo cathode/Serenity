@@ -18,9 +18,9 @@ namespace Serenity.Web
     /// This class cannot be inherited.
     /// </summary>
     public sealed class Doctype
-	{
-		#region Constructors - Public
-		/// <summary>
+    {
+        #region Constructors - Public
+        /// <summary>
         /// Initializes a new instance of the Doctype class
         /// </summary>
         /// <param name="RootElement">Defines the root element that the current Doctype applies to.</param>
@@ -31,15 +31,15 @@ namespace Serenity.Web
             this.rootElement = rootElement;
             this.publicIdentifier = publicIdentifier;
             this.systemIdentifier = systemIdentifier;
-		}
-		#endregion
-		#region Fields - Private
-		private string rootElement;
-		private string publicIdentifier;
-		private string systemIdentifier;
-		#endregion
-		#region Methods - Public
-		/// <summary>
+        }
+        #endregion
+        #region Fields - Private
+        private string rootElement;
+        private string publicIdentifier;
+        private string systemIdentifier;
+        #endregion
+        #region Methods - Public
+        /// <summary>
         /// Returns the string representation of the current Doctype.
         /// </summary>
         /// <returns>The string representation of the current Doctype.</returns>
@@ -52,10 +52,10 @@ namespace Serenity.Web
                 + "\" \""
                 + this.systemIdentifier
                 + "\">";
-		}
-		#endregion
-		#region Properties - Public
-		/// <summary>
+        }
+        #endregion
+        #region Properties - Public
+        /// <summary>
         /// Gets the HTML 4.01 Frameset Doctype.
         /// </summary>
         public static Doctype HTML401Frameset
@@ -244,7 +244,7 @@ namespace Serenity.Web
                     "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN",
                     "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg.dtd");
             }
-		}
-		#endregion
+        }
+        #endregion
     }
 }

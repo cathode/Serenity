@@ -10,16 +10,19 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Serenity.Themes
+namespace Serenity.Web.Drivers
 {
     /// <summary>
-    /// Represents a theme; a collection of styling properties and display information
-    /// that can be applied universally to any themeable resource.
+    /// Manages multiple drivers and provides unified access to incoming
+    /// CommonContexts.
     /// </summary>
-    public sealed class Theme
+    public sealed class DriverPool
     {
-        private string author;
-        private Uri url;
-        private Version version;
+        public DriverPool()
+        {
+
+        }
+        private List<WebDriver> drivers;
+
     }
 }

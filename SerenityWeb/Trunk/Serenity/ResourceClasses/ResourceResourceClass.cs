@@ -17,16 +17,16 @@ using Serenity.Web;
 
 namespace Serenity.ResourceClasses
 {
-	internal class ResourceResourceClass : ResourceClass
-	{
-		public ResourceResourceClass()
-			: base("resource")
-		{
+    internal class ResourceResourceClass : ResourceClass
+    {
+        public ResourceResourceClass()
+            : base("resource")
+        {
 
-		}
-		public override void HandleContext(Serenity.Web.CommonContext context)
-		{
-			//ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
+        }
+        public override void HandleContext(Serenity.Web.CommonContext context)
+        {
+            //ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
 
             byte[] readBuffer = null;
             DomainSettings settings = DomainSettings.GetBestMatch(context.Request.Url);
@@ -49,18 +49,18 @@ namespace Serenity.ResourceClasses
                     if (foundResourceName != "")
                     {
                         Stream resourceStream = null;
-						try
-						{
-							resourceStream = module.Assembly.GetManifestResourceStream(foundResourceName);
-							readBuffer = new byte[resourceStream.Length];
-							resourceStream.Read(readBuffer, 0, readBuffer.Length);
+                        try
+                        {
+                            resourceStream = module.Assembly.GetManifestResourceStream(foundResourceName);
+                            readBuffer = new byte[resourceStream.Length];
+                            resourceStream.Read(readBuffer, 0, readBuffer.Length);
                             string ext = Path.GetExtension(foundResourceName).TrimStart('.');
-							context.Response.MimeType = FileTypeRegistry.GetMimeType(ext);
-						}
-						catch
-						{
-							ErrorHandler.Handle(context, StatusCode.Http500InternalServerError);
-						}
+                            context.Response.MimeType = FileTypeRegistry.GetMimeType(ext);
+                        }
+                        catch
+                        {
+                            ErrorHandler.Handle(context, StatusCode.Http500InternalServerError);
+                        }
                         finally
                         {
                             if (resourceStream != null)
@@ -73,14 +73,14 @@ namespace Serenity.ResourceClasses
                 }
             }
 
-			if (readBuffer != null)
-			{
-				context.Response.Write(readBuffer);
-			}
-			else
-			{
-				ErrorHandler.Handle(context, StatusCode.Http404NotFound);
-			}
-		}
-	}
+            if (readBuffer != null)
+            {
+                context.Response.Write(readBuffer);
+            }
+            else
+            {
+                ErrorHandler.Handle(context, StatusCode.Http404NotFound);
+            }
+        }
+    }
 }

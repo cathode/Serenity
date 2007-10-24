@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Serenity.Web.Services
 {
-	public sealed class WebMethodAttribute : Attribute
-	{
-	}
+    public sealed class WebMethodAttribute : Attribute
+    {
+    }
 }

@@ -13,13 +13,13 @@ using System.Text;
 
 namespace Serenity.Collections
 {
-	public sealed class ContentPageCollection : KeyedCollection<string, ContentPage>
-	{
-		#region Methods - Protected
-		protected override string GetKeyForItem(ContentPage item)
-		{
-			return item.SystemName;
-		}
-		#endregion
-	}
+    public sealed class ContentPageCollection : KeyedCollection<string, ContentPage>
+    {
+        #region Methods - Protected
+        protected override string GetKeyForItem(ContentPage item)
+        {
+            return item.SystemName;
+        }
+        #endregion
+    }
 }

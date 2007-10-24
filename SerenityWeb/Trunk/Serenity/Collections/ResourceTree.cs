@@ -13,43 +13,43 @@ using System.Text;
 
 namespace Serenity.Collections
 {
-	/// <summary>
-	/// Represents a tree of resources.
-	/// </summary>
-	public sealed class ResourceTree
-	{
-		#region Methods - Public
-		/// <summary>
-		/// Initializes a new instance of the ResourceTree class.
-		/// </summary>
-		public ResourceTree()
-		{
+    /// <summary>
+    /// Represents a tree of resources.
+    /// </summary>
+    public sealed class ResourceTree
+    {
+        #region Methods - Public
+        /// <summary>
+        /// Initializes a new instance of the ResourceTree class.
+        /// </summary>
+        public ResourceTree()
+        {
 
-		}
-		#endregion
-		#region Fields - Private
-		#endregion
-		#region Indexers - Public
-		public ResourceTreeElement this[string name]
-		{
-			get
-			{
-				return null;
-			}
-		}
-		#endregion
-		#region Methods - Public
-		/// <summary>
-		/// Adds a resource to the current ResourceTree.
-		/// </summary>
-		/// <param name="relativeUri"></param>
-		/// <param name="resource"></param>
-		/// <returns></returns>
-		public bool AddResource(string relativeUri, Resource resource)
-		{
-			return false;
-		}
-		#endregion
-	}
-	
+        }
+        #endregion
+        #region Fields - Private
+        #endregion
+        #region Indexers - Public
+        public ResourceTreeElement this[string name]
+        {
+            get
+            {
+                return null;
+            }
+        }
+        #endregion
+        #region Methods - Public
+        /// <summary>
+        /// Adds a resource to the current ResourceTree.
+        /// </summary>
+        /// <param name="relativeUri"></param>
+        /// <param name="resource"></param>
+        /// <returns></returns>
+        public bool AddResource(string relativeUri, Resource resource)
+        {
+            return false;
+        }
+        #endregion
+    }
+
 }

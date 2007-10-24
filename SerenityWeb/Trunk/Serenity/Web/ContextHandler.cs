@@ -29,11 +29,11 @@ namespace Serenity.Web
         public virtual void HandleContext(CommonContext context)
         {
             Uri url = context.Request.Url;
-			if (DomainSettings.Current == null)
-			{
-				DomainSettings.Current = DomainSettings.GetBestMatch(url);
-			}
-			DomainSettings settings = DomainSettings.Current;
+            if (DomainSettings.Current == null)
+            {
+                DomainSettings.Current = DomainSettings.GetBestMatch(url);
+            }
+            DomainSettings settings = DomainSettings.Current;
 
 
             ResourceClass resourceClass;

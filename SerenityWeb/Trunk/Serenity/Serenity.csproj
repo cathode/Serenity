@@ -77,6 +77,8 @@
     <Compile Include="ContentPage.cs" />
     <None Include="Data\Database.cs" />
     <Compile Include="FileTypeEntry.cs" />
+    <Compile Include="SerenityServer.cs" />
+    <Compile Include="Web\Drivers\DriverPool.cs" />
     <Compile Include="Web\Indexer.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Pages\DefaultPage.cs" />

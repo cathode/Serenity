@@ -10,16 +10,36 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Serenity.Themes
+using Serenity.Web;
+using Serenity.Web.Drivers;
+
+namespace Serenity
 {
-    /// <summary>
-    /// Represents a theme; a collection of styling properties and display information
-    /// that can be applied universally to any themeable resource.
-    /// </summary>
-    public sealed class Theme
-    {
-        private string author;
-        private Uri url;
-        private Version version;
-    }
+	public sealed class SerenityServer
+	{
+		#region Fields - Private
+		private ContextHandler contextHandler;
+		private DriverPool driverPool;
+		#endregion
+		#region Properties - Public
+		public ContextHandler ContextHandler
+		{
+			get
+			{
+				return this.contextHandler;
+			}
+			set
+			{
+				this.contextHandler = value;
+			}
+		}
+		public DriverPool DriverPool
+		{
+			get
+			{
+				return this.driverPool;
+			}
+		}
+		#endregion
+	}
 }

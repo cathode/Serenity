@@ -13,11 +13,11 @@ using System.Text;
 
 namespace Serenity.Collections
 {
-	public sealed class ResourceCollection : KeyedCollection<string, Resource>
-	{
-		protected override string GetKeyForItem(Resource item)
-		{
-			return item.SystemName;
-		}
-	}
+    public sealed class ResourceCollection : KeyedCollection<string, Resource>
+    {
+        protected override string GetKeyForItem(Resource item)
+        {
+            return item.SystemName;
+        }
+    }
 }

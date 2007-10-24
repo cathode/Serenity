@@ -16,21 +16,22 @@ namespace Serenity.ResourceClasses
 {
     internal class ThemeResourceClass : ResourceClass
     {
-        public ThemeResourceClass() : base("theme")
+        public ThemeResourceClass()
+            : base("theme")
         {
 
         }
         public override void HandleContext(Serenity.Web.CommonContext context)
         {
-			if (context.Request.Url.Segments.Length > 1)
-			{
+            if (context.Request.Url.Segments.Length > 1)
+            {
 
-			}
-			else
-			{
+            }
+            else
+            {
 
-			}
-			ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
+            }
+            ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
         }
     }
 }

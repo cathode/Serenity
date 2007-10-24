@@ -52,11 +52,11 @@ namespace Serenity.Web
                     break;
 
                 case 500:
-					context.Response.Write("Error: 500 Internal Server Error\r\nThe server encountered an error and was unable to process your request.");
-					break;
+                    context.Response.Write("Error: 500 Internal Server Error\r\nThe server encountered an error and was unable to process your request.");
+                    break;
                 case 501:
-					context.Response.Write("Error: 501 Not Implemented\r\nThe feature you requested is not available on the server.");
-					break;
+                    context.Response.Write("Error: 501 Not Implemented\r\nThe feature you requested is not available on the server.");
+                    break;
                 case 502:
                 case 503:
                     break;
@@ -74,6 +74,6 @@ namespace Serenity.Web
 
             return isError;
         }
-#endregion
+        #endregion
     }
 }

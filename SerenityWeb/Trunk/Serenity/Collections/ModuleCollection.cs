@@ -13,13 +13,13 @@ using System.Text;
 
 namespace Serenity.Collections
 {
-	public sealed class ModuleCollection : KeyedCollection<string, Module>
-	{
-		#region Methods - Protected
-		protected override string GetKeyForItem(Module item)
-		{
-			return item.SystemName;
-		}
-		#endregion
-	}
+    public sealed class ModuleCollection : KeyedCollection<string, Module>
+    {
+        #region Methods - Protected
+        protected override string GetKeyForItem(Module item)
+        {
+            return item.SystemName;
+        }
+        #endregion
+    }
 }

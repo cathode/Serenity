@@ -18,7 +18,7 @@ namespace Serenity.Pages
     {
         public override void PostRequest(CommonContext context)
         {
-            
+
         }
         public override void PreRequest(CommonContext context)
         {
