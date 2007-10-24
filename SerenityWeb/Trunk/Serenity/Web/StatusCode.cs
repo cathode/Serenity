@@ -479,7 +479,7 @@ namespace Serenity.Web
 			}
 		}
 		/// <summary>
-		/// Gets a status code indicating a WebDAV 207 Multi-Status response.
+		/// Gets a status code indicating a WebDAV 207 Multi-status response.
 		/// </summary>
 		public static StatusCode WebDav207MultiStatus
 		{

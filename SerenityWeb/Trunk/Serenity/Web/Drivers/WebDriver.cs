@@ -64,7 +64,6 @@ namespace Serenity.Web.Drivers
             {
                 return;
             }
-
         }
         /// <summary>
         /// Checks if the current WebDriver is disposed and throws an
@@ -100,6 +99,33 @@ namespace Serenity.Web.Drivers
         protected virtual void Dispose(bool disposing)
         {
         }
+        protected void HandleAcceptedConnection(object socketObject)
+        {
+            if (socketObject is Socket)
+            {
+                this.HandleAcceptedConnection((Socket)socketObject);
+            }
+            else
+            {
+                throw new ArgumentException("socketObject must be of type System.Net.Sockets.Socket!", "socketObject");
+            }
+        }
+        protected virtual void HandleAcceptedConnection(Socket socket)
+        {
+            CommonContext context = this.RecieveContext(socket);
+            if (context != null)
+            {
+                this.Settings.ContextHandler.HandleContext(context);
+            }
+            else
+            {
+                context = new CommonContext(this);
+                ErrorHandler.Handle(context, StatusCode.Http500InternalServerError);
+            }
+            this.SendContext(socket, context);
+            socket.Disconnect(false);
+            socket.Close();
+        }
         protected virtual void RecieveCallback(IAsyncResult ar)
         {
             this.CheckDisposal();
@@ -120,7 +146,6 @@ namespace Serenity.Web.Drivers
                 state.WorkSocket.EndSend(ar);
             }
         }
-        
         #endregion
         #region Methods - Public
         public virtual IAsyncResult BeginRecieveContext(Socket socket, AsyncCallback callback, object state)
@@ -128,6 +153,14 @@ namespace Serenity.Web.Drivers
             throw new NotSupportedException();
         }
         public virtual IAsyncResult BeginSendContext(Socket socket, CommonContext context, AsyncCallback callback, object state)
+        {
+            throw new NotSupportedException();
+        }
+        public virtual IAsyncResult BeginStart(AsyncCallback callback, object state)
+        {
+            throw new NotSupportedException();
+        }
+        public virtual IAsyncResult BeginStop(AsyncCallback callback, object state)
         {
             throw new NotSupportedException();
         }
@@ -145,6 +178,14 @@ namespace Serenity.Web.Drivers
             throw new NotSupportedException();
         }
         public virtual void EndSendContext(IAsyncResult result)
+        {
+            throw new NotSupportedException();
+        }
+        public virtual void EndStart(IAsyncResult result)
+        {
+            throw new NotSupportedException();
+        }
+        public virtual void EndStop(IAsyncResult result)
         {
             throw new NotSupportedException();
         }
@@ -188,6 +229,7 @@ namespace Serenity.Web.Drivers
                 return false;
             }
         }
+       
         public abstract CommonContext RecieveContext(Socket socket);
         /// <summary>
         /// Starts the WebDriver.
@@ -201,11 +243,9 @@ namespace Serenity.Web.Drivers
                 this.Status = WebDriverStatus.Started;
                 this.ListeningSocket.Listen(10);
 
-
                 while (this.Status == WebDriverStatus.Started)
                 {
-                    this.ListeningSocket.Accept();
-                    //this.HandleAcceptedSocket();
+                   ThreadPool.QueueUserWorkItem(new WaitCallback(this.HandleAcceptedConnection), this.ListeningSocket.Accept());
                 }
                 return true;
             }
@@ -217,19 +257,11 @@ namespace Serenity.Web.Drivers
         /// <summary>
         /// Stops the WebDriver.
         /// </summary>
-        public virtual bool Stop()
+        public virtual void Stop()
         {
             this.CheckDisposal();
 
-            if (this.status == WebDriverStatus.Started)
-            {
-                this.status = WebDriverStatus.Stopped;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            this.status = WebDriverStatus.Stopped;
         }
         public abstract bool SendContext(Socket socket, CommonContext context);
         #endregion

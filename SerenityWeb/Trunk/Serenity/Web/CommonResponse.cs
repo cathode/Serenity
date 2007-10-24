@@ -30,15 +30,15 @@ namespace Serenity.Web
         #region Fields - Private
         private CommonContext context;
         private HeaderCollection headers = new HeaderCollection();
+        private bool headersSent = false;
         private bool lockFlushes = false;
         private bool lockWrites = false;
         private MimeType mimeType = MimeType.Default;
         private List<byte> outputBuffer = new List<byte>();
+        private int sent = 0;
+        private StatusCode status;
         private bool useChunkedTransferEncoding = false;
         private bool useCompression = false;
-        #endregion
-        #region Fields - Public
-        public StatusCode Status;
         #endregion
         #region Methods - Internal
         /// <summary>
@@ -121,15 +121,6 @@ namespace Serenity.Web
             return this.Write(Encoding.UTF8.GetBytes(value + "\r\n"));
         }
         #endregion
-        #region Properties - Internal
-        internal byte[] OutputBuffer
-        {
-            get
-            {
-                return this.outputBuffer.ToArray();
-            }
-        }
-        #endregion
         #region Properties - Public
         /// <summary>
         /// Gets or sets the mimetype associated with the content returned to the client.
@@ -156,15 +147,74 @@ namespace Serenity.Web
             }
         }
         /// <summary>
+        /// Gets an indication of whether or not header data has already been
+        /// sent to the client.
+        /// </summary>
+        public bool HeadersSent
+        {
+            get
+            {
+                return this.headersSent;
+            }
+            set
+            {
+                this.headersSent = value;
+            }
+        }
+        /// <summary>
+        /// Gets the buffer of data that has not yet been sent.
+        /// </summary>
+        public List<byte> OutputBuffer
+        {
+            get
+            {
+                return this.outputBuffer;
+            }
+        }
+        /// <summary>
         /// Gets the CommonContext associated with the current CommonResponse.
         /// </summary>
-        public CommonContext Owner
+        public CommonContext Context
         {
             get
             {
                 return this.context;
             }
         }
+        /// <summary>
+        /// Gets or sets a value which indicates how much data has actually
+        /// been sent to the client.
+        /// </summary>
+        public int Sent
+        {
+            get
+            {
+                return this.sent;
+            }
+            set
+            {
+                this.sent = value;
+            }
+        }
+        /// <summary>
+        /// Gets or sets the StatusCode associated with the current
+        /// CommonResponse.
+        /// </summary>
+        public StatusCode Status
+        {
+            get
+            {
+                return this.status;
+            }
+            set
+            {
+                this.status = value;
+            }
+        }
+        /// <summary>
+        /// Gets or sets a value which determines if the current CommonResponse
+        /// should be sent using chunked transfer encoding.
+        /// </summary>
         public bool UseChunkedTransferEncoding
         {
             get
@@ -180,6 +230,11 @@ namespace Serenity.Web
         /// Gets or sets a value used to determine if the data sent back
         /// to the client with the response should be compressed or not.
         /// </summary>
+        /// <remarks>
+        /// Compression can decrease the amount of data to be sent by a large
+        /// amount if used on highly compressable data such as text. For other
+        /// types of data, like images, compression should not be used.
+        /// </remarks>
         public bool UseCompression
         {
             get
@@ -191,6 +246,7 @@ namespace Serenity.Web
                 this.useCompression = value;
             }
         }
+        
         #endregion
     }
 }

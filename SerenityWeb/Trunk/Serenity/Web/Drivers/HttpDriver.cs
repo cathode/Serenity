@@ -47,76 +47,42 @@ namespace Serenity.Web.Drivers
             }
         }
         #endregion
-        #region Methods - Protected
-        protected bool WriteHeaders(Socket socket, CommonContext context)
-        {
-            if (socket != null && socket.Connected)
-            {
-                CommonRequest request = context.Request;
-                CommonResponse response = context.Response;
-                StringBuilder outputText = new StringBuilder();
-
-                outputText.Append("HTTP/1.1 " + response.Status.ToString() + "\r\n");
-
-                if (response.Headers.Contains("Content-Length") == false)
-                {
-                    response.Headers.Add("Content-Length", response.OutputBuffer.Length.ToString());
-                }
-                if (response.Headers.Contains("Content-Type") == false)
-                {
-                    response.Headers.Add("Content-Type", response.MimeType.ToString() + "; charset=UTF-8");
-                }
-                if (!response.Headers.Contains("Server"))
-                {
-                    response.Headers.Add(new Header("Server", SerenityInfo.Name + "/" + SerenityInfo.Version));
-                }
-
-                foreach (Header header in response.Headers)
-                {
-                    string value;
-                    if (header.Complex == true)
-                    {
-                        switch (header.Name)
-                        {
-                            default:
-                                value = string.Format("{0},{1}", header.PrimaryValue, string.Join(",", header.SecondaryValues)).TrimEnd('\r', '\n');
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        value = header.PrimaryValue.TrimEnd('\r', '\n');
-                    }
-                    outputText.Append(header.Name + ": " + value + "\r\n");
-                }
-
-                outputText.Append("\r\n");
-                byte[] output = Encoding.ASCII.GetBytes(outputText.ToString());
-
-                socket.Send(output);
-
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        #endregion
         #region Methods - Public
         public override CommonContext RecieveContext(Socket socket)
         {
             this.CheckDisposal();
+
             if (socket == null)
             {
                 throw new ArgumentNullException("socket");
             }
-            byte[] buffer = new byte[socket.Available];
-            socket.Receive(buffer);
+
+            if (socket.Available == 0)
+            {
+                int waits = 0;
+                while (socket.Available == 0 && waits < 100)
+                {
+                    Thread.Sleep(1);
+                    waits++;
+                }
+                if (socket.Available == 0)
+                {
+                    return null;
+                }
+            }
+            byte[] buffer;
+            List<byte> listBuffer = new List<byte>();
+            while (socket.Available > 0)
+            {
+                buffer = new byte[socket.Available];
+                socket.Receive(buffer);
+                listBuffer.AddRange(buffer);
+            }
+            buffer = listBuffer.ToArray();
 
             CommonContext context = new CommonContext(this);
 
-            
+
             string requestContent = Encoding.ASCII.GetString(buffer);
             int headerSize = requestContent.IndexOf("\r\n\r\n");
 
@@ -277,8 +243,66 @@ namespace Serenity.Web.Drivers
             {
                 throw new ArgumentNullException("context");
             }
+            CommonRequest request = context.Request;
+            CommonResponse response = context.Response;
+            if (!response.HeadersSent)
+            {
 
-            throw new Exception("The method or operation is not implemented.");
+                StringBuilder outputText = new StringBuilder();
+
+                outputText.Append("HTTP/1.1 " + response.Status.ToString() + "\r\n");
+
+                if (response.Headers.Contains("Content-Length") == false)
+                {
+                    response.Headers.Add("Content-Length", response.OutputBuffer.Count.ToString());
+                }
+                if (response.Headers.Contains("Content-Type") == false)
+                {
+                    response.Headers.Add("Content-Type", response.MimeType.ToString() + "; charset=UTF-8");
+                }
+                if (!response.Headers.Contains("Server"))
+                {
+                    response.Headers.Add(new Header("Server", SerenityInfo.Name + "/" + SerenityInfo.Version));
+                }
+
+                foreach (Header header in response.Headers)
+                {
+                    string value;
+                    if (header.Complex == true)
+                    {
+                        switch (header.Name)
+                        {
+                            default:
+                                value = string.Format("{0},{1}", header.PrimaryValue, string.Join(",", header.SecondaryValues)).TrimEnd('\r', '\n');
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        value = header.PrimaryValue.TrimEnd('\r', '\n');
+                    }
+                    outputText.Append(header.Name + ": " + value + "\r\n");
+                }
+
+                outputText.Append("\r\n");
+                byte[] output = Encoding.ASCII.GetBytes(outputText.ToString());
+
+                socket.Send(output);
+            }
+            if (response.OutputBuffer.Count > 0)
+            {
+                byte[] buffer = response.OutputBuffer.ToArray();
+                int sent = socket.Send(buffer);
+                while (sent < buffer.Length)
+                {
+                    byte[] newBuffer = new byte[buffer.Length - sent];
+                    buffer.CopyTo(newBuffer, sent);
+                    buffer = newBuffer;
+                    sent = socket.Send(buffer);
+                }
+            }
+
+            return true;
         }
         #endregion
         #region Properties - Public
