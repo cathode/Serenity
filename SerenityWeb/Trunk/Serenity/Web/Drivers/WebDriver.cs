@@ -29,18 +29,28 @@ namespace Serenity.Web.Drivers
         protected WebDriver(WebDriverSettings settings)
         {
             this.settings = settings;
+            this.acceptDelegate = new AsyncCallback(this.AcceptCallback);
+            this.disconnectDelegate = new AsyncCallback(this.DisconnectCallback);
+            this.recieveDelegate = new AsyncCallback(this.RecieveCallback);
+            this.sendDelegate = new AsyncCallback(this.SendCallback);
         }
         #endregion
         #region Fields - Private
-        private bool isDisposed = false;
+        private readonly AsyncCallback acceptDelegate;
+        private readonly AsyncCallback disconnectDelegate;
         private DriverInfo info;
+        private bool isDisposed = false;
         private Socket listeningSocket;
+        private readonly AsyncCallback recieveDelegate;
+        private readonly AsyncCallback sendDelegate;
         private WebDriverSettings settings;
         private WebDriverStatus status = WebDriverStatus.None;
         #endregion
         #region Methods - Protected
         protected virtual void AcceptCallback(IAsyncResult ar)
         {
+            this.CheckDisposal();
+
             if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
             {
                 WebDriverState state = (WebDriverState)ar.AsyncState;
@@ -57,11 +67,24 @@ namespace Serenity.Web.Drivers
 
         }
         /// <summary>
+        /// Checks if the current WebDriver is disposed and throws an
+        /// ObjectDisposedException if necessary.
+        /// </summary>
+        protected void CheckDisposal()
+        {
+            if (this.IsDisposed)
+            {
+                throw new ObjectDisposedException(this.GetType().FullName);
+            }
+        }
+        /// <summary>
         /// Provides a callback method to use for an async socket disconnection.
         /// </summary>
         /// <param name="ar"></param>
         protected virtual void DisconnectCallback(IAsyncResult ar)
         {
+            this.CheckDisposal();
+
             if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
             {
                 WebDriverState state = ar.AsyncState as WebDriverState;
@@ -79,6 +102,8 @@ namespace Serenity.Web.Drivers
         }
         protected virtual void RecieveCallback(IAsyncResult ar)
         {
+            this.CheckDisposal();
+
             if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
             {
                 WebDriverState state = ar.AsyncState as WebDriverState;
@@ -87,23 +112,15 @@ namespace Serenity.Web.Drivers
         }
         protected virtual void SendCallback(IAsyncResult ar)
         {
+            this.CheckDisposal();
+
             if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
             {
                 WebDriverState state = ar.AsyncState as WebDriverState;
                 state.WorkSocket.EndSend(ar);
             }
         }
-        /// <summary>
-        /// Checks if the current WebDriver is disposed and throws an
-        /// ObjectDisposedException if necessary.
-        /// </summary>
-        protected void CheckDisposal()
-        {
-            if (this.IsDisposed)
-            {
-                throw new ObjectDisposedException(this.GetType().FullName);
-            }
-        }
+        
         #endregion
         #region Methods - Public
         public virtual IAsyncResult BeginRecieveContext(Socket socket, AsyncCallback callback, object state)
@@ -136,6 +153,8 @@ namespace Serenity.Web.Drivers
         /// </summary>
         public virtual bool Initialize()
         {
+            this.CheckDisposal();
+
             if (this.status < WebDriverStatus.Initialized)
             {
                 this.ListeningSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
@@ -175,6 +194,8 @@ namespace Serenity.Web.Drivers
         /// </summary>
         public virtual bool Start()
         {
+            this.CheckDisposal();
+
             if (this.Status >= WebDriverStatus.Initialized)
             {
                 this.Status = WebDriverStatus.Started;
@@ -198,6 +219,8 @@ namespace Serenity.Web.Drivers
         /// </summary>
         public virtual bool Stop()
         {
+            this.CheckDisposal();
+
             if (this.status == WebDriverStatus.Started)
             {
                 this.status = WebDriverStatus.Stopped;
@@ -211,6 +234,28 @@ namespace Serenity.Web.Drivers
         public abstract bool SendContext(Socket socket, CommonContext context);
         #endregion
         #region Properties - Protected
+        /// <summary>
+        /// Gets a delegate which allows invocation of the callback method
+        /// used when performing an asynchronous accept operation.
+        /// </summary>
+        protected AsyncCallback AcceptDelegate
+        {
+            get
+            {
+                return this.acceptDelegate;
+            }
+        }
+        /// <summary>
+        /// Gets a delegate which allows invocation of the callback method
+        /// used when performing an asynchronous disconnect operation.
+        /// </summary>
+        protected AsyncCallback DisconnectDelegate
+        {
+            get
+            {
+                return this.disconnectDelegate;
+            }
+        }
         protected Socket ListeningSocket
         {
             get
@@ -220,6 +265,28 @@ namespace Serenity.Web.Drivers
             set
             {
                 this.listeningSocket = value;
+            }
+        }
+        /// <summary>
+        /// Gets a delegate which allows invocation of the callback method
+        /// used when performing an asynchronous recieve operation.
+        /// </summary>
+        protected AsyncCallback RecieveDelegate
+        {
+            get
+            {
+                return this.recieveDelegate;
+            }
+        }
+        /// <summary>
+        /// Gets a delegate which allows invocation of the callback method
+        /// used when performing an asynchronous send operation.
+        /// </summary>
+        protected AsyncCallback SendDelegate
+        {
+            get
+            {
+                return this.sendDelegate;
             }
         }
         #endregion

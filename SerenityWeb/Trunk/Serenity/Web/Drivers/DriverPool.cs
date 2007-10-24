@@ -22,7 +22,7 @@ namespace Serenity.Web.Drivers
         {
 
         }
-        private List<WebDriver> drivers;
+        private List<WebDriver> drivers = new List<WebDriver>();
 
     }
 }

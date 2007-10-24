@@ -48,25 +48,6 @@ namespace Serenity.Web.Drivers
         }
         #endregion
         #region Methods - Protected
-        protected override void RecieveCallback(IAsyncResult ar)
-        {
-            if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
-            {
-                WebDriverState state = (WebDriverState)ar.AsyncState;
-                Socket socket = state.WorkSocket;
-                socket.EndReceive(ar);
-
-                int available = socket.Available;
-                if (available > 0)
-                {
-                    WebDriverState newState = new WebDriverState(state.Buffer.Length + socket.Available);
-                    state.Buffer.CopyTo(newState.Buffer, 0);
-                    newState.WorkSocket = state.WorkSocket;
-                    socket.BeginReceive(newState.Buffer, state.Buffer.Length, available,
-                        SocketFlags.None, new AsyncCallback(this.RecieveCallback), newState);
-                }
-            }
-        }
         protected bool WriteHeaders(Socket socket, CommonContext context)
         {
             if (socket != null && socket.Connected)
@@ -125,52 +106,182 @@ namespace Serenity.Web.Drivers
         #region Methods - Public
         public override CommonContext RecieveContext(Socket socket)
         {
-            CommonContext context = new CommonContext(this);
+            this.CheckDisposal();
+            if (socket == null)
+            {
+                throw new ArgumentNullException("socket");
+            }
             byte[] buffer = new byte[socket.Available];
+            socket.Receive(buffer);
 
-            if (socket.Available == 0)
+            CommonContext context = new CommonContext(this);
+
+            
+            string requestContent = Encoding.ASCII.GetString(buffer);
+            int headerSize = requestContent.IndexOf("\r\n\r\n");
+
+            if (headerSize != -1)
             {
-                int waits = 0;
-                while (socket.Available == 0 && waits < 100)
+                headerSize += 4;
+
+                int indexOf = requestContent.IndexOf("\r\n");
+                string line = requestContent.Substring(0, indexOf);
+                requestContent = requestContent.Substring(indexOf + 2);
+                string requestUri = "/";
+                string[] methodParts = line.Split(' ');
+
+                //First line must be "<METHOD> <URI> HTTP/<VERSION>" which translates to 3 elements
+                //when split by the space char.
+                if (methodParts.Length == 3)
                 {
-                    Thread.Sleep(1);
-                    waits++;
+                    //Get down to business.
+                    switch (methodParts[0])
+                    {
+                        //WS: Normal HTTP methods:
+                        case "HEAD":
+                        case "GET":
+                        case "POST":
+                        case "PUT":
+                        case "DELETE":
+                        case "TRACE":
+                        case "OPTIONS":
+                        case "CONNECT":
+                        //WS: WebDAV extension methods:
+                        case "PROPFIND":
+                        case "PROPPATCH":
+                        case "MKCOL":
+                        case "COPY":
+                        case "MOVE":
+                        case "LOCK":
+                        case "UNLOCK":
+                            context.Request.Method = methodParts[0];
+                            break;
+
+                        default:
+                            //WS: We need to generate an error here if the method is not supported.
+                            ErrorHandler.Handle(context, StatusCode.Http405MethodNotAllowed, methodParts[0]);
+                            return context;
+                    }
+                    //Request URI is the "middle"
+                    requestUri = methodParts[1];
+
+                    switch (methodParts[2])
+                    {
+                        case "HTTP/0.9":
+                            context.ProtocolVersion = new Version(0, 9);
+                            break;
+                        case "HTTP/1.0":
+                            context.ProtocolVersion = new Version(1, 0);
+                            break;
+                        case "HTTP/1.1":
+                            context.ProtocolVersion = new Version(1, 1);
+                            break;
+
+                        default:
+                            ErrorHandler.Handle(context, StatusCode.Http400BadRequest, "An invalid HTTP version was detected");
+                            return context;
+                    }
                 }
-                if (socket.Available == 0)
+                else
                 {
-                    return null;
+                    ErrorHandler.Handle(context, StatusCode.Http400BadRequest, "The first line of the request was invalid");
+                    return context;
                 }
-            }
+                indexOf = requestContent.IndexOf("\r\n");
+                while (indexOf != -1)
+                {
+                    line = requestContent.Substring(0, indexOf);
+                    requestContent = requestContent.Substring(indexOf + 2);
+                    if (line.Length > 0)
+                    {
+                        int n = line.IndexOf(':');
+                        if (n != -1)
+                        {
+                            context.Request.Headers.Add(line.Substring(0, n), line.Substring(n + 2));
+                        }
+                    }
+                    indexOf = requestContent.IndexOf("\r\n");
+                }
+                //HTTP 1.1 states that requests must define a "Host" header even if an absolute
+                //request URI is requested.
+                if (context.Request.Headers.Contains("Host"))
+                {
+                    //HTTP 1.1 and later allows a relative URI or an absolute URI to be requested.
+                    if (requestUri.StartsWith("/"))
+                    {
+                        //relative requesturi
+                        context.Request.Url = new Uri("http://"
+                            + context.Request.Headers["Host"].PrimaryValue + requestUri);
+                    }
+                    else if (requestUri.StartsWith("http://") || requestUri.StartsWith("https://"))
+                    {
+                        //absolute requesturi
+                        context.Request.Url = new Uri(requestUri);
+                    }
+                    else
+                    {
+                        //invalid url scheme for HTTP.
+                        ErrorHandler.Handle(context, StatusCode.Http400BadRequest, "Invalid request URI scheme");
+                        return context;
+                    }
+                }
+                else
+                {
+                    //Request is invalid because it doesnt have a Host header.
+                    ErrorHandler.Handle(context, StatusCode.Http400BadRequest, "No Host header included");
+                    return context;
+                }
 
-            List<byte> listBuffer = new List<byte>();
-            while (socket.Available > 0)
-            {
-                buffer = new byte[socket.Available];
-                socket.Receive(buffer);
-                listBuffer.AddRange(buffer);
-            }
-            buffer = listBuffer.ToArray();
+                bool hasContentLength = context.Request.Headers.Contains("Content-Length");
+                bool hasTransferEncoding = context.Request.Headers.Contains("Transfer-Encoding");
+                bool hasBody = hasContentLength | hasTransferEncoding;
 
-            HttpReader reader = new HttpReader(this);
-            bool result;
-            context = reader.Read(buffer, out result);
-
-            if (result)
-            {
+                if (hasBody)
+                {
+                    //Check if the client sent the Content-Type header, which is required if
+                    //a message body is included with the request. 
+                    if (context.Request.Headers.Contains("Content-Type"))
+                    {
+                        //Content-Length and Transfer-Encoding headers can't coexist.
+                        if (hasContentLength && !hasTransferEncoding)
+                        {
+                            ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
+                        }
+                        else if (hasTransferEncoding && !hasContentLength)
+                        {
+                            ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
+                        }
+                        else
+                        {
+                            ErrorHandler.Handle(context, StatusCode.Http400BadRequest, "Content-Length and Transfer-Encoding headers cannot exist in the same request.");
+                        }
+                    }
+                    else
+                    {
+                        ErrorHandler.Handle(context, StatusCode.Http400BadRequest, "No Content-Type header included with request that includes a message body.");
+                    }
+                }
                 return context;
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
-        #endregion
-
         public override bool SendContext(Socket socket, CommonContext context)
         {
+            this.CheckDisposal();
+
+            if (socket == null)
+            {
+                throw new ArgumentNullException("socket");
+            }
+            else if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
             throw new Exception("The method or operation is not implemented.");
         }
-
+        #endregion
+        #region Properties - Public
         public override bool CanRecieveAsync
         {
             get
@@ -178,7 +289,6 @@ namespace Serenity.Web.Drivers
                 return false;
             }
         }
-
         public override bool CanSendAsync
         {
             get
@@ -186,5 +296,6 @@ namespace Serenity.Web.Drivers
                 return false;
             }
         }
+        #endregion
     }
 }

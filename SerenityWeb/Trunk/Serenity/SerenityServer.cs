@@ -19,7 +19,7 @@ namespace Serenity
 	{
 		#region Fields - Private
 		private ContextHandler contextHandler;
-		private DriverPool driverPool;
+        private DriverPool driverPool = new DriverPool();
 		#endregion
 		#region Properties - Public
 		public ContextHandler ContextHandler

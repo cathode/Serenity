@@ -35,7 +35,6 @@ namespace Serenity.Web
         private Version protocolVersion;
         private CommonRequest request;
         private CommonResponse response;
-        private Socket socket;
         private bool supportsAuthentication;
         private bool supportsChunkedTransfer;
         private bool supportsContentControl;
@@ -44,19 +43,6 @@ namespace Serenity.Web
         private bool supportsPeerInfo;
         #endregion
         #region Properties - Internal
-        internal Socket Socket
-        {
-            get
-            {
-                return this.socket;
-            }
-            set
-            {
-                this.socket = value;
-            }
-        }
-        #endregion
-        #region Properties - Public
         /// <summary>
         /// Gets the WebDriver from which the current CommonContext originated from.
         /// </summary>
@@ -67,6 +53,9 @@ namespace Serenity.Web
                 return this.driver;
             }
         }
+        #endregion
+        #region Properties - Public
+        
         /// <summary>
         /// Gets or sets a value indicating if the headers contained in the current CommonContext's
         /// CommonResponse have been sent to the client yet.
