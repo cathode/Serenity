@@ -26,8 +26,6 @@ namespace Serenity.ResourceClasses
         }
         public override void HandleContext(Serenity.Web.CommonContext context)
         {
-            //ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
-
             byte[] readBuffer = null;
             DomainSettings settings = DomainSettings.GetBestMatch(context.Request.Url);
             int n = ((settings.OmitResourceClass) ? 1 : 2);

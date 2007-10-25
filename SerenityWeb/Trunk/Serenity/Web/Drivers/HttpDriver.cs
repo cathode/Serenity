@@ -54,8 +54,7 @@ namespace Serenity.Web.Drivers
             {
                 throw new ObjectDisposedException(this.GetType().FullName);
             }
-
-            if (socket == null)
+            else if (socket == null)
             {
                 throw new ArgumentNullException("socket");
             }
@@ -99,8 +98,8 @@ namespace Serenity.Web.Drivers
                 string requestUri = "/";
                 string[] methodParts = line.Split(' ');
 
-                //First line must be "<METHOD> <URI> HTTP/<VERSION>" which translates to 3 elements
-                //when split by the space char.
+                //First line must be "<METHOD> <URI> HTTP/<VERSION>" which
+                //translates to 3 elements when split by the space char.
                 if (methodParts.Length == 3)
                 {
                     //Get down to business.
@@ -253,7 +252,7 @@ namespace Serenity.Web.Drivers
             if (!response.HeadersSent)
             {
                 StringBuilder outputText = new StringBuilder();
-                
+
                 if (response.Headers.Contains("Content-Length") == false)
                 {
                     response.Headers.Add("Content-Length", response.OutputBuffer.Count.ToString());
@@ -273,6 +272,7 @@ namespace Serenity.Web.Drivers
                     string value;
                     if (header.Complex == true)
                     {
+                        //TODO: Get rid of this worthless switch or make it useful.
                         switch (header.Name)
                         {
                             default:
@@ -301,7 +301,9 @@ namespace Serenity.Web.Drivers
                     buffer.CopyTo(newBuffer, sent);
                     buffer = newBuffer;
                     sent = socket.Send(buffer);
+                    context.Response.Sent += sent;
                 }
+                response.OutputBuffer.Clear();
             }
 
             return true;

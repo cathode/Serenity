@@ -48,7 +48,17 @@
 								</td>
 								<xsl:for-each select='value'>
 									<td>
-										<xsl:value-of select='.' />
+										<xsl:choose>
+										<xsl:when test='@link'>
+											<xsl:element name='a'>
+												<xsl:attribute name='href'><xsl:value-of select='@link' /></xsl:attribute>
+												<xsl:value-of select='.' />
+											</xsl:element>
+										</xsl:when>
+											<xsl:otherwise>
+												<xsl:value-of select='.' />
+											</xsl:otherwise>
+										</xsl:choose>
 									</td>
 								</xsl:for-each>
 							</tr>

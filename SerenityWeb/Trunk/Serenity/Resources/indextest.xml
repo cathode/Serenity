@@ -9,6 +9,10 @@
 			<value link="/">Parent Folder</value>
 			<value>- - -</value>
 		</item>
+		<item icon="folder">
+			<value link="SomeFolder/">SomeFolder</value>
+			<value>2007-10-24T21:00:00</value>
+		</item>
 	</group>
 	<group name="Files">
 		<field id="name" name="File Name"  />
