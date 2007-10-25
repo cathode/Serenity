@@ -18,11 +18,17 @@ namespace Serenity.Web.Drivers
     /// </summary>
     public sealed class DriverPool
     {
+        #region Constructors - Public
+        /// <summary>
+        /// Initializes a new instance of the DriverPool class.
+        /// </summary>
         public DriverPool()
         {
 
         }
+        #endregion
+        #region Fields - Private
         private List<WebDriver> drivers = new List<WebDriver>();
-
+        #endregion
     }
 }

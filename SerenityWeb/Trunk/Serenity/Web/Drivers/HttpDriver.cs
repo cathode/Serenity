@@ -50,7 +50,10 @@ namespace Serenity.Web.Drivers
         #region Methods - Public
         public override CommonContext RecieveContext(Socket socket)
         {
-            this.CheckDisposal();
+            if (this.IsDisposed)
+            {
+                throw new ObjectDisposedException(this.GetType().FullName);
+            }
 
             if (socket == null)
             {
@@ -233,9 +236,11 @@ namespace Serenity.Web.Drivers
         }
         public override bool SendContext(Socket socket, CommonContext context)
         {
-            this.CheckDisposal();
-
-            if (socket == null)
+            if (this.IsDisposed)
+            {
+                throw new ObjectDisposedException(this.GetType().FullName);
+            }
+            else if (socket == null)
             {
                 throw new ArgumentNullException("socket");
             }
@@ -247,11 +252,8 @@ namespace Serenity.Web.Drivers
             CommonResponse response = context.Response;
             if (!response.HeadersSent)
             {
-
                 StringBuilder outputText = new StringBuilder();
-
-                outputText.Append("HTTP/1.1 " + response.Status.ToString() + "\r\n");
-
+                
                 if (response.Headers.Contains("Content-Length") == false)
                 {
                     response.Headers.Add("Content-Length", response.OutputBuffer.Count.ToString());
@@ -265,6 +267,7 @@ namespace Serenity.Web.Drivers
                     response.Headers.Add(new Header("Server", SerenityInfo.Name + "/" + SerenityInfo.Version));
                 }
 
+                outputText.Append("HTTP/1.1 " + response.Status.ToString() + "\r\n");
                 foreach (Header header in response.Headers)
                 {
                     string value;
@@ -283,10 +286,9 @@ namespace Serenity.Web.Drivers
                     }
                     outputText.Append(header.Name + ": " + value + "\r\n");
                 }
-
                 outputText.Append("\r\n");
-                byte[] output = Encoding.ASCII.GetBytes(outputText.ToString());
 
+                byte[] output = Encoding.ASCII.GetBytes(outputText.ToString());
                 socket.Send(output);
             }
             if (response.OutputBuffer.Count > 0)

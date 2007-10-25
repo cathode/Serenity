@@ -47,9 +47,20 @@ namespace Serenity.Web.Drivers
         private WebDriverStatus status = WebDriverStatus.None;
         #endregion
         #region Methods - Protected
+        /// <summary>
+        /// Provides a callback method to use for an async socket accept.
+        /// </summary>
+        /// <param name="ar"></param>
+        /// <exception cref="System.NotSupportedException">Thrown if the
+        /// current WebDriver does not support async operations.</exception>
+        /// <exception cref="System.ObjectDisposedException">Thrown if the
+        /// current WebDriver is already disposed.</exception>
         protected virtual void AcceptCallback(IAsyncResult ar)
         {
-            this.CheckDisposal();
+            if (this.IsDisposed)
+            {
+                throw new ObjectDisposedException(this.GetType().FullName);
+            }
 
             if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
             {
@@ -69,6 +80,7 @@ namespace Serenity.Web.Drivers
         /// Checks if the current WebDriver is disposed and throws an
         /// ObjectDisposedException if necessary.
         /// </summary>
+        [Obsolete]
         protected void CheckDisposal()
         {
             if (this.IsDisposed)
@@ -82,7 +94,10 @@ namespace Serenity.Web.Drivers
         /// <param name="ar"></param>
         protected virtual void DisconnectCallback(IAsyncResult ar)
         {
-            this.CheckDisposal();
+            if (this.IsDisposed)
+            {
+                throw new ObjectDisposedException(this.GetType().FullName);
+            }
 
             if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
             {
@@ -128,7 +143,10 @@ namespace Serenity.Web.Drivers
         }
         protected virtual void RecieveCallback(IAsyncResult ar)
         {
-            this.CheckDisposal();
+            if (this.IsDisposed)
+            {
+                throw new ObjectDisposedException(this.GetType().FullName);
+            }
 
             if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
             {
@@ -138,7 +156,10 @@ namespace Serenity.Web.Drivers
         }
         protected virtual void SendCallback(IAsyncResult ar)
         {
-            this.CheckDisposal();
+            if (this.IsDisposed)
+            {
+                throw new ObjectDisposedException(this.GetType().FullName);
+            }
 
             if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
             {
@@ -194,7 +215,10 @@ namespace Serenity.Web.Drivers
         /// </summary>
         public virtual bool Initialize()
         {
-            this.CheckDisposal();
+            if (this.IsDisposed)
+            {
+                throw new ObjectDisposedException(this.GetType().FullName);
+            }
 
             if (this.status < WebDriverStatus.Initialized)
             {
@@ -229,14 +253,16 @@ namespace Serenity.Web.Drivers
                 return false;
             }
         }
-       
         public abstract CommonContext RecieveContext(Socket socket);
         /// <summary>
         /// Starts the WebDriver.
         /// </summary>
         public virtual bool Start()
         {
-            this.CheckDisposal();
+            if (this.IsDisposed)
+            {
+                throw new ObjectDisposedException(this.GetType().FullName);
+            }
 
             if (this.Status >= WebDriverStatus.Initialized)
             {
@@ -245,7 +271,7 @@ namespace Serenity.Web.Drivers
 
                 while (this.Status == WebDriverStatus.Started)
                 {
-                   ThreadPool.QueueUserWorkItem(new WaitCallback(this.HandleAcceptedConnection), this.ListeningSocket.Accept());
+                    ThreadPool.QueueUserWorkItem(new WaitCallback(this.HandleAcceptedConnection), this.ListeningSocket.Accept());
                 }
                 return true;
             }
@@ -259,10 +285,17 @@ namespace Serenity.Web.Drivers
         /// </summary>
         public virtual void Stop()
         {
-            this.CheckDisposal();
+            if (this.IsDisposed)
+            {
+                throw new ObjectDisposedException(this.GetType().FullName);
+            }
 
             this.status = WebDriverStatus.Stopped;
         }
+        /// <summary>
+        /// When overridden in a derived class, sends the supplied response to
+        /// the client.
+        /// </summary>
         public abstract bool SendContext(Socket socket, CommonContext context);
         #endregion
         #region Properties - Protected
@@ -433,12 +466,25 @@ namespace Serenity.Web.Drivers
         /// Gets the port number that the current WebDriver is listening on
         /// for incoming connections.
         /// </summary>
+        /// <exception cref="System.ObjectDisposedException">
+        /// Thrown if the current WebDriver has already been disposed.
+        /// </exception>
+        /// <exception cref="System.InvalidOperationException">
+        /// Thrown if the current WebDriver has not been initialized.
+        /// </exception>
         public ushort ListeningPort
         {
             get
             {
-                this.CheckDisposal();
-
+                if (this.IsDisposed)
+                {
+                    throw new ObjectDisposedException(this.GetType().FullName);
+                }
+                else if (!this.ListeningSocket.IsBound)
+                {
+                    throw new InvalidOperationException("The current WebDriver is not initialized.");
+                }
+                //TODO: Maybe try and improve performance or reliability here.
                 return (ushort)((IPEndPoint)this.listeningSocket.LocalEndPoint).Port;
             }
         }

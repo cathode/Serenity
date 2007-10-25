@@ -54,6 +54,10 @@ namespace Serenity.Web
         private string userPrimaryLanguage;
         #endregion
         #region Properties - Public
+        /// <summary>
+        /// Gets or sets the content encoding used for content sent with the
+        /// current request.
+        /// </summary>
         public Encoding ContentEncoding
         {
             get
@@ -65,6 +69,9 @@ namespace Serenity.Web
                 this.contentEncoding = value;
             }
         }
+        /// <summary>
+        /// Gets or sets the length of content sent with the current request.
+        /// </summary>
         public int ContentLength
         {
             get
@@ -76,6 +83,10 @@ namespace Serenity.Web
                 this.contentLength = value;
             }
         }
+        /// <summary>
+        /// Gets or sets the mime type of the content sent with the current
+        /// request.
+        /// </summary>
         public MimeType ContentType
         {
             get
@@ -87,6 +98,9 @@ namespace Serenity.Web
                 this.contentType = value;
             }
         }
+        /// <summary>
+        /// Gets a collection of cookies sent with the current request.
+        /// </summary>
         public CookieCollection Cookies
         {
             get
@@ -98,6 +112,10 @@ namespace Serenity.Web
                 this.cookies = value;
             }
         }
+        /// <summary>
+        /// Gets or sets an indication of whether or not the current request
+        /// was sent containing any entity body.
+        /// </summary>
         public bool HasEntityBody
         {
             get

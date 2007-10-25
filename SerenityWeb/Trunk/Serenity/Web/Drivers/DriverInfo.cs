@@ -27,6 +27,13 @@ namespace Serenity.Web.Drivers
         }
         #endregion
         #region Constructors - Public
+        /// <summary>
+        /// Initializes a new instance of the DriverInfo class.
+        /// </summary>
+        /// <param name="className"></param>
+        /// <param name="typeName"></param>
+        /// <param name="uriSchema"></param>
+        /// <param name="version"></param>
         public DriverInfo(string className, string typeName, string uriSchema, Version version)
         {
             this.className = className;
