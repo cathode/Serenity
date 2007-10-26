@@ -18,23 +18,45 @@ namespace Serenity
 	/// Provides a base class that all web-accessible resources must inherit from.
 	/// </summary>
 	public abstract class Resource
-	{
-		#region Fields - Protected
-		/// <summary>
-		/// Holds the name of the resource.
-		/// </summary>
-		protected string name;
-		#endregion
-		#region Properties - Public
-		/// <summary>
+    {
+        #region Fields - Private
+        private MimeType mimeType;
+        private string name;
+        #endregion
+        #region Methods - Public
+        /// <summary>
+        /// When overridden in a derived class, uses the supplied CommonContext to dynamically generate response content.
+        /// </summary>
+        /// <param name="context"></param>
+        public virtual void OnRequest(CommonContext context)
+        {
+            ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
+        }
+        #endregion
+        #region Properties - Public
+        /// <summary>
+        /// Gets the grouping of the current Resource.
+        /// </summary>
+        public virtual ResourceGrouping Grouping
+        {
+            get
+            {
+                return ResourceGrouping.Unspecified;
+            }
+        }
+        /// <summary>
 		/// Gets the MimeType that should be used to describe the content of the current Resource.
 		/// </summary>
 		public virtual MimeType MimeType
 		{
 			get
 			{
-				return MimeType.Default;
+                return this.mimeType;
 			}
+            protected internal set
+            {
+                this.mimeType = value;
+            }
 		}
 		/// <summary>
 		/// Gets or sets the name of the current Resource.
@@ -45,10 +67,10 @@ namespace Serenity
 			{
 				return this.name;
 			}
-			set
-			{
-				this.name = value;
-			}
+            protected internal set
+            {
+                this.name = value;
+            }
 		}
 		/// <summary>
 		/// Gets the name of the resource in a form that can be "safely" used.

@@ -28,19 +28,20 @@ namespace Serenity
         {
         }
         /// <summary>
-        /// When overridden in a derived class, uses the supplied CommonContext to dynamically generate
-        /// a response which is sent back to the client.
-        /// </summary>
-        /// <param name="context"></param>
-        public virtual void OnRequest(CommonContext context)
-        {
-        }
-        /// <summary>
         /// When overridden in a derived class, performs actions when the module is unloaded or the server
         /// is shut down.
         /// </summary>
         public virtual void OnShutdown()
         {
+        }
+        #endregion
+        #region Properties - Public
+        public override ResourceGrouping Grouping
+        {
+            get
+            {
+                return ResourceGrouping.Pages;
+            }
         }
         #endregion
     }

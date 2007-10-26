@@ -24,19 +24,11 @@ namespace Serenity.Collections
         /// </summary>
         public ResourceTree()
         {
-
+            this.trunk = new ResourceTreeBranch(this, "/");
         }
         #endregion
         #region Fields - Private
-        #endregion
-        #region Indexers - Public
-        public ResourceTreeElement this[string name]
-        {
-            get
-            {
-                return null;
-            }
-        }
+        private ResourceTreeBranch trunk; 
         #endregion
         #region Methods - Public
         /// <summary>
@@ -48,6 +40,15 @@ namespace Serenity.Collections
         public bool AddResource(string relativeUri, Resource resource)
         {
             return false;
+        }
+        #endregion
+        #region Properties - Public
+        public ResourceTreeBranch Trunk
+        {
+            get
+            {
+                return this.trunk;
+            }
         }
         #endregion
     }

@@ -16,40 +16,36 @@ namespace Serenity.Collections
     /// <summary>
     /// Represents an element within a ResourceTree, which can contain children.
     /// </summary>
-    public class ResourceTreeElement : IEnumerable<ResourceTreeElement>
+    public sealed class ResourceTreeBranch
     {
         #region Constructors - Private
-        internal ResourceTreeElement()
-        {
-        }
         /// <summary>
         /// Initializes a new instance of the ResourceTreeElement class.
         /// </summary>
-        internal ResourceTreeElement(Resource value, ResourceTree tree)
+        internal ResourceTreeBranch(ResourceTree tree, string name)
         {
-            this.value = value;
             this.tree = tree;
+            this.name = name;
         }
         #endregion
         #region Fields - Private
-        private ResourceTreeElement parent = null;
-        private List<ResourceTreeElement> children = new List<ResourceTreeElement>();
+        private string name;
+        private ResourceTreeBranch parent = null;
+        private List<ResourceTreeBranch> branches = new List<ResourceTreeBranch>();
         private ResourceTree tree;
-        private Resource value;
+        private ResourceCollection resources = new ResourceCollection();
         #endregion
-
         #region Methods - Public
-        /// <summary>
-        /// Gets a generic enumerator for the current ResourceTreeElement,
-        /// and allows enumeration over direct children.
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerator<ResourceTreeElement> GetEnumerator()
+        public void Add(Resource value)
         {
-            foreach (ResourceTreeElement item in this.children)
+            if (!this.resources.Contains(value.SystemName))
             {
-                yield return item;
+                this.resources.Add(value);
             }
+        }
+        public void Add(ResourceTreeBranch value)
+        {
+            this.branches.Add(value);
         }
         #endregion
         #region Properties - Public
@@ -60,32 +56,33 @@ namespace Serenity.Collections
         {
             get
             {
-                return this.children.Count;
+                return this.resources.Count;
             }
         }
-        /// <summary>
-        /// Gets the Resource located at the current ResourceTreeElement.
-        /// </summary>
-        public virtual Resource Value
+        public string Name
         {
             get
             {
-                return this.value;
+                return this.name;
+            }
+        }
+        public ResourceTreeBranch Parent
+        {
+            get
+            {
+                return this.parent;
             }
             internal set
             {
-                this.value = value;
+                this.parent = value;
             }
         }
-        #endregion
-        #region IEnumerable Members
-        /// <summary>
-        /// Gets a nongeneric enumerator.
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator IEnumerable.GetEnumerator()
+        public string Path
         {
-            return this.GetEnumerator();
+            get
+            {
+                return string.Empty;
+            }
         }
         #endregion
     }

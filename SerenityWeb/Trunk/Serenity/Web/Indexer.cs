@@ -14,32 +14,6 @@ using System.Xml;
 
 namespace Serenity.Web
 {
-    public sealed class IndexData : IndexDataNode
-    {
-        private string location;
-
-        public string Location
-        {
-            get
-            {
-                return this.location;
-            }
-        }
-    }
-    public class IndexDataNode
-    {
-        internal IndexDataNode()
-        {
-        }
-        private IndexDataNode(string name)
-        {
-            this.name = name;
-        }
-        private List<IndexDataNode> children;
-        private readonly string name;
-        private string icon;
-
-    }
     public sealed class Indexer
     {
         #region Constructors - Public

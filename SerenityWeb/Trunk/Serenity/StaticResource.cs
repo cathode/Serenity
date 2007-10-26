@@ -42,6 +42,13 @@ namespace Serenity
 		}
 		#endregion
 		#region Properties - Public
+        public override ResourceGrouping Grouping
+        {
+            get
+            {
+                return ResourceGrouping.Files;
+            }
+        }
 		/// <summary>
 		/// Gets the local filesystem location which the current StaticResource represents.
 		/// </summary>

@@ -13,29 +13,11 @@ using System.Text;
 
 namespace Serenity.Collections
 {
-    /// <summary>
-    /// Represents a collection of resources.
-    /// </summary>
-    public sealed class ResourceCollection : KeyedCollection<string, Resource>
+    internal class ResourceTreeBranchCollection : KeyedCollection<string, ResourceTreeBranch>
     {
-        #region Constructors - Public
-        /// <summary>
-        /// Initializes a new instance of the ResourceCollection class.
-        /// </summary>
-        public ResourceCollection()
+        protected override string GetKeyForItem(ResourceTreeBranch item)
         {
+            throw new Exception("The method or operation is not implemented.");
         }
-        #endregion
-        #region Methods - Protected
-        /// <summary>
-        /// Overridden. Returns the SystemName property of the supplied Resource.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        protected override string GetKeyForItem(Resource item)
-        {
-            return item.SystemName;
-        }
-        #endregion
     }
 }

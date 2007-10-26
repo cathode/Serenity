@@ -14,28 +14,13 @@ using System.Text;
 namespace Serenity.Collections
 {
     /// <summary>
-    /// Represents a collection of resources.
+    /// Represents a collection of DomainSettings objects.
     /// </summary>
-    public sealed class ResourceCollection : KeyedCollection<string, Resource>
+    public sealed class DomainSettingsCollection : KeyedCollection<string, DomainSettings>
     {
-        #region Constructors - Public
-        /// <summary>
-        /// Initializes a new instance of the ResourceCollection class.
-        /// </summary>
-        public ResourceCollection()
+        protected override string GetKeyForItem(DomainSettings item)
         {
+            return item.Name;
         }
-        #endregion
-        #region Methods - Protected
-        /// <summary>
-        /// Overridden. Returns the SystemName property of the supplied Resource.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        protected override string GetKeyForItem(Resource item)
-        {
-            return item.SystemName;
-        }
-        #endregion
     }
 }

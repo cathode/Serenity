@@ -71,12 +71,15 @@
     <Compile Include="Attributes\ModuleResourceNamespaceAttribute.cs" />
     <None Include="Collections\ModuleCollection.cs" />
     <None Include="Collections\ContentPageCollection.cs" />
-    <None Include="Collections\ResourceCollection.cs" />
+    <Compile Include="Collections\DomainSettingsCollection.cs" />
+    <Compile Include="Collections\ResourceCollection.cs" />
     <Compile Include="Collections\ResourceTree.cs" />
-    <Compile Include="Collections\ResourceTreeElement.cs" />
+    <Compile Include="Collections\ResourceTreeBranch.cs" />
+    <Compile Include="Collections\ResourceTreeBranchCollection.cs" />
     <Compile Include="ContentPage.cs" />
     <None Include="Data\Database.cs" />
     <Compile Include="FileTypeEntry.cs" />
+    <Compile Include="ResourceGrouping.cs" />
     <Compile Include="SerenityServer.cs" />
     <Compile Include="Web\Drivers\DriverPool.cs" />
     <Compile Include="Web\Indexer.cs" />

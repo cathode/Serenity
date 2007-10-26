@@ -34,7 +34,7 @@ namespace Serenity
 		/// <param name="name"></param>
         public ResourceClass(string name)
         {
-            this.name = name;
+            this.Name = name;
         }
         #endregion
         #region Fields - Private
