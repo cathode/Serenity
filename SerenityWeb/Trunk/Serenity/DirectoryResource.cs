@@ -8,20 +8,34 @@
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
 
-namespace Serenity.Web.Controls
-{
-    public abstract class Control
-    {
-        #region Methods - Public
-        public abstract byte[] Render(CommonContext context);
-        public void RenderToStream(CommonContext context, Stream stream)
-        {
-            byte[] content = this.Render(context);
+using Serenity.Web;
 
-            stream.Write(content, 0, content.Length);
+namespace Serenity
+{
+    public class DirectoryResource : Resource
+    {
+        #region Constructors - Public
+        public DirectoryResource(string location)
+        {
+            if (location.EndsWith("/"))
+            {
+                this.location = location;
+            }
+            else
+            {
+                this.location = location + "/";
+            }
+        }
+        #endregion
+        #region Fields - Private
+        private string location = "/";
+        #endregion
+        #region Methods - Public
+        public override void OnRequest(CommonContext context)
+        {
+
         }
         #endregion
     }

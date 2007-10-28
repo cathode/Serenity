@@ -63,8 +63,7 @@ namespace Serenity.ResourceClasses
 
             if (page != null)
             {
-                ContentPage newPage = page.CreateInstance();
-                newPage.OnRequest(context);
+               page.OnRequest(context);
             }
             else
             {

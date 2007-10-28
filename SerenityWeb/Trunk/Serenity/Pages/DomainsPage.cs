@@ -56,14 +56,5 @@ namespace Serenity.Pages
                 return "Domains";
             }
         }
-
-        public override ContentPage CreateInstance()
-        {
-            return new DomainsPage();
-        }
-        public override MasterPage CreateMasterPageInstance()
-        {
-            return new SystemMaster();
-        }
     }
 }

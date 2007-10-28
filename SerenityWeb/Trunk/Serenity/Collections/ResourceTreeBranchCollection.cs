@@ -13,11 +13,11 @@ using System.Text;
 
 namespace Serenity.Collections
 {
-    internal class ResourceTreeBranchCollection : KeyedCollection<string, ResourceTreeBranch>
+    public class ResourceTreeBranchCollection : KeyedCollection<string, ResourceTreeBranch>
     {
         protected override string GetKeyForItem(ResourceTreeBranch item)
         {
-            throw new Exception("The method or operation is not implemented.");
+            return item.Name;
         }
     }
 }

@@ -20,8 +20,9 @@ namespace Serenity
 	public abstract class Resource
     {
         #region Fields - Private
-        private MimeType mimeType;
-        private string name;
+        private MimeType mimeType = MimeType.Default;
+        private string name = string.Empty;
+        private SerenityServer server;
         #endregion
         #region Methods - Public
         /// <summary>
@@ -42,6 +43,13 @@ namespace Serenity
             get
             {
                 return ResourceGrouping.Unspecified;
+            }
+        }
+        public virtual bool IsSizeKnown
+        {
+            get
+            {
+                return false;
             }
         }
         /// <summary>
@@ -72,6 +80,24 @@ namespace Serenity
                 this.name = value;
             }
 		}
+        public SerenityServer Server
+        {
+            get
+            {
+                return this.server;
+            }
+            internal set
+            {
+                this.server = value;
+            }
+        }
+        public virtual int Size
+        {
+            get
+            {
+                return -1;
+            }
+        }
 		/// <summary>
 		/// Gets the name of the resource in a form that can be "safely" used.
 		/// </summary>

@@ -22,18 +22,29 @@ namespace Serenity.Collections
         /// <summary>
         /// Initializes a new instance of the ResourceTreeElement class.
         /// </summary>
-        internal ResourceTreeBranch(ResourceTree tree, string name)
+        internal ResourceTreeBranch(ResourceTree tree, ResourceTreeBranch parent, string name)
         {
             this.tree = tree;
+            this.parent = parent;
             this.name = name;
+
+            if (this.HasParent)
+            {
+                this.directoryResource = new DirectoryResource(this.Path);
+            }
+            else
+            {
+                this.directoryResource = new DirectoryResource("/");
+            }
         }
         #endregion
         #region Fields - Private
         private string name;
-        private ResourceTreeBranch parent = null;
-        private List<ResourceTreeBranch> branches = new List<ResourceTreeBranch>();
+        private ResourceTreeBranch parent;
+        private ResourceTreeBranchCollection branches = new ResourceTreeBranchCollection();
         private ResourceTree tree;
         private ResourceCollection resources = new ResourceCollection();
+        private DirectoryResource directoryResource;
         #endregion
         #region Methods - Public
         public void Add(Resource value)
@@ -47,16 +58,57 @@ namespace Serenity.Collections
         {
             this.branches.Add(value);
         }
+        public ResourceTreeBranch GetBranch(string name)
+        {
+            return this.branches[name];
+        }
+        public Resource GetResource(string name)
+        {
+            return this.resources[name];
+        }
         #endregion
         #region Properties - Public
+        public ResourceTreeBranchCollection Branches
+        {
+            get
+            {
+                return this.branches;
+            }
+        }
+
         /// <summary>
-        /// Gets the number of elements that are direct descendants of the current ResourceTreeElement.
+        /// Gets the number resources located at the current branch.
         /// </summary>
         public int Count
         {
             get
             {
                 return this.resources.Count;
+            }
+        }
+        public DirectoryResource DirectoryResource
+        {
+            get
+            {
+                return this.directoryResource;
+            }
+            set
+            {
+                this.directoryResource = value;
+            }
+        }
+        public bool HasParent
+        {
+            get
+            {
+                if (this.Parent == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
             }
         }
         public string Name
@@ -82,6 +134,13 @@ namespace Serenity.Collections
             get
             {
                 return string.Empty;
+            }
+        }
+        public ResourceCollection Resources
+        {
+            get
+            {
+                return this.resources;
             }
         }
         #endregion

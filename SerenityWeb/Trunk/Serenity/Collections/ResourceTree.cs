@@ -24,7 +24,7 @@ namespace Serenity.Collections
         /// </summary>
         public ResourceTree()
         {
-            this.trunk = new ResourceTreeBranch(this, "/");
+            this.trunk = new ResourceTreeBranch(this, null, "/");
         }
         #endregion
         #region Fields - Private
@@ -40,6 +40,31 @@ namespace Serenity.Collections
         public bool AddResource(string relativeUri, Resource resource)
         {
             return false;
+        }
+        public ResourceTreeBranch GetBranch(Uri uri)
+        {
+            return this.GetBranch(uri.Segments);
+        }
+        public ResourceTreeBranch GetBranch(string path)
+        {
+            return this.GetBranch(path.Split(new char[] { '/' }, StringSplitOptions.None));
+        }
+        public ResourceTreeBranch GetBranch(string[] pathSegments)
+        {
+            ResourceTreeBranch branch;
+            if (pathSegments[0] == "/")
+            {
+                branch = this.trunk;
+            }
+            else
+            {
+                branch = this.trunk.GetBranch(pathSegments[0]);
+            }
+            for (int i = 1; i < pathSegments.Length; i++)
+            {
+                branch = branch.GetBranch(pathSegments[0]);
+            }
+            return branch;
         }
         #endregion
         #region Properties - Public

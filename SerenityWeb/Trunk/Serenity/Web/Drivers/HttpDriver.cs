@@ -42,7 +42,7 @@ namespace Serenity.Web.Drivers
                 {
                     string Name = Pair.Substring(0, Pair.IndexOf('='));
                     string Value = Pair.Substring(Pair.IndexOf('=') + 1);
-                    context.Request.RequestData.AddDataStream(Name, Encoding.UTF8.GetBytes(Value));
+                    context.Request.RequestData.AddDataStream(Name, Encoding.UTF8.GetBytes(Value)).Origin = RequestDataOrigin.Get;
                 }
             }
         }
@@ -95,7 +95,7 @@ namespace Serenity.Web.Drivers
                 int indexOf = requestContent.IndexOf("\r\n");
                 string line = requestContent.Substring(0, indexOf);
                 requestContent = requestContent.Substring(indexOf + 2);
-                string requestUri = "/";
+                string requestUriRaw = "/";
                 string[] methodParts = line.Split(' ');
 
                 //First line must be "<METHOD> <URI> HTTP/<VERSION>" which
@@ -131,7 +131,7 @@ namespace Serenity.Web.Drivers
                             return context;
                     }
                     //Request URI is the "middle"
-                    requestUri = methodParts[1];
+                    requestUriRaw = methodParts[1];
 
                     switch (methodParts[2])
                     {
@@ -175,22 +175,26 @@ namespace Serenity.Web.Drivers
                 if (context.Request.Headers.Contains("Host"))
                 {
                     //HTTP 1.1 and later allows a relative URI or an absolute URI to be requested.
-                    if (requestUri.StartsWith("/"))
+                    if (requestUriRaw.StartsWith("/"))
                     {
                         //relative requesturi
                         context.Request.Url = new Uri("http://"
-                            + context.Request.Headers["Host"].PrimaryValue + requestUri);
+                            + context.Request.Headers["Host"].PrimaryValue + requestUriRaw);
                     }
-                    else if (requestUri.StartsWith("http://") || requestUri.StartsWith("https://"))
+                    else if (requestUriRaw.StartsWith("http://") || requestUriRaw.StartsWith("https://"))
                     {
                         //absolute requesturi
-                        context.Request.Url = new Uri(requestUri);
+                        context.Request.Url = new Uri(requestUriRaw);
                     }
                     else
                     {
                         //invalid url scheme for HTTP.
                         ErrorHandler.Handle(context, StatusCode.Http400BadRequest, "Invalid request URI scheme");
                         return context;
+                    }
+                    if (context.Request.Url.Query != string.Empty)
+                    {
+                        this.ProcessUrlEncodedRequestData(context.Request.Url.Query.TrimStart('?'), context);
                     }
                 }
                 else

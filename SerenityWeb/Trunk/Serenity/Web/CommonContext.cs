@@ -29,6 +29,7 @@ namespace Serenity.Web
         }
         #endregion
         #region Fields - Private
+        private Domain domain;
         private WebDriver driver;
         private bool headersWritten = false;
         private string protocolType;
@@ -42,7 +43,18 @@ namespace Serenity.Web
         private bool supportsHeaders;
         private bool supportsPeerInfo;
         #endregion
-        #region Properties - Internal
+        #region Properties - Public
+        public Domain Domain
+        {
+            get
+            {
+                return this.domain;
+            }
+            set
+            {
+                this.domain = value;
+            }
+        }
         /// <summary>
         /// Gets the WebDriver from which the current CommonContext originated from.
         /// </summary>
@@ -52,10 +64,7 @@ namespace Serenity.Web
             {
                 return this.driver;
             }
-        }
-        #endregion
-        #region Properties - Public
-        
+        }    
         /// <summary>
         /// Gets or sets a value indicating if the headers contained in the current CommonContext's
         /// CommonResponse have been sent to the client yet.

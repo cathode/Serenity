@@ -80,28 +80,5 @@ namespace Serenity
             }
         }
         #endregion
-		/// <summary>
-		/// Provides a basic implementation of the ResourceClass class which does nothing.
-		/// </summary>
-        public sealed class DefaultImplementation : ResourceClass
-        {
-            #region Constructors - Internal
-			/// <summary>
-			/// Initializes a new instance of the ResourceClass.DefaultImplementation class.
-			/// </summary>
-            public DefaultImplementation() : base("default")
-            {
-            }
-            #endregion
-            #region Methods - Public
-			/// <summary>
-			/// Does nothing.
-			/// </summary>
-			/// <param name="context"></param>
-            public override void HandleContext(CommonContext context)
-            {
-            }
-            #endregion
-        }
     }
 }

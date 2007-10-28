@@ -40,6 +40,7 @@ namespace Serenity.Web
 		private MimeType mimeType;
 		private string name;
 		private long position = 0;
+        private RequestDataOrigin origin = RequestDataOrigin.Unknown;
 		#endregion
 		#region Methods - Public
 		/// <summary>
@@ -275,6 +276,17 @@ namespace Serenity.Web
 				this.name = value;
 			}
 		}
+        public RequestDataOrigin Origin
+        {
+            get
+            {
+                return this.origin;
+            }
+            internal set
+            {
+                this.origin = value;
+            }
+        }
 		/// <summary>
 		/// Gets or sets the position within the current stream.
 		/// </summary>

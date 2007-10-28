@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<domain name="localhost">
+    <theme>system</theme>
+
+    <resources>
+        <kind name="static">
+            <Value id="DocumentRoot">./Domains/Common</Value>
+        </kind>
+        <branch path="/" basepath="/" basedomain="root">
+        </branch>
+    </resources>
+</domain>

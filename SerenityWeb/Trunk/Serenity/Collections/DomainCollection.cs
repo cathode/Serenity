@@ -8,34 +8,39 @@
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
-namespace Serenity.Web.Controls
+namespace Serenity.Collections
 {
-    public sealed class IndexControl : Control
+    /// <summary>
+    /// Represents a collection of DomainSettings objects.
+    /// </summary>
+    public sealed class DomainCollection : KeyedCollection<string, Domain>
     {
-        private string location = "/";
-
-        #region Methods - Public
-        public override byte[] Render(CommonContext context)
+        #region Methods - Protected
+        protected override string GetKeyForItem(Domain item)
         {
-            return Indexer.DefaultIndexer.Generate(this.location);
+            return item.HostName;
         }
         #endregion
-
-        public string Location
+        #region Methods - Public
+        public Domain GetBestMatch(string hostName)
         {
-            get
+            if (string.IsNullOrEmpty(hostName))
             {
-                return this.location;
+                return null;
             }
-            set
+
+            if (this.Contains(hostName))
             {
-                if (!string.IsNullOrEmpty(value))
-                {
-                    this.location = value;
-                }
+                return this[hostName];
+            }
+            else
+            {
+                return this.GetBestMatch(Domain.GetParentHost(hostName));
             }
         }
+        #endregion
     }
 }

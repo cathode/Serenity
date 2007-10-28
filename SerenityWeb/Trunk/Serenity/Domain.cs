@@ -10,46 +10,47 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using System.Xml;
+using Serenity.Collections;
 
-namespace Serenity.Web
+namespace Serenity
 {
-    public sealed class Indexer
+    /// <summary>
+    /// Represents a domain.
+    /// </summary>
+    public sealed class Domain
     {
         #region Constructors - Public
-        private Indexer()
+        public Domain(string hostName)
         {
+            this.hostName = hostName;
         }
         #endregion
         #region Fields - Private
-        private static Indexer defaultIndexer = new Indexer();
+        private readonly string hostName;
+        private ResourceTree resources = new ResourceTree();
         #endregion
         #region Methods - Public
-        public byte[] Generate(string location)
+        public static string GetParentHost(string hostName)
         {
-            StringBuilder output = new StringBuilder();
-            XmlWriter writer = XmlWriter.Create(output);
-            writer.WriteStartDocument();
-            writer.WriteProcessingInstruction("xml-stylesheet", "type='text/xsl' href='/resource/serenity/index.xslt'");
-            writer.WriteStartElement("index");
-            writer.WriteStartElement("location");
-            writer.WriteString(location);
-            writer.WriteEndElement();
-            writer.WriteStartElement("group");
-
-            writer.WriteEndDocument();
-			writer.Flush();
-			writer.Close();
-
-            return Encoding.UTF8.GetBytes(output.ToString());
+            string[] oldNames = hostName.Split('.');
+            string[] newNames = new string[oldNames.Length - 1];
+            Array.Copy(oldNames, newNames, newNames.Length);
+            return string.Join(".", newNames);
         }
         #endregion
         #region Properties - Public
-        public static Indexer DefaultIndexer
+        public string HostName
         {
             get
             {
-                return Indexer.defaultIndexer;
+                return this.hostName;
+            }
+        }
+        public ResourceTree Resources
+        {
+            get
+            {
+                return this.resources;
             }
         }
         #endregion

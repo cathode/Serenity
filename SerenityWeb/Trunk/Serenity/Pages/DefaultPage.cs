@@ -19,10 +19,6 @@ namespace Serenity.Pages
     public sealed class DefaultPage : ContentPage
     {
         #region Methods - Public
-        public override ContentPage CreateInstance()
-        {
-            return new DefaultPage();
-        }
         public override void OnRequest(CommonContext context)
         {
             context.Response.WriteLine("This Page has not yet been implemented!");

@@ -32,9 +32,17 @@ namespace Serenity
         #region Fields - Private
         private ContextHandler contextHandler = new ContextHandler();
         private DriverPool driverPool = new DriverPool();
-        private ResourceTree resourceTree = new ResourceTree();
+        private DomainCollection domains = new DomainCollection();
+        private ResourceTree commonResources = new ResourceTree();
 		#endregion
         #region Properties - Public
+        public ResourceTree CommonResources
+        {
+            get
+            {
+                return this.commonResources;
+            }
+        }
         /// <summary>
         /// Gets or sets the ContextHandler used to handle recieved CommonContexts.
         /// </summary>
@@ -59,16 +67,14 @@ namespace Serenity
 				return this.driverPool;
 			}
 		}
-        /// <summary>
-        /// Gets the ResourceTree containing all the resources associated with the current SerenityServer.
-        /// </summary>
-        public ResourceTree ResourceTree
+        public DomainCollection Domains
         {
             get
             {
-                return this.resourceTree;
+                return this.domains;
             }
         }
+
 		#endregion
 	}
 }
