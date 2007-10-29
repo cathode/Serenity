@@ -21,6 +21,9 @@ namespace Serenity.Web
     /// </summary>
     public class ContextHandler
     {
+        #region Fields - Private
+        private SerenityServer server;
+        #endregion
         #region Methods - Public
         /// <summary>
         /// Handles an incoming CommonContext.
@@ -53,6 +56,19 @@ namespace Serenity.Web
             {
                 //generate 404 not found response.
                 ErrorHandler.Handle(context, StatusCode.Http404NotFound, url.ToString());
+            }
+        }
+        #endregion
+        #region Properties - Public
+        public SerenityServer Server
+        {
+            get
+            {
+                return this.server;
+            }
+            internal set
+            {
+                this.server = value;
             }
         }
         #endregion

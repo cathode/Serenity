@@ -35,6 +35,18 @@ namespace Serenity
         private DomainCollection domains = new DomainCollection();
         private ResourceTree commonResources = new ResourceTree();
 		#endregion
+        #region Methods - Public
+        public void Configure(SerenityServerSettings settings)
+        {
+            Log.LogToConsole = settings.LogToConsole;
+
+            if (Log.LogToConsole)
+            {
+                //Only start logging if the log messages will be recorded somewhere.
+                Log.StartLogging();
+            }
+        }
+        #endregion
         #region Properties - Public
         public ResourceTree CommonResources
         {

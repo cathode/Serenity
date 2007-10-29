@@ -28,7 +28,8 @@ namespace Serenity.Collections
         }
         #endregion
         #region Fields - Private
-        private ResourceTreeBranch trunk; 
+        private ResourceTreeBranch trunk;
+        private SerenityServer server;
         #endregion
         #region Methods - Public
         /// <summary>
@@ -73,6 +74,17 @@ namespace Serenity.Collections
             get
             {
                 return this.trunk;
+            }
+        }
+        public SerenityServer Server
+        {
+            get
+            {
+                return this.server;
+            }
+            internal set
+            {
+                this.server = value;
             }
         }
         #endregion

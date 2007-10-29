@@ -27,29 +27,28 @@ namespace Server
 			Console.WriteLine("{0}, v{1}\r\n{2} ({3})\r\n",
 				SerenityInfo.Name, SerenityInfo.Version, SerenityInfo.Copyright, "http://serenityproject.net/");
 
+            //Make sure the server has the correct folders to use,
+            //if they don't exist we need to create them.
+            foreach (SpecialFolder sf in Program.RecurseEnum<SpecialFolder>())
+            {
+                string dir = SPath.ResolveSpecialPath(sf);
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+            }
+
 			//Perform loading of the server configuration file.
 			ServerConfig config = new ServerConfig();
 			config.Read("Configuration/Serenity.ini");
 
-			Log.LogToConsole = config.LogToConsole;
-			Log.LogToFile = config.LogToFile;
+            SerenityServerSettings settings = new SerenityServerSettings();
+            settings.LogToConsole = true;
 
-			if (Log.LogToConsole || Log.LogToFile)
-			{
-				//Only start logging if the log messages will be recorded somewhere.
-				Log.StartLogging();
-			}
+            SerenityServer server = new SerenityServer();
+            server.Configure(settings);
 
-			//Make sure the server has the correct folders to use,
-			//if they don't exist we need to create them.
-			foreach (SpecialFolder sf in Program.RecurseEnum<SpecialFolder>())
-			{
-				string dir = SPath.ResolveSpecialPath(sf);
-				if (!Directory.Exists(dir))
-				{
-					Directory.CreateDirectory(dir);
-				}
-			}
+			
 
 			//This loads the file type registry information.
 			FileTypeRegistry.Initialize();
@@ -67,11 +66,11 @@ namespace Server
 				DomainSettings.Count,
 				Module.LoadedCount,
 				0), LogMessageLevel.Info);
-			WebDriverSettings settings = new WebDriverSettings();
-			settings.ContextHandler = new ContextHandler();
-			settings.Ports = config.Ports;
+			WebDriverSettings driverSettings = new WebDriverSettings();
+            driverSettings.ContextHandler = new ContextHandler();
+            driverSettings.Ports = config.Ports;
 
-			WebDriver driver = new HttpDriver(settings);
+            WebDriver driver = new HttpDriver(driverSettings);
 
 			driver.Initialize();
 
