@@ -206,7 +206,8 @@ namespace Serenity
                     settings = new DomainSettings(name);
                 }
                 LibINI.IO.IniReader reader = new LibINI.IO.IniReader(LibINI.IO.IniReaderSettings.Win32Style);
-                IniFile file = reader.Read(File.OpenRead(path));
+                IniFile file;
+                bool result = reader.Read(File.OpenRead(path), out file);
                 file.IsCaseSensitive = false;
 
                 if (file.ContainsSection("DomainSettings"))

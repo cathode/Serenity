@@ -1,0 +1,360 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SPCore</name>
+    </assembly>
+    <members>
+        <member name="T:Serenity.ICloneable`1">
+            <summary>
+            Supports generic cloning, which creates a new instance of a generic
+            object with the same value as an existing instance.
+            </summary>
+            <typeparam name="T">The type of object to clone.</typeparam>
+        </member>
+        <member name="M:Serenity.ICloneable`1.Clone">
+            <summary>
+            When implemented in a derived class, returns a shallow copy of the
+            current T.
+            </summary>
+            <returns>A shallow copy of the current T.</returns>
+        </member>
+        <member name="T:Serenity.HexEncoder">
+            <summary>
+            Provides static methods to convert and translate arrays of bytes or strings to and from hexadecimal.
+            </summary>
+        </member>
+        <member name="M:Serenity.HexEncoder.Convert(System.Char[])">
+            <summary>
+            Returns an array of bytes representing the hex input.
+            </summary>
+            <param name="input">The hex input as a char array.</param>
+            <returns>An array of bytes representing the hex input.</returns>
+        </member>
+        <member name="M:Serenity.HexEncoder.Convert(System.String)">
+            <summary>
+            Returns an array of bytes representing the hex input.
+            </summary>
+            <param name="input">The hex input as a string.</param>
+            <returns>An array of bytes representing the hex input.</returns>
+        </member>
+        <member name="M:Serenity.HexEncoder.Convert(System.Byte[])">
+            <summary>
+            Returns a string containing the supplied bytes as hex.
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.HexEncoder.Convert(System.Byte)">
+            <summary>
+            Returns a string containing the supplied byte as hex.
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.HexEncoder.Validate(System.Char)">
+            <summary>
+            Determines if a specific char is a valid hexadecimal character.
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.HexEncoder.Validate(System.Char[])">
+            <summary>
+            Determines if all the chars in the supplied char array are valid hexadecimal characters.
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.HexEncoder.Validate(System.String)">
+            <summary>
+            Determines if the contents of the supplied string are all valid hexadecimal characters.
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Serenity.IO.Writer`1">
+            <summary>
+            Provides an abstract base class for objects that write objects of a
+            specific type to a stream.
+            </summary>
+            <typeparam name="T">The type of object that will be written.</typeparam>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.#ctor">
+            <summary>
+            Initializes a new instance of the Writer class.
+            </summary>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.Dispose(System.Boolean)">
+            <summary>
+            When overridden in a derived class, cleans up unmanaged resources
+            used by that class.
+            </summary>
+            <param name="disposing">Determines if disposal is actually
+            necessary.</param>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.WriteCallback(System.IAsyncResult)">
+            <summary>
+            Provides a default implementation of the callback method invoked
+            when an async write operation occurs.
+            </summary>
+            <param name="result"></param>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.BeginWrite(System.IO.Stream,`0,System.AsyncCallback,System.Object)">
+            <summary>
+            Begins an asynchronus write operation.
+            </summary>
+            <param name="target"></param>
+            <param name="source"></param>
+            <param name="callback"></param>
+            <param name="state"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.Dispose">
+            <summary>
+            When overridden in a derived class, performs cleanup and freeing
+            of any unmanaged resources that may have been used by the current
+            Writer.
+            </summary>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.EncodeLengthPrefixedData(System.Byte[])">
+            <summary>
+            Encodes a byte array as length-prefixed data.
+            </summary>
+            <param name="input">The data to encode.</param>
+            <returns>The encoded data.</returns>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.EncodeLengthPrefixedString(System.String)">
+            <summary>
+            Encodes a string as length-prefixed data.
+            </summary>
+            <param name="input">The string to encode.</param>
+            <returns>The encoded data.</returns>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.EndWrite(System.IAsyncResult)">
+            <summary>
+            Ends an asynchronus write operation.
+            </summary>
+            <param name="result"></param>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.Write(System.IO.Stream,`0)">
+            <summary>
+            Writes the supplied T object to a stream.
+            </summary>
+            <param name="stream">The stream to be written to.</param>
+            <param name="value">The object to write to the stream.</param>
+            <remarks>
+            The supplied Stream must support writing.
+            </remarks>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the
+            current Writer is already in a disposed state.</exception>
+            <exception cref="T:System.ArgumentNullException">Thrown if either
+            the stream or value paramater are null.</exception>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.WriteBytes(System.Byte[]@,`0)">
+            <summary>
+            When overridden in a derived class, writes the supplied T object
+            to an array of bytes.
+            </summary>
+            <param name="target">When this method returns true, target will
+            contain the byte representation of source.</param>
+            <param name="source">The object to write to an array of bytes.</param>
+            <returns>True if the write operation suceeded, otherwise false.</returns>
+        </member>
+        <member name="P:Serenity.IO.Writer`1.IsDisposed">
+            <summary>
+            Gets or sets a value that indicates if the current Writer has been
+            cleaned up (disposed).
+            </summary>
+        </member>
+        <member name="P:Serenity.IO.Writer`1.IsReusable">
+            <summary>
+            Gets or sets a value which determines if the current Writer is reusable,
+            e.g., multiple calls to the Write method can be made to the same Reader.
+            </summary>
+        </member>
+        <member name="T:Serenity.IO.Writer`1.AsyncWriteOperation">
+            <summary>
+            Represents an asynchronous write operation.
+            </summary>
+            <param name="target"></param>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Serenity.IO.Writer`1.AsyncWriteState">
+            <summary>
+            Provides an async state object, allowing an async writer to pass
+            around more than one value between async methods calls.
+            </summary>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.AsyncWriteState.#ctor">
+            <summary>
+            Allows deriving classes to implement construction unheeded.
+            </summary>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.AsyncWriteState.#ctor(System.IO.Stream,`0)">
+            <summary>
+            Initializes a new instance of the AsyncWriterState class.
+            </summary>
+        </member>
+        <member name="P:Serenity.IO.Writer`1.AsyncWriteState.Target">
+            <summary>
+            Gets or sets the stream that is being written to.
+            </summary>
+        </member>
+        <member name="P:Serenity.IO.Writer`1.AsyncWriteState.Source">
+            <summary>
+            Gets or sets the value that is being written.
+            </summary>
+        </member>
+        <member name="T:Serenity.IO.Reader`1">
+            <summary>
+            Provides an abstract base class for objects that read objects of a
+            specific type from a stream.
+            </summary>
+            <typeparam name="T">The type of object that will be read.</typeparam>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.#ctor">
+            <summary>
+            Initializes a new instance of the AsyncReader class.
+            </summary>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.Dispose(System.Boolean)">
+            <summary>
+            When overridden in a derived class, cleans up unmanaged resources
+            used by that class.
+            </summary>
+            <param name="disposing">Determines if disposal is actually
+            necessary.</param>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.ReadCallback(System.IAsyncResult)">
+            <summary>
+            Provides a basic callback method to support asynchronous read operations.
+            </summary>
+            <param name="result"></param>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.BeginRead(System.IO.Stream,`0@,System.AsyncCallback,System.Object)">
+            <summary>
+            Begins an asynchronous read operation.
+            </summary>
+            <param name="source">The stream to read from.</param>
+            <param name="target"></param>
+            <param name="callback"></param>
+            <param name="state"></param>
+            <returns></returns>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the
+            current AsyncReader is already disposed.</exception>
+            <exception cref="T:System.ArgumentNullException">Thrown if either
+            the source, callback, or state params were passed as null.
+            </exception>
+            <exception cref="T:System.ArgumentException">Thrown if the state
+            param is not of type AsyncReaderState.</exception>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.DecodeLengthPrefixedData(System.Byte[])">
+            <summary>
+            Decodes a length-prefixed data block from the supplied byte array.
+            </summary>
+            <param name="input">The byte array to process.</param>
+            <returns>The decoded byte array.</returns>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.DecodeLengthPrefixedString(System.Byte[])">
+            <summary>
+            Decodes a length-prefixed string from the supplied byte array.
+            </summary>
+            <param name="input">The byte array to process.</param>
+            <returns>The decoded string.</returns>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.Dispose">
+            <summary>
+            When overridden in a derived class, performs cleanup and freeing
+            of any unmanaged resources that may have been used by the current
+            Reader.
+            </summary>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.EndRead(`0@,System.IAsyncResult)">
+            <summary>
+            Ends an asynchronous read operation.
+            </summary>
+            <param name="target"></param>
+            <param name="result"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.Read(System.IO.Stream,`0@)">
+            <summary>
+            When overridden in a derived class, reads and returns a T from the
+            supplied Stream.
+            </summary>
+            <param name="source">The stream to read the T from.</param>
+            <param name="target">When this method returns, <b>target</b> will contain
+            the T object read from <b>source</b>.</param>
+            <returns>true if the read operation suceeded, otherwise false.</returns>
+            <remarks>The supplied Stream must support reading.</remarks>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.ReadBytes(System.Byte[],`0@)">
+            <summary>
+            Reads a T from the supplied array of bytes,
+            and indicates if the reading operation succeeded.
+            </summary>
+            <param name="source">The bytes to read a T from.</param>
+            <param name="target">When this method returns, <b>target</b> will contain
+            the T read from <b>source</b>.</param>
+            <returns>true if the read operation suceeded, otherwise false.</returns>
+        </member>
+        <member name="P:Serenity.IO.Reader`1.IsDisposed">
+            <summary>
+            Gets or sets a value that indicates if the current Reader has been
+            cleaned up (disposed).
+            </summary>
+        </member>
+        <member name="P:Serenity.IO.Reader`1.IsReusable">
+            <summary>
+            Gets or sets a value which determines if the current Reader is reusable,
+            e.g., multiple calls to the Read method can be made to the same Reader.
+            </summary>
+        </member>
+        <member name="T:Serenity.IO.Reader`1.AsyncReadOperation">
+            <summary>
+            Represents an asynchronous read operation.
+            </summary>
+            <param name="source"></param>
+            <param name="target"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Serenity.IO.Reader`1.AsyncReadState">
+            <summary>
+            Provides an async state object, allowing an async reader to pass
+            around more than one value between async methods calls.
+            </summary>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.AsyncReadState.#ctor">
+            <summary>
+            Allows deriving classes to implement construction unheeded.
+            </summary>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.AsyncReadState.#ctor(System.IO.Stream,`0)">
+            <summary>
+            Initializes a new instance of the AsyncReaderState class.
+            </summary>
+        </member>
+        <member name="P:Serenity.IO.Reader`1.AsyncReadState.Buffer">
+            <summary>
+            Gets a buffer used to temporarily store bytes read from a
+            stream before they are converted into an object.
+            </summary>
+        </member>
+        <member name="P:Serenity.IO.Reader`1.AsyncReadState.Source">
+            <summary>
+            Gets or sets the stream being read from.
+            </summary>
+        </member>
+        <member name="P:Serenity.IO.Reader`1.AsyncReadState.Target">
+            <summary>
+            Gets or sets the object being read.
+            </summary>
+        </member>
+        <member name="P:Serenity.SPAsyncResult.IsCompleted">
+            <summary>
+            Gets an indication whether the asynchronous operation has completed.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -34,9 +34,9 @@ namespace Serenity
 		{
             FileTypeRegistry.entries = new Dictionary<string, FileTypeEntry>();
             IniReader reader = new IniReader(IniReaderSettings.Win32Style);
-            bool result = false;
-            IniFile file = reader.Read(File.OpenRead(SPath.ResolveSpecialPath(SpecialFile.FileTypeRegistry)), out result);
 
+            IniFile file;
+            bool result = reader.Read(File.OpenRead(SPath.ResolveSpecialPath(SpecialFile.FileTypeRegistry)), out file);
             if (result)
             {
                 file.IsCaseSensitive = false;

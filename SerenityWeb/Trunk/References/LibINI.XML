@@ -15,12 +15,12 @@
             </summary>
             <param name="settings"></param>
         </member>
-        <member name="M:LibINI.IO.IniReader.Read(System.IO.Stream,System.Boolean@)">
+        <member name="M:LibINI.IO.IniReader.ReadBytes(System.Byte[],LibINI.IniFile@)">
             <summary>
             Reads an IniFile from the supplied stream and returns it.
             </summary>
-            <param name="stream"></param>
-            <param name="result"></param>
+            <param name="source"></param>
+            <param name="target"></param>
             <returns></returns>
         </member>
         <member name="T:LibINI.IO.IniWriter">
@@ -34,12 +34,12 @@
             </summary>
             <param name="settings"></param>
         </member>
-        <member name="M:LibINI.IO.IniWriter.Write(System.IO.Stream,LibINI.IniFile)">
+        <member name="M:LibINI.IO.IniWriter.WriteBytes(System.Byte[]@,LibINI.IniFile)">
             <summary>
-            Writes an IniFile to the supplied Stream.
+            Writes the source IniFile to a target array of bytes.
             </summary>
-            <param name="stream"></param>
-            <param name="file"></param>
+            <param name="target"></param>
+            <param name="source"></param>
             <returns></returns>
         </member>
         <member name="T:LibINI.IO.IniWriterSettings">
@@ -47,14 +47,20 @@
             Provides a way to customize the operation of an IniWriter.
             </summary>
         </member>
-        <member name="F:LibINI.IO.IniWriterSettings.CommentChar">
+        <member name="P:LibINI.IO.IniWriterSettings.CommentChar">
             <summary>
             Gets or sets the character used to designate comment lines.
             </summary>
         </member>
-        <member name="F:LibINI.IO.IniWriterSettings.ValueDelimiter">
+        <member name="P:LibINI.IO.IniWriterSettings.ValueDelimiter">
             <summary>
             Gets or sets the character used to separate name and value in an IniEntry.
+            </summary>
+        </member>
+        <member name="P:LibINI.IO.IniWriterSettings.Win32Style">
+            <summary>
+            Gets an IniWriterSettings object representing the most commonly
+            used settings for INI files on the windows platform.
             </summary>
         </member>
         <member name="T:LibINI.IO.IniReaderSettings">
@@ -62,35 +68,35 @@
             Provides a way to customize the operation of an IniReader.
             </summary>
         </member>
-        <member name="F:LibINI.IO.IniReaderSettings.CommentChar">
+        <member name="P:LibINI.IO.IniReaderSettings.CommentChar">
             <summary>
             Gets or sets the character used to designate comment lines.
             </summary>
         </member>
-        <member name="F:LibINI.IO.IniReaderSettings.EntryDuplicationHandlingMethod">
+        <member name="P:LibINI.IO.IniReaderSettings.EntryDuplicationHandlingMethod">
             <summary>
             Gets or sets the handling method to use when duplicate entries are found.
             </summary>
         </member>
-        <member name="F:LibINI.IO.IniReaderSettings.ValueSeparator">
+        <member name="P:LibINI.IO.IniReaderSettings.MaximumCompatability">
             <summary>
-            Gets or sets the character that is used to separate a key from a value.
+            Gets an IniReaderSettings that is preconfigured to maintain maximum compatability.
             </summary>
         </member>
-        <member name="F:LibINI.IO.IniReaderSettings.ValueConcatenationChar">
+        <member name="P:LibINI.IO.IniReaderSettings.ValueConcatenationChar">
             <summary>
             Gets or sets the character that is used as a separator when concatenating values.
+            </summary>
+        </member>
+        <member name="P:LibINI.IO.IniReaderSettings.ValueSeparator">
+            <summary>
+            Gets or sets the character that is used to separate a key from a value.
             </summary>
         </member>
         <member name="P:LibINI.IO.IniReaderSettings.Win32Style">
             <summary>
             Gets an IniReaderSettings that is preconfigured to handle most INI files
             created by windows or windows software.
-            </summary>
-        </member>
-        <member name="P:LibINI.IO.IniReaderSettings.MaximumCompatability">
-            <summary>
-            Gets an IniReaderSettings that is preconfigured to maintain maximum compatability.
             </summary>
         </member>
         <member name="T:LibINI.IniSection">
@@ -110,41 +116,45 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:LibINI.IniSection.Clone(LibINI.IniFile)">
-            <summary>
-            Creates a deep copy of the current IniSection.
-            </summary>
-            <returns>A full clone of the current IniSection.</returns>
-        </member>
         <member name="M:LibINI.IniSection.CreateEntry(System.String)">
             <summary>
-            Creates a new IniEntry using the specified name,
-            adds it to the current IniSection, and returns it for further use.
+            Creates a new IniEntry. The new IniEntry is added to the current
+            IniSection, and then returned.
             </summary>
-            <param name="name"></param>
-            <returns></returns>
+            <param name="name">The name of the IniEntry to create.</param>
+            <returns>The created IniEntry.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if the name
+            paramater is passed as null.</exception>
         </member>
         <member name="M:LibINI.IniSection.CreateEntry(System.String,System.String)">
             <summary>
-            Creates a new IniEntry using the specified name and value,
-            adds it to the current IniSection, and returns it for further use.
+            Creates a new IniEntry with an initial value. The new IniEntry is added
+            to the current IniSection, and then returned.
             </summary>
             <param name="name">The name of the new IniEntry.</param>
             <param name="value">A value to initialize the new IniEntry with.</param>
+            <returns>The created IniEntry.</returns>
+            <remarks>
+            If an IniEntry already exists with the same name, the existing
+            IniEntry will be returned instead of creating a new one. However,
+            the value in the existing IniEntry will be assigned to what was
+            passed to the value param.
+            </remarks>
         </member>
         <member name="M:LibINI.IniSection.ContainsEntry(LibINI.IniEntry)">
             <summary>
             Determines whether an IniEntry exists in the current IniSection.
             </summary>
             <param name="entry">The IniEntry object to check existance for.</param>
-            <returns>True if the object is in the current IniSection's IniEntry list, otherwise false.</returns>
+            <returns>True if it exists; otherwise false.</returns>
         </member>
         <member name="M:LibINI.IniSection.ContainsEntry(System.String)">
             <summary>
             Determines whether an IniEntry exists in the current IniSection.
             </summary>
-            <param name="entryName">The name of the IniEntry object to check existance for.</param>
-            <returns>True if the object is in the current IniSection's IniEntry list, otherwise false.</returns>
+            <param name="entryName">The name of the IniEntry object to check
+            existance for.</param>
+            <returns>True if it exists; otherwise false.</returns>
         </member>
         <member name="M:LibINI.IniSection.GetEnumerator">
             <summary>
@@ -176,10 +186,12 @@
             Renames an IniEntry.
             </summary>
             <remarks>
-            The IniEntry must exist in the current IniSection.
+            The IniEntry must exist in the current IniSection. If no IniEntry
+            is found to rename, this method returns false.
             </remarks>
             <param name="oldName">The name of the IniEntry to rename.</param>
             <param name="newName">The new name of the IniEntry.</param>
+            <returns>True if the rename suceeded; otherwise false.</returns>
         </member>
         <member name="M:LibINI.IniSection.System#Collections#IEnumerable#GetEnumerator">
             <summary>
@@ -193,6 +205,10 @@
             </summary>
             <param name="name">The name of the IniEntry to get.</param>
             <returns>An IniEntry named name.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if the
+            name paramater is passed as null.</exception>
+            <exception cref="T:System.Collections.Generic.KeyNotFoundException">Thrown if no IniEntry
+            is found with a name matching the name paramater.</exception>
         </member>
         <member name="P:LibINI.IniSection.Comment">
             <summary>
@@ -231,15 +247,9 @@
         </member>
         <member name="M:LibINI.IniEntry.Clone">
             <summary>
-            Creates and returns a deep clone of the current IniEntry.
+            Creates and returns a shallow copy of the current IniEntry.
             </summary>
-            <returns></returns>
-        </member>
-        <member name="M:LibINI.IniEntry.Clone(LibINI.IniFile)">
-            <summary>
-            Creates and returns a deep clone of the current IniEntry.
-            </summary>
-            <returns>A deep clone of the current IniEntry.</returns>
+            <returns>A shallow copy of the current IniEntry.</returns>
         </member>
         <member name="P:LibINI.IniEntry.Comment">
             <summary>
@@ -326,18 +336,24 @@
             </summary>
             <param name="section">The IniSection to add to.</param>
             <param name="entry">The IniEntry to be added.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if either the
+            section or entry paramaters are passed as null.</exception>
         </member>
         <member name="M:LibINI.IniFile.AddEntry(System.String,LibINI.IniEntry)">
             <summary>
-            Adds an IniEntry to an IniSection. If no IniSection is found with the supplied name,
-            a new section will be created.
+            Adds an IniEntry to an IniSection, specified by the section param.
+            If no IniSection is found with the supplied name, a new section
+            will be created, and the supplied IniEntry will be added to the
+            new section.
             </summary>
             <param name="section">The name of the IniSection to add to.</param>
             <param name="entry">The IniEntry to add.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if either the
+            section or entry paramaters are passed as null.</exception>
         </member>
         <member name="M:LibINI.IniFile.AddSection(LibINI.IniSection)">
             <summary>
-            Adds an IniSection to the current File.
+            Adds an IniSection to the current IniFile.
             </summary>
             <param name="section">The IniSection to add.</param>
         </member>
@@ -357,6 +373,8 @@
             <param name="entry">The IniEntry to check existance for.</param>
             <returns>True if section exists in the current File's IniSection list,
             and entry exists in section's IniEntry list, otherwise returns false.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if either the
+            section or entry paramaters are passed as null.</exception>
         </member>
         <member name="M:LibINI.IniFile.ContainsEntry(LibINI.IniSection,System.String)">
             <summary>
@@ -367,6 +385,8 @@
             <param name="entry">The name of the IniEntry to check existance for.</param>
             <returns>True if section exists in the current File's IniSection list,
             and entry exists in section's IniEntry list, otherwise returns false.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if either the
+            section or entry paramaters are passed as null.</exception>
         </member>
         <member name="M:LibINI.IniFile.ContainsEntry(System.String,LibINI.IniEntry)">
             <summary>
@@ -377,6 +397,8 @@
             <param name="entry">The IniEntry to check existance for.</param>
             <returns>True if section exists in the current File's IniSection list,
             and entry exists in section's IniEntry list, otherwise returns false.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if either the
+            section or entry paramaters are passed as null.</exception>
         </member>
         <member name="M:LibINI.IniFile.ContainsEntry(System.String,System.String)">
             <summary>
@@ -387,6 +409,8 @@
             <param name="entry">The name of the IniEntry to check existance for.</param>
             <returns>True if section exists in the current File's IniSection list,
             and entry exists in section's IniEntry list, otherwise returns false.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if either the
+            section or entry paramaters are passed as null.</exception>
         </member>
         <member name="M:LibINI.IniFile.ContainsSection(LibINI.IniSection)">
             <summary>
@@ -399,45 +423,84 @@
         </member>
         <member name="M:LibINI.IniFile.ContainsSection(System.String)">
             <summary>
-            Determines whether the specified IniSection exists
-            in the current File's IniSection list.
+            Determines whether a named IniSection exists in the current
+            IniFile.
             </summary>
-            <param name="section">The name of the IniSection to check existance for.</param>
-            <returns>True if section exists in the current File's IniSection list,
-            otherwise returns false.</returns>
+            <param name="section">The name of the IniSection check for.
+            </param>
+            <returns>True if the named IniSection exists; otherwise false.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if the
+            section paramater is null.</exception>
         </member>
         <member name="M:LibINI.IniFile.CreateEntry(LibINI.IniSection,System.String)">
             <summary>
-            Creates an IniEntry in the specified IniSection.
-            If the specified IniSection does not exist in the current File's IniSection list,
-            it will be added.
+            Creates an IniEntry. The new entry is added to the supplied
+            section, and the supplied section is added to the current IniFile
+            if it does not already exist there.
             </summary>
-            <param name="section">The IniSection to create the new IniEntry in.</param>
+            <param name="section">The IniSection to create the new IniEntry in.
+            </param>
             <param name="entry">The name of the new IniEntry to create.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if either the
+            section or entry paramaters are passed as null.</exception>
+        </member>
+        <member name="M:LibINI.IniFile.CreateEntry(LibINI.IniSection,System.String,System.String)">
+            <summary>
+            Creates an IniEntry with an initial value. The new IniEntry is
+            added to the supplied IniSection. The supplied IniSection is added
+            to the current IniFile if it doesnt not already exist there.
+            </summary>
+            <param name="section">The IniSection to create the new IniEntry in.
+            </param>
+            <param name="entry">The name of the new IniEntry to create.</param>
+            <param name="value">The initial value of the new IniEntry.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if either the
+            section or entry paramaters are passed as null.</exception>
         </member>
         <member name="M:LibINI.IniFile.CreateEntry(System.String,System.String)">
             <summary>
-            Creates an IniEntry in the specified IniSection.
-            If the specified IniSection does not exist in the current File's IniSection list,
-            it will be created.
+            Creates an IniEntry. The new IniEntry is added to the named
+            IniSection. If the named IniSection does not exist, it will be
+            created.
             </summary>
-            <param name="section">The name of the IniSection to create the new IniEntry in.</param>
+            <param name="section">The name of the IniSection to create the new
+            IniEntry in.</param>
             <param name="entry">The name of the new IniEntry to create.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if either the
+            section or entry paramaters are passed as null.</exception>
+        </member>
+        <member name="M:LibINI.IniFile.CreateEntry(System.String,System.String,System.String)">
+            <summary>
+            Creates an IniEntry with an initial value. The new IniEntry is
+            added to the named IniSection. If the named IniSection does not
+            exist, it will be created.
+            </summary>
+            <param name="section">The name of the IniSection to create the new
+            IniEntry in.</param>
+            <param name="entry">The name of the new IniEntry to create.</param>
+            <param name="value">The initial value of the new IniEntry.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if either the
+            section or entry paramaters are passed as null.</exception>
         </member>
         <member name="M:LibINI.IniFile.CreateSection(System.String)">
             <summary>
-            Creates a new IniSection in the current File's IniSection list.
+            Creates a new IniSection. The new IniSection is added to the
+            current IniFile.
             </summary>
             <remarks>
-            If a section already exists with the supplied name, it will be returned instead.
+            If a section already exists with the supplied name, it will be
+            returned instead.
             </remarks>
-            <param name="section">The name of the new IniSection to create.</param>
+            <param name="section">
+            The name of the new IniSection to create.
+            </param>
         </member>
         <member name="M:LibINI.IniFile.GetEnumerator">
             <summary>
-            Gets an enumerator for the current IniFile.
+            Gets a generic enumerator for the current IniFile.
             </summary>
-            <returns></returns>
+            <returns>A generic enumerator for the current IniFile</returns>
         </member>
         <member name="M:LibINI.IniFile.IsValidName(System.String)">
             <summary>
@@ -445,7 +508,11 @@
             for an IniSection or IniEntry object.
             </summary>
             <param name="name">The name to validate.</param>
-            <returns>False if the name paramater contains any invalid chars.</returns>
+            <returns>
+            False if the name paramater contains any invalid chars.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if the name
+            paramater is passed as null.</exception>
         </member>
         <member name="M:LibINI.IniFile.IsValidValue(System.String)">
             <summary>
@@ -453,21 +520,22 @@
             for an IniEntry.
             </summary>
             <param name="value">The value to validate.</param>
-            <returns>False if the value paramater contains any invalid chars.</returns>
+            <returns>False if the value paramater contains any invalid chars.
+            </returns>
         </member>
         <member name="M:LibINI.IniFile.Merge(LibINI.IniFile[])">
             <summary>
             Merges any number of IniFiles into the current IniFile.
             </summary>
-            <param name="files"></param>
-            <returns></returns>
+            <param name="files">An array of IniFiles to merge.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if the files
+            paramater is passed as null.</exception>
         </member>
         <member name="M:LibINI.IniFile.MergeFiles(System.String[])">
             <summary>
             Merges any number of INI-format files into the current IniFile.
             </summary>
-            <param name="filePaths"></param>
-            <returns></returns>
+            <param name="filePaths">An array of file paths.</param>
         </member>
         <member name="M:LibINI.IniFile.RemoveEntry(LibINI.IniSection,LibINI.IniEntry)">
             <summary>
@@ -475,6 +543,8 @@
             </summary>
             <param name="section">The IniSection to remove the IniEntry from.</param>
             <param name="entry">The IniEntry to remove.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if either the
+            section or entry paramaters are passed as null.</exception>
         </member>
         <member name="M:LibINI.IniFile.RemoveEntry(LibINI.IniSection,System.String)">
             <summary>
@@ -482,6 +552,8 @@
             </summary>
             <param name="section">The IniSection to remove the IniEntry from.</param>
             <param name="entry">The name of the IniEntry to remove.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if either the
+            section or entry paramaters are passed as null.</exception>
         </member>
         <member name="M:LibINI.IniFile.RemoveEntry(System.String,LibINI.IniEntry)">
             <summary>
@@ -489,6 +561,8 @@
             </summary>
             <param name="section">The name of the IniSection to remove the IniEntry from.</param>
             <param name="entry">The IniEntry to remove.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if either the
+            section or entry paramaters are passed as null.</exception>
         </member>
         <member name="M:LibINI.IniFile.RemoveEntry(System.String,System.String)">
             <summary>
@@ -496,18 +570,24 @@
             </summary>
             <param name="section">The name of the IniSection to remove the IniEntry from.</param>
             <param name="entry">The name of the IniEntry to remove.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if either the
+            section or entry paramaters are passed as null.</exception>
         </member>
         <member name="M:LibINI.IniFile.RemoveSection(LibINI.IniSection)">
             <summary>
             Removes an IniSection from the current File.
             </summary>
             <param name="section">The IniSection to remove.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if the
+            section paramater is passed as null.</exception>
         </member>
         <member name="M:LibINI.IniFile.RemoveSection(System.String)">
             <summary>
             Removes an IniSection from the current File.
             </summary>
             <param name="section">The name of the IniSection to remove.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if the
+            section paramater is passed as null.</exception>
         </member>
         <member name="M:LibINI.IniFile.RenameSection(System.String,System.String)">
             <summary>
@@ -521,18 +601,21 @@
         </member>
         <member name="P:LibINI.IniFile.Item(System.String)">
             <summary>
-            Gets an IniSection by it's name from the current IniFile. If no IniSection is found,
-            a value of null is returned.
+            Gets an IniSection contained in the current IniFile.
             </summary>
             <param name="name">The name of the IniSection to get.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if the
+            name paramater is passed as null.</exception>
+            <exception cref="T:System.Collections.Generic.KeyNotFoundException">Thrown if no IniSection
+            is found with a name matching the name paramater.</exception>
         </member>
         <member name="P:LibINI.IniFile.Item(System.String,System.String)">
             <summary>
             Gets an IniEntry by it's name and section name from the current IniFile. If the IniEntry
             is not found, a value of null is returned.
             </summary>
-            <param name="section"></param>
-            <param name="entry"></param>
+            <param name="sectionName"></param>
+            <param name="entryName"></param>
             <returns></returns>
         </member>
         <member name="P:LibINI.IniFile.IsCaseSensitive">

@@ -22,8 +22,10 @@ namespace Server
 		internal bool Read(string path)
 		{
             IniReader reader = new IniReader(IniReaderSettings.Win32Style);
-            bool result = false;
-            IniFile file = reader.Read(File.OpenRead(path), out result);
+
+            IniFile file;
+            bool result = reader.Read(File.OpenRead(path), out file);
+
             if (result)
             {
                 file.IsCaseSensitive = false;

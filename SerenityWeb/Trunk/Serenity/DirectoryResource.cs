@@ -75,6 +75,10 @@ namespace Serenity
                 writer.WriteStartElement("group");
                 writer.WriteAttributeString("name", pair.Key);
                 writer.WriteStartElement("field");
+                writer.WriteAttributeString("name", pair.Value[0].Grouping.SingularForm + " Name");
+                writer.WriteEndElement();
+                writer.WriteStartElement("field");
+                writer.WriteAttributeString("size", "Size");
             }
             writer.WriteEndDocument();
             writer.Flush();
