@@ -19,23 +19,18 @@ namespace Serenity
     public sealed class Module
     {
         #region Constructors - Private
-        static Module()
-        {
-            Module.modules = new Dictionary<string, Module>();
-        }
         private Module(string name)
         {
             this.name = name;
-            this.pages = new Dictionary<string, ContentPage>();
+            this.pages = new Dictionary<string, Page>();
         }
         #endregion
         #region Fields - Private
 		private Assembly assembly;
-        private static Dictionary<string, Module> modules;
         private readonly string name;
-        private Dictionary<string, ContentPage> pages;
+        private Dictionary<string, Page> pages;
         private string title;
-        private ContentPage defaultPage;
+        private Page defaultPage;
         private string resourceNamespace;
         #endregion
 		#region Methods - Public
@@ -115,18 +110,6 @@ namespace Serenity
                 return module;
             }
         }
-		public static bool AddModule(Module module)
-		{
-			if (module != null && !Module.modules.ContainsKey(module.Name.ToLower()))
-			{
-				Module.modules.Add(module.Name.ToLower(), module);
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
         public void AddPage(ContentPage page)
         {
             if (!this.pages.ContainsKey(page.SystemName))
@@ -141,18 +124,7 @@ namespace Serenity
                 this.AddPage(page);
             }
         }
-        public static Module GetModule(string name)
-        {
-			if (!string.IsNullOrEmpty(name) && Module.modules.ContainsKey(name.ToLower()))
-			{
-				return Module.modules[name.ToLower()];
-			}
-			else
-			{
-				return null;
-			}
-        }
-		public ContentPage GetPage(string name)
+		public Page GetPage(string name)
 		{
 			if (this.pages.ContainsKey(name.ToLower()))
 			{
@@ -172,7 +144,7 @@ namespace Serenity
 				return this.assembly;
 			}
 		}
-		public ContentPage DefaultPage
+		public Page DefaultPage
 		{
 			get
 			{
@@ -184,13 +156,6 @@ namespace Serenity
             get
             {
                 return this.name;
-            }
-        }
-        public static int LoadedCount
-        {
-            get
-            {
-                return Module.modules.Count;
             }
         }
         public string ResourceNamespace

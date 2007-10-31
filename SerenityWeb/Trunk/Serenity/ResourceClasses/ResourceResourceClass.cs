@@ -26,59 +26,8 @@ namespace Serenity.ResourceClasses
         }
         public override void HandleContext(Serenity.Web.CommonContext context)
         {
-            byte[] readBuffer = null;
-            DomainSettings settings = DomainSettings.GetBestMatch(context.Request.Url);
-            int n = ((settings.OmitResourceClass) ? 1 : 2);
-            if (context.Request.Url.Segments.Length > n)
-            {
-                Module module = Module.GetModule(context.Request.Url.Segments[n].TrimEnd('/'));
-                if (module != null)
-                {
-                    string resourceName = module.ResourceNamespace + string.Join("", context.Request.Url.Segments, n + 1, context.Request.Url.Segments.Length - (n + 1)).Replace('/', '.');
-                    string foundResourceName = "";
-                    foreach (string existingResourceName in module.Assembly.GetManifestResourceNames())
-                    {
-                        if (existingResourceName.ToLower() == resourceName.ToLower())
-                        {
-                            foundResourceName = existingResourceName;
-                            break;
-                        }
-                    }
-                    if (foundResourceName != "")
-                    {
-                        Stream resourceStream = null;
-                        try
-                        {
-                            resourceStream = module.Assembly.GetManifestResourceStream(foundResourceName);
-                            readBuffer = new byte[resourceStream.Length];
-                            resourceStream.Read(readBuffer, 0, readBuffer.Length);
-                            string ext = Path.GetExtension(foundResourceName).TrimStart('.');
-                            context.Response.MimeType = FileTypeRegistry.GetMimeType(ext);
-                        }
-                        catch
-                        {
-                            ErrorHandler.Handle(context, StatusCode.Http500InternalServerError);
-                        }
-                        finally
-                        {
-                            if (resourceStream != null)
-                            {
-                                resourceStream.Close();
-                                resourceStream.Dispose();
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (readBuffer != null)
-            {
-                context.Response.Write(readBuffer);
-            }
-            else
-            {
-                ErrorHandler.Handle(context, StatusCode.Http404NotFound);
-            }
+            ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
+            return;
         }
     }
 }

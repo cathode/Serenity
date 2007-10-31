@@ -21,6 +21,10 @@ namespace Serenity.Web
     /// </summary>
     public class ContextHandler
     {
+        protected internal ContextHandler(SerenityServer server)
+        {
+            this.server = server;
+        }
         #region Fields - Private
         private SerenityServer server;
         #endregion
@@ -31,32 +35,7 @@ namespace Serenity.Web
         /// <param name="context">The incoming CommonContext to be handled.</param>
         public virtual void HandleContext(CommonContext context)
         {
-            Uri url = context.Request.Url;
-            if (DomainSettings.Current == null)
-            {
-                DomainSettings.Current = DomainSettings.GetBestMatch(url);
-            }
-            DomainSettings settings = DomainSettings.Current;
-
-
-            ResourceClass resourceClass;
-            if ((settings.OmitResourceClass) || (url.Segments.Length < 2))
-            {
-                resourceClass = ResourceClass.GetResourceClass(settings.DefaultResourceClass);
-            }
-            else
-            {
-                resourceClass = ResourceClass.GetResourceClass(url.Segments[1].TrimEnd('/').ToLower());
-            }
-            if (resourceClass != null)
-            {
-                resourceClass.HandleContext(context);
-            }
-            else
-            {
-                //generate 404 not found response.
-                ErrorHandler.Handle(context, StatusCode.Http404NotFound, url.ToString());
-            }
+           
         }
         #endregion
         #region Properties - Public
@@ -65,10 +44,6 @@ namespace Serenity.Web
             get
             {
                 return this.server;
-            }
-            internal set
-            {
-                this.server = value;
             }
         }
         #endregion

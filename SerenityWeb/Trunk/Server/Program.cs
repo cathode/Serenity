@@ -42,32 +42,19 @@ namespace Server
 			ServerConfig config = new ServerConfig();
 			config.Read("Configuration/Serenity.ini");
 
-            SerenityServerSettings settings = new SerenityServerSettings();
-            settings.LogToConsole = true;
-
             SerenityServer server = new SerenityServer();
-            server.Configure(settings);
 
-			
-
-			//This loads the file type registry information.
-			FileTypeRegistry.Initialize();
-			DomainSettings.LoadAll();
-
-			//(Temporary) Runs the server.
 			foreach (KeyValuePair<string, string> pair in config.Modules)
 			{
 				string name = pair.Key;
 				string path = (pair.Value.StartsWith("@")) ? Path.GetFullPath("./Modules/" + pair.Value.TrimStart('@')) : pair.Value;
-				Module.AddModule(Module.LoadModuleFile(name, path));
 			}
 
 			Log.Write(string.Format("Loaded: {0} domains, {1} modules, {2} themes.",
 				DomainSettings.Count,
-				Module.LoadedCount,
+				0,
 				0), LogMessageLevel.Info);
 			WebDriverSettings driverSettings = new WebDriverSettings();
-            driverSettings.ContextHandler = new ContextHandler();
             driverSettings.Ports = config.Ports;
 
             WebDriver driver = new HttpDriver(driverSettings);

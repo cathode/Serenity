@@ -45,6 +45,7 @@ namespace Serenity.Web.Drivers
         private readonly AsyncCallback sendDelegate;
         private WebDriverSettings settings;
         private WebDriverStatus status = WebDriverStatus.None;
+        private SerenityServer server;
         #endregion
         #region Methods - Protected
         /// <summary>
@@ -74,18 +75,6 @@ namespace Serenity.Web.Drivers
             else
             {
                 return;
-            }
-        }
-        /// <summary>
-        /// Checks if the current WebDriver is disposed and throws an
-        /// ObjectDisposedException if necessary.
-        /// </summary>
-        [Obsolete]
-        protected void CheckDisposal()
-        {
-            if (this.IsDisposed)
-            {
-                throw new ObjectDisposedException(this.GetType().FullName);
             }
         }
         /// <summary>
@@ -130,7 +119,7 @@ namespace Serenity.Web.Drivers
             CommonContext context = this.RecieveContext(socket);
             if (context != null)
             {
-                this.Settings.ContextHandler.HandleContext(context);
+                this.Server.ContextHandler.HandleContext(context);
             }
             else
             {
@@ -511,6 +500,17 @@ namespace Serenity.Web.Drivers
             protected set
             {
                 this.status = value;
+            }
+        }
+        public SerenityServer Server
+        {
+            get
+            {
+                return this.server;
+            }
+            internal set
+            {
+                this.server = value;
             }
         }
         #endregion

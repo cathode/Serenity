@@ -27,12 +27,11 @@ namespace Serenity.Collections
         #region Methods - Public
         public Domain GetBestMatch(string hostName)
         {
-            if (string.IsNullOrEmpty(hostName))
+            if (hostName == null)
             {
-                return null;
+                throw new ArgumentNullException("hostName");
             }
-
-            if (this.Contains(hostName))
+            else if (this.Contains(hostName))
             {
                 return this[hostName];
             }

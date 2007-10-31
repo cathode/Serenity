@@ -84,7 +84,6 @@
     <Compile Include="Pages\IndexerPage.cs" />
     <Compile Include="ResourceGrouping.cs" />
     <Compile Include="SerenityServer.cs" />
-    <Compile Include="SerenityServerSettings.cs" />
     <Compile Include="Web\Drivers\DriverPool.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Pages\DefaultPage.cs" />

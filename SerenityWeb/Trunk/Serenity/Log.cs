@@ -56,6 +56,8 @@ namespace Serenity
     /// </summary>
     public static class Log
     {
+        //TODO: re-implement log class as a non-static class where each Log object represents an individual logfile.
+
         #region Constructors - Private
         static Log()
         {

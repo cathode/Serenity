@@ -27,23 +27,46 @@ namespace Serenity
         /// </summary>
         public SerenityServer()
         {
+            this.contextHandler = new ContextHandler(this);
+            this.driverPool = new DriverPool(this);
         }
         #endregion
         #region Fields - Private
-        private ContextHandler contextHandler = new ContextHandler();
-        private DriverPool driverPool = new DriverPool();
-        private DomainCollection domains = new DomainCollection();
-        private ResourceTree commonResources = new ResourceTree();
+        private ContextHandler contextHandler;
+        private readonly DriverPool driverPool;
+        private readonly DomainCollection domains = new DomainCollection();
+        private readonly ResourceTree commonResources = new ResourceTree();
 		#endregion
-        #region Methods - Public
-        public void Configure(SerenityServerSettings settings)
+        #region Methods - Private
+        private void ExtractResources(Domain domain)
         {
-            Log.LogToConsole = settings.LogToConsole;
-
-            if (Log.LogToConsole)
+            if (domain == null)
             {
-                //Only start logging if the log messages will be recorded somewhere.
-                Log.StartLogging();
+                throw new ArgumentNullException("domain");
+            }
+
+            this.domains.Add(domain);
+        }
+        private void ExtractResources(Module module)
+        {
+            if (module == null)
+            {
+                throw new ArgumentNullException("module");
+            }
+
+        }
+        private void ExtractResources(IEnumerable<Domain> domains)
+        {
+            foreach (Domain domain in domains)
+            {
+                this.ExtractResources(domain);
+            }
+        }
+        private void ExtractResources(IEnumerable<Module> modules)
+        {
+            foreach (Module module in modules)
+            {
+                this.ExtractResources(module);
             }
         }
         #endregion

@@ -22,54 +22,8 @@ namespace Serenity.ResourceClasses
         }
         public override void HandleContext(CommonContext context)
         {
-            ContentPage page = null;
-
-            // http://localhost/dynamic/system/default
-
-            DomainSettings settings = DomainSettings.GetBestMatch(context.Request.Url);
-            int n = ((settings.OmitResourceClass) ? 1 : 2);
-            if (context.Request.Url.Segments.Length > n)
-            {
-                Module module = Module.GetModule(context.Request.Url.Segments[n].TrimEnd('/'));
-                if (module != null)
-                {
-                    if (context.Request.Url.Segments.Length > n + 1)
-                    {
-                        string pageName = string.Join("", context.Request.Url.Segments, n + 1, context.Request.Url.Segments.Length - (n + 1));
-                        page = module.GetPage(pageName);
-                    }
-                    else
-                    {
-                        page = module.DefaultPage;
-                    }
-                }
-                else
-                {
-                    page = null;
-                }
-            }
-            else
-            {
-                Module module = Module.GetModule(settings.DefaultResourceName);
-                if (module != null)
-                {
-                    page = module.DefaultPage;
-                }
-                else
-                {
-                    page = null;
-                }
-            }
-
-            if (page != null)
-            {
-               page.OnRequest(context);
-            }
-            else
-            {
-                //404 Not Found response
-                ErrorHandler.Handle(context, StatusCode.Http404NotFound, context.Request.Url.ToString());
-            }
+            ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
+            return;
         }
     }
 }
