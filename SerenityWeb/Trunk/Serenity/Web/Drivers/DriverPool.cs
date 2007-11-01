@@ -28,5 +28,36 @@ namespace Serenity.Web.Drivers
         private List<WebDriver> drivers = new List<WebDriver>();
         private SerenityServer server;
         #endregion
+        #region Methods - Public
+        public IEnumerable<WebDriver> GetDriversByProvider(string provider)
+        {
+            foreach (WebDriver driver in this.drivers)
+            {
+                if (driver.Info.Provider.Equals(provider,this.Server.StringComparison))
+                {
+                    yield return driver;
+                }
+            }
+        }
+        public IEnumerable<WebDriver> GetDriversBySchema(string schema)
+        {
+            foreach (WebDriver driver in this.drivers)
+            {
+                if (driver.Info.UriSchema.Equals(schema, this.Server.StringComparison))
+                {
+                    yield return driver;
+                }
+            }
+        }
+        #endregion
+        #region Properties - Public
+        public SerenityServer Server
+        {
+            get
+            {
+                return this.server;
+            }
+        }
+        #endregion
     }
 }

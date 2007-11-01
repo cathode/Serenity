@@ -36,6 +36,8 @@ namespace Serenity
         private readonly DriverPool driverPool;
         private readonly DomainCollection domains = new DomainCollection();
         private readonly ResourceTree commonResources = new ResourceTree();
+        private bool isCaseSensitive = false;
+        private bool turbo = true;
 		#endregion
         #region Methods - Private
         private void ExtractResources(Domain domain)
@@ -109,7 +111,56 @@ namespace Serenity
                 return this.domains;
             }
         }
-
+        public bool IsCaseSensitive
+        {
+            get
+            {
+                return this.isCaseSensitive;
+            }
+            set
+            {
+                this.isCaseSensitive = value;
+            }
+        }
+        public StringComparison StringComparison
+        {
+            get
+            {
+                if (this.isCaseSensitive)
+                {
+                    if (this.turbo)
+                    {
+                        return StringComparison.Ordinal;
+                    }
+                    else
+                    {
+                        return StringComparison.CurrentCulture;
+                    }
+                }
+                else
+                {
+                    if (this.turbo)
+                    {
+                        return StringComparison.OrdinalIgnoreCase;
+                    }
+                    else
+                    {
+                        return StringComparison.CurrentCultureIgnoreCase;
+                    }
+                }
+            }
+        }
+        public bool Turbo
+        {
+            get
+            {
+                return this.turbo;
+            }
+            set
+            {
+                this.turbo = value;
+            }
+        }
 		#endregion
 	}
 }

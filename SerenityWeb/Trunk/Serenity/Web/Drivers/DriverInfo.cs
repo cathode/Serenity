@@ -20,9 +20,9 @@ namespace Serenity.Web.Drivers
         #region Constructors - Internal
         internal DriverInfo()
         {
-            this.className = "unknown";
+            this.provider = "unknown";
             this.version = new Version();
-            this.typeName = "unknown";
+            this.protocol = "unknown";
             this.uriSchema = "unknown";
         }
         #endregion
@@ -34,47 +34,47 @@ namespace Serenity.Web.Drivers
         /// <param name="typeName"></param>
         /// <param name="uriSchema"></param>
         /// <param name="version"></param>
-        public DriverInfo(string className, string typeName, string uriSchema, Version version)
+        public DriverInfo(string provider, string protocol, string uriSchema, Version version)
         {
-            this.className = className;
-            this.typeName = typeName;
+            this.provider = provider;
+            this.protocol = protocol;
             this.uriSchema = uriSchema;
             this.version = version;
         }
         #endregion
         #region Fields - Private
-        private string className;
-        private string typeName;
+        private string provider;
+        private string protocol;
         private string uriSchema;
         private Version version;
         #endregion
         #region Properties - Public
         /// <summary>
-        /// Gets a string describing the classification of the current DriverInfo.
+        /// Gets the name of the provider of the driver.
         /// </summary>
-        public string ClassName
+        public string Provider
         {
             get
             {
-                return this.className;
+                return this.provider;
             }
             internal set
             {
-                this.className = value;
+                this.provider = value;
             }
         }
         /// <summary>
         /// Gets a string describing the type of the current DriverInfo.
         /// </summary>
-        public string TypeName
+        public string Protocol
         {
             get
             {
-                return this.typeName;
+                return this.protocol;
             }
             internal set
             {
-                this.typeName = value;
+                this.protocol = value;
             }
         }
         /// <summary>
