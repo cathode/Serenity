@@ -38,6 +38,7 @@ namespace Serenity
         private readonly ResourceTree commonResources = new ResourceTree();
         private bool isCaseSensitive = false;
         private bool turbo = true;
+        private StringComparison stringComparison = StringComparison.Ordinal;
 		#endregion
         #region Methods - Private
         private void ExtractResources(Domain domain)
@@ -69,6 +70,31 @@ namespace Serenity
             foreach (Module module in modules)
             {
                 this.ExtractResources(module);
+            }
+        }
+        private void UpdateStringComparison()
+        {
+            if (this.isCaseSensitive)
+            {
+                if (this.turbo)
+                {
+                    this.stringComparison = StringComparison.Ordinal;
+                }
+                else
+                {
+                    this.stringComparison = StringComparison.CurrentCulture;
+                }
+            }
+            else
+            {
+                if (this.turbo)
+                {
+                    this.stringComparison = StringComparison.OrdinalIgnoreCase;
+                }
+                else
+                {
+                    this.stringComparison = StringComparison.CurrentCultureIgnoreCase;
+                }
             }
         }
         #endregion
@@ -120,34 +146,14 @@ namespace Serenity
             set
             {
                 this.isCaseSensitive = value;
+                this.UpdateStringComparison();
             }
         }
         public StringComparison StringComparison
         {
             get
             {
-                if (this.isCaseSensitive)
-                {
-                    if (this.turbo)
-                    {
-                        return StringComparison.Ordinal;
-                    }
-                    else
-                    {
-                        return StringComparison.CurrentCulture;
-                    }
-                }
-                else
-                {
-                    if (this.turbo)
-                    {
-                        return StringComparison.OrdinalIgnoreCase;
-                    }
-                    else
-                    {
-                        return StringComparison.CurrentCultureIgnoreCase;
-                    }
-                }
+                return this.stringComparison;
             }
         }
         public bool Turbo
@@ -159,6 +165,7 @@ namespace Serenity
             set
             {
                 this.turbo = value;
+                this.UpdateStringComparison();
             }
         }
 		#endregion
