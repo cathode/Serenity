@@ -105,8 +105,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DomainSettings.cs" />
     <Compile Include="Web\CommonContext.cs" />
-    <Compile Include="Web\Drivers\WebDriverState.cs" />
-    <Compile Include="Web\Drivers\WebDriverStatus.cs" />
+    <Compile Include="OperationStatus.cs" />
     <Compile Include="Web\ErrorHandler.cs" />
     <Compile Include="Web\MimeType.cs" />
     <Compile Include="Web\RequestDataOrigin.cs" />

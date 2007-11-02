@@ -10,29 +10,32 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Serenity.Web.Drivers
+namespace Serenity
 {
     /// <summary>
-    /// Represents the status of a WebDriver's operation.
+    /// Represents the status of a continuous or maintained operation/action.
     /// </summary>
-    public enum WebDriverStatus
+    public enum OperationStatus
     {
         /// <summary>
-        /// Indicates that the WebDriver is newly created and has not carried out any action so far.
+        /// Indicates that the operation is newly created and has not carried
+        /// out any action so far.
         /// </summary>
         None = 0,
         /// <summary>
-        /// Indicates that the WebDriver has been initialized with a set of parameters which define it's behaviour.
+        /// Indicates that the operation has been initialized with a set of
+        /// parameters which define it's behaviour, but has not carried out any
+        /// action so far.
         /// </summary>
         Initialized = 1,
         /// <summary>
-        /// Indicates that the WebDriver is in a stopped state.
-        /// It is not listening for connections and all pending requests have been responded to.
+        /// Indicates that the operation is in a stopped state. It is not
+        /// performing any action.
         /// </summary>
         Stopped = 2,
         /// <summary>
-        /// Indicates that the WebDriver is ready to begin Running. It may already be listening,
-        /// but it has not recieved any incoming connections yet.
+        /// Indicates that the operation is in a started state. It is 
+        /// performing it's actions normally.
         /// </summary>
         Started = 3,
     }

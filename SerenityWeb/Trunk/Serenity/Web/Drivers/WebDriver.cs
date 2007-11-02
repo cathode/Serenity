@@ -43,9 +43,9 @@ namespace Serenity.Web.Drivers
         private Socket listeningSocket;
         private readonly AsyncCallback recieveDelegate;
         private readonly AsyncCallback sendDelegate;
-        private WebDriverSettings settings;
-        private WebDriverStatus status = WebDriverStatus.None;
         private SerenityServer server;
+        private WebDriverSettings settings;
+        private OperationStatus status = OperationStatus.None;
         #endregion
         #region Methods - Protected
         /// <summary>
@@ -209,7 +209,7 @@ namespace Serenity.Web.Drivers
                 throw new ObjectDisposedException(this.GetType().FullName);
             }
 
-            if (this.status < WebDriverStatus.Initialized)
+            if (this.status < OperationStatus.Initialized)
             {
                 this.ListeningSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
 
@@ -228,7 +228,7 @@ namespace Serenity.Web.Drivers
                 if (this.ListeningSocket.IsBound)
                 {
                     //TODO: Log "socket bind succeded" informative message.
-                    this.status = WebDriverStatus.Initialized;
+                    this.status = OperationStatus.Initialized;
                     return true;
                 }
                 else
@@ -253,12 +253,12 @@ namespace Serenity.Web.Drivers
                 throw new ObjectDisposedException(this.GetType().FullName);
             }
 
-            if (this.Status >= WebDriverStatus.Initialized)
+            if (this.Status >= OperationStatus.Initialized)
             {
-                this.Status = WebDriverStatus.Started;
+                this.Status = OperationStatus.Started;
                 this.ListeningSocket.Listen(10);
 
-                while (this.Status == WebDriverStatus.Started)
+                while (this.Status == OperationStatus.Started)
                 {
                     ThreadPool.QueueUserWorkItem(new WaitCallback(this.HandleAcceptedConnection), this.ListeningSocket.Accept());
                 }
@@ -279,7 +279,7 @@ namespace Serenity.Web.Drivers
                 throw new ObjectDisposedException(this.GetType().FullName);
             }
 
-            this.status = WebDriverStatus.Stopped;
+            this.status = OperationStatus.Stopped;
         }
         /// <summary>
         /// When overridden in a derived class, sends the supplied response to
@@ -405,7 +405,7 @@ namespace Serenity.Web.Drivers
         {
             get
             {
-                if (this.status >= WebDriverStatus.Initialized)
+                if (this.status >= OperationStatus.Initialized)
                 {
                     return true;
                 }
@@ -423,7 +423,7 @@ namespace Serenity.Web.Drivers
         {
             get
             {
-                if (this.status == WebDriverStatus.Started)
+                if (this.status == OperationStatus.Started)
                 {
                     return true;
                 }
@@ -441,7 +441,7 @@ namespace Serenity.Web.Drivers
         {
             get
             {
-                if (this.status == WebDriverStatus.Stopped)
+                if (this.status == OperationStatus.Stopped)
                 {
                     return true;
                 }
@@ -478,6 +478,20 @@ namespace Serenity.Web.Drivers
             }
         }
         /// <summary>
+        /// Gets the SerenityServer that the current WebDriver belongs to.
+        /// </summary>
+        public SerenityServer Server
+        {
+            get
+            {
+                return this.server;
+            }
+            internal set
+            {
+                this.server = value;
+            }
+        }
+        /// <summary>
         /// Gets the WebDriverSettings which determine the behaviour of the
         /// current WebDriver.
         /// </summary>
@@ -491,7 +505,7 @@ namespace Serenity.Web.Drivers
         /// <summary>
         /// Gets the status of the current WebDriver.
         /// </summary>
-        public WebDriverStatus Status
+        public OperationStatus Status
         {
             get
             {
@@ -502,17 +516,7 @@ namespace Serenity.Web.Drivers
                 this.status = value;
             }
         }
-        public SerenityServer Server
-        {
-            get
-            {
-                return this.server;
-            }
-            internal set
-            {
-                this.server = value;
-            }
-        }
+        
         #endregion
     }
 }

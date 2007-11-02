@@ -37,7 +37,6 @@ namespace Serenity
         private readonly DomainCollection domains = new DomainCollection();
         private readonly ResourceTree commonResources = new ResourceTree();
         private bool isCaseSensitive = false;
-        private bool turbo = true;
         private StringComparison stringComparison = StringComparison.Ordinal;
 		#endregion
         #region Methods - Private
@@ -70,31 +69,6 @@ namespace Serenity
             foreach (Module module in modules)
             {
                 this.ExtractResources(module);
-            }
-        }
-        private void UpdateStringComparison()
-        {
-            if (this.isCaseSensitive)
-            {
-                if (this.turbo)
-                {
-                    this.stringComparison = StringComparison.Ordinal;
-                }
-                else
-                {
-                    this.stringComparison = StringComparison.CurrentCulture;
-                }
-            }
-            else
-            {
-                if (this.turbo)
-                {
-                    this.stringComparison = StringComparison.OrdinalIgnoreCase;
-                }
-                else
-                {
-                    this.stringComparison = StringComparison.CurrentCultureIgnoreCase;
-                }
             }
         }
         #endregion
@@ -146,7 +120,14 @@ namespace Serenity
             set
             {
                 this.isCaseSensitive = value;
-                this.UpdateStringComparison();
+                if (this.isCaseSensitive)
+                {
+                    this.stringComparison = StringComparison.Ordinal;
+                }
+                else
+                {
+                    this.stringComparison = StringComparison.OrdinalIgnoreCase;
+                }
             }
         }
         public StringComparison StringComparison
@@ -154,18 +135,6 @@ namespace Serenity
             get
             {
                 return this.stringComparison;
-            }
-        }
-        public bool Turbo
-        {
-            get
-            {
-                return this.turbo;
-            }
-            set
-            {
-                this.turbo = value;
-                this.UpdateStringComparison();
             }
         }
 		#endregion
