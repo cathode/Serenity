@@ -39,8 +39,8 @@ namespace Serenity
         private bool isCaseSensitive = false;
         private StringComparison stringComparison = StringComparison.Ordinal;
 		#endregion
-        #region Methods - Private
-        private void ExtractResources(Domain domain)
+        #region Methods - Public
+        public void ExtractResources(Domain domain)
         {
             if (domain == null)
             {
@@ -49,22 +49,21 @@ namespace Serenity
 
             this.domains.Add(domain);
         }
-        private void ExtractResources(Module module)
+        public void ExtractResources(Module module)
         {
             if (module == null)
             {
                 throw new ArgumentNullException("module");
             }
-
         }
-        private void ExtractResources(IEnumerable<Domain> domains)
+        public void ExtractResources(IEnumerable<Domain> domains)
         {
             foreach (Domain domain in domains)
             {
                 this.ExtractResources(domain);
             }
         }
-        private void ExtractResources(IEnumerable<Module> modules)
+        public void ExtractResources(IEnumerable<Module> modules)
         {
             foreach (Module module in modules)
             {

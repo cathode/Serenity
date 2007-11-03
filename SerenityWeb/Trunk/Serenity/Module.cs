@@ -158,6 +158,16 @@ namespace Serenity
                 return this.name;
             }
         }
+        public IEnumerable<Page> Pages
+        {
+            get
+            {
+                foreach (Page page in this.pages.Values)
+                {
+                    yield return page;
+                }
+            }
+        }
         public string ResourceNamespace
         {
             get

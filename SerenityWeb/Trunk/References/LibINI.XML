@@ -537,11 +537,30 @@
             </summary>
             <param name="filePaths">An array of file paths.</param>
         </member>
+        <member name="M:LibINI.IniFile.Normalize">
+            <summary>
+            Normalizes the current IniFile. This is a recursive operation that
+            will cause all child IniSection and IniEntry objects to reference
+            the current IniFile as their owner, instead of any previous owner.
+            </summary>
+        </member>
+        <member name="M:LibINI.IniFile.Normalize(System.Boolean)">
+            <summary>
+            Normalizes the current IniFile. This is a recursive operation that
+            will cause all child IniSection and IniEntry objects to reference
+            the current IniFile as their owner, instead of any previous owner.
+            </summary>
+            <param name="exclusive">Indicates that, in the event an IniSection
+            or IniEntry being normalized is marked as owned by an IniFile that
+            is not the current IniFile, it should be removed from that IniFile.
+            </param>
+        </member>
         <member name="M:LibINI.IniFile.RemoveEntry(LibINI.IniSection,LibINI.IniEntry)">
             <summary>
             Removes an IniEntry from a specified IniSection.
             </summary>
-            <param name="section">The IniSection to remove the IniEntry from.</param>
+            <param name="section">The IniSection to remove the IniEntry from.
+            </param>
             <param name="entry">The IniEntry to remove.</param>
             <exception cref="T:System.ArgumentNullException">Thrown if either the
             section or entry paramaters are passed as null.</exception>
@@ -550,7 +569,8 @@
             <summary>
             Removes an IniEntry from a specified IniSection.
             </summary>
-            <param name="section">The IniSection to remove the IniEntry from.</param>
+            <param name="section">The IniSection to remove the IniEntry from.
+            </param>
             <param name="entry">The name of the IniEntry to remove.</param>
             <exception cref="T:System.ArgumentNullException">Thrown if either the
             section or entry paramaters are passed as null.</exception>
@@ -559,7 +579,8 @@
             <summary>
             Removes an IniEntry from a specified IniSection.
             </summary>
-            <param name="section">The name of the IniSection to remove the IniEntry from.</param>
+            <param name="section">The name of the IniSection to remove the
+            IniEntry from.</param>
             <param name="entry">The IniEntry to remove.</param>
             <exception cref="T:System.ArgumentNullException">Thrown if either the
             section or entry paramaters are passed as null.</exception>
@@ -568,7 +589,8 @@
             <summary>
             Removes an IniEntry from a specified IniSection.
             </summary>
-            <param name="section">The name of the IniSection to remove the IniEntry from.</param>
+            <param name="section">The name of the IniSection to remove the
+            IniEntry from.</param>
             <param name="entry">The name of the IniEntry to remove.</param>
             <exception cref="T:System.ArgumentNullException">Thrown if either the
             section or entry paramaters are passed as null.</exception>
@@ -620,7 +642,8 @@
         </member>
         <member name="P:LibINI.IniFile.IsCaseSensitive">
             <summary>
-            Gets or sets a value that determines if section and entry names are case-sensitive.
+            Gets or sets a value that determines if section and entry names are
+            case-sensitive.
             </summary>
         </member>
         <member name="P:LibINI.IniFile.EntryCount">
@@ -632,17 +655,20 @@
         <member name="P:LibINI.IniFile.DefaultSection">
             <summary>
             Gets a pseudo-IniSection that is used to hold any IniEntry objects
-            that are not actually placed in an IniSection. (Used to support legacy INI.)
+            that are not actually placed in an IniSection. (Used to support
+            legacy INI.)
             </summary>
         </member>
         <member name="P:LibINI.IniFile.SectionCount">
             <summary>
-            Gets the total number of IniSections contained in the current IniFile.
+            Gets the total number of IniSections contained in the current
+            IniFile.
             </summary>
         </member>
         <member name="P:LibINI.IniFile.SectionNames">
             <summary>
-            Gets a string array containing the names of all the sections in the current IniFile.
+            Gets a string array containing the names of all the sections in the
+            current IniFile.
             </summary>
         </member>
         <member name="T:LibINI.IO.IniEntryDuplicationHandlingMethod">

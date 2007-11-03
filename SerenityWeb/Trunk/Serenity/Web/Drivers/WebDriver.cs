@@ -70,7 +70,7 @@ namespace Serenity.Web.Drivers
                 Socket socket = workSocket.EndAccept(ar);
                 workSocket.BeginAccept(new AsyncCallback(this.AcceptCallback), state);
 
-                //this.HandleAcceptedSocket(socket);
+                this.HandleAcceptedConnection(socket);
             }
             else
             {
@@ -516,7 +516,6 @@ namespace Serenity.Web.Drivers
                 this.status = value;
             }
         }
-        
         #endregion
     }
 }
