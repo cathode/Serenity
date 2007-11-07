@@ -25,13 +25,29 @@ namespace Serenity.Web
 		/// <param name="subtype">The secondary type of the new MimeType.</param>
 		public MimeType(string type, string subtype)
 		{
-			//WS: add input-validation here.
+            if (type == null)
+            {
+                throw new ArgumentNullException("type");
+            }
+            else if (type == string.Empty)
+            {
+                throw new ArgumentException("Argument 'type' cannot be empty.", "type");
+            }
+            else if (subtype == null)
+            {
+                throw new ArgumentNullException("subtype");
+            }
+            else if (subtype == string.Empty)
+            {
+                throw new ArgumentException("Argument 'subtype' cannot be empty.", "subtype");
+            }
+
 			this.type = type;
 			this.subtype = subtype;
 		}
 		#endregion
 		#region Fields - Private
-		private readonly string subtype;
+        private readonly string subtype;
 		private readonly string type;
 		#endregion
         #region Fields - Public
@@ -57,7 +73,23 @@ namespace Serenity.Web
         /// <returns></returns>
         public static bool Equals(MimeType a, MimeType b, StringComparison comparison)
         {
-            if (a.type.Equals(b.type, comparison))
+            if (a.type == null)
+            {
+                throw new ArgumentException("Field 'type' of argument 'a' cannot be null.", "a");
+            }
+            else if (a.subtype == null)
+            {
+                throw new ArgumentException("Field 'subtype' of argument 'a' cannot be null.", "a");
+            }
+            else if (b.type == null)
+            {
+                throw new ArgumentException("Field 'type' of argument 'b' cannot be null.", "b");
+            }
+            else if (b.subtype == null)
+            {
+                throw new ArgumentException("Field 'subtype' of argument 'b' cannot be null.", "b");
+            }
+            else if (a.type.Equals(b.type, comparison))
             {
                 if (a.subtype.Equals(b.subtype, comparison))
                 {
@@ -190,7 +222,6 @@ namespace Serenity.Web
 				return this.type;
 			}
 		}
-
 		/// <summary>
 		/// application/EDI-X12
 		/// </summary>

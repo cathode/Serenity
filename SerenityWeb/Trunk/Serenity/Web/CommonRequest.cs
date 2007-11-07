@@ -31,7 +31,7 @@ namespace Serenity.Web
         #region Fields - Private
         private Encoding contentEncoding;
         private int contentLength;
-        private MimeType contentType;
+        private MimeType contentType = MimeType.Default;
         private CommonContext context;
         private CookieCollection cookies;
         private bool hasEntityBody;
