@@ -45,6 +45,10 @@ namespace Serenity
                 return ResourceGrouping.Unspecified;
             }
         }
+        /// <summary>
+        /// Gets a value that indicates if the size in bytes of the current
+        /// Resource is known or can be determined.
+        /// </summary>
         public virtual bool IsSizeKnown
         {
             get
@@ -80,6 +84,9 @@ namespace Serenity
                 this.name = value;
             }
 		}
+        /// <summary>
+        /// Gets the SerenityServer instance that owns the current Resource.
+        /// </summary>
         public SerenityServer Server
         {
             get
@@ -91,6 +98,10 @@ namespace Serenity
                 this.server = value;
             }
         }
+        /// <summary>
+        /// When overridden in a derived class, gets the size in bytes of the
+        /// content of the current Resource.
+        /// </summary>
         public virtual int Size
         {
             get

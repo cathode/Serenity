@@ -44,6 +44,9 @@ namespace Serenity.Web
         private bool supportsPeerInfo;
         #endregion
         #region Properties - Public
+        /// <summary>
+        /// Gets or sets the Domain that the current CommonContext falls under.
+        /// </summary>
         public Domain Domain
         {
             get
@@ -66,8 +69,8 @@ namespace Serenity.Web
             }
         }    
         /// <summary>
-        /// Gets or sets a value indicating if the headers contained in the current CommonContext's
-        /// CommonResponse have been sent to the client yet.
+        /// Gets or sets a value indicating if the headers contained in the
+        /// response portion have been sent to the client yet.
         /// </summary>
         public bool HeadersWritten
         {

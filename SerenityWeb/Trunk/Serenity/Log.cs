@@ -53,9 +53,16 @@ namespace Serenity
     {
         //TODO: re-implement log class as a non-static class where each Log object represents an individual logfile.
         #region Constructors - Private
+        /// <summary>
+        /// Initializes a new instance of the Log class, using the standard output stream of the console.
+        /// </summary>
         public Log() : this(Console.OpenStandardOutput())
         {
         }
+        /// <summary>
+        /// Initializes a new instance of the Log class, using the specified outputStream.
+        /// </summary>
+        /// <param name="outputStream">A stream to which log messages will be written to.</param>
         public Log(Stream outputStream)
         {
             if (outputStream == null)
@@ -77,6 +84,9 @@ namespace Serenity
         private DateTime lastWrite = DateTime.Now;
         #endregion
         #region Methods - Public
+        /// <summary>
+        /// Releases unmanaged resources used by the current Log.
+        /// </summary>
         public void Dispose()
         {
             this.outputStream.Dispose();
@@ -89,6 +99,15 @@ namespace Serenity
         /// <param name="level">A LogMessageLevel object describing the severity of the message.</param>
         public void Write(string message, LogMessageLevel level)
         {
+            if (message == null)
+            {
+                throw new ArgumentNullException("message");
+            }
+            else if (message == string.Empty)
+            {
+                throw new ArgumentException("Argument 'message' cannot be empty.", "message");
+            }
+
             lock (this)
             {
                 this.messages.Enqueue(new LogMessage(message, level));
@@ -107,17 +126,11 @@ namespace Serenity
             }
         }
         #endregion
-        #region Properties - Public
-        public TimeSpan MaxWait
-        {
-            get
-            {
-                return this.maxWait;
-            }
-        }
-        #endregion
     }
-    public class LogMessage
+    /// <summary>
+    /// Represents an individual log message.
+    /// </summary>
+    internal class LogMessage
     {
         #region Constructors - Public
         public LogMessage(string message, LogMessageLevel level)
@@ -127,6 +140,7 @@ namespace Serenity
             
             this.timestamp = DateTime.UtcNow;
 
+            // The assembly name is only retrieved if the message is more important than Info.
             if (level > LogMessageLevel.Info)
             {
                 this.assemblyName = Path.GetFileName(Assembly.GetCallingAssembly().Location);

@@ -85,7 +85,7 @@ namespace Serenity.Web.Drivers
             }
         }
         /// <summary>
-        /// Provides a callback method to use for an async socket disconnection.
+        /// Provides a callback method to use for an async disconnect operation.
         /// </summary>
         /// <param name="ar"></param>
         protected virtual void DisconnectCallback(IAsyncResult ar)
@@ -110,6 +110,10 @@ namespace Serenity.Web.Drivers
         protected virtual void Dispose(bool disposing)
         {
         }
+        /// <summary>
+        /// Handles a connection that has been accepted.
+        /// </summary>
+        /// <param name="socketObject"></param>
         protected void HandleAcceptedConnection(object socketObject)
         {
             if (socketObject is Socket)
@@ -121,6 +125,10 @@ namespace Serenity.Web.Drivers
                 throw new ArgumentException("socketObject must be of type System.Net.Sockets.Socket!", "socketObject");
             }
         }
+        /// <summary>
+        /// Handles a connection that has been accepted.
+        /// </summary>
+        /// <param name="socket"></param>
         protected virtual void HandleAcceptedConnection(Socket socket)
         {
             CommonContext context = this.RecieveContext(socket);
@@ -137,6 +145,10 @@ namespace Serenity.Web.Drivers
             socket.Disconnect(false);
             socket.Close();
         }
+        /// <summary>
+        /// Provides a callback method to use for an async recieve operation.
+        /// </summary>
+        /// <param name="ar"></param>
         protected virtual void RecieveCallback(IAsyncResult ar)
         {
             if (this.IsDisposed)
@@ -150,6 +162,10 @@ namespace Serenity.Web.Drivers
                 state.WorkSocket.EndReceive(ar);
             }
         }
+        /// <summary>
+        /// Provides a callback method to use for an async send operation.
+        /// </summary>
+        /// <param name="ar"></param>
         protected virtual void SendCallback(IAsyncResult ar)
         {
             if (this.IsDisposed)
@@ -165,6 +181,13 @@ namespace Serenity.Web.Drivers
         }
         #endregion
         #region Methods - Public
+        /// <summary>
+        /// Begins an asynchronous context recieve operation.
+        /// </summary>
+        /// <param name="socket">The socket to recieve the context from.</param>
+        /// <param name="callback">The System.AsyncCallback delegate.</param>
+        /// <param name="state"></param>
+        /// <returns></returns>
         public virtual IAsyncResult BeginRecieveContext(Socket socket, AsyncCallback callback, object state)
         {
             throw new NotSupportedException();
@@ -317,6 +340,10 @@ namespace Serenity.Web.Drivers
                 return this.disconnectDelegate;
             }
         }
+        /// <summary>
+        /// Gets or sets the socket that the current WebDriver uses to listen
+        /// for incoming connections on.
+        /// </summary>
         protected Socket ListeningSocket
         {
             get
@@ -325,6 +352,11 @@ namespace Serenity.Web.Drivers
             }
             set
             {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
+
                 this.listeningSocket = value;
             }
         }
