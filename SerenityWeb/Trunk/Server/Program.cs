@@ -27,6 +27,8 @@ namespace Server
 			Console.WriteLine("{0}, v{1}\r\n{2} ({3})\r\n",
 				SerenityInfo.Name, SerenityInfo.Version, SerenityInfo.Copyright, "http://serenityproject.net/");
 
+            SerenityServer server = new SerenityServer();
+
             //Make sure the server has the correct folders to use,
             //if they don't exist we need to create them.
             foreach (SpecialFolder sf in Program.RecurseEnum<SpecialFolder>())
@@ -35,6 +37,7 @@ namespace Server
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
+                    server.OperationLog.Write("Creating " + dir, LogMessageLevel.Info);
                 }
             }
 
@@ -42,7 +45,6 @@ namespace Server
 			ServerConfig config = new ServerConfig();
 			config.Read("Configuration/Serenity.ini");
 
-            SerenityServer server = new SerenityServer();
             
 
 			foreach (KeyValuePair<string, string> pair in config.Modules)
@@ -51,10 +53,10 @@ namespace Server
 				string path = (pair.Value.StartsWith("@")) ? Path.GetFullPath("./Modules/" + pair.Value.TrimStart('@')) : pair.Value;
 			}
 
-			//Log.Write(string.Format("Loaded: {0} domains, {1} modules, {2} themes.",
-			//	DomainSettings.Count,
-			//	0,
-			//	0), LogMessageLevel.Info);
+			server.OperationLog.Write(string.Format("Loaded: {0} domains, {1} modules, {2} themes.",
+				DomainSettings.Count,
+				0,
+				0), LogMessageLevel.Info);
 			WebDriverSettings driverSettings = new WebDriverSettings();
             driverSettings.Ports = config.Ports;
 

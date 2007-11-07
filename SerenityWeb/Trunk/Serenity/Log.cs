@@ -53,12 +53,20 @@ namespace Serenity
     {
         //TODO: re-implement log class as a non-static class where each Log object represents an individual logfile.
         #region Constructors - Private
-        public Log()
+        public Log() : this(Console.OpenStandardOutput())
         {
-            this.outputStream = Console.OpenStandardOutput();
         }
         public Log(Stream outputStream)
         {
+            if (outputStream == null)
+            {
+                throw new ArgumentNullException("outputStream");
+            }
+            else if (!outputStream.CanWrite)
+            {
+                throw new ArgumentException("Supplied outputStream must support writing.", "outputStream");
+            }
+
             this.outputStream = outputStream;
         }
         #endregion
@@ -72,6 +80,7 @@ namespace Serenity
         public void Dispose()
         {
             this.outputStream.Dispose();
+            GC.SuppressFinalize(this);
         }
         /// <summary>
         /// Logs a message.
@@ -86,7 +95,6 @@ namespace Serenity
 
                 if (DateTime.Now - this.lastWrite > this.maxWait)
                 {
-
                     LogMessage logMessage;
                     while (this.messages.Count > 0)
                     {
