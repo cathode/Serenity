@@ -42,7 +42,7 @@ namespace Server
 			ServerConfig config = new ServerConfig();
 			config.Read("Configuration/Serenity.ini");
 
-            SerenityServer server = new SerenityServer();
+            SerenityApplication server = new SerenityApplication();
 
 			foreach (KeyValuePair<string, string> pair in config.Modules)
 			{

@@ -47,7 +47,7 @@ namespace Serenity.Web.Drivers
         private Socket listeningSocket;
         private readonly AsyncCallback recieveDelegate;
         private readonly AsyncCallback sendDelegate;
-        private SerenityServer server;
+        private SerenityApplication server;
         private WebDriverSettings settings;
         private OperationStatus status = OperationStatus.None;
         #endregion
@@ -487,7 +487,7 @@ namespace Serenity.Web.Drivers
         /// <summary>
         /// Gets the SerenityServer that the current WebDriver belongs to.
         /// </summary>
-        public SerenityServer Server
+        public SerenityApplication Server
         {
             get
             {

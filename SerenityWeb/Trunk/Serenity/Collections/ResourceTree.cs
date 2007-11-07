@@ -29,7 +29,7 @@ namespace Serenity.Collections
         #endregion
         #region Fields - Private
         private ResourceTreeBranch trunk;
-        private SerenityServer server;
+        private SerenityApplication server;
         #endregion
         #region Methods - Public
         /// <summary>
@@ -76,7 +76,7 @@ namespace Serenity.Collections
                 return this.trunk;
             }
         }
-        public SerenityServer Server
+        public SerenityApplication Server
         {
             get
             {

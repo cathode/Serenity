@@ -36,6 +36,10 @@ namespace Serenity.Web
 		public readonly string Message;
 		#endregion
 		#region Methods - Public
+        public override int GetHashCode()
+        {
+            return this.ToString().GetHashCode() ^ 0x5d1f609c;
+        }
 		public override string ToString()
 		{
 			return this.Code.ToString() + " " + this.Message;

@@ -39,52 +39,6 @@ namespace Serenity.Web
         #endregion
         #region Methods - Public
         /// <summary>
-        /// Determines if the current MimeType is equal to another object.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
-        {
-            if ((obj != null) && (obj.GetType().TypeHandle.Equals(typeof(MimeType).TypeHandle)))
-            {
-                return MimeType.Equals(this, (MimeType)obj, MimeType.DefaultComparison);
-            }
-            return false;
-        }
-        /// <summary>
-        /// Determines if the current MimeType is equal to another object.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="comparison"></param>
-        /// <returns></returns>
-        public bool Equals(object obj, StringComparison comparison)
-        {
-            if ((obj != null) && (obj.GetType().TypeHandle.Equals(typeof(MimeType).TypeHandle)))
-            {
-                return MimeType.Equals(this, (MimeType)obj, comparison);
-            }
-            return false;
-        }
-        /// <summary>
-        /// Determines if the current MimeType is equal to another MimeType.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public bool Equals(MimeType value)
-        {
-            return MimeType.Equals(this, value, MimeType.DefaultComparison);
-        }
-        /// <summary>
-        /// Determines if the current MimeType is equal to another MimeType.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="comparison"></param>
-        /// <returns></returns>
-        public bool Equals(MimeType value, StringComparison comparison)
-        {
-            return MimeType.Equals(this, value, comparison);
-        }
-        /// <summary>
         /// Determines if two MimeType objects are equal to each other.
         /// </summary>
         /// <param name="a"></param>
@@ -112,6 +66,52 @@ namespace Serenity.Web
             }
             return false;
         }
+        /// <summary>
+        /// Determines if the current MimeType is equal to another MimeType.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool Equals(MimeType value)
+        {
+            return MimeType.Equals(this, value, MimeType.DefaultComparison);
+        }
+        /// <summary>
+        /// Determines if the current MimeType is equal to another MimeType.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="comparison"></param>
+        /// <returns></returns>
+        public bool Equals(MimeType value, StringComparison comparison)
+        {
+            return MimeType.Equals(this, value, comparison);
+        }
+        /// <summary>
+        /// Determines if the current MimeType is equal to another object.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            if ((obj != null) && (obj.GetType().TypeHandle.Equals(typeof(MimeType).TypeHandle)))
+            {
+                return MimeType.Equals(this, (MimeType)obj, MimeType.DefaultComparison);
+            }
+            return false;
+        }
+        /// <summary>
+        /// Determines if the current MimeType is equal to another object.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="comparison"></param>
+        /// <returns></returns>
+        public bool Equals(object obj, StringComparison comparison)
+        {
+            if ((obj != null) && (obj.GetType().TypeHandle.Equals(typeof(MimeType).TypeHandle)))
+            {
+                return MimeType.Equals(this, (MimeType)obj, comparison);
+            }
+            return false;
+        }
 		/// <summary>
 		/// Creates a new MimeType given a supplied string in the format:
         /// "type/subtype"
@@ -136,7 +136,7 @@ namespace Serenity.Web
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return this.type.GetHashCode() ^ this.subtype.GetHashCode();
+            return this.ToString().GetHashCode() ^ 0x0523f3cd;
         }
 		/// <summary>
 		/// Overridden. Returns a string representation of the current MimeType.
@@ -147,16 +147,7 @@ namespace Serenity.Web
 			return this.type + "/" + this.subtype;
 		}
 		#endregion
-        /// <summary>
-        /// Compares two MimeType objects and determines if they are equal.
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static bool operator ==(MimeType a, MimeType b)
-        {
-            return MimeType.Equals(a, b, MimeType.DefaultComparison);
-        }
+        #region Operators - Public
         /// <summary>
         /// Compares two MimeType objects and determines if they are inequal.
         /// </summary>
@@ -167,8 +158,19 @@ namespace Serenity.Web
         {
             return !MimeType.Equals(a, b, MimeType.DefaultComparison);
         }
-		#region Properties - Public
-		/// <summary>
+        /// <summary>
+        /// Compares two MimeType objects and determines if they are equal.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator ==(MimeType a, MimeType b)
+        {
+            return MimeType.Equals(a, b, MimeType.DefaultComparison);
+        }
+        #endregion
+        #region Properties - Public
+        /// <summary>
 		/// Gets the secondary type associated with the current MimeType.
 		/// </summary>
 		public string Subtype

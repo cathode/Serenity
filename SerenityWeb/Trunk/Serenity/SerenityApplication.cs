@@ -19,13 +19,13 @@ namespace Serenity
     /// <summary>
     /// Provides a structured representation of a running Serenity server instance.
     /// </summary>
-	public sealed class SerenityServer
+	public sealed class SerenityApplication
     {
         #region Constructors - Public
         /// <summary>
         /// Initializes a new instance of the SerenityServer class.
         /// </summary>
-        public SerenityServer()
+        public SerenityApplication()
         {
             this.contextHandler = new ContextHandler(this);
             this.driverPool = new DriverPool(this);
