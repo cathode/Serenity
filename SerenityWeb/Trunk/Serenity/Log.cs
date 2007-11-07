@@ -16,36 +16,6 @@ using System.Threading;
 namespace Serenity
 {
     /// <summary>
-    /// Used to indicate the severity or type of a log message.
-    /// </summary>
-    public enum LogMessageLevel
-    {
-        /// <summary>
-        /// Indicates that the message is only useful for debugging purposes,
-        /// the message is only useful to developers.
-        /// </summary>
-        Debug,
-        /// <summary>
-        /// Indicates that the message contains informational content about
-        /// something that has taken place.
-        /// </summary>
-        Info,
-        /// <summary>
-        /// Indicates that the message might be related to an issue with the
-        /// current behaviour of the server.
-        /// </summary>
-        Notice,
-        /// <summary>
-        /// Indicates that the message is informing the reader about unstable
-        /// or unsafe behaviour or configuration of the server.
-        /// </summary>
-        Warning,
-        /// <summary>
-        /// Indicates that the message describes a critical problem that has taken place.
-        /// </summary>
-        Error,
-    }
-    /// <summary>
     /// Provides a method which allows other parts of Serenity or
     /// loaded modules to write messages to a central log file.
     /// </summary>
@@ -78,10 +48,11 @@ namespace Serenity
         }
         #endregion
         #region Fields - Private
-        private Stream outputStream;
-        private Queue<LogMessage> messages = new Queue<LogMessage>();
-        private TimeSpan maxWait = TimeSpan.FromMilliseconds(250);
+        private bool isDisposed = false;
         private DateTime lastWrite = DateTime.Now;
+        private TimeSpan maxWait = TimeSpan.FromMilliseconds(250);
+        private Queue<LogMessage> messages = new Queue<LogMessage>();
+        private Stream outputStream;
         #endregion
         #region Methods - Public
         /// <summary>
@@ -90,6 +61,9 @@ namespace Serenity
         public void Dispose()
         {
             this.outputStream.Dispose();
+            this.outputStream = null;
+            this.messages = null;
+            this.isDisposed = true;
             GC.SuppressFinalize(this);
         }
         /// <summary>
@@ -99,7 +73,11 @@ namespace Serenity
         /// <param name="level">A LogMessageLevel object describing the severity of the message.</param>
         public void Write(string message, LogMessageLevel level)
         {
-            if (message == null)
+            if (this.isDisposed)
+            {
+                throw new ObjectDisposedException(this.GetType().FullName);
+            }
+            else if (message == null)
             {
                 throw new ArgumentNullException("message");
             }

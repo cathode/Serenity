@@ -81,6 +81,7 @@
     <Compile Include="DirectoryResource.cs" />
     <Compile Include="Domain.cs" />
     <Compile Include="FileTypeEntry.cs" />
+    <Compile Include="LogMessageLevel.cs" />
     <Compile Include="Pages\IndexerPage.cs" />
     <Compile Include="ResourceGrouping.cs" />
     <Compile Include="SerenityServer.cs" />
@@ -109,7 +110,7 @@
     <Compile Include="Web\Drivers\WebDriverState.cs" />
     <Compile Include="Web\ErrorHandler.cs" />
     <Compile Include="Web\MimeType.cs" />
-    <Compile Include="Web\RequestDataOrigin.cs" />
+    <Compile Include="Web\RequestMethod.cs" />
     <Compile Include="Web\Services\WebMethodAttribute.cs" />
     <Compile Include="Web\Services\WebService.cs" />
     <Compile Include="Web\StatusCode.cs" />

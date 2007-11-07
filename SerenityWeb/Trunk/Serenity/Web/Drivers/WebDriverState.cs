@@ -71,10 +71,16 @@ namespace Serenity.Web.Drivers
             }
             set
             {
-                if (value != null && value.Length >= WebDriverState.MinBufferSize && value.Length <= WebDriverState.MaxBufferSize)
+                if (value == null)
                 {
-                    this.buffer = value;
+                    throw new ArgumentNullException("value");
                 }
+                else if (value.Length > WebDriverState.MaxBufferSize || value.Length < WebDriverState.MinBufferSize)
+                {
+                    throw new ArgumentOutOfRangeException("Argument 'value' must be a byte[] with a length between "
+                        + WebDriverState.MinBufferSize + " and " + WebDriverState.MaxBufferSize + ".", "value");
+                }
+                this.buffer = value;
             }
         }
         /// <summary>

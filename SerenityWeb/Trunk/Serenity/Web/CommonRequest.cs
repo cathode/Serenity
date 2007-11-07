@@ -42,7 +42,7 @@ namespace Serenity.Web
         private bool isSecureConnection;
         private bool keepAlive;
         private IPEndPoint localEndPoint;
-        private string method;
+        private RequestMethod method;
         private RequestDataCollection requestData = new RequestDataCollection();
         private string rawUrl;
         private IPEndPoint remoteEndPoint;
@@ -204,7 +204,7 @@ namespace Serenity.Web
                 this.localEndPoint = value;
             }
         }
-        public string Method
+        public RequestMethod Method
         {
             get
             {

@@ -13,37 +13,46 @@ using System.Text;
 
 namespace Serenity.Web
 {
-	/// <summary>
-	/// Represents a collection of RequestDataStreams that are associated with an incoming or outgoing request.
-	/// </summary>
-	public sealed class RequestDataCollection : KeyedCollection<string, RequestDataStream>
-	{
-		#region Methods - Public
-		/// <summary>
-		/// Creates and adds a new RequestDataStream to the current RequestDataCollection.
-		/// </summary>
-		/// <param name="name">The name of the new stream.</param>
-		/// <param name="data">The data to populate the new stream with.</param>
-		/// <returns>The created RequestDataStream.</returns>
-		public RequestDataStream AddDataStream(string name, byte[] data)
-		{
-			if (!this.Contains(name))
-			{
-				RequestDataStream stream = new RequestDataStream(name, data);
-				this.Add(stream);
-				return stream;
-			}
-			else
-			{
-				return null;
-			}
-		}
-		#endregion
-		#region Methods - Protected
-		protected override string GetKeyForItem(RequestDataStream item)
-		{
-			return item.Name;
-		}
-		#endregion
-	}
+    /// <summary>
+    /// Represents a collection of RequestDataStreams that are associated with an incoming or outgoing request.
+    /// </summary>
+    public sealed class RequestDataCollection : KeyedCollection<string, RequestDataStream>
+    {
+        #region Methods - Public
+        /// <summary>
+        /// Creates and adds a new RequestDataStream to the current RequestDataCollection.
+        /// </summary>
+        /// <param name="name">The name of the new stream.</param>
+        /// <param name="data">The data to populate the new stream with.</param>
+        /// <returns>The created RequestDataStream.</returns>
+        public RequestDataStream AddDataStream(string name, byte[] data)
+        {
+            if (name == null)
+            {
+                throw new ArgumentNullException("name");
+            }
+            else if (name == string.Empty)
+            {
+                throw new ArgumentException("Paramater 'name' cannot be empty.", "name");
+            }
+            else if (data == null)
+            {
+                throw new ArgumentNullException("data");
+            }
+            else if (this.Contains(name))
+            {
+                throw new InvalidOperationException("A RequestDataStream with the same name already exists in the current collection.");
+            }
+            RequestDataStream stream = new RequestDataStream(name, data);
+            this.Add(stream);
+            return stream;
+        }
+        #endregion
+        #region Methods - Protected
+        protected override string GetKeyForItem(RequestDataStream item)
+        {
+            return item.Name;
+        }
+        #endregion
+    }
 }

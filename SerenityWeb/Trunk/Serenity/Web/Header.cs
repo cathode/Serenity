@@ -18,13 +18,29 @@ namespace Serenity.Web
     public sealed class Header
     {
         #region Constructors - Public
-		/// <summary>
-		/// Initializes a new instance of the Header class.
-		/// </summary>
-		/// <param name="name"></param>
-		/// <param name="value"></param>
+        /// <summary>
+        /// Initializes a new instance of the Header class.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         public Header(string name, string value)
         {
+            if (name == null)
+            {
+                throw new ArgumentNullException("name");
+            }
+            else if (name == string.Empty)
+            {
+                throw new ArgumentException("Argument 'name' cannot be empty.", "name");
+            }
+            else if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+            else if (value == string.Empty)
+            {
+                throw new ArgumentException("Argument 'value' cannot be empty.", "value");
+            }
             this.name = name;
             this.primaryValue = value;
         }
@@ -32,7 +48,7 @@ namespace Serenity.Web
         #region Fields - Private
         private readonly string name;
         private bool complex = false;
-		private List<string> secondaryValues = new List<string>();
+        private List<string> secondaryValues = new List<string>();
         private string primaryValue;
         #endregion
         #region Indexers - Public
@@ -48,19 +64,13 @@ namespace Serenity.Web
         {
             get
             {
+                if (index > this.secondaryValues.Count || index < 0)
+                {
+                    throw new IndexOutOfRangeException("Index must be between 0 and "
+                        + this.secondaryValues.Count.ToString() + ".");
+                }
                 return this.secondaryValues[index];
             }
-        }
-        #endregion
-        #region Methods - Internal
-        /// <summary>
-        /// Adds the primary key and all secondary keys of the specified header to the secondary keys of the current header.
-        /// </summary>
-        /// <param name="header"></param>
-        internal void Add(Header header)
-        {
-            this.Add(header.PrimaryValue);
-            this.AddRange(header.SecondaryValues);
         }
         #endregion
         #region Methods - Public
@@ -70,6 +80,10 @@ namespace Serenity.Web
         /// <param name="value"></param>
         public void Add(string value)
         {
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
             this.secondaryValues.Add(value);
         }
         /// <summary>
@@ -78,9 +92,9 @@ namespace Serenity.Web
         /// <param name="values">The string array containing the secondary values to add.</param>
         public void AddRange(string[] values)
         {
-            if ((values == null) || (values.Length == 0))
+            if (values == null)
             {
-                return;
+                throw new ArgumentNullException("values");
             }
             this.complex = true;
             this.secondaryValues.AddRange(values);
@@ -129,6 +143,14 @@ namespace Serenity.Web
             }
             set
             {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
+                else if (value == string.Empty)
+                {
+                    throw new ArgumentException("Argument 'value' cannot be empty.", "value");
+                }
                 this.primaryValue = value;
             }
         }

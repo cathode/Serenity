@@ -33,6 +33,22 @@ namespace Serenity.Web
 		/// <returns>The newly created Header.</returns>
 		public Header Add(string name, string value)
 		{
+            if (name == null)
+            {
+                throw new ArgumentNullException("name");
+            }
+            else if (name == string.Empty)
+            {
+                throw new ArgumentException("Argument 'name' cannot be empty.", "name");
+            }
+            else if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+            else if (value == string.Empty)
+            {
+                throw new ArgumentException("Argument 'value' cannot be empty.", "value");
+            }
 			Header header = new Header(name, value);
 			this.Add(header);
 			return header;

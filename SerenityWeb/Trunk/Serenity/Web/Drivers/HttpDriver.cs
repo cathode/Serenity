@@ -43,7 +43,7 @@ namespace Serenity.Web.Drivers
                 {
                     string Name = Pair.Substring(0, Pair.IndexOf('='));
                     string Value = Pair.Substring(Pair.IndexOf('=') + 1);
-                    context.Request.RequestData.AddDataStream(Name, Encoding.UTF8.GetBytes(Value)).Origin = RequestDataOrigin.Get;
+                    context.Request.RequestData.AddDataStream(Name, Encoding.UTF8.GetBytes(Value)).Method = RequestMethod.GET;
                 }
             }
         }
@@ -103,34 +103,16 @@ namespace Serenity.Web.Drivers
                 //translates to 3 elements when split by the space char.
                 if (methodParts.Length == 3)
                 {
-                    //Get down to business.
-                    switch (methodParts[0])
+                    try
                     {
-                        //WS: Normal HTTP methods:
-                        case "HEAD":
-                        case "GET":
-                        case "POST":
-                        case "PUT":
-                        case "DELETE":
-                        case "TRACE":
-                        case "OPTIONS":
-                        case "CONNECT":
-                        //WS: WebDAV extension methods:
-                        case "PROPFIND":
-                        case "PROPPATCH":
-                        case "MKCOL":
-                        case "COPY":
-                        case "MOVE":
-                        case "LOCK":
-                        case "UNLOCK":
-                            context.Request.Method = methodParts[0];
-                            break;
-
-                        default:
-                            //WS: We need to generate an error here if the method is not supported.
-                            ErrorHandler.Handle(context, StatusCode.Http405MethodNotAllowed, methodParts[0]);
-                            return context;
+                        context.Request.Method = (RequestMethod)Enum.Parse(typeof(RequestMethod), methodParts[0]);
                     }
+                    catch
+                    {
+                        ErrorHandler.Handle(context, StatusCode.Http405MethodNotAllowed, methodParts[0]);
+                        return context;
+                    }
+                    
                     //Request URI is the "middle"
                     requestUriRaw = methodParts[1];
 
