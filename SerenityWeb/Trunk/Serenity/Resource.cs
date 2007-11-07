@@ -22,7 +22,7 @@ namespace Serenity
         #region Fields - Private
         private MimeType mimeType = MimeType.Default;
         private string name = string.Empty;
-        private SerenityApplication server;
+        private SerenityServer server;
         #endregion
         #region Methods - Public
         /// <summary>
@@ -80,7 +80,7 @@ namespace Serenity
                 this.name = value;
             }
 		}
-        public SerenityApplication Server
+        public SerenityServer Server
         {
             get
             {

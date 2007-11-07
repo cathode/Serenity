@@ -19,16 +19,21 @@ namespace Serenity.Web.Drivers
     public sealed class DriverPool
     {
         #region Constructors - Internal
-        internal DriverPool(SerenityApplication server)
+        internal DriverPool(SerenityServer server)
         {
             this.server = server;
         }
         #endregion
         #region Fields - Private
         private List<WebDriver> drivers = new List<WebDriver>();
-        private SerenityApplication server;
+        private SerenityServer server;
         #endregion
         #region Methods - Public
+        public void Add(WebDriver driver)
+        {
+            this.drivers.Add(driver);
+            driver.Server = this.server;
+        }
         public IEnumerable<WebDriver> GetDriversByProvider(string provider)
         {
             foreach (WebDriver driver in this.drivers)
@@ -51,7 +56,7 @@ namespace Serenity.Web.Drivers
         }
         #endregion
         #region Properties - Public
-        public SerenityApplication Server
+        public SerenityServer Server
         {
             get
             {

@@ -218,6 +218,8 @@ namespace Serenity.Web.Drivers
                         //Content-Length and Transfer-Encoding headers can't coexist.
                         if (hasContentLength && !hasTransferEncoding)
                         {
+                            Console.WriteLine(line);
+
                             if (context.Request.ContentType == MimeType.ApplicationXWwwFormUrlEncoded)
                             {
 

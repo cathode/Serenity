@@ -42,7 +42,8 @@ namespace Server
 			ServerConfig config = new ServerConfig();
 			config.Read("Configuration/Serenity.ini");
 
-            SerenityApplication server = new SerenityApplication();
+            SerenityServer server = new SerenityServer();
+            
 
 			foreach (KeyValuePair<string, string> pair in config.Modules)
 			{
@@ -50,20 +51,22 @@ namespace Server
 				string path = (pair.Value.StartsWith("@")) ? Path.GetFullPath("./Modules/" + pair.Value.TrimStart('@')) : pair.Value;
 			}
 
-			Log.Write(string.Format("Loaded: {0} domains, {1} modules, {2} themes.",
-				DomainSettings.Count,
-				0,
-				0), LogMessageLevel.Info);
+			//Log.Write(string.Format("Loaded: {0} domains, {1} modules, {2} themes.",
+			//	DomainSettings.Count,
+			//	0,
+			//	0), LogMessageLevel.Info);
 			WebDriverSettings driverSettings = new WebDriverSettings();
             driverSettings.Ports = config.Ports;
 
             WebDriver driver = new HttpDriver(driverSettings);
 
-			driver.Initialize();
+            server.DriverPool.Add(driver);
+
+            driver.Initialize();
 
 			if (!driver.Start())
 			{
-				Log.Write("Failed to start web driver", LogMessageLevel.Warning);
+				//Log.Write("Failed to start web driver", LogMessageLevel.Warning);
 			}
 			else
 			{
@@ -74,7 +77,7 @@ namespace Server
 				}
 			}
 
-			Log.Write("Server shutting down", LogMessageLevel.Info);
+			server.OperationLog.Write("Server shutting down", LogMessageLevel.Info);
 			Console.WriteLine("Press any key...");
 			Console.Read();
 		}

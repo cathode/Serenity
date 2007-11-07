@@ -19,24 +19,28 @@ namespace Serenity
     /// <summary>
     /// Provides a structured representation of a running Serenity server instance.
     /// </summary>
-	public sealed class SerenityApplication
+	public sealed class SerenityServer
     {
         #region Constructors - Public
         /// <summary>
         /// Initializes a new instance of the SerenityServer class.
         /// </summary>
-        public SerenityApplication()
+        public SerenityServer()
         {
             this.contextHandler = new ContextHandler(this);
             this.driverPool = new DriverPool(this);
+            this.OperationLog.Write("Server created.", LogMessageLevel.Debug);
         }
         #endregion
         #region Fields - Private
-        private ContextHandler contextHandler;
-        private readonly DriverPool driverPool;
-        private readonly DomainCollection domains = new DomainCollection();
+        private Log accessLog = new Log();
         private readonly ResourceTree commonResources = new ResourceTree();
+        private ContextHandler contextHandler;
+        private readonly DomainCollection domains = new DomainCollection();
+        private readonly DriverPool driverPool;
+        private Log errorLog = new Log();
         private bool isCaseSensitive = false;
+        private Log operationLog = new Log();
         private StringComparison stringComparison = StringComparison.Ordinal;
 		#endregion
         #region Methods - Public
@@ -72,6 +76,27 @@ namespace Serenity
         }
         #endregion
         #region Properties - Public
+        public Log AccessLog
+        {
+            get
+            {
+                return this.accessLog;
+            }
+        }
+        public Log ErrorLog
+        {
+            get
+            {
+                return this.errorLog;
+            }
+        }
+        public Log OperationLog
+        {
+            get
+            {
+                return this.operationLog;
+            }
+        }
         public ResourceTree CommonResources
         {
             get

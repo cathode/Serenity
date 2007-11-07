@@ -21,12 +21,12 @@ namespace Serenity.Web
     /// </summary>
     public class ContextHandler
     {
-        protected internal ContextHandler(SerenityApplication server)
+        protected internal ContextHandler(SerenityServer server)
         {
             this.server = server;
         }
         #region Fields - Private
-        private SerenityApplication server;
+        private SerenityServer server;
         #endregion
         #region Methods - Public
         /// <summary>
@@ -42,7 +42,7 @@ namespace Serenity.Web
         }
         #endregion
         #region Properties - Public
-        public SerenityApplication Server
+        public SerenityServer Server
         {
             get
             {
