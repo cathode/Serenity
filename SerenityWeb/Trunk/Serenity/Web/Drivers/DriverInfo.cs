@@ -30,8 +30,8 @@ namespace Serenity.Web.Drivers
         /// <summary>
         /// Initializes a new instance of the DriverInfo class.
         /// </summary>
-        /// <param name="className"></param>
-        /// <param name="typeName"></param>
+        /// <param name="provider"></param>
+        /// <param name="protocol"></param>
         /// <param name="uriSchema"></param>
         /// <param name="version"></param>
         public DriverInfo(string provider, string protocol, string uriSchema, Version version)

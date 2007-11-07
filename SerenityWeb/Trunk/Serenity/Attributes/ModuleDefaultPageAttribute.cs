@@ -22,7 +22,7 @@ namespace Serenity.Attributes
         /// <summary>
         /// Initializes a new instance of the ModuleDefaultPageAttribute class.
         /// </summary>
-        /// <param name="typeName"></param>
+        /// <param name="name"></param>
         public ModuleDefaultPageAttribute(string name)
         {
             this.Name = name;

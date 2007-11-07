@@ -35,7 +35,10 @@ namespace Serenity.Web
         /// <param name="context">The incoming CommonContext to be handled.</param>
         public virtual void HandleContext(CommonContext context)
         {
-           
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
         }
         #endregion
         #region Properties - Public

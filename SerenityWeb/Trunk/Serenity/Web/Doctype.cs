@@ -23,9 +23,9 @@ namespace Serenity.Web
         /// <summary>
         /// Initializes a new instance of the Doctype class
         /// </summary>
-        /// <param name="RootElement">Defines the root element that the current Doctype applies to.</param>
-        /// <param name="PublicIdentifier">Defines the public identifier of the current Doctype.</param>
-        /// <param name="SystemIdentifier">Defines the system identifier of the current Doctype.</param>
+        /// <param name="rootElement">Defines the root element that the current Doctype applies to.</param>
+        /// <param name="publicIdentifier">Defines the public identifier of the current Doctype.</param>
+        /// <param name="systemIdentifier">Defines the system identifier of the current Doctype.</param>
         public Doctype(string rootElement, string publicIdentifier, string systemIdentifier)
         {
             this.rootElement = rootElement;

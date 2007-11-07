@@ -33,6 +33,10 @@ namespace Serenity.Web.Drivers
         /// <param name="bufferSize"></param>
         public WebDriverState(int bufferSize)
         {
+            if (bufferSize > WebDriverState.MaxBufferSize || bufferSize < WebDriverState.MinBufferSize)
+            {
+                throw new ArgumentOutOfRangeException("Invalid value specified for bufferSize. Valid values are between " + WebDriverState.MinBufferSize.ToString() + " and " + WebDriverState.MaxBufferSize + ".");
+            }
             this.buffer = new byte[bufferSize];
         }
         #endregion

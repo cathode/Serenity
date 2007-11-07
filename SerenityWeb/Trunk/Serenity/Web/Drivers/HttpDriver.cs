@@ -25,7 +25,8 @@ namespace Serenity.Web.Drivers
         /// <summary>
         /// Initializes a new instance of the HttpDriver class.
         /// </summary>
-        /// <param name="contextHandler">The context handler to use for the operation of the new HttpDriver.</param>
+        /// <param name="settings">The WebDriverSettings which control the
+        /// behaviour of the new WebDriver instance.</param>
         public HttpDriver(WebDriverSettings settings)
             : base(settings)
         {
@@ -217,7 +218,10 @@ namespace Serenity.Web.Drivers
                         //Content-Length and Transfer-Encoding headers can't coexist.
                         if (hasContentLength && !hasTransferEncoding)
                         {
-                            ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
+                            if (context.Request.ContentType == MimeType.ApplicationXWwwFormUrlEncoded)
+                            {
+
+                            }
                         }
                         else if (hasTransferEncoding && !hasContentLength)
                         {

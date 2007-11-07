@@ -24,10 +24,14 @@ namespace Serenity.Web.Drivers
         /// <summary>
         /// Initializes a new instance of the WebDriver class.
         /// </summary>
-        /// <param name="contextHandler">A ContextHandler which handles
-        /// incoming CommonContext objects.</param>
+        /// <param name="settings">The WebDriverSettings which control the
+        /// behaviour of the new WebDriver instance.</param>
         protected WebDriver(WebDriverSettings settings)
         {
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
             this.settings = settings;
             this.acceptDelegate = new AsyncCallback(this.AcceptCallback);
             this.disconnectDelegate = new AsyncCallback(this.DisconnectCallback);
@@ -62,8 +66,11 @@ namespace Serenity.Web.Drivers
             {
                 throw new ObjectDisposedException(this.GetType().FullName);
             }
-
-            if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
+            else if (ar == null)
+            {
+                throw new ArgumentNullException("ar");
+            }
+            else if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
             {
                 WebDriverState state = (WebDriverState)ar.AsyncState;
                 Socket workSocket = state.WorkSocket;

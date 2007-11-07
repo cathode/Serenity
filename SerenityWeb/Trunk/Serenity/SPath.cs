@@ -103,6 +103,7 @@ namespace Serenity
 		/// </summary>
 		/// <param name="source"></param>
 		/// <param name="destination"></param>
+        /// <param name="mode"></param>
 		/// <returns></returns>
 		public static int CopyDirectory(string source, string destination, OverwriteMode mode)
 		{
