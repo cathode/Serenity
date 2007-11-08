@@ -26,9 +26,6 @@
 !system "xcopy /E /I Server\* ${SRCDIR}\Server"
 !system "xcopy /E /I system\* ${SRCDIR}\system"
 !system "mt -manifest Server\Server.exe.manifest -outputresource:${BINDIR}\Server.exe;#1"
-!system "sn -Ra ${BINDIR}\Serenity.dll ${KEYFILE}"
-!system "sn -Ra ${BINDIR}\Server.exe ${KEYFILE}"
-!system "sn -Ra ${BINDIR}\Modules\system.dll ${KEYFILE}"
 !system "7z a -t7z -mx=7 -ms=on ${PRODUCT}-${VERSION}-src.7z -r ${SRCDIR}\* -x!*.user -x!bin -x!obj -x!.svn"
 !system "7z a -t7z -mx=7 -ms=on ${PRODUCT}-${VERSION}-bin.7z -r ${BINDIR}\* -x!.svn"
 
