@@ -201,7 +201,7 @@
     <Content Include="Themes\blueish\stylesheet.css" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="LibINI, Version=1.5.1.0, Culture=neutral, PublicKeyToken=aafe07b9ddf0a2a4, processorArchitecture=MSIL">
+    <Reference Include="LibINI, Version=1.5.5.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\LibINI.dll</HintPath>
     </Reference>
