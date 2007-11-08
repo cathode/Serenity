@@ -36,7 +36,6 @@ namespace Serenity.Web
         private CookieCollection cookies;
         private bool hasEntityBody;
         private HeaderCollection headers = new HeaderCollection();
-        private Stream inputStream;
         private bool isAuthenticated;
         private bool isLocal;
         private bool isSecureConnection;
@@ -44,6 +43,7 @@ namespace Serenity.Web
         private IPEndPoint localEndPoint;
         private RequestMethod method;
         private RequestDataCollection requestData = new RequestDataCollection();
+        private string rawRequest;
         private string rawUrl;
         private IPEndPoint remoteEndPoint;
         private Uri url = new Uri("http://localhost/");
@@ -107,7 +107,7 @@ namespace Serenity.Web
             {
                 return this.cookies;
             }
-            internal set
+            set
             {
                 this.cookies = value;
             }
@@ -133,21 +133,6 @@ namespace Serenity.Web
             {
                 return this.headers;
             }
-            internal set
-            {
-                this.headers = value;
-            }
-        }
-        public Stream InputStream
-        {
-            get
-            {
-                return this.inputStream;
-            }
-            internal set
-            {
-                this.inputStream = value;
-            }
         }
         public bool IsAuthenticated
         {
@@ -155,7 +140,7 @@ namespace Serenity.Web
             {
                 return this.isAuthenticated;
             }
-            internal set
+            set
             {
                 this.isAuthenticated = value;
             }
@@ -166,7 +151,7 @@ namespace Serenity.Web
             {
                 return this.isLocal;
             }
-            internal set
+            set
             {
                 this.isLocal = value;
             }
@@ -177,7 +162,7 @@ namespace Serenity.Web
             {
                 return this.isSecureConnection;
             }
-            internal set
+            set
             {
                 this.isSecureConnection = value;
             }
@@ -188,7 +173,7 @@ namespace Serenity.Web
             {
                 return this.keepAlive;
             }
-            internal set
+            set
             {
                 this.keepAlive = value;
             }
@@ -199,7 +184,7 @@ namespace Serenity.Web
             {
                 return this.localEndPoint;
             }
-            internal set
+            set
             {
                 this.localEndPoint = value;
             }
@@ -210,9 +195,20 @@ namespace Serenity.Web
             {
                 return this.method;
             }
-            internal set
+            set
             {
                 this.method = value;
+            }
+        }
+        public string RawRequest
+        {
+            get
+            {
+                return this.rawRequest;
+            }
+            set
+            {
+                this.rawRequest = value;
             }
         }
         public string RawUrl
@@ -221,11 +217,12 @@ namespace Serenity.Web
             {
                 return this.rawUrl;
             }
-            internal set
+            set
             {
                 this.rawUrl = value;
             }
         }
+        
         public Uri Referrer
         {
             get

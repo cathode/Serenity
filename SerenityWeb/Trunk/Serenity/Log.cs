@@ -114,7 +114,7 @@ namespace Serenity
         public LogMessage(string message, LogMessageLevel level)
         {
             this.level = level;
-            this.message = message;
+            this.message = message.Replace("\t", "\\t");
             
             this.timestamp = DateTime.UtcNow;
 

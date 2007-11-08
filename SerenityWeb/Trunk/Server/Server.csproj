@@ -59,11 +59,6 @@
     <Compile Include="ServerConfig.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\WShelley.public.snk">
-      <Link>WShelley.public.snk</Link>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Server.exe.manifest">
     </None>
   </ItemGroup>

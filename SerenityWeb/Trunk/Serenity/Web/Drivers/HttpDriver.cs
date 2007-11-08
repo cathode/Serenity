@@ -82,13 +82,10 @@ namespace Serenity.Web.Drivers
                 listBuffer.AddRange(buffer);
             }
             buffer = listBuffer.ToArray();
-
             CommonContext context = new CommonContext(this);
-
-
             string requestContent = Encoding.ASCII.GetString(buffer);
+            context.Request.RawRequest = requestContent;
             int headerSize = requestContent.IndexOf("\r\n\r\n");
-
             if (headerSize != -1)
             {
                 headerSize += 4;

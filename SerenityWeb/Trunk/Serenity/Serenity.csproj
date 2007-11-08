@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Serenity</RootNamespace>
     <AssemblyName>Serenity</AssemblyName>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>..\WShelley.public.snk</AssemblyOriginatorKeyFile>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
     <SccProjectName>
@@ -130,9 +130,6 @@
     <Compile Include="Web\Doctype.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\WShelley.public.snk">
-      <Link>WShelley.public.snk</Link>
-    </None>
     <Content Include="Configuration\Serenity.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
