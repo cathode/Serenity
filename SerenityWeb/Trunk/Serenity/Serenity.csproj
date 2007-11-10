@@ -69,13 +69,13 @@
     <None Include="Cache\CachedStream.cs" />
     <Compile Include="Attributes\ModuleDefaultPageAttribute.cs" />
     <Compile Include="Attributes\ModuleResourceNamespaceAttribute.cs" />
-    <None Include="Collections\ModuleCollection.cs" />
+    <Compile Include="Collections\ModuleCollection.cs" />
     <None Include="Collections\ContentPageCollection.cs" />
     <Compile Include="Collections\DomainCollection.cs" />
     <Compile Include="Collections\ResourceCollection.cs" />
     <Compile Include="Collections\ResourceTree.cs" />
-    <Compile Include="Collections\ResourceTreeBranch.cs" />
-    <Compile Include="Collections\ResourceTreeBranchCollection.cs" />
+    <Compile Include="Collections\ResourceNode.cs" />
+    <Compile Include="Collections\ResourceNodeCollection.cs" />
     <Compile Include="ContentPage.cs" />
     <None Include="Data\Database.cs" />
     <Compile Include="DirectoryResource.cs" />
@@ -85,6 +85,7 @@
     <Compile Include="Pages\IndexerPage.cs" />
     <Compile Include="ResourceGrouping.cs" />
     <Compile Include="SerenityServer.cs" />
+    <Compile Include="SerenityStringComparer.cs" />
     <Compile Include="Web\Drivers\DriverPool.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Pages\DefaultPage.cs" />

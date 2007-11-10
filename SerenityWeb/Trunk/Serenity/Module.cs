@@ -22,15 +22,13 @@ namespace Serenity
         private Module(string name)
         {
             this.name = name;
-            this.pages = new Dictionary<string, Page>();
         }
         #endregion
         #region Fields - Private
 		private Assembly assembly;
         private readonly string name;
-        private Dictionary<string, Page> pages;
+        private Dictionary<string, Page> pages = new Dictionary<string, Page>();
         private string title;
-        private Page defaultPage;
         private string resourceNamespace;
         #endregion
 		#region Methods - Public
@@ -103,7 +101,6 @@ namespace Serenity
                 Module module = new Module(name);
 				module.assembly = moduleAsm;
                 module.title = title;
-                module.defaultPage = defaultPage;
                 module.resourceNamespace = resourceNamespace;
                 module.AddPages(pages);
 
@@ -148,7 +145,7 @@ namespace Serenity
 		{
 			get
 			{
-				return this.defaultPage;
+                return this.pages["default"];
 			}
 		}
         public string Name

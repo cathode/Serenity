@@ -27,7 +27,6 @@ namespace Server
 			Console.WriteLine("{0}, v{1}\r\n{2} ({3})\r\n",
 				SerenityInfo.Name, SerenityInfo.Version, SerenityInfo.Copyright, "http://serenityproject.net/");
 
-            SerenityServer server = new SerenityServer();
 
             //Make sure the server has the correct folders to use,
             //if they don't exist we need to create them.
@@ -37,7 +36,7 @@ namespace Server
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
-                    server.OperationLog.Write("Creating " + dir, LogMessageLevel.Info);
+                    SerenityServer.OperationLog.Write("Creating " + dir, LogMessageLevel.Info);
                 }
             }
 
@@ -51,9 +50,10 @@ namespace Server
 			{
 				string name = pair.Key;
 				string path = (pair.Value.StartsWith("@")) ? Path.GetFullPath("./Modules/" + pair.Value.TrimStart('@')) : pair.Value;
+                SerenityServer.ExtractResources(Module.LoadModuleFile(name, path));
 			}
 
-			server.OperationLog.Write(string.Format("Loaded: {0} domains, {1} modules, {2} themes.",
+            SerenityServer.OperationLog.Write(string.Format("Loaded: {0} domains, {1} modules, {2} themes.",
 				DomainSettings.Count,
 				0,
 				0), LogMessageLevel.Info);
@@ -62,13 +62,13 @@ namespace Server
 
             WebDriver driver = new HttpDriver(driverSettings);
 
-            server.DriverPool.Add(driver);
+            SerenityServer.DriverPool.Add(driver);
 
             driver.Initialize();
 
 			if (!driver.Start())
 			{
-				//Log.Write("Failed to start web driver", LogMessageLevel.Warning);
+                SerenityServer.ErrorLog.Write("Failed to start web driver", LogMessageLevel.Error);
 			}
 			else
 			{
@@ -79,7 +79,7 @@ namespace Server
 				}
 			}
 
-			server.OperationLog.Write("Server shutting down", LogMessageLevel.Info);
+            SerenityServer.OperationLog.Write("Server shutting down", LogMessageLevel.Info);
 			Console.WriteLine("Press any key...");
 			Console.Read();
 		}

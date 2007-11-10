@@ -13,11 +13,21 @@ using System.Text;
 
 namespace Serenity.Collections
 {
-    public class ResourceTreeBranchCollection : KeyedCollection<string, ResourceTreeBranch>
+    public class ResourceNodeCollection : KeyedCollection<string, ResourceNode>
     {
-        protected override string GetKeyForItem(ResourceTreeBranch item)
+        public ResourceNodeCollection(bool pathIndexing)
+            : base(SerenityStringComparer.Instance)
         {
-            return item.Name;
+            this.pathIndexing = pathIndexing;
         }
+        #region Fields - Private
+        private readonly bool pathIndexing;
+        #endregion
+        #region Methods - Public
+        protected override string GetKeyForItem(ResourceNode item)
+        {
+            return (this.pathIndexing) ? item.Path : item.Name;
+        }
+        #endregion
     }
 }

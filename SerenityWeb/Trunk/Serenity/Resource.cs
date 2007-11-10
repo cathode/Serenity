@@ -22,7 +22,6 @@ namespace Serenity
         #region Fields - Private
         private MimeType mimeType = MimeType.Default;
         private string name = string.Empty;
-        private SerenityServer server;
         #endregion
         #region Methods - Public
         /// <summary>
@@ -84,20 +83,6 @@ namespace Serenity
                 this.name = value;
             }
 		}
-        /// <summary>
-        /// Gets the SerenityServer instance that owns the current Resource.
-        /// </summary>
-        public SerenityServer Server
-        {
-            get
-            {
-                return this.server;
-            }
-            internal set
-            {
-                this.server = value;
-            }
-        }
         /// <summary>
         /// When overridden in a derived class, gets the size in bytes of the
         /// content of the current Resource.

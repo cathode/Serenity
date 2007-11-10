@@ -19,6 +19,9 @@ namespace Serenity
     /// </summary>
     public abstract class Page : Resource
     {
+        #region Fields - Private
+        private Module module;
+        #endregion
         #region Methods - Public
         /// <summary>
         /// When overridden in a derived class, performs actions when the module is loaded into the server,
@@ -41,6 +44,24 @@ namespace Serenity
             get
             {
                 return ResourceGrouping.Pages;
+            }
+        }
+        public bool IsOwned
+        {
+            get
+            {
+                return (this.module == null) ? false : true;
+            }
+        }
+        public Module Modules
+        {
+            get
+            {
+                return this.module;
+            }
+            internal set
+            {
+                this.module = value;
             }
         }
         #endregion

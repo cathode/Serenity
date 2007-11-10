@@ -47,7 +47,6 @@ namespace Serenity.Web.Drivers
         private Socket listeningSocket;
         private readonly AsyncCallback recieveDelegate;
         private readonly AsyncCallback sendDelegate;
-        private SerenityServer server;
         private WebDriverSettings settings;
         private OperationStatus status = OperationStatus.None;
         #endregion
@@ -134,7 +133,7 @@ namespace Serenity.Web.Drivers
             CommonContext context = this.RecieveContext(socket);
             if (context != null)
             {
-                this.Server.ContextHandler.HandleContext(context);
+                SerenityServer.ContextHandler.HandleContext(context);
             }
             else
             {
@@ -514,20 +513,6 @@ namespace Serenity.Web.Drivers
                 }
                 //TODO: Maybe try and improve performance or reliability here.
                 return (ushort)((IPEndPoint)this.listeningSocket.LocalEndPoint).Port;
-            }
-        }
-        /// <summary>
-        /// Gets the SerenityServer that the current WebDriver belongs to.
-        /// </summary>
-        public SerenityServer Server
-        {
-            get
-            {
-                return this.server;
-            }
-            internal set
-            {
-                this.server = value;
             }
         }
         /// <summary>

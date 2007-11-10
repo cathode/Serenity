@@ -13,16 +13,10 @@ using System.Text;
 
 namespace Serenity.Collections
 {
-    /// <summary>
-    /// Represents an element within a ResourceTree, which can contain children.
-    /// </summary>
-    public sealed class ResourceTreeBranch
+    public sealed class ResourceNode
     {
-        #region Constructors - Private
-        /// <summary>
-        /// Initializes a new instance of the ResourceTreeElement class.
-        /// </summary>
-        internal ResourceTreeBranch(ResourceTree tree, ResourceTreeBranch parent, string name)
+        #region Constructors - Internal
+        internal ResourceNode(ResourceTree tree, ResourceNode parent, string name)
         {
             this.tree = tree;
             this.parent = parent;
@@ -40,8 +34,8 @@ namespace Serenity.Collections
         #endregion
         #region Fields - Private
         private string name;
-        private ResourceTreeBranch parent;
-        private ResourceTreeBranchCollection branches = new ResourceTreeBranchCollection();
+        private ResourceNode parent;
+        private ResourceNodeCollection nodes = new ResourceNodeCollection(false);
         private ResourceTree tree;
         private ResourceCollection resources = new ResourceCollection();
         private DirectoryResource directoryResource;
@@ -54,13 +48,21 @@ namespace Serenity.Collections
                 this.resources.Add(value);
             }
         }
-        public void Add(ResourceTreeBranch value)
+        public void Add(ResourceNode value)
         {
-            this.branches.Add(value);
+            this.nodes.Add(value);
         }
-        public ResourceTreeBranch GetBranch(string name)
+        public bool ContainsNode(string name)
         {
-            return this.branches[name];
+            return this.nodes.Contains(name);
+        }
+        public bool ContainsResource(string name)
+        {
+            return this.resources.Contains(name);
+        }
+        public ResourceNode GetNode(string name)
+        {
+            return this.nodes[name];
         }
         public Resource GetResource(string name)
         {
@@ -68,16 +70,8 @@ namespace Serenity.Collections
         }
         #endregion
         #region Properties - Public
-        public ResourceTreeBranchCollection Branches
-        {
-            get
-            {
-                return this.branches;
-            }
-        }
-
         /// <summary>
-        /// Gets the number resources located at the current branch.
+        /// Gets the number resources located at the current node.
         /// </summary>
         public int Count
         {
@@ -118,7 +112,14 @@ namespace Serenity.Collections
                 return this.name;
             }
         }
-        public ResourceTreeBranch Parent
+        public IEnumerable<ResourceNode> Nodes
+        {
+            get
+            {
+                return this.nodes;
+            }
+        }
+        public ResourceNode Parent
         {
             get
             {
@@ -133,10 +134,21 @@ namespace Serenity.Collections
         {
             get
             {
-                return string.Empty;
+                if (this.HasParent)
+                {
+                    return parent.Path + this.name + "/";
+                }
+                else if (!string.IsNullOrEmpty(this.name))
+                {
+                    return "/" + this.name + "/";
+                }
+                else
+                {
+                    return "/";
+                }
             }
         }
-        public ResourceCollection Resources
+        public IEnumerable<Resource> Resources
         {
             get
             {

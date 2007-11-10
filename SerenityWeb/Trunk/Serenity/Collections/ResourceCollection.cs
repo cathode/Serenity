@@ -22,8 +22,9 @@ namespace Serenity.Collections
         /// <summary>
         /// Initializes a new instance of the ResourceCollection class.
         /// </summary>
-        public ResourceCollection()
+        public ResourceCollection() : base(SerenityStringComparer.Instance)
         {
+          
         }
         #endregion
         #region Methods - Protected
@@ -34,7 +35,7 @@ namespace Serenity.Collections
         /// <returns></returns>
         protected override string GetKeyForItem(Resource item)
         {
-            return item.SystemName;
+            return item.Name;
         }
         #endregion
     }

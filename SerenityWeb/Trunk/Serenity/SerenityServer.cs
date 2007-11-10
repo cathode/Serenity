@@ -19,146 +19,164 @@ namespace Serenity
     /// <summary>
     /// Provides a structured representation of a running Serenity server instance.
     /// </summary>
-	public sealed class SerenityServer
+	public static class SerenityServer
     {
-        #region Constructors - Public
-        /// <summary>
-        /// Initializes a new instance of the SerenityServer class.
-        /// </summary>
-        public SerenityServer()
+        #region Constructors - Private
+        static SerenityServer()
         {
-            this.contextHandler = new ContextHandler(this);
-            this.driverPool = new DriverPool(this);
-            this.OperationLog.Write("Server created.", LogMessageLevel.Debug);
+            SerenityServer.contextHandler = new ContextHandler();
+            SerenityServer.driverPool = new DriverPool();
+            SerenityServer.OperationLog.Write("Server created.", LogMessageLevel.Debug);
         }
         #endregion
         #region Fields - Private
-        private Log accessLog = new Log();
-        private readonly ResourceTree commonResources = new ResourceTree();
-        private ContextHandler contextHandler;
-        private readonly DomainCollection domains = new DomainCollection();
-        private readonly DriverPool driverPool;
-        private Log errorLog = new Log();
-        private bool isCaseSensitive = false;
-        private Log operationLog = new Log();
-        private StringComparison stringComparison = StringComparison.Ordinal;
+        private static Log accessLog = new Log();
+        private static readonly ResourceTree commonResources = new ResourceTree();
+        private static ContextHandler contextHandler;
+        private static readonly DomainCollection domains = new DomainCollection();
+        private static readonly DriverPool driverPool;
+        private static Log errorLog = new Log();
+        private static bool isCaseSensitive = false;
+        private static ModuleCollection modules = new ModuleCollection();
+        private static Log operationLog = new Log();
+        private static OperationStatus status = OperationStatus.None;
+        private static StringComparison stringComparison = StringComparison.Ordinal;
 		#endregion
         #region Methods - Public
-        public void ExtractResources(Domain domain)
+        public static void ExtractResources(Domain domain)
         {
             if (domain == null)
             {
                 throw new ArgumentNullException("domain");
             }
 
-            this.domains.Add(domain);
+            SerenityServer.domains.Add(domain);
         }
-        public void ExtractResources(Module module)
+        public static void ExtractResources(Module module)
         {
             if (module == null)
             {
                 throw new ArgumentNullException("module");
             }
+            if (SerenityServer.modules.Contains(module.Name))
+            {
+                return;
+            }
+            foreach (Page page in module.Pages)
+            {
+                SerenityServer.commonResources.Add("/dynamic/" + module.Name + "/", page);
+            }
         }
-        public void ExtractResources(IEnumerable<Domain> domains)
+        public static void ExtractResources(IEnumerable<Domain> domains)
         {
             foreach (Domain domain in domains)
             {
-                this.ExtractResources(domain);
+                SerenityServer.ExtractResources(domain);
             }
         }
-        public void ExtractResources(IEnumerable<Module> modules)
+        public static void ExtractResources(IEnumerable<Module> modules)
         {
             foreach (Module module in modules)
             {
-                this.ExtractResources(module);
+                SerenityServer.ExtractResources(module);
             }
         }
         #endregion
         #region Properties - Public
-        public Log AccessLog
+        public static Log AccessLog
         {
             get
             {
-                return this.accessLog;
+                return SerenityServer.accessLog;
             }
         }
-        public Log ErrorLog
+        public static Log ErrorLog
         {
             get
             {
-                return this.errorLog;
+                return SerenityServer.errorLog;
             }
         }
-        public Log OperationLog
+        public static Log OperationLog
         {
             get
             {
-                return this.operationLog;
+                return SerenityServer.operationLog;
             }
         }
-        public ResourceTree CommonResources
+        public static ResourceTree CommonResources
         {
             get
             {
-                return this.commonResources;
+                return SerenityServer.commonResources;
             }
         }
         /// <summary>
         /// Gets or sets the ContextHandler used to handle recieved CommonContexts.
         /// </summary>
-        public ContextHandler ContextHandler
+        public static ContextHandler ContextHandler
 		{
 			get
 			{
-				return this.contextHandler;
+                return SerenityServer.contextHandler;
 			}
 			set
 			{
-				this.contextHandler = value;
+                SerenityServer.contextHandler = value;
 			}
 		}
         /// <summary>
         /// Gets the DriverPool containing WebDrivers used by the current SerenityServer.
         /// </summary>
-		public DriverPool DriverPool
+        public static DriverPool DriverPool
 		{
 			get
 			{
-				return this.driverPool;
+                return SerenityServer.driverPool;
 			}
 		}
-        public DomainCollection Domains
+        public static DomainCollection Domains
         {
             get
             {
-                return this.domains;
+                return SerenityServer.domains;
             }
         }
-        public bool IsCaseSensitive
+        public static bool IsCaseSensitive
         {
             get
             {
-                return this.isCaseSensitive;
+                return SerenityServer.isCaseSensitive;
             }
             set
             {
-                this.isCaseSensitive = value;
-                if (this.isCaseSensitive)
+                SerenityServer.isCaseSensitive = value;
+                if (SerenityServer.isCaseSensitive)
                 {
-                    this.stringComparison = StringComparison.Ordinal;
+                    SerenityServer.stringComparison = StringComparison.Ordinal;
                 }
                 else
                 {
-                    this.stringComparison = StringComparison.OrdinalIgnoreCase;
+                    SerenityServer.stringComparison = StringComparison.OrdinalIgnoreCase;
                 }
             }
         }
-        public StringComparison StringComparison
+        public static StringComparison StringComparison
         {
             get
             {
-                return this.stringComparison;
+                return SerenityServer.stringComparison;
+            }
+        }
+        public static OperationStatus Status
+        {
+            get
+            {
+                return SerenityServer.status;
+            }
+            set
+            {
+                SerenityServer.status = value;
             }
         }
 		#endregion

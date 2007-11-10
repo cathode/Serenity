@@ -15,10 +15,16 @@ namespace Serenity.Collections
 {
     public sealed class ModuleCollection : KeyedCollection<string, Module>
     {
+        #region Constructors - Public
+        public ModuleCollection()
+            : base(SerenityStringComparer.Instance)
+        {
+        }
+        #endregion
         #region Methods - Protected
         protected override string GetKeyForItem(Module item)
         {
-            return item.SystemName;
+            return item.Name;
         }
         #endregion
     }

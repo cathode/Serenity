@@ -49,10 +49,10 @@ namespace Serenity
             }
 
             // collect data
-            ResourceTreeBranch branch = domain.Resources.GetBranch(this.location);
+            ResourceNode node = domain.Resources.GetNode(this.location);
             Dictionary<string, List<Resource>> groupedResources = new Dictionary<string, List<Resource>>();
 
-            foreach (Resource resource in branch.Resources)
+            foreach (Resource resource in node.Resources)
             {
                 if (!groupedResources.ContainsKey(resource.Grouping.PluralForm))
                 {
