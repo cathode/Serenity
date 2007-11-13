@@ -67,7 +67,24 @@ namespace Serenity
         }
         public ResourceNode GetNode(ResourcePath path)
         {
-            return this.root.GetNode(path);
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+
+            ResourceNode node = this.root;
+            for (int i = 0; i < path.Depth; i++)
+            {
+                if (node.ContainsNode(path.Segments[i]))
+                {
+                    node = node.GetNode(path.Segments[i]);
+                }
+                else
+                {
+                    throw new KeyNotFoundException();
+                }
+            }
+            return node;
         }
         public Resource GetResource(ResourcePath path)
         {

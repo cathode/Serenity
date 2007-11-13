@@ -80,12 +80,14 @@
     <None Include="Data\Database.cs" />
     <Compile Include="DirectoryResource.cs" />
     <Compile Include="Domain.cs" />
+    <Compile Include="ErrorResource.cs" />
     <Compile Include="FileTypeEntry.cs" />
     <Compile Include="LogMessageLevel.cs" />
     <Compile Include="Pages\IndexerPage.cs" />
     <Compile Include="ResourceGrouping.cs" />
     <Compile Include="ResourceNode.cs" />
     <Compile Include="ResourcePath.cs" />
+    <Compile Include="ResourceResource.cs" />
     <Compile Include="ResourceTree.cs" />
     <Compile Include="SerenityServer.cs" />
     <Compile Include="SerenityStringComparer.cs" />
