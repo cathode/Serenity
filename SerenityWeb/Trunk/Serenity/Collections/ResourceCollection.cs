@@ -22,7 +22,8 @@ namespace Serenity.Collections
         /// <summary>
         /// Initializes a new instance of the ResourceCollection class.
         /// </summary>
-        public ResourceCollection() : base(SerenityStringComparer.Instance)
+        public ResourceCollection()
+            : base(StringComparer.OrdinalIgnoreCase)
         {
           
         }

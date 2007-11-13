@@ -52,6 +52,14 @@ namespace Serenity
                 }
                 groupedResources[resource.Grouping.PluralForm].Add(resource);
             }
+            foreach (ResourceNode resourceNode in this.node.Nodes)
+            {
+                if (!groupedResources.ContainsKey(resourceNode.DirectoryResource.Grouping.PluralForm))
+                {
+                    groupedResources.Add(resourceNode.DirectoryResource.Grouping.PluralForm, new List<Resource>());
+                }
+                groupedResources[resourceNode.DirectoryResource.Grouping.PluralForm].Add(resourceNode.DirectoryResource);
+            }
 
             // output data
             StringBuilder output = new StringBuilder();
@@ -79,6 +87,7 @@ namespace Serenity
             context.Response.Write(output.ToString());
         }
         #endregion
+        #region Properties - Public
         public override MimeType ContentType
         {
             get
@@ -90,5 +99,13 @@ namespace Serenity
                 throw new InvalidOperationException("Cannot set MimeType for DirectoryResource objects.");
             }
         }
+        public override ResourceGrouping Grouping
+        {
+            get
+            {
+                return ResourceGrouping.Directories;
+            }
+        }
+        #endregion
     }
 }

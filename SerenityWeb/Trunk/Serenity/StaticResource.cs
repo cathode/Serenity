@@ -11,6 +11,8 @@ using System.IO;
 using System.Collections.Generic;
 using System.Text;
 
+using Serenity.Web;
+
 namespace Serenity
 {
 	/// <summary>
@@ -22,24 +24,17 @@ namespace Serenity
 		private string location;
 		#endregion
 		#region Methods - Public
-		public Stream GetStream()
-		{
-			if (File.Exists(this.location))
-			{
-				try
-				{
-					return File.Open(location, FileMode.Open);
-				}
-				catch
-				{
-					return null;
-				}
-			}
-			else
-			{
-				return null;
-			}
-		}
+        public override void OnRequest(CommonContext context)
+        {
+            if (File.Exists(this.location))
+            {
+                context.Response.Write(File.ReadAllBytes(this.location));
+            }
+            else
+            {
+                ErrorHandler.Handle(context, StatusCode.Http404NotFound);
+            }
+        }
 		#endregion
 		#region Properties - Public
         public override ResourceGrouping Grouping

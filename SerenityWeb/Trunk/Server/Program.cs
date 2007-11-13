@@ -50,7 +50,7 @@ namespace Server
 			{
 				string name = pair.Key;
 				string path = (pair.Value.StartsWith("@")) ? Path.GetFullPath("./Modules/" + pair.Value.TrimStart('@')) : pair.Value;
-                SerenityServer.ExtractResources(Module.LoadModuleFile(name, path));
+                SerenityServer.AddModule(Module.LoadModuleFile(name, path));
 			}
 
             SerenityServer.OperationLog.Write(string.Format("Loaded: {0} domains, {1} modules, {2} themes.",

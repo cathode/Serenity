@@ -94,15 +94,18 @@ namespace Serenity
             }
             
             ResourceNode node = this.root;
-            for (int i = 0; i < path.Depth; i++)
+            if (path.Depth > 0)
             {
-                if (node.ContainsNode(path.Segments[i]))
+                for (int i = 0; i < path.Depth - 1; i++)
                 {
-                    node = node.GetNode(path.Segments[i]);
-                }
-                else
-                {
-                    throw new KeyNotFoundException();
+                    if (node.ContainsNode(path.Segments[i]))
+                    {
+                        node = node.GetNode(path.Segments[i]);
+                    }
+                    else
+                    {
+                        throw new KeyNotFoundException();
+                    }
                 }
             }
             if (path.IsDirectory)

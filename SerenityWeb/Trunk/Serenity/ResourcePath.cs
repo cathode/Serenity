@@ -32,6 +32,10 @@ namespace Serenity
             }
             this.path = path;
             this.segments = this.path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+            //if (this.segments.Length == 0)
+            //{
+            //    this.segments = new string[1] { "" };
+            //}
         }
         #endregion
         #region Fields - Private

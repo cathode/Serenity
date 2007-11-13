@@ -90,7 +90,6 @@
     <Compile Include="ResourceResource.cs" />
     <Compile Include="ResourceTree.cs" />
     <Compile Include="SerenityServer.cs" />
-    <Compile Include="SerenityStringComparer.cs" />
     <Compile Include="Web\Drivers\DriverPool.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Pages\DefaultPage.cs" />

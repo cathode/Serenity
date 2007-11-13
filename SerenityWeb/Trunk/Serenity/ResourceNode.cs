@@ -134,6 +134,16 @@ namespace Serenity
                 return this.name;
             }
         }
+        public IEnumerable<ResourceNode> Nodes
+        {
+            get
+            {
+                foreach (ResourceNode node in this.nodes)
+                {
+                    yield return node;
+                }
+            }
+        }
         public ResourcePath Path
         {
             get

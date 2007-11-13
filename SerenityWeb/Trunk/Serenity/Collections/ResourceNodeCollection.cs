@@ -16,7 +16,7 @@ namespace Serenity.Collections
     public class ResourceNodeCollection : KeyedCollection<string, ResourceNode>
     {
         public ResourceNodeCollection()
-            : base(SerenityStringComparer.Instance)
+            : base(StringComparer.OrdinalIgnoreCase)
         {
             
         }

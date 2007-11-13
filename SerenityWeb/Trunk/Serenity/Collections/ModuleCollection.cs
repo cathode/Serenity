@@ -17,7 +17,7 @@ namespace Serenity.Collections
     {
         #region Constructors - Public
         public ModuleCollection()
-            : base(SerenityStringComparer.Instance)
+            : base(StringComparer.OrdinalIgnoreCase)
         {
         }
         #endregion

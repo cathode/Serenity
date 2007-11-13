@@ -17,6 +17,38 @@ namespace Serenity
     /// </summary>
     public class ResourceResource : Resource
     {
-        //TODO: Implement ResourceResource class.
+        #region Constructors - Public
+        public ResourceResource(string name, byte[] data)
+        {
+            if (name == null)
+            {
+                throw new ArgumentNullException("name");
+            }
+            if (data == null)
+            {
+                throw new ArgumentNullException("data");
+            }
+            this.Name = name;
+            this.data = data;
+        }
+        #endregion
+        #region Fields - Private
+        private readonly byte[] data;
+        #endregion
+        #region Methods - Public
+        public override void OnRequest(Serenity.Web.CommonContext context)
+        {
+            context.Response.Write(this.data);
+        }
+        #endregion
+        #region Properties - Public
+        public override ResourceGrouping Grouping
+        {
+            get
+            {
+                return ResourceGrouping.Resources;
+            }
+        }
+        #endregion
     }
 }

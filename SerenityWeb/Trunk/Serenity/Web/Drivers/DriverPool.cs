@@ -35,7 +35,7 @@ namespace Serenity.Web.Drivers
         {
             foreach (WebDriver driver in this.drivers)
             {
-                if (driver.Info.Provider.Equals(provider, SerenityServer.StringComparison))
+                if (driver.Info.Provider.Equals(provider))
                 {
                     yield return driver;
                 }
@@ -45,7 +45,7 @@ namespace Serenity.Web.Drivers
         {
             foreach (WebDriver driver in this.drivers)
             {
-                if (driver.Info.UriSchema.Equals(schema, SerenityServer.StringComparison))
+                if (driver.Info.UriSchema.Equals(schema))
                 {
                     yield return driver;
                 }

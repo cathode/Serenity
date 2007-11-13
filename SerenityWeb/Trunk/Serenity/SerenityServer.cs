@@ -8,6 +8,7 @@
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 using Serenity.Collections;
@@ -19,11 +20,13 @@ namespace Serenity
     /// <summary>
     /// Provides a structured representation of a running Serenity server instance.
     /// </summary>
-	public static class SerenityServer
+    public static class SerenityServer
     {
         #region Constructors - Private
         static SerenityServer()
         {
+            FileTypeRegistry.Initialize();
+
             SerenityServer.domains.Add(SerenityServer.commonDomain);
             SerenityServer.OperationLog.Write("Server created.", LogMessageLevel.Debug);
         }
@@ -35,14 +38,12 @@ namespace Serenity
         private static readonly DomainCollection domains = new DomainCollection();
         private static readonly DriverPool driverPool = new DriverPool();
         private static Log errorLog = new Log();
-        private static bool isCaseSensitive = false;
         private static ModuleCollection modules = new ModuleCollection();
         private static Log operationLog = new Log();
         private static OperationStatus status = OperationStatus.None;
-        private static StringComparison stringComparison = StringComparison.Ordinal;
-		#endregion
+        #endregion
         #region Methods - Public
-        public static void ExtractResources(Domain domain)
+        public static void AddDomain(Domain domain)
         {
             if (domain == null)
             {
@@ -51,34 +52,74 @@ namespace Serenity
 
             SerenityServer.domains.Add(domain);
         }
-        public static void ExtractResources(Module module)
+        public static void AddModule(Module module)
         {
             if (module == null)
             {
                 throw new ArgumentNullException("module");
             }
+            else if (SerenityServer.Status == OperationStatus.Started)
+            {
+                throw new InvalidOperationException("Cannot modify server state while server is running.");
+            }
             if (SerenityServer.modules.Contains(module.Name))
             {
                 return;
             }
+            SerenityServer.modules.Add(module);
             ResourcePath path = new ResourcePath("/dynamic/" + module.Name + "/");
             foreach (Page page in module.Pages)
             {
                 SerenityServer.commonDomain.Resources.Add(path, page);
+            }
+            foreach (string embedPath in module.Assembly.GetManifestResourceNames())
+            {
+                string newpath = embedPath.Remove(0, module.ResourceNamespace.Length);
+                string[] parts = newpath.Split('.');
+                
+                if (parts.Length > 2)
+                {
+                    path = new ResourcePath("/resource/" + module.Name + "/" + string.Join("/", parts, 0, parts.Length - 2) + "/");
+                }
+                else
+                {
+                    path = new ResourcePath("/resource/" + module.Name + "/");
+                }
+                string name = "";
+                if (parts.Length > 1)
+                {
+                    name = parts[parts.Length - 2] + "." + parts[parts.Length - 1];
+                }
+                else
+                {
+                    name = parts[0];
+                }
+
+                using (Stream stream = module.Assembly.GetManifestResourceStream(embedPath))
+                {
+                    byte[] data = new byte[stream.Length];
+                    if (stream.Read(data, 0, data.Length) == data.Length)
+                    {
+                        ResourceResource res = new ResourceResource(name, data);
+                        res.ContentType = FileTypeRegistry.GetMimeType(parts[parts.Length - 1]);
+
+                        SerenityServer.commonDomain.Resources.Add(path, res);
+                    }
+                }
             }
         }
         public static void ExtractResources(IEnumerable<Domain> domains)
         {
             foreach (Domain domain in domains)
             {
-                SerenityServer.ExtractResources(domain);
+                SerenityServer.AddDomain(domain);
             }
         }
         public static void ExtractResources(IEnumerable<Module> modules)
         {
             foreach (Module module in modules)
             {
-                SerenityServer.ExtractResources(module);
+                SerenityServer.AddModule(module);
             }
         }
         #endregion
@@ -115,57 +156,35 @@ namespace Serenity
         /// Gets or sets the ContextHandler used to handle recieved CommonContexts.
         /// </summary>
         public static ContextHandler ContextHandler
-		{
-			get
-			{
+        {
+            get
+            {
                 return SerenityServer.contextHandler;
-			}
-			set
-			{
+            }
+            set
+            {
+                if (SerenityServer.Status == OperationStatus.Started)
+                {
+                    throw new InvalidOperationException("Cannot modify server state while server is running.");
+                }
                 SerenityServer.contextHandler = value;
-			}
-		}
+            }
+        }
         /// <summary>
         /// Gets the DriverPool containing WebDrivers used by the current SerenityServer.
         /// </summary>
         public static DriverPool DriverPool
-		{
-			get
-			{
+        {
+            get
+            {
                 return SerenityServer.driverPool;
-			}
-		}
+            }
+        }
         public static DomainCollection Domains
         {
             get
             {
                 return SerenityServer.domains;
-            }
-        }
-        public static bool IsCaseSensitive
-        {
-            get
-            {
-                return SerenityServer.isCaseSensitive;
-            }
-            set
-            {
-                SerenityServer.isCaseSensitive = value;
-                if (SerenityServer.isCaseSensitive)
-                {
-                    SerenityServer.stringComparison = StringComparison.Ordinal;
-                }
-                else
-                {
-                    SerenityServer.stringComparison = StringComparison.OrdinalIgnoreCase;
-                }
-            }
-        }
-        public static StringComparison StringComparison
-        {
-            get
-            {
-                return SerenityServer.stringComparison;
             }
         }
         public static OperationStatus Status
@@ -179,6 +198,6 @@ namespace Serenity
                 SerenityServer.status = value;
             }
         }
-		#endregion
-	}
+        #endregion
+    }
 }
