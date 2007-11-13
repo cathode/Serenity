@@ -24,17 +24,16 @@ namespace Serenity
         #region Constructors - Private
         static SerenityServer()
         {
-            SerenityServer.contextHandler = new ContextHandler();
-            SerenityServer.driverPool = new DriverPool();
+            SerenityServer.domains.Add(SerenityServer.commonDomain);
             SerenityServer.OperationLog.Write("Server created.", LogMessageLevel.Debug);
         }
         #endregion
         #region Fields - Private
         private static Log accessLog = new Log();
-        private static readonly ResourceTree commonResources = new ResourceTree();
-        private static ContextHandler contextHandler;
+        private static readonly Domain commonDomain = new Domain("");
+        private static ContextHandler contextHandler = new ContextHandler();
         private static readonly DomainCollection domains = new DomainCollection();
-        private static readonly DriverPool driverPool;
+        private static readonly DriverPool driverPool = new DriverPool();
         private static Log errorLog = new Log();
         private static bool isCaseSensitive = false;
         private static ModuleCollection modules = new ModuleCollection();
@@ -62,9 +61,10 @@ namespace Serenity
             {
                 return;
             }
+            ResourcePath path = new ResourcePath("/dynamic/" + module.Name + "/");
             foreach (Page page in module.Pages)
             {
-                SerenityServer.commonResources.Add("/dynamic/" + module.Name + "/", page);
+                SerenityServer.commonDomain.Resources.Add(path, page);
             }
         }
         public static void ExtractResources(IEnumerable<Domain> domains)
@@ -104,11 +104,11 @@ namespace Serenity
                 return SerenityServer.operationLog;
             }
         }
-        public static ResourceTree CommonResources
+        public static Domain CommonDomain
         {
             get
             {
-                return SerenityServer.commonResources;
+                return SerenityServer.commonDomain;
             }
         }
         /// <summary>

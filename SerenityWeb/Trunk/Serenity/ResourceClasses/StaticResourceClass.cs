@@ -159,7 +159,7 @@ namespace Serenity.ResourceClasses
 	</div>
 </body>
 </html>");
-                    response.MimeType = MimeType.TextHtml;
+                    response.ContentType = MimeType.TextHtml;
                 }
                 else
                 {
@@ -179,7 +179,7 @@ namespace Serenity.ResourceClasses
                     bool useCompression = false;
                     context.Response.UseCompression = useCompression;
 
-                    context.Response.MimeType = mimeType;
+                    context.Response.ContentType = mimeType;
                     context.Response.Status = StatusCode.Http200Ok;
 
                     context.Response.Write(File.ReadAllBytes(resourcePath));

@@ -42,7 +42,7 @@ namespace Serenity.Pages
 	</div>
 </body>
 </html>");
-            response.MimeType = MimeType.TextHtml;
+            response.ContentType = MimeType.TextHtml;
         }
         public override void OnShutdown()
         {

@@ -22,6 +22,7 @@ namespace Serenity
         #region Fields - Private
         private MimeType mimeType = MimeType.Default;
         private string name = string.Empty;
+        private string webPath = string.Empty;
         #endregion
         #region Methods - Public
         /// <summary>
@@ -31,6 +32,17 @@ namespace Serenity
         public virtual void OnRequest(CommonContext context)
         {
             ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
+        }
+        public virtual void PostRequest(CommonContext context)
+        {
+            if (context.Response.ContentType != this.ContentType)
+            {
+                context.Response.ContentType = this.ContentType;
+            }
+        }
+        public virtual void PreRequest(CommonContext context)
+        {
+
         }
         #endregion
         #region Properties - Public
@@ -58,7 +70,7 @@ namespace Serenity
         /// <summary>
 		/// Gets the MimeType that should be used to describe the content of the current Resource.
 		/// </summary>
-		public virtual MimeType MimeType
+		public virtual MimeType ContentType
 		{
 			get
 			{
@@ -80,9 +92,24 @@ namespace Serenity
 			}
             protected internal set
             {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
                 this.name = value;
             }
 		}
+        public string WebPath
+        {
+            get
+            {
+                return this.webPath;
+            }
+            internal set
+            {
+                this.webPath = value;
+            }
+        }
         /// <summary>
         /// When overridden in a derived class, gets the size in bytes of the
         /// content of the current Resource.
@@ -94,16 +121,6 @@ namespace Serenity
                 return -1;
             }
         }
-		/// <summary>
-		/// Gets the name of the resource in a form that can be "safely" used.
-		/// </summary>
-		public string SystemName
-		{
-			get
-			{
-				return this.Name.ToLower();
-			}
-		}
 		#endregion
 	}
 }

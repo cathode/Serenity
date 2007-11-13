@@ -73,8 +73,8 @@
     <None Include="Collections\ContentPageCollection.cs" />
     <Compile Include="Collections\DomainCollection.cs" />
     <Compile Include="Collections\ResourceCollection.cs" />
-    <Compile Include="Collections\ResourceTree.cs" />
-    <Compile Include="Collections\ResourceNode.cs" />
+    <None Include="Collections\ResourceTree.cs" />
+    <None Include="Collections\ResourceNode.cs" />
     <Compile Include="Collections\ResourceNodeCollection.cs" />
     <Compile Include="ContentPage.cs" />
     <None Include="Data\Database.cs" />
@@ -84,6 +84,9 @@
     <Compile Include="LogMessageLevel.cs" />
     <Compile Include="Pages\IndexerPage.cs" />
     <Compile Include="ResourceGrouping.cs" />
+    <Compile Include="ResourceNode.cs" />
+    <Compile Include="ResourcePath.cs" />
+    <Compile Include="ResourceTree.cs" />
     <Compile Include="SerenityServer.cs" />
     <Compile Include="SerenityStringComparer.cs" />
     <Compile Include="Web\Drivers\DriverPool.cs" />

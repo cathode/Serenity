@@ -15,18 +15,15 @@ namespace Serenity.Collections
 {
     public class ResourceNodeCollection : KeyedCollection<string, ResourceNode>
     {
-        public ResourceNodeCollection(bool pathIndexing)
+        public ResourceNodeCollection()
             : base(SerenityStringComparer.Instance)
         {
-            this.pathIndexing = pathIndexing;
+            
         }
-        #region Fields - Private
-        private readonly bool pathIndexing;
-        #endregion
         #region Methods - Public
         protected override string GetKeyForItem(ResourceNode item)
         {
-            return (this.pathIndexing) ? item.Path : item.Name;
+            return item.Name;
         }
         #endregion
     }

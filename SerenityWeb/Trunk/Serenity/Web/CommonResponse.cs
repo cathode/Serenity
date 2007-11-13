@@ -125,7 +125,7 @@ namespace Serenity.Web
         /// <summary>
         /// Gets or sets the mimetype associated with the content returned to the client.
         /// </summary>
-        public MimeType MimeType
+        public MimeType ContentType
         {
             get
             {

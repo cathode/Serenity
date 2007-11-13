@@ -172,6 +172,9 @@ namespace Serenity.Web.Drivers
                         ErrorHandler.Handle(context, StatusCode.Http400BadRequest, "Invalid request URI scheme");
                         return context;
                     }
+
+                    context.Domain = SerenityServer.Domains.GetBestMatch(context.Request.Headers["Host"].PrimaryValue);
+
                     if (context.Request.Url.Query != string.Empty)
                     {
                         this.ProcessUrlEncodedRequestData(context.Request.Url.Query.TrimStart('?'), context);
@@ -242,13 +245,17 @@ namespace Serenity.Web.Drivers
             {
                 StringBuilder outputText = new StringBuilder();
 
-                if (response.Headers.Contains("Content-Length") == false)
+                if (!response.Headers.Contains("Content-Length"))
                 {
                     response.Headers.Add("Content-Length", response.OutputBuffer.Count.ToString());
                 }
-                if (response.Headers.Contains("Content-Type") == false)
+                if (!response.Headers.Contains("Content-Type"))
                 {
-                    response.Headers.Add("Content-Type", response.MimeType.ToString() + "; charset=UTF-8");
+                    response.Headers.Add("Content-Type", response.ContentType.ToString() + "; charset=UTF-8");
+                }
+                else if (response.Headers["Content-Type"].PrimaryValue != response.ContentType.ToString())
+                {
+                    response.Headers["Content-Type"].PrimaryValue = response.ContentType.ToString();
                 }
                 if (!response.Headers.Contains("Server"))
                 {

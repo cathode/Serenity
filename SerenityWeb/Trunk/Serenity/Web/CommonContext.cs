@@ -67,7 +67,14 @@ namespace Serenity.Web
             {
                 return this.driver;
             }
-        }    
+        }
+        public bool HasDomain
+        {
+            get
+            {
+                return (this.domain != null);
+            }
+        }
         /// <summary>
         /// Gets or sets a value indicating if the headers contained in the
         /// response portion have been sent to the client yet.

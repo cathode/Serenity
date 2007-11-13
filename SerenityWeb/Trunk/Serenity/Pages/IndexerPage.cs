@@ -27,7 +27,7 @@ namespace Serenity.Pages
                 
             }
         }
-        public override MimeType MimeType
+        public override MimeType ContentType
         {
             get
             {

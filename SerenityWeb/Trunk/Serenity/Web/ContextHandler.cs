@@ -37,6 +37,26 @@ namespace Serenity.Web
             {
                 throw new ArgumentNullException("context");
             }
+             Resource resource;
+            if (context.HasDomain)
+            {
+                resource = context.Domain.Resources.GetResource(new ResourcePath(context.Request.Url.AbsolutePath));
+            }
+            else
+            {
+                resource = SerenityServer.CommonDomain.Resources.GetResource(new ResourcePath(context.Request.Url.AbsolutePath));
+            }
+
+            if (resource != null)
+            {
+                resource.PreRequest(context);
+                resource.OnRequest(context);
+                resource.PostRequest(context);
+            }
+            else
+            {
+                ErrorHandler.Handle(context, StatusCode.Http404NotFound);
+            }
         }
         #endregion
         #region Properties - Public

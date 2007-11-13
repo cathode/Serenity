@@ -13,60 +13,88 @@ using System.Text;
 
 namespace Serenity.Collections
 {
-    public sealed class ResourceNode
+    public class ResourceNode
     {
         #region Constructors - Internal
-        internal ResourceNode(ResourceTree tree, ResourceNode parent, string name)
+        internal ResourceNode(string name)
         {
-            this.tree = tree;
-            this.parent = parent;
+            if (name == null)
+            {
+                throw new ArgumentNullException("name");
+            }
+            else if (name == string.Empty)
+            {
+                throw new ArgumentException("Argument 'name' cannot be empty.", "name");
+            }
             this.name = name;
-
-            if (this.HasParent)
-            {
-                this.directoryResource = new DirectoryResource(this.Path);
-            }
-            else
-            {
-                this.directoryResource = new DirectoryResource("/");
-            }
         }
         #endregion
         #region Fields - Private
         private string name;
         private ResourceNode parent;
-        private ResourceNodeCollection nodes = new ResourceNodeCollection(false);
-        private ResourceTree tree;
+        private ResourceNodeCollection nodes = new ResourceNodeCollection();
         private ResourceCollection resources = new ResourceCollection();
         private DirectoryResource directoryResource;
+        #endregion
+        #region Methods - Internal
+        internal void Add(ResourceNode node)
+        {
+            if (!this.nodes.Contains(node.Name))
+            {
+                this.nodes.Add(node);
+            }
+        }
         #endregion
         #region Methods - Public
         public void Add(Resource value)
         {
-            if (!this.resources.Contains(value.SystemName))
+            if (!this.resources.Contains(value.Name))
             {
                 this.resources.Add(value);
             }
         }
-        public void Add(ResourceNode value)
+        public bool ContainsNode(string path)
         {
-            this.nodes.Add(value);
+            path = ResourceTree.SanitizePath(path);
+
+            return this.nodes.Contains(path);
         }
-        public bool ContainsNode(string name)
+        public bool ContainsResource(string path)
         {
-            return this.nodes.Contains(name);
+            path = ResourceTree.SanitizePath(path);
+
+            if (path.EndsWith("/") && this.nodes.Contains(path))
+            {
+                return true;
+            }
+            string container = System.IO.Path.GetDirectoryName(path);
+            if (this.nodes.Contains(container))
+            {
+                return false;
+            }
+            else
+            {
+                return false;
+            }
         }
-        public bool ContainsResource(string name)
+        public ResourceNode GetNode(string path)
         {
-            return this.resources.Contains(name);
+            path = ResourceTree.SanitizePath(path);
+
+            if (this.nodes.Contains(path))
+            {
+                return this.nodes[path];
+            }
+            else
+            {
+                throw new KeyNotFoundException();
+            }
         }
-        public ResourceNode GetNode(string name)
+        public Resource GetResource(string path)
         {
-            return this.nodes[name];
-        }
-        public Resource GetResource(string name)
-        {
-            return this.resources[name];
+            path = ResourceTree.SanitizePath(path);
+
+            return null;
         }
         #endregion
         #region Properties - Public
@@ -95,14 +123,7 @@ namespace Serenity.Collections
         {
             get
             {
-                if (this.Parent == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                return !(this.parent == null);
             }
         }
         public string Name
@@ -116,7 +137,10 @@ namespace Serenity.Collections
         {
             get
             {
-                return this.nodes;
+                foreach (ResourceNode node in this.nodes)
+                {
+                    yield return node;
+                }
             }
         }
         public ResourceNode Parent
@@ -125,27 +149,12 @@ namespace Serenity.Collections
             {
                 return this.parent;
             }
-            internal set
-            {
-                this.parent = value;
-            }
         }
         public string Path
         {
             get
             {
-                if (this.HasParent)
-                {
-                    return parent.Path + this.name + "/";
-                }
-                else if (!string.IsNullOrEmpty(this.name))
-                {
-                    return "/" + this.name + "/";
-                }
-                else
-                {
-                    return "/";
-                }
+                return (this.HasParent) ? this.parent.Path + "/" + this.Name + "/" : "/" + this.name + "/";
             }
         }
         public IEnumerable<Resource> Resources

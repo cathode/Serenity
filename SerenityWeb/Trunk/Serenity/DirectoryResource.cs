@@ -18,21 +18,14 @@ namespace Serenity
 {
     public class DirectoryResource : Resource
     {
-        #region Constructors - Public
-        public DirectoryResource(string location)
+        #region Constructors - internal
+        internal DirectoryResource(ResourceNode node)
         {
-            if (location.EndsWith("/"))
-            {
-                this.location = location;
-            }
-            else
-            {
-                this.location = location + "/";
-            }
+            this.node = node;
         }
         #endregion
         #region Fields - Private
-        private string location = "/";
+        private ResourceNode node;
         #endregion
         #region Fields - Public
         public const string XsltStylesheetUrl = "/resource/serenity/index.xslt";
@@ -49,10 +42,9 @@ namespace Serenity
             }
 
             // collect data
-            ResourceNode node = domain.Resources.GetNode(this.location);
             Dictionary<string, List<Resource>> groupedResources = new Dictionary<string, List<Resource>>();
 
-            foreach (Resource resource in node.Resources)
+            foreach (Resource resource in this.node.Resources)
             {
                 if (!groupedResources.ContainsKey(resource.Grouping.PluralForm))
                 {
@@ -68,7 +60,7 @@ namespace Serenity
             writer.WriteProcessingInstruction("xml-stylesheet", "type='text/xsl' href='" + DirectoryResource.XsltStylesheetUrl + "'");
             writer.WriteStartElement("index");
             writer.WriteStartElement("location");
-            writer.WriteString(this.location);
+            writer.WriteString(this.node.Path.ToString());
             writer.WriteEndElement();
             foreach (KeyValuePair<string, List<Resource>> pair in groupedResources)
             {
@@ -87,5 +79,16 @@ namespace Serenity
             context.Response.Write(output.ToString());
         }
         #endregion
+        public override MimeType ContentType
+        {
+            get
+            {
+                return MimeType.ApplicationXml;
+            }
+            protected internal set
+            {
+                throw new InvalidOperationException("Cannot set MimeType for DirectoryResource objects.");
+            }
+        }
     }
 }

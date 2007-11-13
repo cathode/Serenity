@@ -37,7 +37,15 @@ namespace Serenity.Collections
             }
             else
             {
-                return this.GetBestMatch(Domain.GetParentHost(hostName));
+                string parentHost = Domain.GetParentHost(hostName);
+                if (parentHost == hostName)
+                {
+                    return null;
+                }
+                else
+                {
+                    return this.GetBestMatch(parentHost);
+                }
             }
         }
         #endregion
