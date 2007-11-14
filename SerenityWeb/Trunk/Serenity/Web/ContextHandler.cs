@@ -40,11 +40,28 @@ namespace Serenity.Web
              Resource resource;
             if (context.HasDomain)
             {
-                resource = context.Domain.Resources.GetResource(new ResourcePath(context.Request.Url.AbsolutePath));
+                ResourcePath path = new ResourcePath(context.Request.Url.AbsolutePath);
+                try
+                {
+                    resource = context.Domain.Resources.GetResource(path);
+                }
+                catch
+                {
+                    ErrorHandler.Handle(context, StatusCode.Http404NotFound);
+                    return;
+                }
             }
             else
             {
-                resource = SerenityServer.CommonDomain.Resources.GetResource(new ResourcePath(context.Request.Url.AbsolutePath));
+                try
+                {
+                    resource = SerenityServer.CommonDomain.Resources.GetResource(new ResourcePath(context.Request.Url.AbsolutePath));
+                }
+                catch
+                {
+                    ErrorHandler.Handle(context, StatusCode.Http404NotFound);
+                    return;
+                }
             }
 
             if (resource != null)

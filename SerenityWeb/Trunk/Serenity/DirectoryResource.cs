@@ -52,6 +52,7 @@ namespace Serenity
                 }
                 groupedResources[resource.Grouping.PluralForm].Add(resource);
             }
+            /*
             foreach (ResourceNode resourceNode in this.node.Nodes)
             {
                 if (!groupedResources.ContainsKey(resourceNode.DirectoryResource.Grouping.PluralForm))
@@ -59,7 +60,7 @@ namespace Serenity
                     groupedResources.Add(resourceNode.DirectoryResource.Grouping.PluralForm, new List<Resource>());
                 }
                 groupedResources[resourceNode.DirectoryResource.Grouping.PluralForm].Add(resourceNode.DirectoryResource);
-            }
+            }*/
 
             // output data
             StringBuilder output = new StringBuilder();
@@ -79,6 +80,28 @@ namespace Serenity
                 writer.WriteEndElement();
                 writer.WriteStartElement("field");
                 writer.WriteAttributeString("size", "Size");
+                writer.WriteEndElement();
+
+                foreach (Resource res in pair.Value)
+                {
+                    writer.WriteStartElement("item");
+                    writer.WriteAttributeString("icon", FileTypeRegistry.GetIcon(System.IO.Path.GetExtension(res.Name)));
+                    writer.WriteStartElement("value");
+                    writer.WriteAttributeString("link", res.Name);
+                    writer.WriteString(res.Name);
+                    writer.WriteEndElement();
+                    if (res.IsSizeKnown)
+                    {
+                        writer.WriteElementString("value", res.Size.ToString());
+                    }
+                    else
+                    {
+                        writer.WriteElementString("value", "---");
+                    }
+                    writer.WriteElementString("value", FileTypeRegistry.GetDescription(System.IO.Path.GetExtension(res.Name)));
+                    writer.WriteElementString("value", "---");
+                    writer.WriteEndElement();
+                }
             }
             writer.WriteEndDocument();
             writer.Flush();
