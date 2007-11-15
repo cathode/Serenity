@@ -22,6 +22,7 @@ namespace Serenity
         internal DirectoryResource(ResourceNode node)
         {
             this.node = node;
+            this.Name = node.Name + "/";
         }
         #endregion
         #region Fields - Private
@@ -52,7 +53,7 @@ namespace Serenity
                 }
                 groupedResources[resource.Grouping.PluralForm].Add(resource);
             }
-            /*
+
             foreach (ResourceNode resourceNode in this.node.Nodes)
             {
                 if (!groupedResources.ContainsKey(resourceNode.DirectoryResource.Grouping.PluralForm))
@@ -60,28 +61,47 @@ namespace Serenity
                     groupedResources.Add(resourceNode.DirectoryResource.Grouping.PluralForm, new List<Resource>());
                 }
                 groupedResources[resourceNode.DirectoryResource.Grouping.PluralForm].Add(resourceNode.DirectoryResource);
-            }*/
+            }
 
             // output data
             StringBuilder output = new StringBuilder();
             XmlWriter writer = XmlWriter.Create(output);
+            // <?xml version="1.0" encoding="utf-8" ?>
             writer.WriteStartDocument();
+            // <?xsl
             writer.WriteProcessingInstruction("xml-stylesheet", "type='text/xsl' href='" + DirectoryResource.XsltStylesheetUrl + "'");
+            // <index>
             writer.WriteStartElement("index");
+            //   <location>Node Path</location>
             writer.WriteStartElement("location");
             writer.WriteString(this.node.Path.ToString());
             writer.WriteEndElement();
             foreach (KeyValuePair<string, List<Resource>> pair in groupedResources)
             {
+                // <group name="name">
                 writer.WriteStartElement("group");
                 writer.WriteAttributeString("name", pair.Key);
+                //   <field id="name" name="Thing Name" />
                 writer.WriteStartElement("field");
+                writer.WriteAttributeString("id", "name");
                 writer.WriteAttributeString("name", pair.Value[0].Grouping.SingularForm + " Name");
                 writer.WriteEndElement();
+
                 writer.WriteStartElement("field");
-                writer.WriteAttributeString("size", "Size");
+                writer.WriteAttributeString("id", "size");
+                writer.WriteAttributeString("name", "Size");
                 writer.WriteEndElement();
 
+                writer.WriteStartElement("field");
+                writer.WriteAttributeString("id", "description");
+                writer.WriteAttributeString("name", "Description");
+                writer.WriteEndElement();
+
+                writer.WriteStartElement("field");
+                writer.WriteAttributeString("id", "timestamp");
+                writer.WriteAttributeString("name", "Timestamp");
+                writer.WriteEndElement();
+                
                 foreach (Resource res in pair.Value)
                 {
                     writer.WriteStartElement("item");
@@ -102,6 +122,8 @@ namespace Serenity
                     writer.WriteElementString("value", "---");
                     writer.WriteEndElement();
                 }
+                // </group>
+                writer.WriteEndElement();
             }
             writer.WriteEndDocument();
             writer.Flush();

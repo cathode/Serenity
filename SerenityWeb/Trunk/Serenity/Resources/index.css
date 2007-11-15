@@ -37,15 +37,15 @@ td, th
 {
 	width: 20px;
 }
-.Size
+.size
 {
 	width: 96px;
 }
-.Type
+.description
 {
 	width: 160px;
 }
-.Time
+.timestamp
 {
 	width: 160px;
 }
