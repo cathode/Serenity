@@ -8,6 +8,7 @@
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Xml;
 
@@ -66,72 +67,78 @@ namespace Serenity
             }
 
             // output data
-            StringBuilder output = new StringBuilder();
-            XmlWriter writer = XmlWriter.Create(output);
-            // <?xml version="1.0" encoding="utf-8" ?>
-            writer.WriteStartDocument();
-            // <?xsl
-            writer.WriteProcessingInstruction("xml-stylesheet", "type='text/xsl' href='" + DirectoryResource.XsltStylesheetUrl + "'");
-            // <index>
-            writer.WriteStartElement("index");
-            //   <location>Node Path</location>
-            writer.WriteStartElement("location");
-            writer.WriteString(this.node.Path.ToString());
-            writer.WriteEndElement();
-            foreach (KeyValuePair<string, List<Resource>> pair in groupedResources)
+            using (MemoryStream ms = new MemoryStream())
             {
-                // <group name="name">
-                writer.WriteStartElement("group");
-                writer.WriteAttributeString("name", pair.Key);
-                //   <field id="name" name="Thing Name" />
-                writer.WriteStartElement("field");
-                writer.WriteAttributeString("id", "name");
-                writer.WriteAttributeString("name", pair.Value[0].Grouping.SingularForm + " Name");
-                writer.WriteEndElement();
-
-                writer.WriteStartElement("field");
-                writer.WriteAttributeString("id", "size");
-                writer.WriteAttributeString("name", "Size");
-                writer.WriteEndElement();
-
-                writer.WriteStartElement("field");
-                writer.WriteAttributeString("id", "description");
-                writer.WriteAttributeString("name", "Description");
-                writer.WriteEndElement();
-
-                writer.WriteStartElement("field");
-                writer.WriteAttributeString("id", "timestamp");
-                writer.WriteAttributeString("name", "Timestamp");
-                writer.WriteEndElement();
-                
-                foreach (Resource res in pair.Value)
+                XmlWriterSettings settings = new XmlWriterSettings();
+                settings.ConformanceLevel = ConformanceLevel.Document;
+                settings.Encoding = Encoding.UTF8;
+                using (XmlTextWriter writer = new XmlTextWriter(ms, Encoding.UTF8))
                 {
-                    writer.WriteStartElement("item");
-                    writer.WriteAttributeString("icon", FileTypeRegistry.GetIcon(System.IO.Path.GetExtension(res.Name)));
-                    writer.WriteStartElement("value");
-                    writer.WriteAttributeString("link", res.WebPath);
-                    writer.WriteString(res.Name);
+                    // <?xml version="1.0" encoding="utf-8" ?>
+                    writer.WriteStartDocument();
+                    // <?xsl
+                    writer.WriteProcessingInstruction("xml-stylesheet", "type='text/xsl' href='" + DirectoryResource.XsltStylesheetUrl + "'");
+                    // <index>
+                    writer.WriteStartElement("index");
+                    //   <location>Node Path</location>
+                    writer.WriteStartElement("location");
+                    writer.WriteString(this.node.Path.ToString());
                     writer.WriteEndElement();
-                    if (res.IsSizeKnown)
+                    foreach (KeyValuePair<string, List<Resource>> pair in groupedResources)
                     {
-                        writer.WriteElementString("value", res.Size.ToString());
-                    }
-                    else
-                    {
-                        writer.WriteElementString("value", "---");
-                    }
-                    writer.WriteElementString("value", FileTypeRegistry.GetDescription(System.IO.Path.GetExtension(res.Name)));
-                    writer.WriteElementString("value", "---");
-                    writer.WriteEndElement();
-                }
-                // </group>
-                writer.WriteEndElement();
-            }
-            writer.WriteEndDocument();
-            writer.Flush();
-            writer.Close();
+                        // <group name="name">
+                        writer.WriteStartElement("group");
+                        writer.WriteAttributeString("name", pair.Key);
+                        //   <field id="name" name="Thing Name" />
+                        writer.WriteStartElement("field");
+                        writer.WriteAttributeString("id", "name");
+                        writer.WriteAttributeString("name", pair.Value[0].Grouping.SingularForm + " Name");
+                        writer.WriteEndElement();
 
-            context.Response.Write(output.ToString());
+                        writer.WriteStartElement("field");
+                        writer.WriteAttributeString("id", "size");
+                        writer.WriteAttributeString("name", "Size");
+                        writer.WriteEndElement();
+
+                        writer.WriteStartElement("field");
+                        writer.WriteAttributeString("id", "description");
+                        writer.WriteAttributeString("name", "Description");
+                        writer.WriteEndElement();
+
+                        writer.WriteStartElement("field");
+                        writer.WriteAttributeString("id", "timestamp");
+                        writer.WriteAttributeString("name", "Timestamp");
+                        writer.WriteEndElement();
+
+                        foreach (Resource res in pair.Value)
+                        {
+                            writer.WriteStartElement("item");
+                            writer.WriteAttributeString("icon", FileTypeRegistry.GetIcon(System.IO.Path.GetExtension(res.Name)));
+                            writer.WriteStartElement("value");
+                            writer.WriteAttributeString("link", res.WebPath);
+                            writer.WriteString(res.Name);
+                            writer.WriteEndElement();
+                            if (res.IsSizeKnown)
+                            {
+                                writer.WriteElementString("value", res.Size.ToString());
+                            }
+                            else
+                            {
+                                writer.WriteElementString("value", "---");
+                            }
+                            writer.WriteElementString("value", FileTypeRegistry.GetDescription(System.IO.Path.GetExtension(res.Name)));
+                            writer.WriteElementString("value", "---");
+                            writer.WriteEndElement();
+                        }
+                        // </group>
+                        writer.WriteEndElement();
+                    }
+                    writer.WriteEndDocument();
+                    writer.Flush();
+                    writer.Close();
+                }
+                context.Response.Write(ms.ToArray());
+            }
         }
         #endregion
         #region Properties - Public
@@ -139,7 +146,7 @@ namespace Serenity
         {
             get
             {
-                return MimeType.ApplicationXml;
+                return new MimeType("text", "xml");
             }
             protected internal set
             {
