@@ -12,12 +12,12 @@ using System.Text;
 
 using Serenity.Web;
 
-namespace Serenity
+namespace Serenity.Resources
 {
     /// <summary>
     /// Provides the base class for dynamic resources.
     /// </summary>
-    public abstract class Page : Resource
+    public abstract class DynamicResource : Resource
     {
         #region Fields - Private
         private Module module;

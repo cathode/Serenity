@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
+using Serenity.Resources;
 using Serenity.Themes;
 using Serenity.Web;
 

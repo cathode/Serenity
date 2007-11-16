@@ -11,12 +11,13 @@ using System.Collections.Generic;
 using System.Text;
 
 using Serenity;
+using Serenity.Resources;
 using Serenity.Web;
 using Serenity.Web.Drivers;
 
 namespace Serenity.Pages
 {
-    public sealed class DefaultPage : Page
+    public sealed class DefaultPage : DynamicResource
     {
         #region Methods - Public
         public override void OnRequest(CommonContext context)

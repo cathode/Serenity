@@ -12,6 +12,7 @@ using System.Text;
 using System.Xml;
 
 using Serenity.Collections;
+using Serenity.Resources;
 using Serenity.Web;
 
 namespace Serenity

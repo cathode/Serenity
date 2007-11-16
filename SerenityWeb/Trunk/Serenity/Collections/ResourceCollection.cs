@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 
+using Serenity.Resources;
+
 namespace Serenity.Collections
 {
     /// <summary>

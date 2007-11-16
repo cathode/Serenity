@@ -12,7 +12,7 @@ using System.Text;
 
 using Serenity.Web;
 
-namespace Serenity
+namespace Serenity.Resources
 {
 	/// <summary>
 	/// Provides a base class that all web-accessible resources must inherit from.

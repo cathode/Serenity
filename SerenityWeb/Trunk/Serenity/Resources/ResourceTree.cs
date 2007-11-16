@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Serenity
+namespace Serenity.Resources
 {
     /// <summary>
     /// Represents a tree of resources, and contains methods to add and remove them.

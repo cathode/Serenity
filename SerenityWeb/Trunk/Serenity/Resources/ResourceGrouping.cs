@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Serenity
+namespace Serenity.Resources
 {
     public sealed class ResourceGrouping
     {

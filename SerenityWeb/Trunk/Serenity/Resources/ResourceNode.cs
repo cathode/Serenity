@@ -12,7 +12,7 @@ using System.Text;
 
 using Serenity.Collections;
 
-namespace Serenity
+namespace Serenity.Resources
 {
     public class ResourceNode
     {

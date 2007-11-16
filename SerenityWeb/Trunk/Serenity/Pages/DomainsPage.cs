@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Serenity.Resources;
 using Serenity.Web;
 
 namespace Serenity.Pages
@@ -17,7 +18,7 @@ namespace Serenity.Pages
     /// <summary>
     /// Provides a web administration page to add, remove, view, and edit Domain Settings.
     /// </summary>
-    public sealed class DomainsPage : Page
+    public sealed class DomainsPage : DynamicResource
     {
         public override void OnInitialization()
         {

@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Serenity
+namespace Serenity.Resources
 {
     /// <summary>
     /// Represents a requestable file embedded in a module assembly file.

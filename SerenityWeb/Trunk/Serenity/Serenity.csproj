@@ -77,27 +77,27 @@
     <None Include="Collections\ResourceNode.cs" />
     <Compile Include="Collections\ResourceNodeCollection.cs" />
     <None Include="Data\Database.cs" />
-    <Compile Include="DirectoryResource.cs" />
+    <Compile Include="Resources\DirectoryResource.cs" />
     <Compile Include="Domain.cs" />
-    <Compile Include="ErrorResource.cs" />
+    <Compile Include="Resources\ErrorResource.cs" />
     <Compile Include="FileTypeEntry.cs" />
     <Compile Include="LogMessageLevel.cs" />
     <Compile Include="Pages\IndexerPage.cs" />
-    <Compile Include="ResourceGrouping.cs" />
-    <Compile Include="ResourceNode.cs" />
-    <Compile Include="ResourcePath.cs" />
-    <Compile Include="ResourceResource.cs" />
-    <Compile Include="ResourceTree.cs" />
+    <Compile Include="Resources\ResourceGrouping.cs" />
+    <Compile Include="Resources\ResourceNode.cs" />
+    <Compile Include="Resources\ResourcePath.cs" />
+    <Compile Include="Resources\ResourceResource.cs" />
+    <Compile Include="Resources\ResourceTree.cs" />
     <Compile Include="SerenityServer.cs" />
     <Compile Include="Web\Drivers\DriverPool.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Pages\DefaultPage.cs" />
     <Compile Include="Pages\DomainsPage.cs" />
-    <Compile Include="Resource.cs" />
-    <Compile Include="StaticResource.cs" />
+    <Compile Include="Resources\Resource.cs" />
+    <Compile Include="Resources\StaticResource.cs" />
     <Compile Include="Themes\Theme.cs" />
     <Compile Include="Web\ContextHandler.cs" />
-    <Compile Include="Page.cs" />
+    <Compile Include="Resources\DynamicResource.cs" />
     <Compile Include="SerenityInfo.cs" />
     <Compile Include="FileTypeRegistry.cs" />
     <Compile Include="SPath.cs" />
@@ -195,7 +195,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <EmbeddedResource Include="Resources\index.xslt" />
-    <EmbeddedResource Include="Resources\indextest.xml" />
     <Content Include="Domains\localhost.xml" />
     <Content Include="Themes\blueish\stylesheet.css" />
   </ItemGroup>

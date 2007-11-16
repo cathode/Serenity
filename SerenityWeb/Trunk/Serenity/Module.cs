@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Text;
 
 using Serenity.Attributes;
+using Serenity.Resources;
 
 namespace Serenity
 {
@@ -27,7 +28,7 @@ namespace Serenity
         #region Fields - Private
 		private Assembly assembly;
         private readonly string name;
-        private Dictionary<string, Page> pages = new Dictionary<string, Page>();
+        private Dictionary<string, DynamicResource> pages = new Dictionary<string, DynamicResource>();
         private string title;
         private string resourceNamespace;
         #endregion
@@ -39,7 +40,7 @@ namespace Serenity
         public static Module LoadModuleFile(string name, string assemblyPath)
         {
 			string title = name;
-            Page defaultPage = null;
+            DynamicResource defaultPage = null;
 
             Assembly moduleAsm = Assembly.LoadFile(Path.GetFullPath(assemblyPath));
 
@@ -59,7 +60,7 @@ namespace Serenity
                 if (attrib is ModuleDefaultPageAttribute)
                 {
                     ModuleDefaultPageAttribute defaultPageAttribute = (ModuleDefaultPageAttribute)attrib;
-                    defaultPage = (Page)moduleAsm.CreateInstance(defaultPageAttribute.Name);
+                    defaultPage = (DynamicResource)moduleAsm.CreateInstance(defaultPageAttribute.Name);
                     break;
                 }
             }
@@ -71,12 +72,12 @@ namespace Serenity
                     break;
                 }
             }
-            List<Page> pages = new List<Page>();
+            List<DynamicResource> pages = new List<DynamicResource>();
             foreach (Type type in moduleAsm.GetTypes())
             {
-                if (type.IsSubclassOf(typeof(Page)) == true)
+                if (type.IsSubclassOf(typeof(DynamicResource)) == true)
                 {
-                    Page page = (Page)moduleAsm.CreateInstance(type.FullName);
+                    DynamicResource page = (DynamicResource)moduleAsm.CreateInstance(type.FullName);
 
                     pages.Add(page);
                 }
@@ -103,21 +104,21 @@ namespace Serenity
                 return module;
             }
         }
-        public void AddPage(Page page)
+        public void AddPage(DynamicResource page)
         {
             if (!this.pages.ContainsKey(page.Name))
             {
                 this.pages.Add(page.Name, page);
             }
         }
-        public void AddPages(IEnumerable<Page> pages)
+        public void AddPages(IEnumerable<DynamicResource> pages)
         {
-            foreach (Page page in pages)
+            foreach (DynamicResource page in pages)
             {
                 this.AddPage(page);
             }
         }
-		public Page GetPage(string name)
+		public DynamicResource GetPage(string name)
 		{
 			if (this.pages.ContainsKey(name.ToLower()))
 			{
@@ -137,7 +138,7 @@ namespace Serenity
 				return this.assembly;
 			}
 		}
-		public Page DefaultPage
+		public DynamicResource DefaultPage
 		{
 			get
 			{
@@ -151,11 +152,11 @@ namespace Serenity
                 return this.name;
             }
         }
-        public IEnumerable<Page> Pages
+        public IEnumerable<DynamicResource> Pages
         {
             get
             {
-                foreach (Page page in this.pages.Values)
+                foreach (DynamicResource page in this.pages.Values)
                 {
                     yield return page;
                 }

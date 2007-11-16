@@ -12,6 +12,7 @@ using System.IO;
 using System.Text;
 
 using Serenity.Collections;
+using Serenity.Resources;
 using Serenity.Web;
 using Serenity.Web.Drivers;
 
@@ -68,7 +69,7 @@ namespace Serenity
             }
             SerenityServer.modules.Add(module);
             ResourcePath path = new ResourcePath("/dynamic/" + module.Name + "/");
-            foreach (Page page in module.Pages)
+            foreach (DynamicResource page in module.Pages)
             {
                 SerenityServer.commonDomain.Resources.Add(path, page);
             }
