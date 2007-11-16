@@ -16,7 +16,7 @@ using Serenity.Web.Drivers;
 
 namespace Serenity.Pages
 {
-    public sealed class DefaultPage : ContentPage
+    public sealed class DefaultPage : Page
     {
         #region Methods - Public
         public override void OnRequest(CommonContext context)

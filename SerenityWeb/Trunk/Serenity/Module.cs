@@ -39,7 +39,7 @@ namespace Serenity
         public static Module LoadModuleFile(string name, string assemblyPath)
         {
 			string title = name;
-            ContentPage defaultPage = null;
+            Page defaultPage = null;
 
             Assembly moduleAsm = Assembly.LoadFile(Path.GetFullPath(assemblyPath));
 
@@ -59,7 +59,7 @@ namespace Serenity
                 if (attrib is ModuleDefaultPageAttribute)
                 {
                     ModuleDefaultPageAttribute defaultPageAttribute = (ModuleDefaultPageAttribute)attrib;
-                    defaultPage = (ContentPage)moduleAsm.CreateInstance(defaultPageAttribute.Name);
+                    defaultPage = (Page)moduleAsm.CreateInstance(defaultPageAttribute.Name);
                     break;
                 }
             }
@@ -71,18 +71,14 @@ namespace Serenity
                     break;
                 }
             }
-            List<ContentPage> pages = new List<ContentPage>();
+            List<Page> pages = new List<Page>();
             foreach (Type type in moduleAsm.GetTypes())
             {
-                if (type.IsSubclassOf(typeof(ContentPage)) == true)
+                if (type.IsSubclassOf(typeof(Page)) == true)
                 {
-                    ContentPage page = (ContentPage)moduleAsm.CreateInstance(type.FullName);
+                    Page page = (Page)moduleAsm.CreateInstance(type.FullName);
 
                     pages.Add(page);
-                }
-                else if (type.IsSubclassOf(typeof(ResourceClass)) == true)
-                {
-                    ResourceClass.RegisterResourceClass(moduleAsm.CreateInstance(type.FullName) as ResourceClass);
                 }
             }
             if (pages.Count == 0)
@@ -107,16 +103,16 @@ namespace Serenity
                 return module;
             }
         }
-        public void AddPage(ContentPage page)
+        public void AddPage(Page page)
         {
             if (!this.pages.ContainsKey(page.Name))
             {
                 this.pages.Add(page.Name, page);
             }
         }
-        public void AddPages(IEnumerable<ContentPage> pages)
+        public void AddPages(IEnumerable<Page> pages)
         {
-            foreach (ContentPage page in pages)
+            foreach (Page page in pages)
             {
                 this.AddPage(page);
             }

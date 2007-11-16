@@ -76,7 +76,6 @@
     <None Include="Collections\ResourceTree.cs" />
     <None Include="Collections\ResourceNode.cs" />
     <Compile Include="Collections\ResourceNodeCollection.cs" />
-    <Compile Include="ContentPage.cs" />
     <None Include="Data\Database.cs" />
     <Compile Include="DirectoryResource.cs" />
     <Compile Include="Domain.cs" />
@@ -95,16 +94,11 @@
     <Compile Include="Pages\DefaultPage.cs" />
     <Compile Include="Pages\DomainsPage.cs" />
     <Compile Include="Resource.cs" />
-    <Compile Include="ResourceClasses\DynamicResourceClass.cs" />
-    <Compile Include="ResourceClasses\ResourceResourceClass.cs" />
-    <Compile Include="ResourceClasses\StaticResourceClass.cs" />
-    <Compile Include="ResourceClasses\ThemeResourceClass.cs" />
     <Compile Include="StaticResource.cs" />
     <Compile Include="Themes\Theme.cs" />
     <Compile Include="Web\ContextHandler.cs" />
     <Compile Include="Page.cs" />
     <Compile Include="SerenityInfo.cs" />
-    <Compile Include="ResourceClass.cs" />
     <Compile Include="FileTypeRegistry.cs" />
     <Compile Include="SPath.cs" />
     <Compile Include="Log.cs" />

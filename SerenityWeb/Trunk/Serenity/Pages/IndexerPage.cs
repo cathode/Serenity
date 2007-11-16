@@ -16,7 +16,7 @@ using Serenity.Web;
 
 namespace Serenity.Pages
 {
-    public sealed class IndexerPage : ContentPage
+    public sealed class IndexerPage : Page
     {
        
 
