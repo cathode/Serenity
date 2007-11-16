@@ -1,0 +1,866 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SPCore</name>
+    </assembly>
+    <members>
+        <member name="T:Serenity.PackedBool16">
+            <summary>
+            Represents 16 discrete boolean values in two octets.
+            </summary>
+        </member>
+        <member name="F:Serenity.PackedBool16.MaxIndex">
+            <summary>
+            Holds the maximum allowed value that can be used when indexing a PackedBool16.
+            </summary>
+        </member>
+        <member name="F:Serenity.PackedBool16.MinIndex">
+            <summary>
+            Holds the minimum allowed value that can be used when indexing a PackedBool16.
+            </summary>
+        </member>
+        <member name="M:Serenity.PackedBool16.#ctor(System.Boolean)">
+            <summary>
+            Initializes a new instance of the PackedBool16 struct.
+            </summary>
+            <param name="initialState">The initial state of the bits in the new instance.</param>
+        </member>
+        <member name="M:Serenity.PackedBool16.#ctor(System.Boolean[])">
+            <summary>
+            Initializes a new instance of the PackedBool16 struct.
+            </summary>
+            <param name="initialValues">The values to initialize the new instance with.</param>
+        </member>
+        <member name="M:Serenity.PackedBool16.#ctor(System.Boolean,System.Boolean[])">
+            <summary>
+            Initializes a new instance of the PackedBool16 struct.
+            </summary>
+            <param name="initialState">The initial state of the bits in the new instance.</param>
+            <param name="initialValues">The values to initialize the new instance with.</param>
+        </member>
+        <member name="M:Serenity.PackedBool16.Equals(System.Object)">
+            <summary>
+            Compares the current PackedBool16 instance to an object and determines if they are equal.
+            </summary>
+            <param name="obj">The object to compare to.</param>
+            <returns>True if obj is a PackedBool16 and has a value equal to the current instance.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool16.Equals(Serenity.PackedBool16)">
+            <summary>
+            Compares the current PackedBool16 instance to another instance and determines if they have equal values.
+            </summary>
+            <param name="pbool">The object to compare to.</param>
+            <returns>True if value of pbool equal to value of current instance.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool16.Equals(Serenity.PackedBool16,Serenity.PackedBool16)">
+            <summary>
+            Compares two PackedBool16 instances and determines if they have equal values.
+            </summary>
+            <param name="a">The first instance to compare.</param>
+            <param name="b">The second instance to compare.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.PackedBool16.GetEnumerator">
+            <summary>
+            Exposes an enumerator which allows iteration over the discrete boolean
+            values stored in the current PackedBool16.
+            </summary>
+            <returns>An enumerator for the current instance.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool16.GetHashCode">
+            <summary>
+            Computes a hashcode that is mathematically related to the value of the current PackedBool16.
+            </summary>
+            <returns>The hashcode of the current instance.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool16.ToString">
+            <summary>
+            Converts the current PackedBool16 to a string representation.
+            </summary>
+            <returns>The string representation of the current instance.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool16.op_Inequality(Serenity.PackedBool16,Serenity.PackedBool16)">
+            <summary>
+            Compares two PackedBool16 instances and determines if they have inequal values.
+            </summary>
+            <param name="a">The first instance to compare.</param>
+            <param name="b">The second instance to compare.</param>
+            <returns>True if the two instances have inequal values, otherwise false.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool16.op_Equality(Serenity.PackedBool16,Serenity.PackedBool16)">
+            <summary>
+            Compares two PackedBool instances and determines if they have equal values.
+            </summary>
+            <param name="a">The first instance to compare.</param>
+            <param name="b">The second instance to compare.</param>
+            <returns>True if the two instances have equal values, otherwise false.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool16.op_Explicit(Serenity.PackedBool16)~Serenity.PackedBool">
+            <summary>
+            Allows a PackedBool16 to be explicitly downconverted to a PackedBool.
+            This is a potentially lossy operation.
+            </summary>
+            <param name="pbool">The PackedBool16 to explicitly downconvert.</param>
+            <returns>A PackedBool with a similar value to the supplied PackedBool16.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool16.op_Implicit(Serenity.PackedBool16)~Serenity.PackedBool32">
+            <summary>
+            Allows a PackedBool16 to be implicitly upconverted to a PackedBool32.
+            </summary>
+            <param name="pbool">The PackedBool16 to implicitly upconvert.</param>
+            <returns>A PackedBool32 with the same value as the supplied PackedBool16.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool16.op_Implicit(Serenity.PackedBool16)~Serenity.PackedBool64">
+            <summary>
+            Allows a PackedBool16 to be implicitly upconverted to a PackedBool64.
+            </summary>
+            <param name="pbool">The PackedBool16 to implicitly upconvert.</param>
+            <returns>A PackedBool64 with the same value as the supplied PackedBool16.</returns>
+        </member>
+        <member name="P:Serenity.PackedBool16.Item(System.Int32)">
+            <summary>
+            Gets or sets a discrete boolean value stored in the current PackedBool16.
+            </summary>
+            <param name="index">The index of the boolean value to access.</param>
+            <returns>The boolean value stored at index.</returns>
+        </member>
+        <member name="P:Serenity.PackedBool16.PackedValue">
+            <summary>
+            Gets the actual packed value.
+            </summary>
+        </member>
+        <member name="T:Serenity.ICloneable`1">
+            <summary>
+            Supports generic cloning, which creates a new instance of a generic
+            object with the same value as an existing instance.
+            </summary>
+            <typeparam name="T">The type of object to clone.</typeparam>
+        </member>
+        <member name="M:Serenity.ICloneable`1.Clone">
+            <summary>
+            When implemented in a derived class, returns a shallow copy of the
+            current T.
+            </summary>
+            <returns>A shallow copy of the current T.</returns>
+        </member>
+        <member name="T:Serenity.HexEncoder">
+            <summary>
+            Provides static methods to convert and translate arrays of bytes or strings to and from hexadecimal.
+            </summary>
+        </member>
+        <member name="M:Serenity.HexEncoder.Convert(System.Char[])">
+            <summary>
+            Returns an array of bytes representing the hex input.
+            </summary>
+            <param name="input">The hex input as a char array.</param>
+            <returns>An array of bytes representing the hex input.</returns>
+        </member>
+        <member name="M:Serenity.HexEncoder.Convert(System.String)">
+            <summary>
+            Returns an array of bytes representing the hex input.
+            </summary>
+            <param name="input">The hex input as a string.</param>
+            <returns>An array of bytes representing the hex input.</returns>
+        </member>
+        <member name="M:Serenity.HexEncoder.Convert(System.Byte[])">
+            <summary>
+            Returns a string containing the supplied bytes as hex.
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.HexEncoder.Convert(System.Byte)">
+            <summary>
+            Returns a string containing the supplied byte as hex.
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.HexEncoder.Validate(System.Char)">
+            <summary>
+            Determines if a specific char is a valid hexadecimal character.
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.HexEncoder.Validate(System.Char[])">
+            <summary>
+            Determines if all the chars in the supplied char array are valid hexadecimal characters.
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.HexEncoder.Validate(System.String)">
+            <summary>
+            Determines if the contents of the supplied string are all valid hexadecimal characters.
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Serenity.PackedBool32">
+            <summary>
+            Represents 32 discrete boolean values in four octets.
+            </summary>
+        </member>
+        <member name="F:Serenity.PackedBool32.MaxIndex">
+            <summary>
+            Holds the maximum allowed value that can be used when indexing a PackedBool32.
+            </summary>
+        </member>
+        <member name="F:Serenity.PackedBool32.MinIndex">
+            <summary>
+            Holds the minimum allowed value that can be used when indexing a PackedBool32.
+            </summary>
+        </member>
+        <member name="M:Serenity.PackedBool32.#ctor(System.Boolean)">
+            <summary>
+            Initializes a new instance of the PackedBool32 struct.
+            </summary>
+            <param name="initialState">The initial state of the bits in the new instance.</param>
+        </member>
+        <member name="M:Serenity.PackedBool32.#ctor(System.Boolean[])">
+            <summary>
+            Initializes a new instance of the PackedBool32 struct.
+            </summary>
+            <param name="initialValues">The values to initialize the new instance with.</param>
+        </member>
+        <member name="M:Serenity.PackedBool32.#ctor(System.Boolean,System.Boolean[])">
+            <summary>
+            Initializes a new instance of the PackedBool32 struct.
+            </summary>
+            <param name="initialState">The initial state of the bits in the new instance.</param>
+            <param name="initialValues">The values to initialize the new instance with.</param>
+        </member>
+        <member name="M:Serenity.PackedBool32.Equals(System.Object)">
+            <summary>
+            Compares the current PackedBool32 instance to an object and determines if they are equal.
+            </summary>
+            <param name="obj">The object to compare to.</param>
+            <returns>True if obj is a PackedBool32 and has a value equal to the current instance; otherwise false.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool32.Equals(Serenity.PackedBool32)">
+            <summary>
+            Compares the current PackedBool32 instance to another instance and determines if they have equal values.
+            </summary>
+            <param name="pbool">The object to compare to.</param>
+            <returns>True if value of pbool equal to value of current instance.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool32.Equals(Serenity.PackedBool32,Serenity.PackedBool32)">
+            <summary>
+            Compares two PackedBool32 instances and determines if they have equal values.
+            </summary>
+            <param name="a">The first instance to compare.</param>
+            <param name="b">The second instance to compare.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.PackedBool32.GetEnumerator">
+            <summary>
+            Exposes an enumerator which allows iteration over the discrete boolean
+            values stored in the current PackedBool32.
+            </summary>
+            <returns>An enumerator for the current instance.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool32.GetHashCode">
+            <summary>
+            Computes a hashcode that is mathematically related to the value of the current PackedBool32.
+            </summary>
+            <returns>The hashcode of the current instance.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool32.ToString">
+            <summary>
+            Converts the current PackedBool32 to a string representation.
+            </summary>
+            <returns>The string representation of the current instance.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool32.op_Inequality(Serenity.PackedBool32,Serenity.PackedBool32)">
+            <summary>
+            Compares two PackedBool32 instances and determines if they have inequal values.
+            </summary>
+            <param name="a">The first instance to compare.</param>
+            <param name="b">The second instance to compare.</param>
+            <returns>True if the two instances have inequal values, otherwise false.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool32.op_Equality(Serenity.PackedBool32,Serenity.PackedBool32)">
+            <summary>
+            Compares two PackedBool32 instances and determines if they have equal values.
+            </summary>
+            <param name="a">The first instance to compare.</param>
+            <param name="b">The second instance to compare.</param>
+            <returns>True if the two instances have equal values, otherwise false.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool32.op_Explicit(Serenity.PackedBool32)~Serenity.PackedBool">
+            <summary>
+            Allows a PackedBool32 to be explicitly downconverted to a PackedBool.
+            This is a potentially lossy operation.
+            </summary>
+            <param name="pbool">The PackedBool32 to explicitly downconvert.</param>
+            <returns>A PackedBool with a similar value to the supplied PackedBool32.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool32.op_Explicit(Serenity.PackedBool32)~Serenity.PackedBool16">
+            <summary>
+            Allows a PackedBool32 to be explicitly downconverted to a PackedBool16.
+            This is a potentially lossy operation.
+            </summary>
+            <param name="pbool">The PackedBool32 to explicitly downconvert.</param>
+            <returns>A PackedBool16 with a similar value to the supplied PackedBool32</returns>
+        </member>
+        <member name="M:Serenity.PackedBool32.op_Implicit(Serenity.PackedBool32)~Serenity.PackedBool64">
+            <summary>
+            Allows a PackedBool32 to be implicitly upconverted to a PackedBool64.
+            </summary>
+            <param name="pbool">The PackedBool32 to implicitly upconvert.</param>
+            <returns>A PackedBool64 with the same value as the supplied PackedBool32.</returns>
+        </member>
+        <member name="P:Serenity.PackedBool32.Item(System.Int32)">
+            <summary>
+            Gets or sets a discrete boolean value stored in the current PackedBool32.
+            </summary>
+            <param name="index">The index of the boolean value to access.</param>
+            <returns>The boolean value stored at index.</returns>
+        </member>
+        <member name="P:Serenity.PackedBool32.PackedValue">
+            <summary>
+            Gets the actual packed value.
+            </summary>
+        </member>
+        <member name="T:Serenity.PackedBool">
+            <summary>
+            Represents 8 discrete boolean values in a single octet.
+            </summary>
+        </member>
+        <member name="F:Serenity.PackedBool.MinIndex">
+            <summary>
+            Holds the minimum allowed value that can be used when indexing a PackedBool.
+            </summary>
+        </member>
+        <member name="F:Serenity.PackedBool.MaxIndex">
+            <summary>
+            Holds the maximum allowed value that can be used when indexing a PackedBool.
+            </summary>
+        </member>
+        <member name="M:Serenity.PackedBool.#ctor(System.Boolean)">
+            <summary>
+            Initializes a new instance of the PackedBool struct.
+            </summary>
+            <param name="initialState">The initial state of the bits in the new
+            PackedBool instance.</param>
+        </member>
+        <member name="M:Serenity.PackedBool.#ctor(System.Boolean[])">
+            <summary>
+            Initializes a new instance of the PackedBool struct.
+            </summary>
+            <param name="initialValues">The values to initialize the new
+            PackedBool instance with.</param>
+        </member>
+        <member name="M:Serenity.PackedBool.#ctor(System.Boolean,System.Boolean[])">
+            <summary>
+            Initializes a new instance of the PackedBool struct.
+            </summary>
+            <param name="initialState">The initial state of the bits in the new
+            PackedBool instance.</param>
+            <param name="initialValues">The values to initialize the new
+            PackedBool instance with.</param>
+        </member>
+        <member name="M:Serenity.PackedBool.Equals(System.Object)">
+            <summary>
+            Compares the current PackedBool to an object and determines if they are equal.
+            </summary>
+            <param name="obj">The object to compare to.</param>
+            <returns>True if obj is a PackedBool and has a value equal to the current PackedBool.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool.Equals(Serenity.PackedBool)">
+            <summary>
+            Compares the current PackedBool to another PackedBool and determines if they have equal values.
+            </summary>
+            <param name="pbool">The object to compare to.</param>
+            <returns>True if value of pbool equal to value of current PackedBool.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool.Equals(Serenity.PackedBool,Serenity.PackedBool)">
+            <summary>
+            Compares two PackedBool instances and determines if they have equal values.
+            </summary>
+            <param name="a">The first instance to compare.</param>
+            <param name="b">The second instance to compare.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.PackedBool.GetEnumerator">
+            <summary>
+            Exposes an enumerator which allows iteration over the discrete boolean
+            values stored in the current PackedBool.
+            </summary>
+            <returns>An enumerator for the current instance.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool.GetHashCode">
+            <summary>
+            Computes a hashcode that is mathematically related to the value of the current PackedBool.
+            </summary>
+            <returns>The hashcode of the current instance.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool.ToString">
+            <summary>
+            Converts the current PackedBool to a string representation.
+            </summary>
+            <returns>The string representation of the current instance.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool.op_Inequality(Serenity.PackedBool,Serenity.PackedBool)">
+            <summary>
+            Compares two PackedBool instances and determines if they have inequal values.
+            </summary>
+            <param name="a">The first instance to compare.</param>
+            <param name="b">The second instance to compare.</param>
+            <returns>True if the two instances have inequal values, otherwise false.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool.op_Equality(Serenity.PackedBool,Serenity.PackedBool)">
+            <summary>
+            Compares two PackedBool instances and determines if they have equal values.
+            </summary>
+            <param name="a">The first instance to compare.</param>
+            <param name="b">The second instance to compare.</param>
+            <returns>True if the two instances have equal values, otherwise false.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool.op_Implicit(Serenity.PackedBool)~Serenity.PackedBool16">
+            <summary>
+            Allows a PackedBool to be implicitly upconverted to a PackedBool16.
+            </summary>
+            <param name="pbool">The PackedBool to implicitly upconvert.</param>
+            <returns>A PackedBool16 with the same value as the supplied PackedBoool.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool.op_Implicit(Serenity.PackedBool)~Serenity.PackedBool32">
+            <summary>
+            Allows a PackedBool to be implicitly upconverted to a PackedBool32.
+            </summary>
+            <param name="pbool">The PackedBool to implicitly upconvert.</param>
+            <returns>A PackedBool32 with the same value as the supplied PackedBool.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool.op_Implicit(Serenity.PackedBool)~Serenity.PackedBool64">
+            <summary>
+            Allows a PackedBool to be implicitly upconverted to a PackedBool64.
+            </summary>
+            <param name="pbool">The PackedBool to implicitly upconvert.</param>
+            <returns>A PackedBool64 with the same value as the supplied PackedBool.</returns>
+        </member>
+        <member name="P:Serenity.PackedBool.Item(System.Int32)">
+            <summary>
+            Gets or sets a discrete boolean value stored in the current PackedBool.
+            </summary>
+            <param name="index">The index of the boolean value to access.</param>
+            <returns>The boolean value stored at index.</returns>
+        </member>
+        <member name="P:Serenity.PackedBool.PackedValue">
+            <summary>
+            Gets the actual packed value.
+            </summary>
+        </member>
+        <member name="T:Serenity.PackedBool64">
+            <summary>
+            Represents 64 discrete boolean values in eight octets.
+            </summary>
+        </member>
+        <member name="F:Serenity.PackedBool64.MaxIndex">
+            <summary>
+            Holds the maximum allowed value that can be used when indexing a PackedBool64.
+            </summary>
+        </member>
+        <member name="F:Serenity.PackedBool64.MinIndex">
+            <summary>
+            Holds the minimum allowed value that can be used when indexing a PackedBool64.
+            </summary>
+        </member>
+        <member name="M:Serenity.PackedBool64.#ctor(System.Boolean)">
+            <summary>
+            Initializes a new instance of the PackedBool64 struct.
+            </summary>
+            <param name="initialState">The initial state of the bits in the new instance.</param>
+        </member>
+        <member name="M:Serenity.PackedBool64.#ctor(System.Boolean[])">
+            <summary>
+            Initializes a new instance of the PackedBool64 struct.
+            </summary>
+            <param name="initialValues">The values to initialize the new instance with.</param>
+        </member>
+        <member name="M:Serenity.PackedBool64.#ctor(System.Boolean,System.Boolean[])">
+            <summary>
+            Initializes a new instance of the PackedBool64 struct.
+            </summary>
+            <param name="initialState">The initial state of the bits in the new instance.</param>
+            <param name="initialValues">The values to initialize the new instance with.</param>
+        </member>
+        <member name="M:Serenity.PackedBool64.Equals(System.Object)">
+            <summary>
+            Compares the current PackedBool64 instance to an object and determines if they are equal.
+            </summary>
+            <param name="obj">The object to compare to.</param>
+            <returns>True if obj is a PackedBool64 and has a value equal to the current instance; otherwise false.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool64.Equals(Serenity.PackedBool64)">
+            <summary>
+            Compares the current PackedBool64 instance to another instance and determines if they have equal values.
+            </summary>
+            <param name="pbool">The object to compare to.</param>
+            <returns>True if value of pbool equal to value of current instance.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool64.Equals(Serenity.PackedBool64,Serenity.PackedBool64)">
+            <summary>
+            Compares two PackedBool64 instances and determines if they have equal values.
+            </summary>
+            <param name="a">The first instance to compare.</param>
+            <param name="b">The second instance to compare.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.PackedBool64.GetEnumerator">
+            <summary>
+            Exposes an enumerator which allows iteration over the discrete boolean
+            values stored in the current PackedBool64.
+            </summary>
+            <returns>An enumerator for the current instance.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool64.GetHashCode">
+            <summary>
+            Computes a hashcode that is mathematically related to the value of the current PackedBool64.
+            </summary>
+            <returns>The hashcode of the current instance.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool64.ToString">
+            <summary>
+            Converts the current PackedBool64 to a string representation.
+            </summary>
+            <returns>The string representation of the current instance.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool64.op_Inequality(Serenity.PackedBool64,Serenity.PackedBool64)">
+            <summary>
+            Compares two PackedBool64 instances and determines if they have inequal values.
+            </summary>
+            <param name="a">The first instance to compare.</param>
+            <param name="b">The second instance to compare.</param>
+            <returns>True if the two instances have inequal values, otherwise false.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool64.op_Equality(Serenity.PackedBool64,Serenity.PackedBool64)">
+            <summary>
+            Compares two PackedBool64 instances and determines if they have equal values.
+            </summary>
+            <param name="a">The first instance to compare.</param>
+            <param name="b">The second instance to compare.</param>
+            <returns>True if the two instances have equal values, otherwise false.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool64.op_Explicit(Serenity.PackedBool64)~Serenity.PackedBool">
+            <summary>
+            Allows a PackedBool64 to be explicitly downconverted to a PackedBool.
+            This is a potentially lossy operation.
+            </summary>
+            <param name="pbool">The PackedBool64 to explicitly downconvert.</param>
+            <returns>A PackedBool with a similar value to the supplied PackedBool64.</returns>
+        </member>
+        <member name="M:Serenity.PackedBool64.op_Explicit(Serenity.PackedBool64)~Serenity.PackedBool16">
+            <summary>
+            Allows a PackedBool64 to be explicitly downconverted to a PackedBool16.
+            This is a potentially lossy operation.
+            </summary>
+            <param name="pbool">The PackedBool64 to explicitly downconvert.</param>
+            <returns>A PackedBool16 with a similar value to the supplied PackedBool64</returns>
+        </member>
+        <member name="M:Serenity.PackedBool64.op_Explicit(Serenity.PackedBool64)~Serenity.PackedBool32">
+            <summary>
+            Allows a PackedBool64 to be explicitly downconverted to a PackedBool32.
+            This is a potentially lossy operation.
+            </summary>
+            <param name="pbool">The PackedBool64 to explicitly downconvert.</param>
+            <returns>A PackedBool32 with a similar value to the supplied PackedBool64</returns>
+        </member>
+        <member name="P:Serenity.PackedBool64.Item(System.Int32)">
+            <summary>
+            Gets or sets a discrete boolean value stored in the current PackedBool64.
+            </summary>
+            <param name="index">The index of the boolean value to access.</param>
+            <returns>The boolean value stored at index.</returns>
+        </member>
+        <member name="P:Serenity.PackedBool64.PackedValue">
+            <summary>
+            Gets the actual packed value.
+            </summary>
+        </member>
+        <member name="T:Serenity.IO.Writer`1">
+            <summary>
+            Provides an abstract base class for objects that write objects of a
+            specific type to a stream.
+            </summary>
+            <typeparam name="T">The type of object that will be written.</typeparam>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.#ctor">
+            <summary>
+            Initializes a new instance of the Writer class.
+            </summary>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.Dispose(System.Boolean)">
+            <summary>
+            When overridden in a derived class, cleans up unmanaged resources
+            used by that class.
+            </summary>
+            <param name="disposing">Determines if disposal is actually
+            necessary.</param>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.WriteCallback(System.IAsyncResult)">
+            <summary>
+            Provides a default implementation of the callback method invoked
+            when an async write operation occurs.
+            </summary>
+            <param name="result"></param>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.BeginWrite(System.IO.Stream,`0,System.AsyncCallback,System.Object)">
+            <summary>
+            Begins an asynchronus write operation.
+            </summary>
+            <param name="target"></param>
+            <param name="source"></param>
+            <param name="callback"></param>
+            <param name="state"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.Dispose">
+            <summary>
+            When overridden in a derived class, performs cleanup and freeing
+            of any unmanaged resources that may have been used by the current
+            Writer.
+            </summary>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.EncodeLengthPrefixedData(System.Byte[])">
+            <summary>
+            Encodes a byte array as length-prefixed data.
+            </summary>
+            <param name="input">The data to encode.</param>
+            <returns>The encoded data.</returns>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.EncodeLengthPrefixedString(System.String)">
+            <summary>
+            Encodes a string as length-prefixed data.
+            </summary>
+            <param name="input">The string to encode.</param>
+            <returns>The encoded data.</returns>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.EndWrite(System.IAsyncResult)">
+            <summary>
+            Ends an asynchronus write operation.
+            </summary>
+            <param name="result"></param>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.Write(System.IO.Stream,`0)">
+            <summary>
+            Writes the supplied T object to a stream.
+            </summary>
+            <param name="stream">The stream to be written to.</param>
+            <param name="value">The object to write to the stream.</param>
+            <remarks>
+            The supplied Stream must support writing.
+            </remarks>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the
+            current Writer is already in a disposed state.</exception>
+            <exception cref="T:System.ArgumentNullException">Thrown if either
+            the stream or value paramater are null.</exception>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.WriteBytes(System.Byte[]@,`0)">
+            <summary>
+            When overridden in a derived class, writes the supplied T object
+            to an array of bytes.
+            </summary>
+            <param name="target">When this method returns true, target will
+            contain the byte representation of source.</param>
+            <param name="source">The object to write to an array of bytes.</param>
+            <returns>True if the write operation suceeded, otherwise false.</returns>
+        </member>
+        <member name="P:Serenity.IO.Writer`1.IsDisposed">
+            <summary>
+            Gets or sets a value that indicates if the current Writer has been
+            cleaned up (disposed).
+            </summary>
+        </member>
+        <member name="P:Serenity.IO.Writer`1.IsReusable">
+            <summary>
+            Gets or sets a value which determines if the current Writer is reusable,
+            e.g., multiple calls to the Write method can be made to the same Reader.
+            </summary>
+        </member>
+        <member name="T:Serenity.IO.Writer`1.AsyncWriteOperation">
+            <summary>
+            Represents an asynchronous write operation.
+            </summary>
+            <param name="target"></param>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Serenity.IO.Writer`1.AsyncWriteState">
+            <summary>
+            Provides an async state object, allowing an async writer to pass
+            around more than one value between async methods calls.
+            </summary>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.AsyncWriteState.#ctor">
+            <summary>
+            Allows deriving classes to implement construction unheeded.
+            </summary>
+        </member>
+        <member name="M:Serenity.IO.Writer`1.AsyncWriteState.#ctor(System.IO.Stream,`0)">
+            <summary>
+            Initializes a new instance of the AsyncWriterState class.
+            </summary>
+        </member>
+        <member name="P:Serenity.IO.Writer`1.AsyncWriteState.Target">
+            <summary>
+            Gets or sets the stream that is being written to.
+            </summary>
+        </member>
+        <member name="P:Serenity.IO.Writer`1.AsyncWriteState.Source">
+            <summary>
+            Gets or sets the value that is being written.
+            </summary>
+        </member>
+        <member name="T:Serenity.IO.Reader`1">
+            <summary>
+            Provides an abstract base class for objects that read objects of a
+            specific type from a stream.
+            </summary>
+            <typeparam name="T">The type of object that will be read.</typeparam>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.#ctor">
+            <summary>
+            Initializes a new instance of the AsyncReader class.
+            </summary>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.Dispose(System.Boolean)">
+            <summary>
+            When overridden in a derived class, cleans up unmanaged resources
+            used by that class.
+            </summary>
+            <param name="disposing">Determines if disposal is actually
+            necessary.</param>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.ReadCallback(System.IAsyncResult)">
+            <summary>
+            Provides a basic callback method to support asynchronous read operations.
+            </summary>
+            <param name="result"></param>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.BeginRead(System.IO.Stream,`0@,System.AsyncCallback,System.Object)">
+            <summary>
+            Begins an asynchronous read operation.
+            </summary>
+            <param name="source">The stream to read from.</param>
+            <param name="target"></param>
+            <param name="callback"></param>
+            <param name="state"></param>
+            <returns></returns>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the
+            current AsyncReader is already disposed.</exception>
+            <exception cref="T:System.ArgumentNullException">Thrown if either
+            the source, callback, or state params were passed as null.
+            </exception>
+            <exception cref="T:System.ArgumentException">Thrown if the state
+            param is not of type AsyncReaderState.</exception>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.DecodeLengthPrefixedData(System.Byte[])">
+            <summary>
+            Decodes a length-prefixed data block from the supplied byte array.
+            </summary>
+            <param name="input">The byte array to process.</param>
+            <returns>The decoded byte array.</returns>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.DecodeLengthPrefixedString(System.Byte[])">
+            <summary>
+            Decodes a length-prefixed string from the supplied byte array.
+            </summary>
+            <param name="input">The byte array to process.</param>
+            <returns>The decoded string.</returns>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.Dispose">
+            <summary>
+            When overridden in a derived class, performs cleanup and freeing
+            of any unmanaged resources that may have been used by the current
+            Reader.
+            </summary>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.EndRead(`0@,System.IAsyncResult)">
+            <summary>
+            Ends an asynchronous read operation.
+            </summary>
+            <param name="target"></param>
+            <param name="result"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.Read(System.IO.Stream,`0@)">
+            <summary>
+            When overridden in a derived class, reads and returns a T from the
+            supplied Stream.
+            </summary>
+            <param name="source">The stream to read the T from.</param>
+            <param name="target">When this method returns, <b>target</b> will contain
+            the T object read from <b>source</b>.</param>
+            <returns>true if the read operation suceeded, otherwise false.</returns>
+            <remarks>The supplied Stream must support reading.</remarks>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.ReadBytes(System.Byte[],`0@)">
+            <summary>
+            Reads a T from the supplied array of bytes,
+            and indicates if the reading operation succeeded.
+            </summary>
+            <param name="source">The bytes to read a T from.</param>
+            <param name="target">When this method returns, <b>target</b> will contain
+            the T read from <b>source</b>.</param>
+            <returns>true if the read operation suceeded, otherwise false.</returns>
+        </member>
+        <member name="P:Serenity.IO.Reader`1.IsDisposed">
+            <summary>
+            Gets or sets a value that indicates if the current Reader has been
+            cleaned up (disposed).
+            </summary>
+        </member>
+        <member name="P:Serenity.IO.Reader`1.IsReusable">
+            <summary>
+            Gets or sets a value which determines if the current Reader is reusable,
+            e.g., multiple calls to the Read method can be made to the same Reader.
+            </summary>
+        </member>
+        <member name="T:Serenity.IO.Reader`1.AsyncReadOperation">
+            <summary>
+            Represents an asynchronous read operation.
+            </summary>
+            <param name="source"></param>
+            <param name="target"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Serenity.IO.Reader`1.AsyncReadState">
+            <summary>
+            Provides an async state object, allowing an async reader to pass
+            around more than one value between async methods calls.
+            </summary>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.AsyncReadState.#ctor">
+            <summary>
+            Allows deriving classes to implement construction unheeded.
+            </summary>
+        </member>
+        <member name="M:Serenity.IO.Reader`1.AsyncReadState.#ctor(System.IO.Stream,`0)">
+            <summary>
+            Initializes a new instance of the AsyncReaderState class.
+            </summary>
+        </member>
+        <member name="P:Serenity.IO.Reader`1.AsyncReadState.Buffer">
+            <summary>
+            Gets a buffer used to temporarily store bytes read from a
+            stream before they are converted into an object.
+            </summary>
+        </member>
+        <member name="P:Serenity.IO.Reader`1.AsyncReadState.Source">
+            <summary>
+            Gets or sets the stream being read from.
+            </summary>
+        </member>
+        <member name="P:Serenity.IO.Reader`1.AsyncReadState.Target">
+            <summary>
+            Gets or sets the object being read.
+            </summary>
+        </member>
+        <member name="P:Serenity.SPAsyncResult.IsCompleted">
+            <summary>
+            Gets an indication whether the asynchronous operation has completed.
+            </summary>
+        </member>
+    </members>
+</doc>
