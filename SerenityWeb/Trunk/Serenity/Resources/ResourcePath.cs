@@ -123,6 +123,14 @@ namespace Serenity.Resources
         {
             return this.path.GetHashCode() ^ 0x010CE52A;
         }
+        public ResourcePath MakeDirectoryPath()
+        {
+            if (this.IsDirectory)
+            {
+                throw new InvalidOperationException();
+            }
+            return new ResourcePath(this.path + "/");
+        }
         public override string ToString()
         {
             return this.path;

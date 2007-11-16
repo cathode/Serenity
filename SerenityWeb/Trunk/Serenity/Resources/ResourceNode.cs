@@ -29,6 +29,10 @@ namespace Serenity.Resources
             {
                 throw new ArgumentNullException("name");
             }
+            else if (name.EndsWith("/"))
+            {
+                throw new ArgumentException("Argument 'name' cannot contain any invalid characters.", "name");
+            }
             this.name = name;
             this.parent = parent;
 
@@ -56,9 +60,10 @@ namespace Serenity.Resources
         /// Adds a resource to the current node.
         /// </summary>
         /// <param name="resource"></param>
-        public void Add(Resource resource)
+        public void AddResource(Resource resource)
         {
             this.resources.Add(resource);
+            resource.WebPath = this.Path.ToString() + resource.Name;
         }
         /// <summary>
         /// Determines if a named node exists as a child of the current node.
@@ -175,11 +180,11 @@ namespace Serenity.Resources
             {
                 if (this.HasParent)
                 {
-                    return this.parent.Path + this.name;
+                    return (this.parent.Path + this.name).MakeDirectoryPath();
                 }
                 else
                 {
-                    return new ResourcePath(this.name);
+                    return new ResourcePath(this.name).MakeDirectoryPath();
                 }
             }
         }

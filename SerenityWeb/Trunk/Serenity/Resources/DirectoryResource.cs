@@ -23,7 +23,8 @@ namespace Serenity
         internal DirectoryResource(ResourceNode node)
         {
             this.node = node;
-            this.Name = node.Name + "/";
+            this.Name = node.Name;
+            this.WebPath = node.Path.ToString();
         }
         #endregion
         #region Fields - Private
@@ -108,7 +109,7 @@ namespace Serenity
                     writer.WriteStartElement("item");
                     writer.WriteAttributeString("icon", FileTypeRegistry.GetIcon(System.IO.Path.GetExtension(res.Name)));
                     writer.WriteStartElement("value");
-                    writer.WriteAttributeString("link", res.Name);
+                    writer.WriteAttributeString("link", res.WebPath);
                     writer.WriteString(res.Name);
                     writer.WriteEndElement();
                     if (res.IsSizeKnown)

@@ -9,6 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>HashWidget</RootNamespace>
     <AssemblyName>HashWidget</AssemblyName>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -18,19 +19,24 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <FileAlignment>512</FileAlignment>
+    <BaseAddress>0</BaseAddress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <FileAlignment>512</FileAlignment>
+    <BaseAddress>0</BaseAddress>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="SPCore, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\References\SPCore.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -47,6 +53,7 @@
     <ProjectReference Include="..\..\Serenity\Serenity.csproj">
       <Project>{2013CDED-1043-4FF6-A080-9B3C9BD7B140}</Project>
       <Name>Serenity</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -57,4 +64,8 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PostBuildEvent>mkdir "$(SolutionDir)Output\Modules"
+copy "$(TargetPath)" "$(SolutionDir)Output\Modules\$(TargetFileName)"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -38,7 +38,7 @@ namespace Serenity.Web
             {
                 throw new ArgumentNullException("context");
             }
-             Resource resource;
+            Resource resource;
             if (context.HasDomain)
             {
                 ResourcePath path = new ResourcePath(context.Request.Url.AbsolutePath);

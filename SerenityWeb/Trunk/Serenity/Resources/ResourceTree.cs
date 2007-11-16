@@ -59,7 +59,7 @@ namespace Serenity.Resources
                     node = node.GetNode(segment);
                 }
             }
-            node.Add(resource);
+            node.AddResource(resource);
         }
         public ResourceNode GetNode(string name)
         {
@@ -94,9 +94,10 @@ namespace Serenity.Resources
             }
             
             ResourceNode node = this.root;
-            if (path.Depth > 0)
+            int depth = (path.IsDirectory) ? path.Depth : path.Depth - 1;
+            if (depth > 0)
             {
-                for (int i = 0; i < path.Depth - 1; i++)
+                for (int i = 0; i < depth; i++)
                 {
                     if (node.ContainsNode(path.Segments[i]))
                     {
