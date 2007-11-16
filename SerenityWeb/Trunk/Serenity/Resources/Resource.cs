@@ -33,6 +33,10 @@ namespace Serenity.Resources
         {
             ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
         }
+        /// <summary>
+        /// Invoked after OnRequest.
+        /// </summary>
+        /// <param name="context"></param>
         public virtual void PostRequest(CommonContext context)
         {
             if (context.Response.ContentType != this.ContentType)
@@ -40,6 +44,10 @@ namespace Serenity.Resources
                 context.Response.ContentType = this.ContentType;
             }
         }
+        /// <summary>
+        /// Invoked before OnRequest.
+        /// </summary>
+        /// <param name="context"></param>
         public virtual void PreRequest(CommonContext context)
         {
 
@@ -99,6 +107,9 @@ namespace Serenity.Resources
                 this.name = value;
             }
 		}
+        /// <summary>
+        /// Gets the absolute path to the current Resource.
+        /// </summary>
         public string WebPath
         {
             get

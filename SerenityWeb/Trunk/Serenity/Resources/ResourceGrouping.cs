@@ -32,7 +32,7 @@ namespace Serenity.Resources
         public static readonly ResourceGrouping Resources = new ResourceGrouping("Resource", "Resources");
         public static readonly ResourceGrouping Directories = new ResourceGrouping("Directory", "Directories");
         public static readonly ResourceGrouping Files = new ResourceGrouping("File", "Files");
-        public static readonly ResourceGrouping Pages = new ResourceGrouping("Page", "Pages");
+        public static readonly ResourceGrouping Dynamic = new ResourceGrouping("Dynamic", "Dynamic");
         public static readonly ResourceGrouping Unspecified = new ResourceGrouping("Unspecified", "Unspecified");
         #endregion
         #region Methods - Public

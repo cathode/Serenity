@@ -43,7 +43,7 @@ namespace Serenity.Resources
         {
             get
             {
-                return ResourceGrouping.Pages;
+                return ResourceGrouping.Dynamic;
             }
         }
         public bool IsOwned

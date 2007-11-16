@@ -14,6 +14,9 @@ using Serenity.Collections;
 
 namespace Serenity.Resources
 {
+    /// <summary>
+    /// Represents a node in a tree of resources.
+    /// </summary>
     public class ResourceNode
     {
         #region Constructors - Internal
@@ -40,14 +43,28 @@ namespace Serenity.Resources
         private ResourceNodeCollection nodes = new ResourceNodeCollection();
         #endregion
         #region Methods - Public
+        /// <summary>
+        /// Adds a node as a child of the current node.
+        /// </summary>
+        /// <param name="node"></param>
         public void AddNode(ResourceNode node)
         {
             this.nodes.Add(node);
+            node.parent = this;
         }
+        /// <summary>
+        /// Adds a resource to the current node.
+        /// </summary>
+        /// <param name="resource"></param>
         public void Add(Resource resource)
         {
             this.resources.Add(resource);
         }
+        /// <summary>
+        /// Determines if a named node exists as a child of the current node.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public bool ContainsNode(string name)
         {
             if (name == null)
@@ -61,6 +78,11 @@ namespace Serenity.Resources
 
             return this.nodes.Contains(name);
         }
+        /// <summary>
+        /// Gets a named child node.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public virtual ResourceNode GetNode(string name)
         {
             if (name == null)
@@ -78,23 +100,11 @@ namespace Serenity.Resources
 
             return this.nodes[name];
         }
-        public ResourceNode GetNode(ResourcePath path)
-        {
-            ResourceNode node = this;
-
-            foreach (string segment in path)
-            {
-                if (node.ContainsNode(segment))
-                {
-                    node = node.GetNode(segment);
-                }
-                else
-                {
-                    throw new KeyNotFoundException("No node found at 'path'.");
-                }
-            }
-            return node;
-        }
+        /// <summary>
+        /// Gets a named resource.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public virtual Resource GetResource(string name)
         {
             if (name == null)
@@ -113,6 +123,9 @@ namespace Serenity.Resources
         }
         #endregion
         #region Properties - Public
+        /// <summary>
+        /// Gets a DirectoryResource object that can be used to generate an index of the current node.
+        /// </summary>
         public DirectoryResource DirectoryResource
         {
             get
@@ -120,6 +133,9 @@ namespace Serenity.Resources
                 return this.directoryResource;
             }
         }
+        /// <summary>
+        /// Gets a boolean value that indicates if the current node has a parent.
+        /// </summary>
         public bool HasParent
         {
             get
@@ -127,6 +143,9 @@ namespace Serenity.Resources
                 return (this.parent != null);
             }
         }
+        /// <summary>
+        /// Gets the name of the current node.
+        /// </summary>
         public string Name
         {
             get
@@ -134,6 +153,9 @@ namespace Serenity.Resources
                 return this.name;
             }
         }
+        /// <summary>
+        /// Gets an object which allows enumeration over the child nodes of the current node.
+        /// </summary>
         public IEnumerable<ResourceNode> Nodes
         {
             get
@@ -144,6 +166,9 @@ namespace Serenity.Resources
                 }
             }
         }
+        /// <summary>
+        /// Gets the path of the current node.
+        /// </summary>
         public ResourcePath Path
         {
             get
@@ -158,6 +183,9 @@ namespace Serenity.Resources
                 }
             }
         }
+        /// <summary>
+        /// Gets the parent node of the current node.
+        /// </summary>
         public ResourceNode Parent
         {
             get
@@ -172,6 +200,9 @@ namespace Serenity.Resources
                 }
             }
         }
+        /// <summary>
+        /// Gets an object that allows enumeration over the resources located at the current node.
+        /// </summary>
         public IEnumerable<Resource> Resources
         {
             get

@@ -68,6 +68,9 @@ namespace Serenity.Web
                 return this.driver;
             }
         }
+        /// <summary>
+        /// Gets a value which indicates if the current context has a Domain specified.
+        /// </summary>
         public bool HasDomain
         {
             get
