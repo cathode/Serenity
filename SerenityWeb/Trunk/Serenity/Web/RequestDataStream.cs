@@ -19,6 +19,7 @@ namespace Serenity.Web
     public sealed class RequestDataStream : Stream
     {
         #region Constructors - Public
+        [Obsolete]
         public RequestDataStream(string name)
             : this(name, new byte[0])
         {

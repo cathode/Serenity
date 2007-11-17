@@ -41,7 +41,11 @@ namespace Serenity.Web
             }
             else if (this.Contains(name))
             {
-                throw new InvalidOperationException("A RequestDataStream with the same name already exists in the current collection.");
+                List<byte> combinedData = new List<byte>(this[name].ReadAll());
+                combinedData.AddRange(data);
+                RequestDataStream newStream = new RequestDataStream(name, combinedData.ToArray());
+                this.SetItem(this.IndexOf(this[name]), newStream);
+                return newStream;
             }
             RequestDataStream stream = new RequestDataStream(name, data);
             this.Add(stream);

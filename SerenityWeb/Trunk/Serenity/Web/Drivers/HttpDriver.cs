@@ -36,14 +36,24 @@ namespace Serenity.Web.Drivers
         #region Methods - Private
         private void ProcessUrlEncodedRequestData(string input, CommonContext context)
         {
-            string[] Pairs = input.Split('&');
-            foreach (string Pair in Pairs)
+            if (input == null)
             {
-                if (Pair.IndexOf('=') != -1)
+                throw new ArgumentNullException("input");
+            }
+            else if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            string[] pairs = input.Split('&');
+            foreach (string escapedPair in pairs)
+            {
+                string pair = Uri.UnescapeDataString(escapedPair);
+                if (pair.IndexOf('=') != -1)
                 {
-                    string Name = Pair.Substring(0, Pair.IndexOf('='));
-                    string Value = Pair.Substring(Pair.IndexOf('=') + 1);
-                    context.Request.RequestData.AddDataStream(Name, Encoding.UTF8.GetBytes(Value)).Method = RequestMethod.GET;
+                    string name = pair.Substring(0, pair.IndexOf('='));
+                    string value = pair.Substring(pair.IndexOf('=') + 1);
+                    context.Request.RequestData.AddDataStream(name, Encoding.UTF8.GetBytes(value)).Method = RequestMethod.GET;
                 }
             }
         }
