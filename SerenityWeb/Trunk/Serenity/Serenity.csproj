@@ -82,7 +82,6 @@
     <Compile Include="Resources\ErrorResource.cs" />
     <Compile Include="FileTypeEntry.cs" />
     <Compile Include="LogMessageLevel.cs" />
-    <Compile Include="Pages\IndexerPage.cs" />
     <Compile Include="Resources\ResourceGrouping.cs" />
     <Compile Include="Resources\ResourceNode.cs" />
     <Compile Include="Resources\ResourcePath.cs" />
@@ -92,7 +91,7 @@
     <Compile Include="Web\Drivers\DriverPool.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Pages\DefaultPage.cs" />
-    <Compile Include="Pages\DomainsPage.cs" />
+    <None Include="Pages\DomainsPage.cs" />
     <Compile Include="Resources\Resource.cs" />
     <Compile Include="Resources\StaticResource.cs" />
     <Compile Include="Themes\Theme.cs" />

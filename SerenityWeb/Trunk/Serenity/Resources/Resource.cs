@@ -43,6 +43,10 @@ namespace Serenity.Resources
             {
                 context.Response.ContentType = this.ContentType;
             }
+            if (context.Response.Status.Code == 0)
+            {
+                context.Response.Status = StatusCode.Http200Ok;
+            }
         }
         /// <summary>
         /// Invoked before OnRequest.

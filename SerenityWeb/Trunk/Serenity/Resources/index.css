@@ -43,11 +43,11 @@ td, th
 }
 .description
 {
-	width: 160px;
+	width: auto;
 }
 .timestamp
 {
-	width: 160px;
+	width: auto;
 }
 .group
 {

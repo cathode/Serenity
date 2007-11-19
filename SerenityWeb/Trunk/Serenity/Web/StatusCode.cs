@@ -74,7 +74,7 @@ namespace Serenity.Web
 		{
 			get
 			{
-				return new StatusCode(200, "Ok");
+				return new StatusCode(200, "OK");
 			}
 		}
 		/// <summary>

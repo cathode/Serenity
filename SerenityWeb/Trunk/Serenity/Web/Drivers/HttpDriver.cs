@@ -295,7 +295,14 @@ namespace Serenity.Web.Drivers
                 outputText.Append("\r\n");
 
                 byte[] output = Encoding.ASCII.GetBytes(outputText.ToString());
-                socket.Send(output);
+                try
+                {
+                    socket.Send(output);
+                }
+                catch
+                {
+                    return false;
+                }
             }
             if (response.OutputBuffer.Count > 0)
             {
