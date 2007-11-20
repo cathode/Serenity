@@ -53,6 +53,18 @@ namespace Serenity.Resources
                 return (this.module == null) ? false : true;
             }
         }
+        public Module Module
+        {
+            get
+            {
+                return this.module;
+            }
+            internal set
+            {
+                this.module = value;
+            }
+        }
+        [Obsolete]
         public Module Modules
         {
             get

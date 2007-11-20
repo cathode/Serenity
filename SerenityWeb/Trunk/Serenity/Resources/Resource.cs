@@ -39,14 +39,15 @@ namespace Serenity.Resources
         /// <param name="context"></param>
         public virtual void PostRequest(CommonContext context)
         {
-            if (context.Response.ContentType != this.ContentType)
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            else if (context.Response.ContentType != this.ContentType)
             {
                 context.Response.ContentType = this.ContentType;
             }
-            if (context.Response.Status.Code == 0)
-            {
-                context.Response.Status = StatusCode.Http200Ok;
-            }
+            context.Response.Status = StatusCode.Http200Ok;
         }
         /// <summary>
         /// Invoked before OnRequest.

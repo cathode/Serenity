@@ -19,19 +19,16 @@ namespace Serenity.Pages
 {
     public sealed class DefaultPage : DynamicResource
     {
+        #region Constructors - Public
+        public DefaultPage()
+        {
+            this.Name = "Default";
+        }
+        #endregion
         #region Methods - Public
         public override void OnRequest(CommonContext context)
         {
-            context.Response.WriteLine("This Page has not yet been implemented!");
-        }
-        #endregion
-        #region Properties - Public
-        public override string Name
-        {
-            get
-            {
-                return "Default";
-            }
+            context.Response.WriteLine("This is the default page of the Serenity module.\r\nPlease visit <a href='http://serenityproject.net/'>http://serenityproject.net/</a> for more information.");
         }
         #endregion
     }

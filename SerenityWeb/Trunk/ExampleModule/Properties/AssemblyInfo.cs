@@ -5,5 +5,5 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("HashWidget")]
-[assembly: AssemblyDescription("An example module for Serenity")]
+[assembly: AssemblyTitle("ExampleModule")]
+[assembly: AssemblyDescription("")]

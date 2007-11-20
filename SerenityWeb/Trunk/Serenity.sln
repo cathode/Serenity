@@ -5,9 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serenity", "Serenity\Sereni
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{36484189-0ED9-48F5-988D-B1398F934F61}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{A6D97EDA-1105-468B-B511-A64EFB8640BD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashWidget", "Examples\HashWidget\HashWidget.csproj", "{BEEC0EDD-0CF2-483B-839F-153831343612}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleModule", "ExampleModule\ExampleModule.csproj", "{FA63034A-1277-43C5-B1A8-146CCF5E3DD4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,16 +21,13 @@ Global
 		{36484189-0ED9-48F5-988D-B1398F934F61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36484189-0ED9-48F5-988D-B1398F934F61}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36484189-0ED9-48F5-988D-B1398F934F61}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BEEC0EDD-0CF2-483B-839F-153831343612}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BEEC0EDD-0CF2-483B-839F-153831343612}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BEEC0EDD-0CF2-483B-839F-153831343612}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BEEC0EDD-0CF2-483B-839F-153831343612}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA63034A-1277-43C5-B1A8-146CCF5E3DD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA63034A-1277-43C5-B1A8-146CCF5E3DD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA63034A-1277-43C5-B1A8-146CCF5E3DD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA63034A-1277-43C5-B1A8-146CCF5E3DD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{BEEC0EDD-0CF2-483B-839F-153831343612} = {A6D97EDA-1105-468B-B511-A64EFB8640BD}
 	EndGlobalSection
 	GlobalSection(TextTemplating) = postSolution
 		TextTemplating = 1

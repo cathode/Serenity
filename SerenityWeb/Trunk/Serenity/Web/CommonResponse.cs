@@ -36,7 +36,7 @@ namespace Serenity.Web
         private MimeType mimeType = MimeType.Default;
         private List<byte> outputBuffer = new List<byte>();
         private int sent = 0;
-        private StatusCode status;
+        private StatusCode status = StatusCode.Http500InternalServerError;
         private bool useChunkedTransferEncoding = false;
         private bool useCompression = false;
         #endregion
