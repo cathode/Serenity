@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Serenity.Web;
+
 namespace Serenity.Resources
 {
     /// <summary>
@@ -36,7 +38,7 @@ namespace Serenity.Resources
         private readonly byte[] data;
         #endregion
         #region Methods - Public
-        public override void OnRequest(Serenity.Web.CommonContext context)
+        public override void OnRequest(CommonContext context)
         {
             context.Response.Write(this.data);
         }
@@ -47,6 +49,20 @@ namespace Serenity.Resources
             get
             {
                 return ResourceGrouping.Resources;
+            }
+        }
+        public override bool IsSizeKnown
+        {
+            get
+            {
+                return true;
+            }
+        }
+        public override int Size
+        {
+            get
+            {
+                return this.data.Length;
             }
         }
         #endregion

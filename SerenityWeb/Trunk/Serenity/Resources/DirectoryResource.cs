@@ -46,7 +46,7 @@ namespace Serenity
             }
 
             // collect data
-            Dictionary<string, List<Resource>> groupedResources = new Dictionary<string, List<Resource>>();
+            SortedDictionary<string, List<Resource>> groupedResources = new SortedDictionary<string, List<Resource>>();
 
             foreach (Resource resource in this.node.Resources)
             {

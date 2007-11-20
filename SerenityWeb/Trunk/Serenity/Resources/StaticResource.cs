@@ -58,6 +58,20 @@ namespace Serenity.Resources
 				this.location = value;
 			}
 		}
+        public override bool IsSizeKnown
+        {
+            get
+            {
+                return true;
+            }
+        }
+        public override int Size
+        {
+            get
+            {
+                return (int)new FileInfo(this.location).Length;
+            }
+        }
 		#endregion
 	}
 }
