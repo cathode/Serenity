@@ -155,7 +155,18 @@ namespace Serenity.Web.Drivers
                         int n = line.IndexOf(':');
                         if (n != -1)
                         {
-                            context.Request.Headers.Add(line.Substring(0, n), line.Substring(n + 2));
+                            string name = line.Substring(0, n);
+                            string value = line.Substring(n + 2);
+                            if (value == string.Empty)
+                            {
+                                ErrorHandler.Handle(context, StatusCode.Http400BadRequest, "A header was specified with no value.");
+                                return context;
+                            }
+                            if (!context.Request.Headers.Contains(name))
+                            {
+                                //TODO: Make sure ignoring duplicated headers is acceptable.
+                                context.Request.Headers.Add(name, value);
+                            }
                         }
                     }
                     indexOf = requestContent.IndexOf("\r\n");
