@@ -196,6 +196,8 @@
     <EmbeddedResource Include="Resources\index.xslt" />
     <Content Include="Domains\localhost.xml" />
     <Content Include="Themes\blueish\stylesheet.css" />
+    <Content Include="Web\Drivers\multipart test.txt" />
+    <Content Include="Web\Drivers\urlencoded test.txt" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="LibINI, Version=1.5.5.0, Culture=neutral, processorArchitecture=MSIL">

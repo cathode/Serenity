@@ -150,18 +150,29 @@ namespace Serenity.Web
 		/// </summary>
 		/// <param name="mimeType"></param>
 		/// <returns></returns>
-		public static MimeType FromString(string mimeType)
-		{
-			string[] parts = mimeType.Split('/');
-			if (parts.Length == 2)
-			{
-				return new MimeType(parts[0].Trim('"', ' '), parts[1].Trim('"', ' '));
-			}
-			else
-			{
-				return MimeType.Default;
-			}
-		}
+        public static MimeType FromString(string mimeType)
+        {
+            if (mimeType == null)
+            {
+                throw new ArgumentNullException("mimeType");
+            }
+            else if (mimeType == string.Empty)
+            {
+                throw new ArgumentException("Argument 'mimeType' cannot be empty.");
+            }
+            else if (!mimeType.Contains("/"))
+            {
+                throw new ArgumentException("Argument 'mimeType' has invalid format.");
+            }
+
+            string[] parts = mimeType.Split('/');
+            if (parts.Length != 2)
+            {
+                throw new ArgumentException("Argument 'mimeType' has invalid format.");
+            }
+
+            return new MimeType(parts[0], parts[1]);
+        }
         /// <summary>
         /// Overridden. Gets the hash code for the current MimeType.
         /// </summary>

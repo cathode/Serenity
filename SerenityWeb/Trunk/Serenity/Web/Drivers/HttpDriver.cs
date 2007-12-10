@@ -34,7 +34,7 @@ namespace Serenity.Web.Drivers
         }
         #endregion
         #region Methods - Private
-        private void ProcessUrlEncodedRequestData(string input, CommonContext context)
+        private bool ProcessUrlEncodedRequestData(string input, CommonContext context)
         {
             if (input == null)
             {
@@ -56,6 +56,22 @@ namespace Serenity.Web.Drivers
                     context.Request.RequestData.AddDataStream(name, Encoding.UTF8.GetBytes(value)).Method = RequestMethod.GET;
                 }
             }
+            return true;
+        }
+        private bool ProcessMultipartFormDataContent(string input, CommonContext context)
+        {
+            if (input == null)
+            {
+                throw new ArgumentNullException("input");
+            }
+            else if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            Header ct = context.Request.Headers["Content-Type"];
+
+            return true;
         }
         #endregion
         #region Methods - Public
@@ -119,7 +135,7 @@ namespace Serenity.Web.Drivers
                         ErrorHandler.Handle(context, StatusCode.Http405MethodNotAllowed, methodParts[0]);
                         return context;
                     }
-                    
+
                     //Request URI is the "middle"
                     requestUriRaw = methodParts[1];
 
@@ -136,7 +152,8 @@ namespace Serenity.Web.Drivers
                             break;
 
                         default:
-                            ErrorHandler.Handle(context, StatusCode.Http400BadRequest, "An invalid HTTP version was detected");
+                            ErrorHandler.Handle(context, StatusCode.Http505HttpVersionNotSupported,
+                                "The HTTP version specified with the request is not supported.");
                             return context;
                     }
                 }
@@ -208,6 +225,12 @@ namespace Serenity.Web.Drivers
                     return context;
                 }
 
+                if (context.Request.Headers.Contains("Content-Type"))
+                {
+                    Header h = context.Request.Headers["Content-Type"];
+                    context.Request.ContentType = MimeType.FromString(h.PrimaryValue);
+                }
+
                 bool hasContentLength = context.Request.Headers.Contains("Content-Length");
                 bool hasTransferEncoding = context.Request.Headers.Contains("Transfer-Encoding");
                 bool hasBody = hasContentLength | hasTransferEncoding;
@@ -219,20 +242,32 @@ namespace Serenity.Web.Drivers
                     if (context.Request.Headers.Contains("Content-Type"))
                     {
                         //Content-Length and Transfer-Encoding headers can't coexist.
-                        if (hasContentLength && !hasTransferEncoding)
+                        if (hasContentLength && hasTransferEncoding)
                         {
-                            if (context.Request.ContentType == MimeType.ApplicationXWwwFormUrlEncoded)
-                            {
-
-                            }
-                        }
-                        else if (hasTransferEncoding && !hasContentLength)
-                        {
-                            ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
+                            ErrorHandler.Handle(context, StatusCode.Http400BadRequest,
+                                "Content-Length and Transfer-Encoding headers cannot exist in the same request.");
                         }
                         else
                         {
-                            ErrorHandler.Handle(context, StatusCode.Http400BadRequest, "Content-Length and Transfer-Encoding headers cannot exist in the same request.");
+                            if (context.Request.ContentType == MimeType.ApplicationXWwwFormUrlEncoded)
+                            {
+                                if (!this.ProcessUrlEncodedRequestData(requestContent, context))
+                                {
+                                    return context;
+                                }
+                            }
+                            else if (context.Request.ContentType == MimeType.MultipartFormData)
+                            {
+                                if (!this.ProcessMultipartFormDataContent(requestContent, context))
+                                {
+                                    return context;
+                                }
+                            }
+                            else
+                            {
+                                ErrorHandler.Handle(context, StatusCode.Http501NotImplemented,
+                                    "No handler for the specified Content-Type exists.");
+                            }
                         }
                     }
                     else
