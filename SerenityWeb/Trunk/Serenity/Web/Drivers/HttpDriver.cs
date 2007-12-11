@@ -31,9 +31,19 @@ namespace Serenity.Web.Drivers
             : base(settings)
         {
             this.Info = new DriverInfo("Serenity", "HyperText Transmission Protocol", "http", new Version(1, 1));
+            this.RegisterHeaderHandler("Content-Type", new HeaderHandlerCallback(this.ContentTypeHeaderCallback));
         }
         #endregion
         #region Methods - Private
+        private void ContentTypeHeaderCallback(CommonContext context, Header header)
+        {
+            if (header.PrimaryValue.Contains(";"))
+            {
+                string[] segments = header.PrimaryValue.Split(new char[] { ';' }, 2);
+                header.PrimaryValue = segments[0];
+            }
+            context.Request.ContentType = MimeType.FromString(header.PrimaryValue);
+        }
         private bool ProcessUrlEncodedRequestData(string input, CommonContext context)
         {
             if (input == null)
@@ -225,10 +235,9 @@ namespace Serenity.Web.Drivers
                     return context;
                 }
 
-                if (context.Request.Headers.Contains("Content-Type"))
+                foreach (Header header in context.Request.Headers)
                 {
-                    Header h = context.Request.Headers["Content-Type"];
-                    context.Request.ContentType = MimeType.FromString(h.PrimaryValue);
+                    this.HandleHeader(context, header);
                 }
 
                 bool hasContentLength = context.Request.Headers.Contains("Content-Length");

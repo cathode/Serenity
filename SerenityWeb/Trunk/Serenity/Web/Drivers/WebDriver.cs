@@ -15,6 +15,8 @@ using System.Threading;
 
 namespace Serenity.Web.Drivers
 {
+    public delegate void HeaderHandlerCallback(CommonContext context, Header header);
+
     /// <summary>
     /// Provides a mechanism for recieving and responding to requests from clients (browsers).
     /// </summary>
@@ -35,6 +37,7 @@ namespace Serenity.Web.Drivers
             this.settings = settings;
             this.acceptDelegate = new AsyncCallback(this.AcceptCallback);
             this.disconnectDelegate = new AsyncCallback(this.DisconnectCallback);
+            this.headerHandlers = new Dictionary<string, HeaderHandlerCallback>();
             this.recieveDelegate = new AsyncCallback(this.RecieveCallback);
             this.sendDelegate = new AsyncCallback(this.SendCallback);
         }
@@ -42,12 +45,13 @@ namespace Serenity.Web.Drivers
         #region Fields - Private
         private readonly AsyncCallback acceptDelegate;
         private readonly AsyncCallback disconnectDelegate;
+        private readonly Dictionary<string, HeaderHandlerCallback> headerHandlers;
         private DriverInfo info;
         private bool isDisposed = false;
         private Socket listeningSocket;
         private readonly AsyncCallback recieveDelegate;
         private readonly AsyncCallback sendDelegate;
-        private WebDriverSettings settings;
+        private readonly WebDriverSettings settings;
         private OperationStatus status = OperationStatus.None;
         #endregion
         #region Methods - Protected
@@ -228,6 +232,23 @@ namespace Serenity.Web.Drivers
         {
             throw new NotSupportedException();
         }
+        public bool HandleHeader(CommonContext context, Header header)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            else if (header == null)
+            {
+                throw new ArgumentNullException("header");
+            }
+            else if (this.headerHandlers.ContainsKey(header.Name))
+            {
+                this.headerHandlers[header.Name].Invoke(context, header);
+                return true;
+            }
+            return false;
+        }
         /// <summary>
         /// Creates and binds the listening socket, preparing the WebDriver so that it can be started.
         /// </summary>
@@ -271,7 +292,28 @@ namespace Serenity.Web.Drivers
                 return false;
             }
         }
+        public bool IsHeaderHandlerRegistered(string headerName)
+        {
+            return this.headerHandlers.ContainsKey(headerName);
+        }
         public abstract CommonContext RecieveContext(Socket socket);
+        public void RegisterHeaderHandler(string headerName, HeaderHandlerCallback callback)
+        {
+            if (headerName == null)
+            {
+                throw new ArgumentNullException("headerName");
+            }
+            else if (callback == null)
+            {
+                throw new ArgumentNullException("callback");
+            }
+            else if (this.IsHeaderHandlerRegistered(headerName))
+            {
+                throw new InvalidOperationException("A header handler has already been registered for that header name.");
+            }
+
+            this.headerHandlers.Add(headerName, callback);
+        }
         /// <summary>
         /// Starts the WebDriver.
         /// </summary>
