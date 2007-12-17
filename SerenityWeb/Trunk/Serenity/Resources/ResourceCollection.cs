@@ -11,18 +11,30 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 
-namespace Serenity.Collections
+namespace Serenity.Resources
 {
-    public sealed class ModuleCollection : KeyedCollection<string, Module>
+    /// <summary>
+    /// Represents a collection of resources.
+    /// </summary>
+    public sealed class ResourceCollection : KeyedCollection<string, Resource>
     {
         #region Constructors - Public
-        public ModuleCollection()
+        /// <summary>
+        /// Initializes a new instance of the ResourceCollection class.
+        /// </summary>
+        public ResourceCollection()
             : base(StringComparer.OrdinalIgnoreCase)
         {
+          
         }
         #endregion
         #region Methods - Protected
-        protected override string GetKeyForItem(Module item)
+        /// <summary>
+        /// Overridden. Returns the SystemName property of the supplied Resource.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        protected override string GetKeyForItem(Resource item)
         {
             return item.Name;
         }

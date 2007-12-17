@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using Serenity.Collections;
 using Serenity.Resources;
 
 namespace Serenity
@@ -21,8 +20,17 @@ namespace Serenity
     public sealed class Domain
     {
         #region Constructors - Public
+        /// <summary>
+        /// Initializes a new instance of the Domain class.
+        /// </summary>
+        /// <param name="hostName">The host name of the new Domain instance.</param>
         public Domain(string hostName)
         {
+            if (hostName == null)
+            {
+                throw new ArgumentNullException("hostName");
+            }
+            
             this.hostName = hostName;
         }
         #endregion

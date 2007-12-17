@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-using Serenity.Collections;
 using Serenity.Resources;
 using Serenity.Web;
 using Serenity.Web.Drivers;
@@ -50,7 +49,14 @@ namespace Serenity
             {
                 throw new ArgumentNullException("domain");
             }
-
+            else if (SerenityServer.Status == OperationStatus.Started)
+            {
+                throw new InvalidOperationException("Cannot modify server state while server is running.");
+            }
+            else if (SerenityServer.domains.Contains(domain.HostName))
+            {
+                throw new InvalidOperationException("Cannot add a domain when a domain of the same name has already been added.");
+            }
             SerenityServer.domains.Add(domain);
         }
         public static void AddModule(Module module)
@@ -63,9 +69,9 @@ namespace Serenity
             {
                 throw new InvalidOperationException("Cannot modify server state while server is running.");
             }
-            if (SerenityServer.modules.Contains(module.Name))
+            else if (SerenityServer.modules.Contains(module.Name))
             {
-                return;
+                throw new InvalidOperationException("Cannot add a module when a module of the same name has already been added.");
             }
             SerenityServer.modules.Add(module);
             ResourcePath path = new ResourcePath("/dynamic/" + module.Name + "/");
@@ -77,7 +83,7 @@ namespace Serenity
             {
                 string newpath = embedPath.Remove(0, module.ResourceNamespace.Length);
                 string[] parts = newpath.Split('.');
-                
+
                 if (parts.Length > 2)
                 {
                     path = new ResourcePath("/resource/" + module.Name + "/" + string.Join("/", parts, 0, parts.Length - 2) + "/");
@@ -109,15 +115,33 @@ namespace Serenity
                 }
             }
         }
-        public static void ExtractResources(IEnumerable<Domain> domains)
+        public static void AddDomains(IEnumerable<Domain> domains)
         {
+            if (domains == null)
+            {
+                throw new ArgumentNullException("domains");
+            }
+            else if (SerenityServer.Status == OperationStatus.Started)
+            {
+                throw new InvalidOperationException("Cannot modify server state while server is running.");
+            }
+
             foreach (Domain domain in domains)
             {
                 SerenityServer.AddDomain(domain);
             }
         }
-        public static void ExtractResources(IEnumerable<Module> modules)
+        public static void AddModules(IEnumerable<Module> modules)
         {
+            if (modules == null)
+            {
+                throw new ArgumentNullException("modules");
+            }
+            else if (SerenityServer.Status == OperationStatus.Started)
+            {
+                throw new InvalidOperationException("Cannot modify server state while server is running.");
+            }
+
             foreach (Module module in modules)
             {
                 SerenityServer.AddModule(module);
@@ -186,6 +210,13 @@ namespace Serenity
             get
             {
                 return SerenityServer.domains;
+            }
+        }
+        public static ModuleCollection Modules
+        {
+            get
+            {
+                return SerenityServer.modules;
             }
         }
         public static OperationStatus Status

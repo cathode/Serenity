@@ -22,9 +22,14 @@ namespace Serenity.Web
     /// </summary>
     public class ContextHandler
     {
+        #region Constructors - Protected Internal
+        /// <summary>
+        /// Initializes a new instance of the ContextHandler class.
+        /// </summary>
         protected internal ContextHandler()
         {
         }
+        #endregion
         #region Fields - Private
         #endregion
         #region Methods - Public

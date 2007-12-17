@@ -11,14 +11,19 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 
-namespace Serenity.Collections
+namespace Serenity.Resources
 {
-    public sealed class ContentPageCollection : KeyedCollection<string, ContentPage>
+    public class ResourceNodeCollection : KeyedCollection<string, ResourceNode>
     {
-        #region Methods - Protected
-        protected override string GetKeyForItem(ContentPage item)
+        public ResourceNodeCollection()
+            : base(StringComparer.OrdinalIgnoreCase)
         {
-            return item.SystemName;
+            
+        }
+        #region Methods - Public
+        protected override string GetKeyForItem(ResourceNode item)
+        {
+            return item.Name;
         }
         #endregion
     }

@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 
-namespace Serenity.Collections
+namespace Serenity
 {
     /// <summary>
     /// Represents a collection of DomainSettings objects.
@@ -19,9 +19,41 @@ namespace Serenity.Collections
     public sealed class DomainCollection : KeyedCollection<string, Domain>
     {
         #region Methods - Protected
+        protected override void ClearItems()
+        {
+            if (SerenityServer.Status == OperationStatus.Started)
+            {
+                throw new InvalidOperationException("Cannot modify server-wide objects while server is running.");
+            }
+            base.ClearItems();
+        }
         protected override string GetKeyForItem(Domain item)
         {
             return item.HostName;
+        }
+        protected override void InsertItem(int index, Domain item)
+        {
+            if (SerenityServer.Status == OperationStatus.Started)
+            {
+                throw new InvalidOperationException("Cannot modify server-wide objects while server is running.");
+            }
+            base.InsertItem(index, item);
+        }
+        protected override void RemoveItem(int index)
+        {
+            if (SerenityServer.Status == OperationStatus.Started)
+            {
+                throw new InvalidOperationException("Cannot modify server-wide objects while server is running.");
+            }
+            base.RemoveItem(index);
+        }
+        protected override void SetItem(int index, Domain item)
+        {
+            if (SerenityServer.Status == OperationStatus.Started)
+            {
+                throw new InvalidOperationException("Cannot modify server-wide objects while server is running.");
+            }
+            base.SetItem(index, item);
         }
         #endregion
         #region Methods - Public

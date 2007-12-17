@@ -10,8 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using Serenity.Collections;
-
 namespace Serenity.Resources
 {
     /// <summary>

@@ -69,13 +69,10 @@
     <None Include="Cache\CachedStream.cs" />
     <Compile Include="Attributes\ModuleDefaultPageAttribute.cs" />
     <Compile Include="Attributes\ModuleResourceNamespaceAttribute.cs" />
-    <Compile Include="Collections\ModuleCollection.cs" />
-    <None Include="Collections\ContentPageCollection.cs" />
-    <Compile Include="Collections\DomainCollection.cs" />
-    <Compile Include="Collections\ResourceCollection.cs" />
-    <None Include="Collections\ResourceTree.cs" />
-    <None Include="Collections\ResourceNode.cs" />
-    <Compile Include="Collections\ResourceNodeCollection.cs" />
+    <Compile Include="ModuleCollection.cs" />
+    <Compile Include="DomainCollection.cs" />
+    <Compile Include="Resources\ResourceCollection.cs" />
+    <Compile Include="Resources\ResourceNodeCollection.cs" />
     <None Include="Data\Database.cs" />
     <Compile Include="Resources\DirectoryResource.cs" />
     <Compile Include="Domain.cs" />

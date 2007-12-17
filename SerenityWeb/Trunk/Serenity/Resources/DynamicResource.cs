@@ -19,6 +19,14 @@ namespace Serenity.Resources
     /// </summary>
     public abstract class DynamicResource : Resource
     {
+        #region Constructors - Public
+        /// <summary>
+        /// Initializes a new instance of the DynamicResource class.
+        /// </summary>
+        public DynamicResource()
+        {
+        }
+        #endregion
         #region Fields - Private
         private Module module;
         #endregion
@@ -39,6 +47,10 @@ namespace Serenity.Resources
         }
         #endregion
         #region Properties - Public
+        /// <summary>
+        /// Overridden. Gets the grouping of the current DynamicResource,
+        /// which is always ResourceGrouping.Dynamic.
+        /// </summary>
         public override ResourceGrouping Grouping
         {
             get
@@ -46,13 +58,11 @@ namespace Serenity.Resources
                 return ResourceGrouping.Dynamic;
             }
         }
-        public bool IsOwned
-        {
-            get
-            {
-                return (this.module == null) ? false : true;
-            }
-        }
+        /// <summary>
+        /// Gets the Module which the current DynamicResource belongs to.
+        /// </summary>
+        /// <exception cref="System.ArgumentNullException">Thrown when setting
+        /// if the value to be assigned is null.</exception>
         public Module Module
         {
             get
@@ -61,18 +71,10 @@ namespace Serenity.Resources
             }
             internal set
             {
-                this.module = value;
-            }
-        }
-        [Obsolete]
-        public Module Modules
-        {
-            get
-            {
-                return this.module;
-            }
-            internal set
-            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
                 this.module = value;
             }
         }

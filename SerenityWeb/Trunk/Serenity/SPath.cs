@@ -15,7 +15,7 @@ using System.Text;
 namespace Serenity
 {
 	/// <summary>
-	/// Represents one of the "special" folders that Serenity uses.
+	/// Represents special folders used by Serenity.
 	/// </summary>
 	public enum SpecialFolder
 	{
@@ -47,17 +47,13 @@ namespace Serenity
 		/// </summary>
 		Logs,
 	}
+    /// <summary>
+    /// Represents special files used by Serenity.
+    /// </summary>
 	public enum SpecialFile
 	{
 		Log,
 		FileTypeRegistry,
-	}
-	public enum OverwriteMode
-	{
-		All,
-		Newer,
-		Older,
-		None,
 	}
 	public static class SPath
 	{
@@ -94,45 +90,6 @@ namespace Serenity
 			}
 			return result;
 		}
-		public static int CopyDirectory(string source, string destination)
-		{
-			return SPath.CopyDirectory(source, destination, OverwriteMode.None);
-		}
-		/// <summary>
-		/// Recursively copies files and directories from one directory to another.
-		/// </summary>
-		/// <param name="source"></param>
-		/// <param name="destination"></param>
-        /// <param name="mode"></param>
-		/// <returns></returns>
-		public static int CopyDirectory(string source, string destination, OverwriteMode mode)
-		{
-			int copied = 0;
-			source = Path.GetFullPath(source);
-			destination = Path.GetFullPath(destination);
-
-			if (Directory.Exists(destination) == false)
-			{
-				Directory.CreateDirectory(destination);
-			}
-
-			foreach (string path in Directory.GetFiles(source))
-			{
-				string temp = Path.Combine(destination, Path.GetFileName(path));
-				if (File.Exists(temp) == false)
-				{
-					File.Copy(path, temp);
-					copied++;
-				}
-			}
-			foreach (string path in Directory.GetDirectories(source))
-			{
-				string temp = Path.Combine(destination, Path.GetFileName(path));
-				copied += SPath.CopyDirectory(path, temp, mode);
-			}
-
-			return copied;
-		}
 		public static string ResolveSpecialPath(SpecialFolder specialFolder)
 		{
 			return SPath.specialFolders[specialFolder];
@@ -140,34 +97,6 @@ namespace Serenity
 		public static string ResolveSpecialPath(SpecialFile specialFile)
 		{
 			return SPath.specialFiles[specialFile];
-		}
-		public static string GetModuleFile(string name)
-		{
-			return SPath.Combine(SPath.ModulesFolder, name, name + ".dll");
-		}
-		public static string GetModuleDirectory(string name)
-		{
-			return SPath.Combine(SPath.ModulesFolder, name);
-		}
-		public static string GetStaticFile(string name)
-		{
-			return SPath.Combine(DomainSettings.Current.DocumentRoot, name);
-		}
-		public static string GetLocalizedStaticFile(string name, CultureInfo ci)
-		{
-			return SPath.Combine(DomainSettings.Current.DocumentRoot, ci.Name, name);
-		}
-		public static string GetThemeFile(string name)
-		{
-			return SPath.Combine(SPath.ThemesFolder, name, "Theme");
-		}
-		public static string GetThemeDirectory(string name)
-		{
-			return SPath.Combine(SPath.ThemesFolder, name);
-		}
-		public static string SanitizePath(string path)
-		{
-			return path.Replace("../", "").Replace('/', '\\');
 		}
 		#endregion
 		#region Properties - Public

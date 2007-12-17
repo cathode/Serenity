@@ -24,6 +24,9 @@ namespace Serenity.Themes
         private Version version;
         #endregion
         #region Properties - Public
+        /// <summary>
+        /// Gets or sets the name of the author of the current Theme.
+        /// </summary>
         public string Author
         {
             get
@@ -35,6 +38,10 @@ namespace Serenity.Themes
                 this.author = value;
             }
         }
+        /// <summary>
+        /// Gets or sets the URL at which more information about the current
+        /// Theme can be found.
+        /// </summary>
         public Uri Url
         {
             get
@@ -46,6 +53,9 @@ namespace Serenity.Themes
                 this.url = value;
             }
         }
+        /// <summary>
+        /// Gets or sets the version information of the current Theme.
+        /// </summary>
         public Version Version
         {
             get

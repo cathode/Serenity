@@ -54,8 +54,8 @@ namespace Server
 			}
 
             SerenityServer.OperationLog.Write(string.Format("Loaded: {0} domains, {1} modules, {2} themes.",
-				DomainSettings.Count,
-				0,
+				SerenityServer.Domains.Count,
+				SerenityServer.Modules.Count,
 				0), LogMessageLevel.Info);
 			WebDriverSettings driverSettings = new WebDriverSettings();
             driverSettings.Ports = config.Ports;
