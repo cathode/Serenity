@@ -26,21 +26,19 @@ namespace Serenity
         static SerenityServer()
         {
             FileTypeRegistry.Initialize();
-
-            SerenityServer.domains.Add(SerenityServer.commonDomain);
             SerenityServer.OperationLog.Write("Server created.", LogMessageLevel.Debug);
         }
         #endregion
         #region Fields - Private
         private static Log accessLog = new Log();
-        private static readonly Domain commonDomain = new Domain("");
         private static ContextHandler contextHandler = new ContextHandler();
         private static readonly DomainCollection domains = new DomainCollection();
         private static readonly DriverPool driverPool = new DriverPool();
         private static Log errorLog = new Log();
-        private static ModuleCollection modules = new ModuleCollection();
+        private static readonly ModuleCollection modules = new ModuleCollection();
         private static Log operationLog = new Log();
         private static OperationStatus status = OperationStatus.None;
+        private static readonly ResourceCollection resources = new ResourceCollection();
         #endregion
         #region Methods - Public
         public static void AddDomain(Domain domain)
@@ -51,11 +49,11 @@ namespace Serenity
             }
             else if (SerenityServer.Status == OperationStatus.Started)
             {
-                throw new InvalidOperationException("Cannot modify server state while server is running.");
+                throw new InvalidOperationException(__Strings.CannotModifyWhileRunning);
             }
             else if (SerenityServer.domains.Contains(domain.HostName))
             {
-                throw new InvalidOperationException("Cannot add a domain when a domain of the same name has already been added.");
+                throw new InvalidOperationException(__Strings.DomainNameAlreadyExists);
             }
             SerenityServer.domains.Add(domain);
         }
@@ -67,17 +65,20 @@ namespace Serenity
             }
             else if (SerenityServer.Status == OperationStatus.Started)
             {
-                throw new InvalidOperationException("Cannot modify server state while server is running.");
+                throw new InvalidOperationException(__Strings.CannotModifyWhileRunning);
             }
             else if (SerenityServer.modules.Contains(module.Name))
             {
-                throw new InvalidOperationException("Cannot add a module when a module of the same name has already been added.");
+                throw new InvalidOperationException(__Strings.ModuleNameAlreadyExists);
             }
             SerenityServer.modules.Add(module);
-            ResourcePath path = new ResourcePath("/dynamic/" + module.Name + "/");
+            string path = "/dynamic/" + module.Name + "/";
+            DirectoryResource dr = new DirectoryResource(ResourcePath.Create(path));
+            SerenityServer.Resources.Add(dr);
             foreach (DynamicResource page in module.Pages)
             {
-                SerenityServer.commonDomain.Resources.Add(path, page);
+                page.Uri = ResourcePath.Create(path + page.Name);
+                SerenityServer.Resources.Add(page);
             }
             foreach (string embedPath in module.Assembly.GetManifestResourceNames())
             {
@@ -86,11 +87,15 @@ namespace Serenity
 
                 if (parts.Length > 2)
                 {
-                    path = new ResourcePath("/resource/" + module.Name + "/" + string.Join("/", parts, 0, parts.Length - 2) + "/");
+                    path = "/resource/" + module.Name + "/" + string.Join("/", parts, 0, parts.Length - 2) + "/";
                 }
                 else
                 {
-                    path = new ResourcePath("/resource/" + module.Name + "/");
+                    path = "/resource/" + module.Name + "/";
+                }
+                if (!SerenityServer.Resources.Contains(ResourcePath.Create(path)))
+                {
+                    SerenityServer.Resources.Add(new DirectoryResource(ResourcePath.Create(path)));
                 }
                 string name = "";
                 if (parts.Length > 1)
@@ -110,7 +115,8 @@ namespace Serenity
                         ResourceResource res = new ResourceResource(name, data);
                         res.ContentType = FileTypeRegistry.GetMimeType(parts[parts.Length - 1]);
 
-                        SerenityServer.commonDomain.Resources.Add(path, res);
+                        res.Uri = ResourcePath.Create(path + name);
+                        SerenityServer.Resources.Add(res);
                     }
                 }
             }
@@ -123,7 +129,7 @@ namespace Serenity
             }
             else if (SerenityServer.Status == OperationStatus.Started)
             {
-                throw new InvalidOperationException("Cannot modify server state while server is running.");
+                throw new InvalidOperationException(__Strings.CannotModifyWhileRunning);
             }
 
             foreach (Domain domain in domains)
@@ -139,7 +145,7 @@ namespace Serenity
             }
             else if (SerenityServer.Status == OperationStatus.Started)
             {
-                throw new InvalidOperationException("Cannot modify server state while server is running.");
+                throw new InvalidOperationException(__Strings.CannotModifyWhileRunning);
             }
 
             foreach (Module module in modules)
@@ -170,13 +176,6 @@ namespace Serenity
                 return SerenityServer.operationLog;
             }
         }
-        public static Domain CommonDomain
-        {
-            get
-            {
-                return SerenityServer.commonDomain;
-            }
-        }
         /// <summary>
         /// Gets or sets the ContextHandler used to handle recieved CommonContexts.
         /// </summary>
@@ -190,7 +189,7 @@ namespace Serenity
             {
                 if (SerenityServer.Status == OperationStatus.Started)
                 {
-                    throw new InvalidOperationException("Cannot modify server state while server is running.");
+                    throw new InvalidOperationException(__Strings.CannotModifyWhileRunning);
                 }
                 SerenityServer.contextHandler = value;
             }
@@ -228,6 +227,13 @@ namespace Serenity
             set
             {
                 SerenityServer.status = value;
+            }
+        }
+        public static ResourceCollection Resources
+        {
+            get
+            {
+                return SerenityServer.resources;
             }
         }
         #endregion

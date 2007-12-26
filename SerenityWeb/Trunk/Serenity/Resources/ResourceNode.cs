@@ -27,10 +27,10 @@ namespace Serenity.Resources
             {
                 throw new ArgumentNullException("name");
             }
-            else if (name.EndsWith("/"))
-            {
-                throw new ArgumentException("Argument 'name' cannot contain any invalid characters.", "name");
-            }
+            //else if (name.EndsWith("/"))
+            //{
+            //    throw new ArgumentException("Argument 'name' cannot contain any invalid characters.", "name");
+            //}
             this.name = name;
             this.parent = parent;
 

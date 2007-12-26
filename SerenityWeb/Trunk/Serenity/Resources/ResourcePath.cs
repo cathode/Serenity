@@ -13,88 +13,75 @@ using System.Text;
 namespace Serenity.Resources
 {
     /// <summary>
-    /// Represents a path to a resource. This class is immutable.
+    /// Represents a information that can be used to locate a resource.
     /// </summary>
-    public sealed class ResourcePath : ICloneable<ResourcePath>, IEnumerable<string>, IEquatable<ResourcePath>
+    public sealed class ResourcePath : ICloneable<ResourcePath>, IComparable<ResourcePath>, IEquatable<ResourcePath>
     {
         #region Constructors - Public
-        /// <summary>
-        /// Initializes a new instance of the ResourcePath class.
-        /// </summary>
-        /// <param name="path">The path string to create the new ResourcePath from.</param>
-        /// <exception cref="System.ArgumentException">Thrown if 'path' is empty.</exception>
-        /// <exception cref="System.ArgumentNullException">Thrown if 'path' is null.</exception>
         public ResourcePath(string path)
         {
             if (path == null)
             {
                 throw new ArgumentNullException("path");
             }
-            this.path = path;
-            this.segments = this.path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-            //if (this.segments.Length == 0)
-            //{
-            //    this.segments = new string[1] { "" };
-            //}
-        }
-        #endregion
-        #region Fields - Private
-        private readonly string path;
-        private readonly string[] segments;
-        #endregion
-        #region Operators
-        public static ResourcePath operator +(ResourcePath a, string b)
-        {
-            if (a == null)
-            {
-                throw new ArgumentNullException("a");
-            }
-            else if (b == null)
-            {
-                throw new ArgumentNullException("b");
-            }
-            else if (b == string.Empty)
-            {
-                throw new ArgumentException("Argument 'b' cannot be empty.");
-            }
+            Uri u = new Uri(path, UriKind.RelativeOrAbsolute);
 
-            if (a.IsDirectory)
+            if (u.IsAbsoluteUri)
             {
-                return new ResourcePath(a.ToString() + b);
+                this.Domain = u.Host;
+                this.IsDomainUsed = true;
+                this.Path = u.AbsolutePath;
+                this.scheme = u.Scheme;
+                this.IsSchemeUsed = true;
             }
             else
             {
-                return new ResourcePath(a.ToString() + "/" + b);
+                this.path = path;
             }
         }
-        public static bool operator !=(ResourcePath a, ResourcePath b)
+        public ResourcePath(Uri pathUri)
         {
-            return !ResourcePath.Equals(a, b);
+
         }
-        public static bool operator ==(ResourcePath a, ResourcePath b)
-        {
-            return ResourcePath.Equals(a, b);
-        }
+        #endregion
+        #region Fields - Private
+        private string domain;
+        private bool isDomainUsed;
+        private bool isSchemeUsed;
+        private string scheme;
+        private string path;
+        #endregion
+        #region Fields - Public
+        public const string DefaultDomain = "localhost";
+        public const string DefaultScheme = "http";
         #endregion
         #region Methods - Public
         public ResourcePath Clone()
         {
             return new ResourcePath(this.path);
         }
-        public override bool Equals(object obj)
+        public int CompareTo(ResourcePath other)
         {
-            if (obj == null)
+            if (other == null)
             {
-                throw new ArgumentNullException("obj");
+                return 1;
             }
-            else if (obj.GetType().TypeHandle.Equals(typeof(ResourcePath).TypeHandle))
+            else if (ResourcePath.ReferenceEquals(this, other))
             {
-                return ResourcePath.Equals(this, (ResourcePath)obj);
+                return 0;
             }
-            else
+
+            return this.ToString().CompareTo(other.ToString());
+        }
+        public static ResourcePath Create(string uriString)
+        {
+            if (uriString == null)
             {
-                return false;
+                throw new ArgumentNullException("uriString");
             }
+
+            ResourcePath uri = new ResourcePath(uriString);
+            return uri;
         }
         public bool Equals(ResourcePath other)
         {
@@ -106,34 +93,34 @@ namespace Serenity.Resources
             {
                 return true;
             }
-            if (object.Equals(a, null) || object.Equals(b, null))
+            else if (object.Equals(a, null) || object.Equals(b, null))
             {
                 return false;
             }
-            return a.path.Equals(b.path);
-        }
-        public IEnumerator<string> GetEnumerator()
-        {
-            foreach (string s in this.segments)
-            {
-                yield return s;
-            }
-        }
-        public override int GetHashCode()
-        {
-            return this.path.GetHashCode() ^ 0x010CE52A;
-        }
-        public ResourcePath MakeDirectoryPath()
-        {
-            if (this.IsDirectory)
-            {
-                throw new InvalidOperationException();
-            }
-            return new ResourcePath(this.path + "/");
+
+            return (a.GetHashCode() == b.GetHashCode());
         }
         public override string ToString()
         {
+            return this.ToString(true, true);
+        }
+        public string ToString(bool includeDomain)
+        {
+            return this.ToString(true, true);
+        }
+        public string ToString(bool includeDomain, bool includeProtocolScheme)
+        {
             return this.path;
+        }
+        #endregion
+        #region Operators
+        public static bool operator ==(ResourcePath a, ResourcePath b)
+        {
+            return ResourcePath.Equals(a, b);
+        }
+        public static bool operator !=(ResourcePath a, ResourcePath b)
+        {
+            return !ResourcePath.Equals(a, b);
         }
         #endregion
         #region Properties - Public
@@ -141,7 +128,18 @@ namespace Serenity.Resources
         {
             get
             {
-                return this.segments.Length;
+                return 0;
+            }
+        }
+        public string Domain
+        {
+            get
+            {
+                return this.domain;
+            }
+            set
+            {
+                this.domain = value;
             }
         }
         public bool IsDirectory
@@ -151,11 +149,37 @@ namespace Serenity.Resources
                 return this.path.EndsWith("/");
             }
         }
-        public string[] Segments
+        public bool IsDomainUsed
         {
             get
             {
-                return this.segments.Clone() as string[];
+                return this.isDomainUsed;
+            }
+            set
+            {
+                this.isDomainUsed = value;
+            }
+        }
+        public bool IsSchemeUsed
+        {
+            get
+            {
+                return this.isSchemeUsed;
+            }
+            set
+            {
+                this.isSchemeUsed = value;
+            }
+        }
+        public string Path
+        {
+            get
+            {
+                return this.path;
+            }
+            set
+            {
+                this.path = value;
             }
         }
         #endregion
@@ -163,12 +187,6 @@ namespace Serenity.Resources
         object ICloneable.Clone()
         {
             return this.Clone();
-        }
-        #endregion
-        #region IEnumerable Members
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
         }
         #endregion
     }

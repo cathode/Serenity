@@ -41,7 +41,7 @@ namespace Serenity
             }
             else if (!outputStream.CanWrite)
             {
-                throw new ArgumentException("Supplied outputStream must support writing.", "outputStream");
+                throw new ArgumentException(__Strings.StreamMustSupportWriting, "outputStream");
             }
 
             this.outputStream = outputStream;
@@ -83,7 +83,7 @@ namespace Serenity
             }
             else if (message == string.Empty)
             {
-                throw new ArgumentException("Argument 'message' cannot be empty.", "message");
+                throw new ArgumentException(__Strings.ArgumentCannotBeEmpty, "message");
             }
 
             lock (this)

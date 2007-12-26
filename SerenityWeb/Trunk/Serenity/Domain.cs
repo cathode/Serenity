@@ -36,7 +36,6 @@ namespace Serenity
         #endregion
         #region Fields - Private
         private readonly string hostName;
-        private ResourceTree resources = new ResourceTree();
         #endregion
         #region Methods - Public
         public static string GetParentHost(string hostName)
@@ -53,13 +52,6 @@ namespace Serenity
             get
             {
                 return this.hostName;
-            }
-        }
-        public ResourceTree Resources
-        {
-            get
-            {
-                return this.resources;
             }
         }
         #endregion

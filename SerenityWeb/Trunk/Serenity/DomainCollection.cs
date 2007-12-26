@@ -23,7 +23,7 @@ namespace Serenity
         {
             if (SerenityServer.Status == OperationStatus.Started)
             {
-                throw new InvalidOperationException("Cannot modify server-wide objects while server is running.");
+                throw new InvalidOperationException(__Strings.CannotModifyWhileRunning);
             }
             base.ClearItems();
         }
@@ -35,7 +35,7 @@ namespace Serenity
         {
             if (SerenityServer.Status == OperationStatus.Started)
             {
-                throw new InvalidOperationException("Cannot modify server-wide objects while server is running.");
+                throw new InvalidOperationException(__Strings.CannotModifyWhileRunning);
             }
             base.InsertItem(index, item);
         }
@@ -43,7 +43,7 @@ namespace Serenity
         {
             if (SerenityServer.Status == OperationStatus.Started)
             {
-                throw new InvalidOperationException("Cannot modify server-wide objects while server is running.");
+                throw new InvalidOperationException(__Strings.CannotModifyWhileRunning);
             }
             base.RemoveItem(index);
         }
@@ -51,7 +51,7 @@ namespace Serenity
         {
             if (SerenityServer.Status == OperationStatus.Started)
             {
-                throw new InvalidOperationException("Cannot modify server-wide objects while server is running.");
+                throw new InvalidOperationException(__Strings.CannotModifyWhileRunning);
             }
             base.SetItem(index, item);
         }

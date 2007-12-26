@@ -30,8 +30,6 @@ namespace Serenity.Web
         {
         }
         #endregion
-        #region Fields - Private
-        #endregion
         #region Methods - Public
         /// <summary>
         /// Handles an incoming CommonContext.
@@ -44,45 +42,45 @@ namespace Serenity.Web
                 throw new ArgumentNullException("context");
             }
             Resource resource;
-            if (context.HasDomain)
+            ResourcePath path = new ResourcePath(context.Request.Url);
+            try
             {
-                ResourcePath path = new ResourcePath(context.Request.Url.AbsolutePath);
-                try
+                if (SerenityServer.Resources.Contains(path))
                 {
-                    resource = context.Domain.Resources.GetResource(path);
+                    resource = SerenityServer.Resources[path];
                 }
-                catch
+                else
                 {
                     ErrorHandler.Handle(context, StatusCode.Http404NotFound);
                     return;
                 }
             }
-            else
+            catch
             {
-                try
-                {
-                    resource = SerenityServer.CommonDomain.Resources.GetResource(new ResourcePath(context.Request.Url.AbsolutePath));
-                }
-                catch
-                {
-                    ErrorHandler.Handle(context, StatusCode.Http404NotFound);
-                    return;
-                }
+                ErrorHandler.Handle(context, StatusCode.Http500InternalServerError);
+                return;
             }
-
+            
             if (resource != null)
             {
-                resource.PreRequest(context);
-                resource.OnRequest(context);
-                resource.PostRequest(context);
+                try
+                {
+                    resource.PreRequest(context);
+                    resource.OnRequest(context);
+                    resource.PostRequest(context);
+                }
+                catch (Exception e)
+                {
+                    SerenityServer.ErrorLog.Write("Dynamic Resource crash, Exception details:\r\n"
+                        + e.ToString(), LogMessageLevel.Error);
+                    ErrorHandler.Handle(context, StatusCode.Http500InternalServerError);
+                }
             }
             else
             {
-                ErrorHandler.Handle(context, StatusCode.Http404NotFound);
+                ErrorHandler.Handle(context, StatusCode.Http500InternalServerError);
             }
         }
-        #endregion
-        #region Properties - Public
         #endregion
     }
 }

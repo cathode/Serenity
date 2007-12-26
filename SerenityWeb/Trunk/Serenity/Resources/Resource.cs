@@ -22,7 +22,7 @@ namespace Serenity.Resources
         #region Fields - Private
         private MimeType mimeType = MimeType.Default;
         private string name = string.Empty;
-        private string webPath = string.Empty;
+        private ResourcePath uri;
         #endregion
         #region Methods - Public
         /// <summary>
@@ -31,6 +31,10 @@ namespace Serenity.Resources
         /// <param name="context"></param>
         public virtual void OnRequest(CommonContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
             ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
         }
         /// <summary>
@@ -55,7 +59,10 @@ namespace Serenity.Resources
         /// <param name="context"></param>
         public virtual void PreRequest(CommonContext context)
         {
-
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
         }
         #endregion
         #region Properties - Public
@@ -112,18 +119,15 @@ namespace Serenity.Resources
                 this.name = value;
             }
 		}
-        /// <summary>
-        /// Gets the absolute path to the current Resource.
-        /// </summary>
-        public string WebPath
+        public ResourcePath Uri
         {
             get
             {
-                return this.webPath;
+                return this.uri;
             }
             internal set
             {
-                this.webPath = value;
+                this.uri = value;
             }
         }
         /// <summary>

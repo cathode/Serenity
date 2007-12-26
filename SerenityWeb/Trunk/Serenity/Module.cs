@@ -35,6 +35,14 @@ namespace Serenity
 		#region Methods - Public
 		public static Module LoadModule(string name)
         {
+            if (name == null)
+            {
+                throw new ArgumentNullException("name");
+            }
+            else if (name == string.Empty)
+            {
+                throw new ArgumentException(__Strings.ArgumentCannotBeEmpty);
+            }
             return Module.LoadModuleFile(name, SPath.Combine("Modules", name + ".dll"));
         }
         public static Module LoadModuleFile(string name, string assemblyPath)

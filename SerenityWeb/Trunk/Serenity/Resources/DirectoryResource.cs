@@ -20,15 +20,14 @@ namespace Serenity
     public class DirectoryResource : Resource
     {
         #region Constructors - internal
-        internal DirectoryResource(ResourceNode node)
+        internal DirectoryResource(ResourcePath uri)
         {
-            this.node = node;
-            this.Name = node.Name;
-            this.WebPath = node.Path.ToString();
+            if (uri == null)
+            {
+                throw new ArgumentNullException("uri");
+            }
+            this.Uri = uri;
         }
-        #endregion
-        #region Fields - Private
-        private ResourceNode node;
         #endregion
         #region Fields - Public
         public const string XsltStylesheetUrl = "/resource/serenity/index.xslt";
@@ -36,33 +35,21 @@ namespace Serenity
         #region Methods - Public
         public override void OnRequest(CommonContext context)
         {
-            Domain domain = context.Domain;
-
-            if (domain == null)
+            if (context == null)
             {
-                ErrorHandler.Handle(context, StatusCode.Http500InternalServerError);
-                return;
+                throw new ArgumentNullException("context");
             }
 
             // collect data
             SortedDictionary<string, List<Resource>> groupedResources = new SortedDictionary<string, List<Resource>>();
 
-            foreach (Resource resource in this.node.Resources)
+            foreach (Resource resource in SerenityServer.Resources.GetChildren(this.Uri, true))
             {
                 if (!groupedResources.ContainsKey(resource.Grouping.PluralForm))
                 {
                     groupedResources.Add(resource.Grouping.PluralForm, new List<Resource>());
                 }
                 groupedResources[resource.Grouping.PluralForm].Add(resource);
-            }
-
-            foreach (ResourceNode resourceNode in this.node.Nodes)
-            {
-                if (!groupedResources.ContainsKey(resourceNode.DirectoryResource.Grouping.PluralForm))
-                {
-                    groupedResources.Add(resourceNode.DirectoryResource.Grouping.PluralForm, new List<Resource>());
-                }
-                groupedResources[resourceNode.DirectoryResource.Grouping.PluralForm].Add(resourceNode.DirectoryResource);
             }
 
             // output data
@@ -81,7 +68,7 @@ namespace Serenity
                     writer.WriteStartElement("index");
                     //   <location>Node Path</location>
                     writer.WriteStartElement("location");
-                    writer.WriteString(this.node.Path.ToString());
+                    writer.WriteString(this.Uri.ToString());
                     writer.WriteEndElement();
                     foreach (KeyValuePair<string, List<Resource>> pair in groupedResources)
                     {
@@ -114,7 +101,7 @@ namespace Serenity
                             writer.WriteStartElement("item");
                             writer.WriteAttributeString("icon", FileTypeRegistry.GetIcon(System.IO.Path.GetExtension(res.Name)));
                             writer.WriteStartElement("value");
-                            writer.WriteAttributeString("link", res.WebPath);
+                            writer.WriteAttributeString("link", res.Uri.ToString());
                             writer.WriteString(res.Name);
                             writer.WriteEndElement();
                             if (res.IsSizeKnown)

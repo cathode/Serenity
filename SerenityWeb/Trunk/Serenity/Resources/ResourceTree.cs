@@ -20,10 +20,11 @@ namespace Serenity.Resources
         #region Constructors - Public
         public ResourceTree()
         {
-            this.root = new ResourceNode("", null);
+            this.root = new ResourceNode("/", null);
         }
         #endregion
         #region Fields - Private
+        private ResourceTree fallback;
         private ResourceNode root;
         #endregion
         #region Methods - Public
@@ -41,7 +42,7 @@ namespace Serenity.Resources
             }
             else if (!path.IsDirectory)
             {
-                throw new ArgumentException("Argument 'path' must represent a directory path.", "path");
+                throw new ArgumentException(__StringLiterals.MustBeDirectoryResource, "path");
             }
 
             ResourceNode node = this.root;
@@ -61,10 +62,6 @@ namespace Serenity.Resources
             }
             node.AddResource(resource);
         }
-        public ResourceNode GetNode(string name)
-        {
-            return this.root.GetNode(name);
-        }
         public ResourceNode GetNode(ResourcePath path)
         {
             if (path == null)
@@ -78,6 +75,10 @@ namespace Serenity.Resources
                 if (node.ContainsNode(path.Segments[i]))
                 {
                     node = node.GetNode(path.Segments[i]);
+                }
+                else if (this.HasFallback)
+                {
+                    return this.Fallback.GetNode(path);
                 }
                 else
                 {
@@ -103,6 +104,10 @@ namespace Serenity.Resources
                     {
                         node = node.GetNode(path.Segments[i]);
                     }
+                    else if (this.HasFallback)
+                    {
+                        return this.fallback.GetResource(path);
+                    }
                     else
                     {
                         throw new KeyNotFoundException();
@@ -116,6 +121,50 @@ namespace Serenity.Resources
             else
             {
                 return node.GetResource(path.Segments[path.Segments.Length - 1]);
+            }
+        }
+        public IEnumerable<Resource> GetResources(ResourcePath path)
+        {
+            return this.GetResources(path, false);
+        }
+        public IEnumerable<Resource> GetResources(ResourcePath path, bool includeFallback)
+        {
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+            else if (!path.IsDirectory)
+            {
+                throw new ArgumentException(__StringLiterals.MustBeDirectoryResource);
+            }
+
+            yield break;
+        }
+        #endregion
+        #region Properties - Public
+        public ResourceTree Fallback
+        {
+            get
+            {
+                return this.fallback;
+            }
+            internal set
+            {
+                this.fallback = value;
+            }
+        }
+        public bool HasFallback
+        {
+            get
+            {
+                return !(this.fallback == null);
+            }
+        }
+        public ResourceNode Root
+        {
+            get
+            {
+                return this.root;
             }
         }
         #endregion
