@@ -16,7 +16,7 @@ namespace Serenity.Resources
     /// <summary>
     /// Represents a collection of resources.
     /// </summary>
-    public sealed class ResourceCollection : KeyedCollection<ResourcePath, Resource>
+    public sealed class ResourceCollection : IList<Resource>
     {
         #region Constructors - Public
         /// <summary>
@@ -24,20 +24,59 @@ namespace Serenity.Resources
         /// </summary>
         public ResourceCollection()
         {
+            this.uc = new UnderlyingResourceCollection();
         }
         #endregion
-        #region Methods - Protected
-        /// <summary>
-        /// Overridden. Returns the SystemName property of the supplied Resource.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        protected override ResourcePath GetKeyForItem(Resource item)
+        #region Explicit Interface Implementations
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            return item.Uri;
+            throw new Exception("The method or operation is not implemented.");
+        }
+        #endregion
+        #region Fields - Private
+        private UnderlyingResourceCollection uc;
+        #endregion
+        #region Indexers - Public
+        public Resource this[int index]
+        {
+            get
+            {
+                return this.uc[index];
+            }
+            set
+            {
+                this.uc[index] = value;
+            }
+        }
+        public Resource this[ResourcePath path]
+        {
+            get
+            {
+                return this.uc[path];
+            }
         }
         #endregion
         #region Methods - Public
+        public void Add(Resource item)
+        {
+            this.uc.Add(item);
+        }
+        public void Clear()
+        {
+            this.uc.Clear();
+        }
+        public bool Contains(Resource item)
+        {
+            return this.uc.Contains(item);
+        }
+        public bool Contains(ResourcePath path)
+        {
+            return this.uc.Contains(path);
+        }
+        public void CopyTo(Resource[] array, int arrayIndex)
+        {
+            this.uc.CopyTo(array, arrayIndex);
+        }
         public IEnumerable<Resource> GetChildren(ResourcePath parentUri)
         {
             return this.GetChildren(parentUri, true);
@@ -48,22 +87,67 @@ namespace Serenity.Resources
             {
                 if (immediateOnly)
                 {
-                    if (res.Uri.ToString().StartsWith(parentUri.ToString())
-                        && res.Uri.Depth == parentUri.Depth + 1)
+                    if (res.Path.ToString().StartsWith(parentUri.ToString())
+                        && res.Path.Depth == parentUri.Depth + 1)
                     {
                         yield return res;
                     }
                 }
                 else
                 {
-                    if (res.Uri.ToString().StartsWith(parentUri.ToString()))
+                    if (res.Path.ToString().StartsWith(parentUri.ToString()))
                     {
                         yield return res;
                     }
                 }
             }
         }
+        public IEnumerator<Resource> GetEnumerator()
+        {
+            return this.uc.GetEnumerator();
+        }
+        public int IndexOf(Resource item)
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+
+        public void Insert(int index, Resource item)
+        {
+            this.uc.Insert(index, item);
+        }
+        public bool Remove(Resource item)
+        {
+            return this.uc.Remove(item);
+        }
+        public void RemoveAt(int index)
+        {
+            this.uc.RemoveAt(index);
+        }
         #endregion
-        
+        #region Properties - Public
+        public int Count
+        {
+            get
+            {
+                return this.uc.Count;
+            }
+        }
+        public bool IsReadOnly
+        {
+            get
+            {
+                return false;
+            }
+        }
+        #endregion
+        #region Types - Private
+        private class UnderlyingResourceCollection : KeyedCollection<ResourcePath, Resource>
+        {
+            protected override ResourcePath GetKeyForItem(Resource item)
+            {
+                return item.Path;
+            }
+        }
+        #endregion
     }
 }

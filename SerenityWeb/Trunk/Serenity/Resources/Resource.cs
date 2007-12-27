@@ -119,7 +119,7 @@ namespace Serenity.Resources
                 this.name = value;
             }
 		}
-        public ResourcePath Uri
+        public ResourcePath Path
         {
             get
             {

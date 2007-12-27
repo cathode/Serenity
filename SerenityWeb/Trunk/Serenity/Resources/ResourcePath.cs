@@ -70,7 +70,14 @@ namespace Serenity.Resources
             {
                 return 0;
             }
-
+            else if (!this.IsSchemeUsed && other.IsSchemeUsed)
+            {
+                return 1;
+            }
+            else if (!this.IsDomainUsed && other.IsDomainUsed)
+            {
+                return 1;
+            }
             return this.ToString().CompareTo(other.ToString());
         }
         public static ResourcePath Create(string uriString)
@@ -82,6 +89,21 @@ namespace Serenity.Resources
 
             ResourcePath uri = new ResourcePath(uriString);
             return uri;
+        }
+        public override bool Equals(object obj)
+        {
+            if (object.Equals(obj, null))
+            {
+                return false;
+            }
+            else if (!obj.GetType().TypeHandle.Equals(typeof(ResourcePath).TypeHandle))
+            {
+                return false;
+            }
+            else
+            {
+                return ResourcePath.Equals(this, (ResourcePath)obj);
+            }
         }
         public bool Equals(ResourcePath other)
         {
@@ -99,6 +121,10 @@ namespace Serenity.Resources
             }
 
             return (a.GetHashCode() == b.GetHashCode());
+        }
+        public override int GetHashCode()
+        {
+            return this.ToString().GetHashCode() ^ 0x5D13A04C;
         }
         public override string ToString()
         {

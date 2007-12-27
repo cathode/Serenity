@@ -26,7 +26,7 @@ namespace Serenity
             {
                 throw new ArgumentNullException("uri");
             }
-            this.Uri = uri;
+            this.Path = uri;
         }
         #endregion
         #region Fields - Public
@@ -43,7 +43,7 @@ namespace Serenity
             // collect data
             SortedDictionary<string, List<Resource>> groupedResources = new SortedDictionary<string, List<Resource>>();
 
-            foreach (Resource resource in SerenityServer.Resources.GetChildren(this.Uri, true))
+            foreach (Resource resource in SerenityServer.Resources.GetChildren(this.Path, true))
             {
                 if (!groupedResources.ContainsKey(resource.Grouping.PluralForm))
                 {
@@ -68,7 +68,7 @@ namespace Serenity
                     writer.WriteStartElement("index");
                     //   <location>Node Path</location>
                     writer.WriteStartElement("location");
-                    writer.WriteString(this.Uri.ToString());
+                    writer.WriteString(this.Path.ToString());
                     writer.WriteEndElement();
                     foreach (KeyValuePair<string, List<Resource>> pair in groupedResources)
                     {
@@ -101,7 +101,7 @@ namespace Serenity
                             writer.WriteStartElement("item");
                             writer.WriteAttributeString("icon", FileTypeRegistry.GetIcon(System.IO.Path.GetExtension(res.Name)));
                             writer.WriteStartElement("value");
-                            writer.WriteAttributeString("link", res.Uri.ToString());
+                            writer.WriteAttributeString("link", res.Path.ToString());
                             writer.WriteString(res.Name);
                             writer.WriteEndElement();
                             if (res.IsSizeKnown)

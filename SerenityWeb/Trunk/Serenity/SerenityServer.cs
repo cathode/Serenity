@@ -77,7 +77,7 @@ namespace Serenity
             SerenityServer.Resources.Add(dr);
             foreach (DynamicResource page in module.Pages)
             {
-                page.Uri = ResourcePath.Create(path + page.Name);
+                page.Path = ResourcePath.Create(path + page.Name);
                 SerenityServer.Resources.Add(page);
             }
             foreach (string embedPath in module.Assembly.GetManifestResourceNames())
@@ -115,7 +115,7 @@ namespace Serenity
                         ResourceResource res = new ResourceResource(name, data);
                         res.ContentType = FileTypeRegistry.GetMimeType(parts[parts.Length - 1]);
 
-                        res.Uri = ResourcePath.Create(path + name);
+                        res.Path = ResourcePath.Create(path + name);
                         SerenityServer.Resources.Add(res);
                     }
                 }
