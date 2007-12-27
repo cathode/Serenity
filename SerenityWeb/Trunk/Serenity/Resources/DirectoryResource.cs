@@ -20,13 +20,23 @@ namespace Serenity
     public class DirectoryResource : Resource
     {
         #region Constructors - internal
-        internal DirectoryResource(ResourcePath uri)
+        internal DirectoryResource(ResourcePath path)
         {
-            if (uri == null)
+            if (path == null)
             {
                 throw new ArgumentNullException("uri");
             }
-            this.Path = uri;
+            this.Path = path;
+
+            string temp = path.Path.TrimEnd('/');
+            if (temp.Length > 0)
+            {
+                this.Name = temp.Substring(temp.LastIndexOf('/') + 1);
+            }
+            else
+            {
+                this.Name = "";
+            }
         }
         #endregion
         #region Fields - Public

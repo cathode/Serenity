@@ -31,6 +31,7 @@ namespace Serenity.Resources
         #region Fields - Private
         private bool autoMaintainDirectoryResources = true;
         private UnderlyingResourceCollection uc;
+        private Dictionary<ResourcePath, Resource[]> cachedDirectories = null;
         #endregion
         #region Indexers - Public
         public Resource this[int index]
@@ -41,6 +42,8 @@ namespace Serenity.Resources
             }
             set
             {
+                this.InvalidateCaches();
+
                 this.uc[index] = value;
             }
         }
@@ -52,9 +55,55 @@ namespace Serenity.Resources
             }
         }
         #endregion
+        #region Methods - Private
+        private void InvalidateCaches()
+        {
+            this.cachedDirectories = null;
+        }
+        private void RebuildCaches()
+        {
+            if (this.cachedDirectories != null)
+            {
+                return;
+            }
+            else
+            {
+                this.cachedDirectories = new Dictionary<ResourcePath, Resource[]>();
+
+                Dictionary<ResourcePath, List<Resource>> tempCache = new Dictionary<ResourcePath, List<Resource>>();
+                foreach (Resource res in this)
+                {
+                    ResourcePath resPath = res.Path;
+                    ResourcePath resParent = resPath.GetParentDirectory();
+
+                    if (resParent == null)
+                    {
+                        if (!tempCache.ContainsKey(resPath))
+                        {
+                            tempCache.Add(resPath, new List<Resource>());
+                        }
+                    }
+                    else
+                    {
+                        if (!tempCache.ContainsKey(resParent))
+                        {
+                            tempCache.Add(resParent, new List<Resource>());
+                        }
+                        tempCache[resParent].Add(res);
+                    }
+                }
+                foreach (KeyValuePair<ResourcePath, List<Resource>> pair in tempCache)
+                {
+                    this.cachedDirectories.Add(pair.Key, pair.Value.ToArray());
+                }
+            }
+        }
+        #endregion
         #region Methods - Public
         public void Add(Resource item)
         {
+            this.InvalidateCaches();
+
             if (this.AutoMaintainDirectoryResources)
             {
                 ResourcePath path = item.Path.GetParentDirectory();
@@ -71,6 +120,7 @@ namespace Serenity.Resources
         }
         public void Clear()
         {
+            this.InvalidateCaches();
             this.uc.Clear();
         }
         public bool Contains(Resource item)
@@ -91,23 +141,11 @@ namespace Serenity.Resources
         }
         public IEnumerable<Resource> GetChildren(ResourcePath parentUri, bool immediateOnly)
         {
-            foreach (Resource res in this)
+            this.RebuildCaches();
+
+            foreach (Resource res in this.cachedDirectories[parentUri])
             {
-                if (immediateOnly)
-                {
-                    if (res.Path.ToString().StartsWith(parentUri.ToString())
-                        && res.Path.Depth == parentUri.Depth + 1)
-                    {
-                        yield return res;
-                    }
-                }
-                else
-                {
-                    if (res.Path.ToString().StartsWith(parentUri.ToString()))
-                    {
-                        yield return res;
-                    }
-                }
+                yield return res;
             }
         }
         public IEnumerator<Resource> GetEnumerator()
@@ -119,6 +157,8 @@ namespace Serenity.Resources
         }
         public bool Remove(Resource item)
         {
+            this.InvalidateCaches();
+
             return this.uc.Remove(item);
         }
         #endregion
