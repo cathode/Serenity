@@ -7,6 +7,7 @@
  * this distribution as License.txt.                                          *
  *****************************************************************************/
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
@@ -16,7 +17,7 @@ namespace Serenity.Resources
     /// <summary>
     /// Represents a collection of resources.
     /// </summary>
-    public sealed class ResourceCollection : IList<Resource>
+    public sealed class ResourceCollection : ICollection<Resource>, IEnumerable<Resource>
     {
         #region Constructors - Public
         /// <summary>
@@ -27,13 +28,8 @@ namespace Serenity.Resources
             this.uc = new UnderlyingResourceCollection();
         }
         #endregion
-        #region Explicit Interface Implementations
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
-        #endregion
         #region Fields - Private
+        private bool autoMaintainDirectoryResources = true;
         private UnderlyingResourceCollection uc;
         #endregion
         #region Indexers - Public
@@ -59,6 +55,18 @@ namespace Serenity.Resources
         #region Methods - Public
         public void Add(Resource item)
         {
+            if (this.AutoMaintainDirectoryResources)
+            {
+                ResourcePath path = item.Path.GetParentDirectory();
+                if (path != null)
+                {
+                    if (!this.uc.Contains(path))
+                    {
+                        DirectoryResource res = new DirectoryResource(path);
+                        this.Add(res);
+                    }
+                }
+            }
             this.uc.Add(item);
         }
         public void Clear()
@@ -104,27 +112,28 @@ namespace Serenity.Resources
         }
         public IEnumerator<Resource> GetEnumerator()
         {
-            return this.uc.GetEnumerator();
-        }
-        public int IndexOf(Resource item)
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
-
-        public void Insert(int index, Resource item)
-        {
-            this.uc.Insert(index, item);
+            foreach (Resource res in this.uc)
+            {
+                yield return res;
+            }
         }
         public bool Remove(Resource item)
         {
             return this.uc.Remove(item);
         }
-        public void RemoveAt(int index)
-        {
-            this.uc.RemoveAt(index);
-        }
         #endregion
         #region Properties - Public
+        public bool AutoMaintainDirectoryResources
+        {
+            get
+            {
+                return this.autoMaintainDirectoryResources;
+            }
+            set
+            {
+                this.autoMaintainDirectoryResources = value;
+            }
+        }
         public int Count
         {
             get
@@ -148,6 +157,14 @@ namespace Serenity.Resources
                 return item.Path;
             }
         }
+        #endregion
+        #region Explicit Interface Implementations
+        #region IEnumerable Members
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
+        #endregion
         #endregion
     }
 }

@@ -51,8 +51,24 @@ namespace Serenity.Web
                 }
                 else
                 {
-                    ErrorHandler.Handle(context, StatusCode.Http404NotFound);
-                    return;
+                    path.IsSchemeUsed = false;
+                    if (SerenityServer.Resources.Contains(path))
+                    {
+                        resource = SerenityServer.Resources[path];
+                    }
+                    else
+                    {
+                        path.IsDomainUsed = false;
+                        if (SerenityServer.Resources.Contains(path))
+                        {
+                            resource = SerenityServer.Resources[path];
+                        }
+                        else
+                        {
+                            ErrorHandler.Handle(context, StatusCode.Http404NotFound);
+                            return;
+                        }
+                    }
                 }
             }
             catch

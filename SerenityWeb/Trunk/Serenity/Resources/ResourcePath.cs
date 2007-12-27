@@ -24,6 +24,7 @@ namespace Serenity.Resources
             {
                 throw new ArgumentNullException("path");
             }
+            path = path.ToLowerInvariant();
             Uri u = new Uri(path, UriKind.RelativeOrAbsolute);
 
             if (u.IsAbsoluteUri)
@@ -39,9 +40,8 @@ namespace Serenity.Resources
                 this.path = path;
             }
         }
-        public ResourcePath(Uri pathUri)
-        {
-
+        public ResourcePath(Uri pathUri) : this(pathUri.ToString())
+        {   
         }
         #endregion
         #region Fields - Private
@@ -119,12 +119,55 @@ namespace Serenity.Resources
             {
                 return false;
             }
-
-            return (a.GetHashCode() == b.GetHashCode());
+            else if ((a.isSchemeUsed && !b.isSchemeUsed) || (!a.isSchemeUsed && b.isSchemeUsed))
+            {
+                return false;
+            }
+            else if ((a.isDomainUsed && !b.isDomainUsed) || (!a.isDomainUsed && b.isDomainUsed))
+            {
+                return false;
+            }
+            else if (a.isSchemeUsed && !a.scheme.Equals(b.scheme, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+            else if (a.isDomainUsed && !a.domain.Equals(b.domain, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+            else
+            {
+                return a.path.Equals(b.path, StringComparison.OrdinalIgnoreCase);
+            }
         }
         public override int GetHashCode()
         {
-            return this.ToString().GetHashCode() ^ 0x5D13A04C;
+            return this.ToString().ToLowerInvariant().GetHashCode() ^ 0x5D13A04C;
+        }
+        public ResourcePath GetParentDirectory()
+        {
+
+            string[] parts = this.path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (parts.Length == 0)
+            {
+                return null;
+            }
+            else
+            {
+                string resultPath = "/";
+                for (int i = 0; i < parts.Length - 1; i++)
+                {
+                    resultPath += parts[i] + "/";
+                }
+                ResourcePath result = new ResourcePath(resultPath);
+                result.domain = this.domain;
+                result.isDomainUsed = this.isDomainUsed;
+                result.isSchemeUsed = this.isSchemeUsed;
+                result.scheme = this.scheme;
+
+                return result;
+            }
         }
         public override string ToString()
         {
@@ -134,9 +177,18 @@ namespace Serenity.Resources
         {
             return this.ToString(true, true);
         }
-        public string ToString(bool includeDomain, bool includeProtocolScheme)
+        public string ToString(bool includeDomain, bool includeScheme)
         {
-            return this.path;
+            string result = "";
+            if (includeScheme && this.isSchemeUsed)
+            {
+                result += this.scheme + "://";
+            }
+            if (includeDomain && this.isDomainUsed)
+            {
+                result += this.domain;
+            }
+            return result + this.path;
         }
         #endregion
         #region Operators
