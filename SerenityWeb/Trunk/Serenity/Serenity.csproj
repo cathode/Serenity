@@ -66,13 +66,11 @@
   <ItemGroup>
     <Compile Include="Attributes\ModuleTitleAttribute.cs" />
     <None Include="Cache\CacheManager.cs" />
-    <None Include="Cache\CachedStream.cs" />
     <Compile Include="Attributes\ModuleDefaultPageAttribute.cs" />
     <Compile Include="Attributes\ModuleResourceNamespaceAttribute.cs" />
     <Compile Include="ModuleCollection.cs" />
     <Compile Include="DomainCollection.cs" />
     <Compile Include="Resources\ResourceCollection.cs" />
-    <None Include="Resources\ResourceNodeCollection.cs" />
     <None Include="Data\Database.cs" />
     <Compile Include="Resources\DirectoryResource.cs" />
     <Compile Include="Domain.cs" />
@@ -80,10 +78,8 @@
     <Compile Include="FileTypeEntry.cs" />
     <Compile Include="LogMessageLevel.cs" />
     <Compile Include="Resources\ResourceGrouping.cs" />
-    <None Include="Resources\ResourceNode.cs" />
     <Compile Include="Resources\ResourcePath.cs" />
     <Compile Include="Resources\ResourceResource.cs" />
-    <None Include="Resources\ResourceTree.cs" />
     <Compile Include="SerenityServer.cs" />
     <Compile Include="Web\Drivers\DriverPool.cs" />
     <Compile Include="Module.cs" />
@@ -191,7 +187,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <EmbeddedResource Include="Resources\index.xslt" />
-    <Content Include="Domains\localhost.xml" />
     <Content Include="Themes\blueish\stylesheet.css" />
     <Content Include="Web\Drivers\multipart test.txt" />
     <Content Include="Web\Drivers\urlencoded test.txt" />

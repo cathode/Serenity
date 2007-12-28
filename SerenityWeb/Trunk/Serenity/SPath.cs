@@ -22,9 +22,6 @@ namespace Serenity
 		/// <summary>
 		/// Represents the root folder (where all the other data is kept).
 		/// </summary>
-		/// <remarks>
-		/// When scope resolution is global, this directory also contains the Serenity binaries.
-		/// </remarks>
 		Root,
 		/// <summary>
 		/// The configuration folder (where server-wide configuration settings are stored)
@@ -52,7 +49,6 @@ namespace Serenity
     /// </summary>
 	public enum SpecialFile
 	{
-		Log,
 		FileTypeRegistry,
 	}
 	public static class SPath
@@ -73,7 +69,6 @@ namespace Serenity
 			SPath.specialFolders[SpecialFolder.Themes] = Path.GetFullPath(SPath.Combine(root, "Themes"));
 
 			SPath.specialFiles[SpecialFile.FileTypeRegistry] = SPath.Combine(SPath.specialFolders[SpecialFolder.Configuration], "FileTypeRegistry.ini");
-			SPath.specialFiles[SpecialFile.Log] = SPath.Combine(SPath.specialFolders[SpecialFolder.Logs], "Serenity.log");
 		}
 		#endregion
 		#region Fields - Private
@@ -108,16 +103,6 @@ namespace Serenity
 			get
 			{
 				return SPath.ResolveSpecialPath(SpecialFolder.Domains);
-			}
-		}
-		/// <summary>
-		/// Gets an absolute path to the primary log file.
-		/// </summary>
-		public static string LogFile
-		{
-			get
-			{
-				return SPath.ResolveSpecialPath(SpecialFile.Log);
 			}
 		}
 		/// <summary>

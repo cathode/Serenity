@@ -149,6 +149,12 @@ namespace Serenity
         }
         #endregion
         #region Properties - Public
+        /// <summary>
+        /// Overridden. Gets the MimeType of the current DirectoryResource.
+        /// </summary>
+        /// <remarks>
+        /// This property always returns the text/xml mimetype.
+        /// </remarks>
         public override MimeType ContentType
         {
             get
@@ -157,7 +163,7 @@ namespace Serenity
             }
             protected internal set
             {
-                throw new InvalidOperationException("Cannot set MimeType for DirectoryResource objects.");
+                throw new NotSupportedException(__Strings.CannotModifyResourceMimetype);
             }
         }
         public override ResourceGrouping Grouping

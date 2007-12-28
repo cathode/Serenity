@@ -32,7 +32,7 @@ namespace Serenity.Web
             }
             else if (name == string.Empty)
             {
-                throw new ArgumentException("Argument 'name' cannot be empty.", "name");
+                throw new ArgumentException(__Strings.ArgumentCannotBeEmpty, "name");
             }
             else if (contents == null)
             {
@@ -58,7 +58,7 @@ namespace Serenity.Web
         /// <exception cref="NotSupportedException">Cannot flush a RequestDataStream.</exception>
         public override void Flush()
         {
-            throw new NotSupportedException("Cannot flush a RequestDataStream.");
+            throw new NotSupportedException(__Strings.CannotFlushRequestDataStream);
         }
         /// <summary>
         /// Reads a number of bytes into Buffer
@@ -200,7 +200,7 @@ namespace Serenity.Web
         /// </exception>
         public override void SetLength(long value)
         {
-            throw new NotSupportedException("Cannot modify a RequestDataStream.");
+            throw new NotSupportedException(__Strings.CannotModifyRequestDataStream);
         }
         /// <summary>
         /// Not supported.
@@ -210,7 +210,7 @@ namespace Serenity.Web
         /// </exception>
         public override void Write(byte[] buffer, int offset, int count)
         {
-            throw new NotSupportedException("Cannot modify a RequestDataStream.");
+            throw new NotSupportedException(__Strings.CannotModifyRequestDataStream);
         }
         #endregion
         #region Properties - Public
