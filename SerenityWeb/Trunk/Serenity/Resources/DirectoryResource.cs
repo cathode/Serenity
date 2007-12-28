@@ -17,6 +17,10 @@ using Serenity.Web;
 
 namespace Serenity
 {
+    /// <summary>
+    /// Provides a dynamic resource that represents a virtual directory and can
+    /// provide indexing services for virtual directories.
+    /// </summary>
     public class DirectoryResource : Resource
     {
         #region Constructors - internal
@@ -40,9 +44,16 @@ namespace Serenity
         }
         #endregion
         #region Fields - Public
+        /// <summary>
+        /// Holds the path of the XSLT stylesheet used to render the XML index output.
+        /// </summary>
         public const string XsltStylesheetUrl = "/resource/serenity/index.xslt";
         #endregion
         #region Methods - Public
+        /// <summary>
+        /// Overridden. Renders the dynamic content of the current DirectoryResource.
+        /// </summary>
+        /// <param name="context"></param>
         public override void OnRequest(CommonContext context)
         {
             if (context == null)

@@ -37,6 +37,9 @@ namespace Serenity.Resources
         }
 		#endregion
 		#region Properties - Public
+        /// <summary>
+        /// Overridden. Returns ResourceGrouping.Files.
+        /// </summary>
         public override ResourceGrouping Grouping
         {
             get
@@ -58,6 +61,9 @@ namespace Serenity.Resources
 				this.location = value;
 			}
 		}
+        /// <summary>
+        /// Overridden. Returns true, indicating the size of a static file can be known.
+        /// </summary>
         public override bool IsSizeKnown
         {
             get
@@ -65,6 +71,9 @@ namespace Serenity.Resources
                 return true;
             }
         }
+        /// <summary>
+        /// Overridden. Gets the size of the file represented by the current StaticResource.
+        /// </summary>
         public override int Size
         {
             get

@@ -13,15 +13,26 @@ using System.Text;
 
 namespace Serenity
 {
+    /// <summary>
+    /// Represents a collection of Modules.
+    /// </summary>
     public sealed class ModuleCollection : KeyedCollection<string, Module>
     {
         #region Constructors - Public
+        /// <summary>
+        /// Initializes a new instance of the ModuleCollection class.
+        /// </summary>
         public ModuleCollection()
             : base(StringComparer.OrdinalIgnoreCase)
         {
         }
         #endregion
         #region Methods - Protected
+        /// <summary>
+        /// Overridden. Used by KeyedCollection.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         protected override string GetKeyForItem(Module item)
         {
             return item.Name;

@@ -119,6 +119,9 @@ namespace Serenity.Resources
                 this.name = value;
             }
 		}
+        /// <summary>
+        /// Gets the ResourcePath of the current Resource.
+        /// </summary>
         public ResourcePath Path
         {
             get
