@@ -36,6 +36,7 @@ namespace Serenity
         #endregion
         #region Fields - Private
         private readonly string hostName;
+        private string documentRoot;
         #endregion
         #region Methods - Public
         public static string GetParentHost(string hostName)
@@ -47,6 +48,17 @@ namespace Serenity
         }
         #endregion
         #region Properties - Public
+        public string DocumentRoot
+        {
+            get
+            {
+                return this.documentRoot;
+            }
+            set
+            {
+                this.documentRoot = value;
+            }
+        }
         public string HostName
         {
             get

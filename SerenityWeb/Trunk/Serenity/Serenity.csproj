@@ -70,6 +70,7 @@
     <Compile Include="Attributes\ModuleResourceNamespaceAttribute.cs" />
     <Compile Include="ModuleCollection.cs" />
     <Compile Include="DomainCollection.cs" />
+    <Compile Include="Resources\RewriteResource.cs" />
     <Compile Include="Resources\ResourceCollection.cs" />
     <None Include="Data\Database.cs" />
     <Compile Include="Resources\DirectoryResource.cs" />

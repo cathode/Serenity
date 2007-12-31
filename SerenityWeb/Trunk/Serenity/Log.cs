@@ -21,7 +21,6 @@ namespace Serenity
     /// </summary>
     public sealed class Log : IDisposable
     {
-        //TODO: re-implement log class as a non-static class where each Log object represents an individual logfile.
         #region Constructors - Private
         /// <summary>
         /// Initializes a new instance of the Log class, using the standard output stream of the console.

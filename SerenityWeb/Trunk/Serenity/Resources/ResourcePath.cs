@@ -190,6 +190,17 @@ namespace Serenity.Resources
             }
             return result + this.path;
         }
+        public Uri ToUri()
+        {
+            Uri uri = new Uri(this.scheme ?? ResourcePath.DefaultScheme
+                + "://" + this.Domain ?? ResourcePath.DefaultDomain + this.path);
+
+            return uri;
+        }
+        public string ToUriString()
+        {
+            return this.ToUri().ToString();
+        }
         #endregion
         #region Operators
         public static bool operator ==(ResourcePath a, ResourcePath b)
