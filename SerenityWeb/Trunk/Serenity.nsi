@@ -1,6 +1,6 @@
 !include "MUI.nsh"
 
-!define VERSION "0.5.1.0"
+!define VERSION "0.6.0.0"
 !define PRODUCT "Serenity"
 !define COMPANY "Serenity Project"
 
