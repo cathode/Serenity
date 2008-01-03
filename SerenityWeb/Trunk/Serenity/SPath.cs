@@ -49,6 +49,9 @@ namespace Serenity
     /// </summary>
 	public enum SpecialFile
 	{
+        /// <summary>
+        /// The file where information about file types is stored.
+        /// </summary>
 		FileTypeRegistry,
 	}
 	public static class SPath

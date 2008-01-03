@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading;
 
 using Serenity;
+using Serenity.Logging;
 using Serenity.Themes;
 using Serenity.Web;
 using Serenity.Web.Drivers;

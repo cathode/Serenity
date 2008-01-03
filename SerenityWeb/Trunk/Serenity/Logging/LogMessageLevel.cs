@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Serenity
+namespace Serenity.Logging
 {
     /// <summary>
     /// Used to indicate the severity or type of a log message.

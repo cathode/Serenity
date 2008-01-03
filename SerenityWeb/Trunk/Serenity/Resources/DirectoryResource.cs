@@ -166,6 +166,9 @@ namespace Serenity
                 throw new NotSupportedException(__Strings.CannotModifyResourceMimetype);
             }
         }
+        /// <summary>
+        /// Gets the resource grouping of the current DirectoryResource.
+        /// </summary>
         public override ResourceGrouping Grouping
         {
             get

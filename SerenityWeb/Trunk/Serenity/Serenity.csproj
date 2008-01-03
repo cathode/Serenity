@@ -68,6 +68,7 @@
     <None Include="Cache\CacheManager.cs" />
     <Compile Include="Attributes\ModuleDefaultPageAttribute.cs" />
     <Compile Include="Attributes\ModuleResourceNamespaceAttribute.cs" />
+    <Compile Include="Logging\LogMessage.cs" />
     <Compile Include="ModuleCollection.cs" />
     <Compile Include="DomainCollection.cs" />
     <Compile Include="Resources\RewriteResource.cs" />
@@ -77,7 +78,7 @@
     <Compile Include="Domain.cs" />
     <Compile Include="Resources\ErrorResource.cs" />
     <Compile Include="FileTypeEntry.cs" />
-    <Compile Include="LogMessageLevel.cs" />
+    <Compile Include="Logging\LogMessageLevel.cs" />
     <Compile Include="Resources\ResourceGrouping.cs" />
     <Compile Include="Resources\ResourcePath.cs" />
     <Compile Include="Resources\ResourceResource.cs" />
@@ -94,7 +95,7 @@
     <Compile Include="SerenityInfo.cs" />
     <Compile Include="FileTypeRegistry.cs" />
     <Compile Include="SPath.cs" />
-    <Compile Include="Log.cs" />
+    <Compile Include="Logging\Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Web\CommonContext.cs" />
     <Compile Include="OperationStatus.cs" />

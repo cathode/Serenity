@@ -48,6 +48,9 @@ namespace Serenity
         }
         #endregion
         #region Properties - Public
+        /// <summary>
+        /// Gets the root path where static resources are stored.
+        /// </summary>
         public string DocumentRoot
         {
             get
@@ -59,6 +62,9 @@ namespace Serenity
                 this.documentRoot = value;
             }
         }
+        /// <summary>
+        /// Gets the hostname represented by the current Domain.
+        /// </summary>
         public string HostName
         {
             get
