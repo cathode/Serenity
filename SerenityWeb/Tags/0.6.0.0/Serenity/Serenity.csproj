@@ -1,0 +1,217 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2013CDED-1043-4FF6-A080-9B3C9BD7B140}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Serenity</RootNamespace>
+    <AssemblyName>Serenity</AssemblyName>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\WShelley.public.snk</AssemblyOriginatorKeyFile>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <DelaySign>true</DelaySign>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>../Output/</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <FileAlignment>512</FileAlignment>
+    <BaseAddress>0</BaseAddress>
+    <DocumentationFile>
+    </DocumentationFile>
+    <LangVersion>default</LangVersion>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Serenity</AssemblyName>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>../Output/</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <FileAlignment>512</FileAlignment>
+    <BaseAddress>0</BaseAddress>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <DocumentationFile>..\Output\Serenity.XML</DocumentationFile>
+    <LangVersion>default</LangVersion>
+    <DebugSymbols>False</DebugSymbols>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Serenity</AssemblyName>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Attributes\ModuleTitleAttribute.cs" />
+    <None Include="Cache\CacheManager.cs" />
+    <Compile Include="Attributes\ModuleDefaultPageAttribute.cs" />
+    <Compile Include="Attributes\ModuleResourceNamespaceAttribute.cs" />
+    <Compile Include="Logging\LogMessage.cs" />
+    <Compile Include="ModuleCollection.cs" />
+    <Compile Include="DomainCollection.cs" />
+    <Compile Include="Resources\RewriteResource.cs" />
+    <Compile Include="Resources\ResourceCollection.cs" />
+    <None Include="Data\Database.cs" />
+    <Compile Include="Resources\DirectoryResource.cs" />
+    <Compile Include="Domain.cs" />
+    <Compile Include="Resources\ErrorResource.cs" />
+    <Compile Include="FileTypeEntry.cs" />
+    <Compile Include="Logging\LogMessageLevel.cs" />
+    <Compile Include="Resources\ResourceGrouping.cs" />
+    <Compile Include="Resources\ResourcePath.cs" />
+    <Compile Include="Resources\ResourceResource.cs" />
+    <Compile Include="SerenityServer.cs" />
+    <Compile Include="Web\Drivers\DriverPool.cs" />
+    <Compile Include="Module.cs" />
+    <Compile Include="Pages\DefaultPage.cs" />
+    <None Include="Pages\DomainsPage.cs" />
+    <Compile Include="Resources\Resource.cs" />
+    <Compile Include="Resources\StaticResource.cs" />
+    <Compile Include="Themes\Theme.cs" />
+    <Compile Include="Web\ContextHandler.cs" />
+    <Compile Include="Resources\DynamicResource.cs" />
+    <Compile Include="SerenityInfo.cs" />
+    <Compile Include="FileTypeRegistry.cs" />
+    <Compile Include="SPath.cs" />
+    <Compile Include="Logging\Log.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Web\CommonContext.cs" />
+    <Compile Include="OperationStatus.cs" />
+    <Compile Include="Web\Drivers\WebDriverState.cs" />
+    <Compile Include="Web\ErrorHandler.cs" />
+    <Compile Include="Web\MimeType.cs" />
+    <Compile Include="Web\RequestMethod.cs" />
+    <Compile Include="Web\Services\WebMethodAttribute.cs" />
+    <Compile Include="Web\Services\WebService.cs" />
+    <Compile Include="Web\StatusCode.cs" />
+    <Compile Include="Web\Drivers\DriverInfo.cs" />
+    <Compile Include="Web\Header.cs" />
+    <Compile Include="Web\HeaderCollection.cs" />
+    <Compile Include="Web\RequestDataCollection.cs" />
+    <Compile Include="Web\RequestDataStream.cs" />
+    <Compile Include="Web\CommonRequest.cs" />
+    <Compile Include="Web\CommonResponse.cs" />
+    <Compile Include="Web\Drivers\HttpDriver.cs" />
+    <Compile Include="Web\Drivers\WebDriver.cs" />
+    <Compile Include="Web\Drivers\WebDriverSettings.cs" />
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
+    <Compile Include="Web\Doctype.cs" />
+    <Compile Include="__Strings.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Configuration\Serenity.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Configuration\FileTypeRegistry.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Domains\root.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Domains\localhost.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\icons\arrow_down.png" />
+    <EmbeddedResource Include="Resources\icons\arrow_up.png" />
+    <EmbeddedResource Include="Resources\icons\folder.png" />
+    <EmbeddedResource Include="Resources\icons\page_white.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_acrobat.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_actionscript.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_c.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_cd.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_code.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_code_red.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_coldfusion.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_compressed.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_cplusplus.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_csharp.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_cup.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_database.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_delete.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_dvd.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_excel.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_flash.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_freehand.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_gear.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_h.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_key.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_lightning.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_link.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_office.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_paint.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_paintbrush.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_paste.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_php.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_picture.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_powerpoint.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_ruby.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_stack.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_star.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_swoosh.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_text.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_tux.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_vector.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_visualstudio.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_word.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_wrench.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_zip.png" />
+    <EmbeddedResource Include="Resources\index.css" />
+    <Content Include="Domains\Common\default.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="Resources\index.xslt" />
+    <Content Include="Themes\blueish\stylesheet.css" />
+    <Content Include="Web\Drivers\multipart test.txt" />
+    <Content Include="Web\Drivers\urlencoded test.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="LibINI, Version=1.5.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\LibINI.dll</HintPath>
+    </Reference>
+    <Reference Include="SPCore, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aafe07b9ddf0a2a4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\SPCore.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <ProjectGuid>{2013CDED-1043-4FF6-A080-9B3C9BD7B140}</ProjectGuid>
+  </PropertyGroup>
+</Project>
