@@ -134,6 +134,11 @@ namespace Serenity.Web.Drivers
         /// <param name="socket"></param>
         protected virtual void HandleAcceptedConnection(Socket socket)
         {
+            if (socket == null)
+            {
+                throw new ArgumentNullException("socket");
+            }
+            
             CommonContext context = this.RecieveContext(socket);
             if (context != null)
             {
@@ -195,14 +200,34 @@ namespace Serenity.Web.Drivers
         {
             throw new NotSupportedException();
         }
+        /// <summary>
+        /// Begins an asynchronous context send operation.
+        /// </summary>
+        /// <param name="socket"></param>
+        /// <param name="context"></param>
+        /// <param name="callback"></param>
+        /// <param name="state"></param>
+        /// <returns></returns>
         public virtual IAsyncResult BeginSendContext(Socket socket, CommonContext context, AsyncCallback callback, object state)
         {
             throw new NotSupportedException();
         }
+        /// <summary>
+        /// Begins an asynchronous operation to start the current WebDriver.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <param name="state"></param>
+        /// <returns></returns>
         public virtual IAsyncResult BeginStart(AsyncCallback callback, object state)
         {
             throw new NotSupportedException();
         }
+        /// <summary>
+        /// Begins an asynchronous operation to stop the current WebDriver.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <param name="state"></param>
+        /// <returns></returns>
         public virtual IAsyncResult BeginStop(AsyncCallback callback, object state)
         {
             throw new NotSupportedException();
@@ -216,22 +241,40 @@ namespace Serenity.Web.Drivers
             this.isDisposed = true;
             GC.SuppressFinalize(this);
         }
+        /// <summary>
+        /// Ends a pending asynchronous context recieve operation.
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
         public virtual CommonContext EndRecieveContext(IAsyncResult result)
         {
             throw new NotSupportedException();
         }
+        /// <summary>
+        /// Ends a pending asynchronous context send operation.
+        /// </summary>
+        /// <param name="result"></param>
         public virtual void EndSendContext(IAsyncResult result)
         {
             throw new NotSupportedException();
         }
+        /// <summary>
+        /// Ends a pending asynchronous WebDriver start operation.
+        /// </summary>
+        /// <param name="result"></param>
         public virtual void EndStart(IAsyncResult result)
         {
             throw new NotSupportedException();
         }
+        /// <summary>
+        /// Ends a pending asynchronous WebDriver stop operation.
+        /// </summary>
+        /// <param name="result"></param>
         public virtual void EndStop(IAsyncResult result)
         {
             throw new NotSupportedException();
         }
+        [Obsolete]
         public bool HandleHeader(CommonContext context, Header header)
         {
             if (context == null)
@@ -292,11 +335,13 @@ namespace Serenity.Web.Drivers
                 return false;
             }
         }
+        [Obsolete]
         public bool IsHeaderHandlerRegistered(string headerName)
         {
             return this.headerHandlers.ContainsKey(headerName);
         }
         public abstract CommonContext RecieveContext(Socket socket);
+        [Obsolete]
         public void RegisterHeaderHandler(string headerName, HeaderHandlerCallback callback)
         {
             if (headerName == null)

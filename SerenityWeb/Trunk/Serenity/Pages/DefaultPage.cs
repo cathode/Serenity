@@ -23,6 +23,7 @@ namespace Serenity.Pages
         public DefaultPage()
         {
             this.Name = "Default";
+            this.ContentType = MimeType.TextHtml;
         }
         #endregion
         #region Methods - Public

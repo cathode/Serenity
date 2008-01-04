@@ -47,6 +47,19 @@ namespace Serenity
         }
         public static Module LoadModuleFile(string name, string assemblyPath)
         {
+            if (name == null)
+            {
+                throw new ArgumentNullException("name");
+            }
+            else if (assemblyPath == null)
+            {
+                throw new ArgumentNullException("assemblyPath");
+            }
+            else if (!File.Exists(assemblyPath))
+            {
+                SerenityServer.ErrorLog.Write("Failed to find module assembly file at " + assemblyPath, Serenity.Logging.LogMessageLevel.Error);
+                throw new FileNotFoundException("The module was not found at the supplied assemblyPath", assemblyPath);
+            }
 			string title = name;
             DynamicResource defaultPage = null;
 

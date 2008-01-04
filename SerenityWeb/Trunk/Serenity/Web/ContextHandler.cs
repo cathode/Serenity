@@ -72,9 +72,11 @@ namespace Serenity.Web
                     }
                 }
             }
-            catch
+            catch (Exception e)
             {
                 ErrorHandler.Handle(context, StatusCode.Http500InternalServerError);
+                SerenityServer.ErrorLog.Write("An error has occured while processing a request. Exception details: "
+                    + e.ToString(), LogMessageLevel.Error);
                 return;
             }
             
@@ -88,14 +90,17 @@ namespace Serenity.Web
                 }
                 catch (Exception e)
                 {
+
+                    ErrorHandler.Handle(context, StatusCode.Http500InternalServerError);
                     SerenityServer.ErrorLog.Write("Dynamic Resource crash, Exception details:\r\n"
                         + e.ToString(), LogMessageLevel.Error);
-                    ErrorHandler.Handle(context, StatusCode.Http500InternalServerError);
+                    return;
                 }
             }
             else
             {
                 ErrorHandler.Handle(context, StatusCode.Http500InternalServerError);
+                SerenityServer.ErrorLog.Write("The resource was null", LogMessageLevel.Error);
             }
         }
         #endregion
