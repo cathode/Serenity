@@ -78,6 +78,10 @@ namespace Serenity.Web.Drivers
             {
                 throw new ArgumentNullException("context");
             }
+            else if (!context.Request.Headers.Contains("Content-Type"))
+            {
+                //throw new InvalidOperationException("
+            }
 
             Header ct = context.Request.Headers["Content-Type"];
 
