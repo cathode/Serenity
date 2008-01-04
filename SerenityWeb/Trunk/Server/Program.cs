@@ -1,6 +1,6 @@
 ﻿/******************************************************************************
  * Serenity - The next evolution of web server technology.                    *
- * Copyright © 2006-2007 Serenity Project - http://SerenityProject.net/       *
+ * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
  *----------------------------------------------------------------------------*
  * This software is released under the terms and conditions of the Microsoft  *
  * Public License (Ms-PL), a copy of which should have been included with     *
@@ -9,13 +9,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading;
 
 using Serenity;
 using Serenity.Logging;
-using Serenity.Themes;
-using Serenity.Web;
 using Serenity.Web.Drivers;
 
 namespace Server
