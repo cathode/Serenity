@@ -6,7 +6,9 @@
  * Public License (Ms-PL), a copy of which should have been included with     *
  * this distribution as License.txt.                                          *
  *****************************************************************************/
+using System;
 using System.Reflection;
+using System.Security.Permissions;
 
 using Serenity;
 
@@ -17,3 +19,6 @@ using Serenity;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyVersion(SerenityInfo.Version)]
+
+[assembly: CLSCompliant(true)]
+[assembly: SecurityPermission(SecurityAction.RequestMinimum, Execution=true)]

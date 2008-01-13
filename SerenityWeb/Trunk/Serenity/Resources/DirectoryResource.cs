@@ -21,7 +21,7 @@ namespace Serenity
     /// Provides a dynamic resource that represents a virtual directory and can
     /// provide indexing services for virtual directories.
     /// </summary>
-    public class DirectoryResource : Resource
+    public sealed class DirectoryResource : Resource
     {
         #region Constructors - internal
         internal DirectoryResource(ResourcePath path)

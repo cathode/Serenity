@@ -116,17 +116,21 @@ namespace Serenity.Web.Drivers
         /// <summary>
         /// Handles a connection that has been accepted.
         /// </summary>
-        /// <param name="socketObject"></param>
-        protected void HandleAcceptedConnection(object socketObject)
+        /// <param name="socket"></param>
+        protected void HandleAcceptedConnection(object sock)
         {
-            if (socketObject is Socket)
+            if (sock == null)
             {
-                this.HandleAcceptedConnection((Socket)socketObject);
+                throw new ArgumentNullException("socket");
             }
-            else
+
+            Socket s = sock as Socket;
+            if (s == null)
             {
-                throw new ArgumentException("socketObject must be of type System.Net.Sockets.Socket!", "socketObject");
+                throw new ArgumentException("Specified socket object must be of type System.Net.Sockets.Socket", "sock");
             }
+
+            this.HandleAcceptedConnection(s);
         }
         /// <summary>
         /// Handles a connection that has been accepted.
@@ -314,7 +318,7 @@ namespace Serenity.Web.Drivers
                         this.ListeningSocket.Bind(new IPEndPoint(IPAddress.Any, port));
                         break;
                     }
-                    catch
+                    catch (SocketException socketEx)
                     {
                     }
                 }

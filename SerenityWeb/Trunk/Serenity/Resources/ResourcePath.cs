@@ -80,14 +80,14 @@ namespace Serenity.Resources
             }
             return this.ToString().CompareTo(other.ToString());
         }
-        public static ResourcePath Create(string uriString)
+        public static ResourcePath Create(string path)
         {
-            if (uriString == null)
+            if (path == null)
             {
                 throw new ArgumentNullException("uriString");
             }
 
-            ResourcePath uri = new ResourcePath(uriString);
+            ResourcePath uri = new ResourcePath(path);
             return uri;
         }
         public override bool Equals(object obj)

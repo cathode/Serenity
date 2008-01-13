@@ -40,25 +40,6 @@ namespace Serenity.Web
         private bool useChunkedTransferEncoding = false;
         private bool useCompression = false;
         #endregion
-        #region Methods - Internal
-        /// <summary>
-        /// Prevents the output buffer from being flushed.
-        /// </summary>
-        /// <param name="lockWrites">Determines if writes are prevented in addition to flushes.</param>
-        internal void LockOutputBuffer(bool lockWrites)
-        {
-            this.lockFlushes = true;
-            this.lockWrites = lockWrites;
-        }
-        /// <summary>
-        /// Performs the opposite of CommonResponse.LockOutputBuffer(bool).
-        /// </summary>
-        internal void UnlockOutputBuffer()
-        {
-            this.lockFlushes = false;
-            this.lockWrites = false;
-        }
-        #endregion
         #region Methods - Public
         public void ClearOutputBuffer()
         {

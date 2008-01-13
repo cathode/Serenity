@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{2013CDED-1043-4FF6-A080-9B3C9BD7B140}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -89,6 +89,7 @@
     <Compile Include="Resources\ResourcePath.cs" />
     <Compile Include="Resources\ResourceResource.cs" />
     <Compile Include="SerenityServer.cs" />
+    <None Include="Web\Controls\Control.cs" />
     <Compile Include="Web\Drivers\DriverPool.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Pages\DefaultPage.cs" />
@@ -109,8 +110,8 @@
     <Compile Include="Web\ErrorHandler.cs" />
     <Compile Include="Web\MimeType.cs" />
     <Compile Include="Web\RequestMethod.cs" />
-    <Compile Include="Web\Services\WebMethodAttribute.cs" />
-    <Compile Include="Web\Services\WebService.cs" />
+    <None Include="Web\Services\WebMethodAttribute.cs" />
+    <None Include="Web\Services\WebService.cs" />
     <Compile Include="Web\StatusCode.cs" />
     <Compile Include="Web\Drivers\DriverInfo.cs" />
     <Compile Include="Web\Header.cs" />

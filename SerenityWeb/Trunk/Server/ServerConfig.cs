@@ -16,10 +16,10 @@ using LibINI.IO;
 
 namespace Server
 {
-	internal class ServerConfig
-	{
-		internal bool Read(string path)
-		{
+    internal class ServerConfig
+    {
+        internal bool Read(string path)
+        {
             IniReader reader = new IniReader(IniReaderSettings.Win32Style);
 
             IniFile file;
@@ -54,32 +54,21 @@ namespace Server
                 {
                     IniSection section = file["Network"];
 
-                    if (section.ContainsEntry("BlockingIO"))
-                    {
-                        try
-                        {
-                            //this.BlockingIO = bool.Parse(section["BlockingIO"].Value);
-                        }
-                        catch
-                        {
-                        }
-                    }
                     if (section.ContainsEntry("Ports"))
                     {
+                        string[] portValues = ((string)section["Ports"].Value.Value).Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                        List<ushort> ports = new List<ushort>();
+                        ushort port;
 
-                        try
+                        for (int i = 0; i < portValues.Length; i++)
                         {
-                            string[] portValues = ((string)section["Ports"].Value.Value).Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                            this.Ports = new ushort[portValues.Length];
 
-                            for (int i = 0; i < portValues.Length; i++)
+                            if (ushort.TryParse(portValues[i], out port))
                             {
-                                this.Ports[i] = ushort.Parse(portValues[i]);
+                                ports.Add(port);
                             }
                         }
-                        catch
-                        {
-                        }
+                        this.Ports = ports.ToArray();
                     }
                 }
                 return true;
@@ -88,13 +77,13 @@ namespace Server
             {
                 return false;
             }
-		}
-		internal ushort[] Ports = new ushort[] { 80, 8080 };
-		internal bool BlockingIO = true;
-		internal bool LogToConsole = true;
-		internal bool LogToFile = true;
-		internal Dictionary<string, string> Modules = new Dictionary<string, string>();
-		internal bool OnDemandLoading = true;
-		
-	}
+        }
+        internal ushort[] Ports = new ushort[] { 80, 8080 };
+        internal bool BlockingIO = true;
+        internal bool LogToConsole = true;
+        internal bool LogToFile = true;
+        internal Dictionary<string, string> Modules = new Dictionary<string, string>();
+        internal bool OnDemandLoading = true;
+
+    }
 }

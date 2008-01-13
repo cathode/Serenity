@@ -23,7 +23,7 @@ namespace Serenity.Resources
         /// <summary>
         /// Initializes a new instance of the DynamicResource class.
         /// </summary>
-        public DynamicResource()
+        protected DynamicResource()
         {
         }
         #endregion

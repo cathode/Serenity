@@ -17,7 +17,7 @@ namespace Serenity.Resources
     /// <summary>
     /// Represents a requestable file embedded in a module assembly file.
     /// </summary>
-    public class ResourceResource : Resource
+    public sealed class ResourceResource : Resource
     {
         #region Constructors - Public
         public ResourceResource(string name, byte[] data)
