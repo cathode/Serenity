@@ -4,6 +4,179 @@
         <name>SPCore</name>
     </assembly>
     <members>
+        <member name="T:Serenity.Physics.Temperature">
+            <summary>
+            Represents a temperature in several different scales, and provides methods to convert
+            and manipulate temperatures, as well as common standard temperatures.
+            </summary>
+        </member>
+        <member name="F:Serenity.Physics.Temperature.CelsiusSign">
+            <summary>
+            Holds the sign used to denote a Celsius temperature represented as a string.
+            </summary>
+        </member>
+        <member name="F:Serenity.Physics.Temperature.DefaultUnit">
+            <summary>
+            Holds the default TemperatureUnit. Temperature values provided without a unit are
+            treated as the DefaultUnit.
+            </summary>
+        </member>
+        <member name="F:Serenity.Physics.Temperature.FahrenheitSign">
+            <summary>
+            Holds the sign used to denote a Fahrenheit temperature represented as a string.
+            </summary>
+        </member>
+        <member name="F:Serenity.Physics.Temperature.KelvinSign">
+            <summary>
+            Holds the sign used to denote a kelvin temperature represented as a string.
+            </summary>
+        </member>
+        <member name="F:Serenity.Physics.Temperature.MinimumCelsius">
+            <summary>
+            Holds the minimum allowed value that can be used when specifying a value in Celsius.
+            This is equivalent to Absolute Zero on the Celsius scale.
+            </summary>
+        </member>
+        <member name="F:Serenity.Physics.Temperature.MinimumFahrenheit">
+            <summary>
+            Holds the minimum allowed value that can be used when specifying a value in Fahrenheit.
+            This is equivalent to Absolute Zero on the Fahrenheit scale.
+            </summary>
+        </member>
+        <member name="F:Serenity.Physics.Temperature.MinimumKelvin">
+            <summary>
+            Holds the minimum allowed value that can be used when specifying a value in Kelvin.
+            This is equivalent to Absolute Zero on the Kelvin scale.
+            </summary>
+        </member>
+        <member name="M:Serenity.Physics.Temperature.#ctor(System.Double)">
+            <summary>
+            Initializes a new instance of the Temperature class using the provided temperature
+            value and the default temperature unit.
+            </summary>
+            <param name="value">The value of the new Temperature.</param>
+        </member>
+        <member name="M:Serenity.Physics.Temperature.#ctor(System.Double,Serenity.Physics.TemperatureUnit)">
+            <summary>
+            Initializes a new instance of the Temperature class using the provided temperature
+            value and the provided temperature unit.
+            </summary>
+            <param name="value">The value of the new Temperature.</param>
+            <param name="valueUnit">The unit of the provided value.</param>
+        </member>
+        <member name="F:Serenity.Physics.Temperature.AbsoluteZero">
+            <summary>
+            Gets a Temperature representing the coldest possible temperature
+            (e.g. a complete lack of thermal activity).
+            </summary>
+        </member>
+        <member name="F:Serenity.Physics.Temperature.RoomTemperature">
+            <summary>
+            Gets a Temperature representing the most common room temperature.
+            </summary>
+        </member>
+        <member name="F:Serenity.Physics.Temperature.WaterBoilingPoint">
+            <summary>
+            Gets a Temperature representing the boiling point of water at standard atmospheric pressure.
+            </summary>
+        </member>
+        <member name="F:Serenity.Physics.Temperature.WaterFreezingPoint">
+            <summary>
+            Gets a Temperature representing the freezing point of water at standard atmospheric pressure.
+            </summary>
+        </member>
+        <member name="M:Serenity.Physics.Temperature.CompareTo(Serenity.Physics.Temperature)">
+            <summary>
+            Compares the current Serenity.Physics.Temperature to another Serenity.Physics.Temperature.
+            </summary>
+            <param name="other">The Serenity.Physics.Temperature object to compare to.</param>
+            <returns>A 32-bit signed integer that indicates the relative order of the objects
+             being compared.</returns>
+        </member>
+        <member name="M:Serenity.Physics.Temperature.Convert(System.Double,Serenity.Physics.TemperatureUnit,Serenity.Physics.TemperatureUnit)">
+            <summary>
+            Converts a temperature value from one unit to another.
+            </summary>
+            <param name="value">The temperature value to convert.</param>
+            <param name="sourceUnit">The TemperatureUnit to treat the input value as.</param>
+            <param name="resultUnit">The TemperatureUnit to convert the input value to.</param>
+            <returns>The converted temperature value.</returns>
+        </member>
+        <member name="M:Serenity.Physics.Temperature.Equals(System.Object)">
+            <summary>
+            Determines whether the specified System.Object is equal to the
+            current Serenity.Physics.Temperature.
+            </summary>
+            <param name="obj">The System.Object to compare with the current
+            Serenity.Physics.Temperature</param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Physics.Temperature.Equals(Serenity.Physics.Temperature)">
+            <summary>
+            Determines if the current Serenity.Physics.Temperature is equal
+            to the specified Serenity.Physics.Temperature.
+            </summary>
+            <param name="other">The instance to compare equality with.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Physics.Temperature.Equals(Serenity.Physics.Temperature,Serenity.Physics.Temperature)">
+            <summary>
+            Determines if two Serenity.Physics.Temperature instances are equal.
+            </summary>
+            <param name="a">The first value to compare.</param>
+            <param name="b">The second value to compare.</param>
+            <returns>true if both instances have the same value, otherwise false.</returns>
+        </member>
+        <member name="M:Serenity.Physics.Temperature.GetHashCode">
+            <summary>
+            Computes a hash code for the current Serenity.Physics.Temperature.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Physics.Temperature.ToString">
+            <summary>
+            Converts a Temperature to it's string represention, using the default TemperatureUnit.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Physics.Temperature.ToString(Serenity.Physics.TemperatureUnit)">
+            <summary>
+            Converts a Temperature to it's string represention, using the specified TemperatureUnit.
+            </summary>
+            <param name="unit">The TemperatureUnit to represent.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Physics.Temperature.op_Inequality(Serenity.Physics.Temperature,Serenity.Physics.Temperature)">
+            <summary>
+            Determines if two Serenity.Physics.Temperature objects are inequal.
+            </summary>
+            <param name="a">The first instance to compare.</param>
+            <param name="b">The second instance to compare.</param>
+            <returns>true if both instances are inequal, otherwise false.</returns>
+        </member>
+        <member name="M:Serenity.Physics.Temperature.op_Equality(Serenity.Physics.Temperature,Serenity.Physics.Temperature)">
+            <summary>
+            Determines if two Serenity.Physics.Temperature objects are equal.
+            </summary>
+            <param name="a">The first instance to compare.</param>
+            <param name="b">The second instance to compare.</param>
+            <returns>true if both instances are equal, otherwise false.</returns>
+        </member>
+        <member name="P:Serenity.Physics.Temperature.ValueCelsius">
+            <summary>
+            Gets the current Temperature value in the Celsius scale.
+            </summary>
+        </member>
+        <member name="P:Serenity.Physics.Temperature.ValueFahrenheit">
+            <summary>
+            Gets the current Temperature value in the Fahrenheit scale.
+            </summary>
+        </member>
+        <member name="P:Serenity.Physics.Temperature.ValueKelvin">
+            <summary>
+            Gets the current Temperature value in the Kelvin scale.
+            </summary>
+        </member>
         <member name="T:Serenity.PackedBool16">
             <summary>
             Represents 16 discrete boolean values in two octets.
@@ -49,7 +222,7 @@
             <summary>
             Compares the current PackedBool16 instance to another instance and determines if they have equal values.
             </summary>
-            <param name="pbool">The object to compare to.</param>
+            <param name="other">The object to compare to.</param>
             <returns>True if value of pbool equal to value of current instance.</returns>
         </member>
         <member name="M:Serenity.PackedBool16.Equals(Serenity.PackedBool16,Serenity.PackedBool16)">
@@ -128,6 +301,59 @@
             <summary>
             Gets the actual packed value.
             </summary>
+        </member>
+        <member name="T:Serenity.Physics.TemperatureUnit">
+            <summary>
+            Enumerates the temperature measurement systems supported by the Temperature struct.
+            </summary>
+        </member>
+        <member name="F:Serenity.Physics.TemperatureUnit.Kelvin">
+            <summary>
+            Represents the Kelvin scale.
+            </summary>
+        </member>
+        <member name="F:Serenity.Physics.TemperatureUnit.Celsius">
+            <summary>
+            Represents the Celsius scale.
+            </summary>
+        </member>
+        <member name="F:Serenity.Physics.TemperatureUnit.Fahrenheit">
+            <summary>
+            Represents the Fahrenheit scale.
+            </summary>
+        </member>
+        <member name="T:Serenity.DisposableBase">
+            <summary>
+            Provides common/shared functionality for classes implementing the IDisposable pattern.
+            </summary>
+        </member>
+        <member name="M:Serenity.DisposableBase.Dispose(System.Boolean)">
+            <summary>
+            When overridden in a derived class, performs the actual cleanup of unmanaged resources.
+            </summary>
+            <param name="disposing">A value that indicates if disposal is actually needed.</param>
+        </member>
+        <member name="M:Serenity.DisposableBase.Dispose">
+            <summary>
+            Disposes (releases unmanaged resources) the current object.
+            </summary>
+        </member>
+        <member name="P:Serenity.DisposableBase.IsDisposed">
+            <summary>
+            Gets or sets a value that indicates if the current instance has been disposed.
+            </summary>
+        </member>
+        <member name="T:Serenity.IO.PathExt">
+            <summary>
+            Provides an additional set of methods for manipulating file paths.
+            </summary>
+        </member>
+        <member name="M:Serenity.IO.PathExt.Combine(System.String[])">
+            <summary>
+            Combines a number of path strings.
+            </summary>
+            <param name="paths"></param>
+            <returns></returns>
         </member>
         <member name="T:Serenity.ICloneable`1">
             <summary>
@@ -242,7 +468,7 @@
             <summary>
             Compares the current PackedBool32 instance to another instance and determines if they have equal values.
             </summary>
-            <param name="pbool">The object to compare to.</param>
+            <param name="other">The object to compare to.</param>
             <returns>True if value of pbool equal to value of current instance.</returns>
         </member>
         <member name="M:Serenity.PackedBool32.Equals(Serenity.PackedBool32,Serenity.PackedBool32)">
@@ -372,15 +598,15 @@
             <summary>
             Compares the current PackedBool to another PackedBool and determines if they have equal values.
             </summary>
-            <param name="pbool">The object to compare to.</param>
+            <param name="other">The object to compare to.</param>
             <returns>True if value of pbool equal to value of current PackedBool.</returns>
         </member>
         <member name="M:Serenity.PackedBool.Equals(Serenity.PackedBool,Serenity.PackedBool)">
             <summary>
             Compares two PackedBool instances and determines if they have equal values.
             </summary>
-            <param name="a">The first instance to compare.</param>
-            <param name="b">The second instance to compare.</param>
+            <param name="objA">The first instance to compare.</param>
+            <param name="objB">The second instance to compare.</param>
             <returns></returns>
         </member>
         <member name="M:Serenity.PackedBool.GetEnumerator">
@@ -406,16 +632,16 @@
             <summary>
             Compares two PackedBool instances and determines if they have inequal values.
             </summary>
-            <param name="a">The first instance to compare.</param>
-            <param name="b">The second instance to compare.</param>
+            <param name="objA">The first instance to compare.</param>
+            <param name="objB">The second instance to compare.</param>
             <returns>True if the two instances have inequal values, otherwise false.</returns>
         </member>
         <member name="M:Serenity.PackedBool.op_Equality(Serenity.PackedBool,Serenity.PackedBool)">
             <summary>
             Compares two PackedBool instances and determines if they have equal values.
             </summary>
-            <param name="a">The first instance to compare.</param>
-            <param name="b">The second instance to compare.</param>
+            <param name="objA">The first instance to compare.</param>
+            <param name="objB">The second instance to compare.</param>
             <returns>True if the two instances have equal values, otherwise false.</returns>
         </member>
         <member name="M:Serenity.PackedBool.op_Implicit(Serenity.PackedBool)~Serenity.PackedBool16">
@@ -496,7 +722,7 @@
             <summary>
             Compares the current PackedBool64 instance to another instance and determines if they have equal values.
             </summary>
-            <param name="pbool">The object to compare to.</param>
+            <param name="other">The object to compare to.</param>
             <returns>True if value of pbool equal to value of current instance.</returns>
         </member>
         <member name="M:Serenity.PackedBool64.Equals(Serenity.PackedBool64,Serenity.PackedBool64)">
@@ -855,6 +1081,39 @@
         <member name="P:Serenity.IO.Reader`1.AsyncReadState.Target">
             <summary>
             Gets or sets the object being read.
+            </summary>
+        </member>
+        <member name="T:Serenity.SPAsyncResult">
+            <summary>
+            Provides a basic implementation of IAsyncResult.
+            </summary>
+        </member>
+        <member name="M:Serenity.SPAsyncResult.#ctor">
+            <summary>
+            Initializes a new instance of the SPAsyncResult class.
+            </summary>
+        </member>
+        <member name="M:Serenity.SPAsyncResult.Dispose(System.Boolean)">
+            <summary>
+            Overridden. Performs disposal actions.
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="P:Serenity.SPAsyncResult.AsyncState">
+            <summary>
+            Gets a user-defined object that qualifies or contains information about an
+            asynchronous operation.
+            </summary>
+        </member>
+        <member name="P:Serenity.SPAsyncResult.AsyncWaitHandle">
+            <summary>
+            Gets a System.Threading.WaitHandle that is used to wait for an asynchronous 
+            operation to complete.
+            </summary>
+        </member>
+        <member name="P:Serenity.SPAsyncResult.CompletedSynchronously">
+            <summary>
+            Gets an indication of whether the asynchronous operation completed synchronously.
             </summary>
         </member>
         <member name="P:Serenity.SPAsyncResult.IsCompleted">
