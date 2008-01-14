@@ -25,14 +25,23 @@ namespace Serenity.Attributes
         /// <param name="title"></param>
         public ModuleTitleAttribute(string title)
         {
-            this.Title = title;
+            this.title = title;
         }
         #endregion
-        #region Fields - Public
+        #region Fields - Private
+        private readonly string title;
+        #endregion
+        #region Properties - Public
         /// <summary>
         /// Holds the title of the module.
         /// </summary>
-        public readonly string Title;
+        public string Title
+        {
+            get
+            {
+                return this.title;
+            }
+        }
         #endregion
     }
 }
