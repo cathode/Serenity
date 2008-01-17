@@ -130,20 +130,6 @@
     <Compile Include="__Strings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Configuration\Serenity.ini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configuration\FileTypeRegistry.ini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Domains\root.ini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Domains\localhost.ini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
@@ -192,9 +178,6 @@
     <EmbeddedResource Include="Resources\icons\page_white_wrench.png" />
     <EmbeddedResource Include="Resources\icons\page_white_zip.png" />
     <EmbeddedResource Include="Resources\index.css" />
-    <Content Include="Domains\Common\default.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <EmbeddedResource Include="Resources\index.xslt" />
     <Content Include="Themes\blueish\stylesheet.css" />
     <Content Include="Web\Drivers\multipart test.txt" />
