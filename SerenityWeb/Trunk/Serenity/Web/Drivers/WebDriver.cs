@@ -320,6 +320,7 @@ namespace Serenity.Web.Drivers
                     }
                     catch (SocketException socketEx)
                     {
+                        SerenityServer.ErrorLog.Write("Could not bind listening socket to desired port.\r\n" + socketEx.ToString(), Serenity.Logging.LogMessageLevel.Warning);
                     }
                 }
                 if (this.ListeningSocket.IsBound)
@@ -330,7 +331,7 @@ namespace Serenity.Web.Drivers
                 }
                 else
                 {
-                    //TODO: Log "socket bind failed" error message.
+                    SerenityServer.ErrorLog.Write("Failed to bind listening socket to any port.", Serenity.Logging.LogMessageLevel.Error);
                     return false;
                 }
             }

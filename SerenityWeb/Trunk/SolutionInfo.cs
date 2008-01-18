@@ -20,5 +20,6 @@ using Serenity;
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyVersion(SerenityInfo.Version)]
 
-[assembly: CLSCompliant(true)]
+[assembly: CLSCompliant(false)]
+
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, Execution=true)]

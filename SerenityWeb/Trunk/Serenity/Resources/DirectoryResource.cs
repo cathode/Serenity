@@ -41,6 +41,7 @@ namespace Serenity
             {
                 this.Name = "";
             }
+            this.ContentType = MimeType.ApplicationXml;
         }
         #endregion
         #region Fields - Public
@@ -149,23 +150,6 @@ namespace Serenity
         }
         #endregion
         #region Properties - Public
-        /// <summary>
-        /// Overridden. Gets the MimeType of the current DirectoryResource.
-        /// </summary>
-        /// <remarks>
-        /// This property always returns the text/xml mimetype.
-        /// </remarks>
-        public override MimeType ContentType
-        {
-            get
-            {
-                return new MimeType("text", "xml");
-            }
-            protected internal set
-            {
-                throw new NotSupportedException(__Strings.CannotModifyResourceMimetype);
-            }
-        }
         /// <summary>
         /// Gets the resource grouping of the current DirectoryResource.
         /// </summary>

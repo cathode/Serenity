@@ -90,7 +90,7 @@ namespace Serenity.Resources
         /// <summary>
 		/// Gets the MimeType that should be used to describe the content of the current Resource.
 		/// </summary>
-		public virtual MimeType ContentType
+		public MimeType ContentType
 		{
 			get
 			{
@@ -104,7 +104,7 @@ namespace Serenity.Resources
 		/// <summary>
 		/// Gets or sets the name of the current Resource.
 		/// </summary>
-		public virtual string Name
+		public string Name
 		{
 			get
 			{
