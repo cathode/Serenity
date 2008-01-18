@@ -90,6 +90,7 @@
     <None Include="Cache\CacheManager.cs" />
     <Compile Include="Attributes\ModuleDefaultPageAttribute.cs" />
     <Compile Include="Attributes\ModuleResourceNamespaceAttribute.cs" />
+    <Compile Include="Data\Database.cs" />
     <Compile Include="Data\DataScope.cs" />
     <Compile Include="Logging\LogMessage.cs" />
     <Compile Include="ModuleCollection.cs" />
@@ -97,7 +98,6 @@
     <Compile Include="Pages\Admin\MainConfigPage.cs" />
     <Compile Include="Resources\RewriteResource.cs" />
     <Compile Include="Resources\ResourceCollection.cs" />
-    <Compile Include="Data\Database.cs" />
     <Compile Include="Resources\DirectoryResource.cs" />
     <Compile Include="Domain.cs" />
     <Compile Include="Resources\ErrorResource.cs" />
@@ -215,6 +215,9 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>

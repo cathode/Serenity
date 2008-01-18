@@ -21,20 +21,14 @@ namespace Serenity.Web
 		#region Constructors - Private
 		private StatusCode(int code, string message)
 		{
-			this.Code = code;
-			this.Message = message;
+			this.code = code;
+			this.message = message;
 		}
 		#endregion
-		#region Fields - Public
-		/// <summary>
-		/// Gets the numeric portion of the current ResponseCode.
-		/// </summary>
-		public readonly int Code;
-		/// <summary>
-		/// Gets the description or command word associated with the current ResponseCode.
-		/// </summary>
-		public readonly string Message;
-		#endregion
+        #region Fields - Private
+        private readonly int code;
+        private readonly string message;
+        #endregion
 		#region Methods - Public
         public override int GetHashCode()
         {
@@ -46,6 +40,17 @@ namespace Serenity.Web
 		}
 		#endregion
 		#region Properties - Public
+        /// <summary>
+        /// Gets the numeric portion of the current ResponseCode.
+        /// </summary>
+        public int Code
+        {
+            get
+            {
+                return this.code;
+            }
+        }
+        
 		/// <summary>
 		/// Gets a status code indicating an HTTP 100 Continue response.
 		/// </summary>
@@ -472,6 +477,16 @@ namespace Serenity.Web
 				return new StatusCode(505, "HTTP Version Not Supported");
 			}
 		}
+        /// <summary>
+        /// Gets the description or command word associated with the current ResponseCode.
+        /// </summary>
+        public string Message
+        {
+            get
+            {
+                return this.message;
+            }
+        }
 		/// <summary>
 		/// Gets a status code indicating a WebDAV 102 Processing response.
 		/// </summary>

@@ -7,15 +7,24 @@
  * this distribution as License.txt.                                          *
  *****************************************************************************/
 using System;
-using System.Data;
-using System.Data.SQLite;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Data.Linq;
+using System.Data.SQLite;
 using System.Text;
 
 namespace Serenity.Data
 {
     public static class Database
     {
-        
+        public static DbConnection Open(DataScope scope)
+        {
+            throw new NotImplementedException();
+
+            SQLiteConnectionStringBuilder builder = new SQLiteConnectionStringBuilder();
+            
+            SQLiteConnection con = new SQLiteConnection();
+        }
     }
 }

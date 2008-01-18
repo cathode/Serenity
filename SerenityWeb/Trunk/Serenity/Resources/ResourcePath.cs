@@ -84,7 +84,7 @@ namespace Serenity.Resources
         {
             if (path == null)
             {
-                throw new ArgumentNullException("uriString");
+                throw new ArgumentNullException("path");
             }
 
             ResourcePath uri = new ResourcePath(path);

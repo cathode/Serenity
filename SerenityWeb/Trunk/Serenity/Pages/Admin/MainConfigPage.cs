@@ -21,7 +21,7 @@ namespace Serenity.Pages.Admin
         }
         #endregion
         #region Methods - Public
-        public override void OnRequest(Serenity.Web.CommonContext context)
+        public override void OnRequest(CommonContext context)
         {
 
         }

@@ -117,17 +117,17 @@ namespace Serenity.Web.Drivers
         /// Handles a connection that has been accepted.
         /// </summary>
         /// <param name="socket"></param>
-        protected void HandleAcceptedConnection(object sock)
+        protected void HandleAcceptedConnection(object socket)
         {
-            if (sock == null)
+            if (socket == null)
             {
                 throw new ArgumentNullException("socket");
             }
 
-            Socket s = sock as Socket;
+            Socket s = socket as Socket;
             if (s == null)
             {
-                throw new ArgumentException("Specified socket object must be of type System.Net.Sockets.Socket", "sock");
+                throw new ArgumentException("Specified socket object must be of type System.Net.Sockets.Socket", "socket");
             }
 
             this.HandleAcceptedConnection(s);

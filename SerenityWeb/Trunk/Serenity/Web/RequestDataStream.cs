@@ -38,9 +38,7 @@ namespace Serenity.Web
                 throw new ArgumentNullException("contents");
             }
             this.name = name;
-
             this.contents = contents;
-
         }
         #endregion
         #region Fields - Private
@@ -62,24 +60,36 @@ namespace Serenity.Web
         /// <summary>
         /// Reads a number of bytes into Buffer
         /// </summary>
-        /// <param name="Buffer">An array of bytes. When this method returns, Buffer contains the specified
-        ///     Byte array with the values between Offset and (Offset + Count - 1) replaced
-        ///     by the bytes read from the current stream.</param>
-        /// <param name="Offset">The zero-based index in Buffer at which to begin storing the read bytes.</param>
-        /// <param name="Count">The maximum of bytes to read from the current stream.</param>
+        /// <param name="buffer">An array of bytes. When this method returns,
+        /// buffer contains the values between offset and (offset + count - 1) replaced
+        /// by the bytes read from the current stream.</param>
+        /// <param name="offset">The zero-based index in Buffer at which to begin storing the read bytes.</param>
+        /// <param name="count">The maximum of bytes to read from the current stream.</param>
         /// <returns></returns>
-        public override int Read(byte[] Buffer, int Offset, int Count)
+        public override int Read(byte[] buffer, int offset, int count)
         {
-            int ReadCount = 0;
-            int Index = Offset;
-            while ((Index < Buffer.Length) || (ReadCount <= Count))
+            if (buffer == null)
             {
-                Buffer[ReadCount] = this.contents[Index];
-                Index++;
-                ReadCount++;
+                throw new ArgumentNullException("buffer");
             }
-            this.position += ReadCount;
-            return ReadCount;
+            else if (offset < 0 || offset > this.Length)
+            {
+                throw new ArgumentOutOfRangeException("offset");
+            }
+            else if (count + offset > this.Length)
+            {
+                throw new ArgumentOutOfRangeException("count");
+            }
+            int readCount = 0;
+            int index = offset;
+            while ((index < buffer.Length) || (readCount <= count))
+            {
+                buffer[readCount] = this.contents[index];
+                index++;
+                readCount++;
+            }
+            this.position += readCount;
+            return readCount;
         }
         /// <summary>
         /// Reads the entire stream, starting at the beginning.
@@ -88,12 +98,13 @@ namespace Serenity.Web
         public byte[] ReadAll()
         {
             this.position = this.contents.Length - 1;
-            byte[] Result = new byte[this.contents.Length];
-            this.contents.CopyTo(Result, 0);
-            return Result;
+            byte[] result = new byte[this.contents.Length];
+            this.contents.CopyTo(result, 0);
+            return result;
         }
         /// <summary>
-        /// Reads the entire stream into a string, starting at the beginning and using the default text encoding.
+        /// Reads the entire stream into a string, starting at the beginning
+        /// and using the default text encoding.
         /// </summary>
         /// <returns></returns>
         public string ReadAllText()
@@ -102,35 +113,48 @@ namespace Serenity.Web
             return Encoding.Default.GetString(this.contents);
         }
         /// <summary>
-        /// Reads the entire stream into a string, starting at the beginning and using the specified text encoding.
+        /// Reads the entire stream into a string, starting at the beginning
+        /// and using the specified text encoding.
         /// </summary>
-        /// <param name="ReadEncoding">The encoding to read with.</param>
+        /// <param name="encoding">The encoding to use.</param>
         /// <returns></returns>
-        public string ReadAllText(Encoding ReadEncoding)
+        public string ReadAllText(Encoding encoding)
         {
+            if (encoding == null)
+            {
+                throw new ArgumentNullException("encoding");
+            }
             this.position = this.contents.Length - 1;
-            return ReadEncoding.GetString(this.contents);
+            return encoding.GetString(this.contents);
         }
         /// <summary>
         /// Reads a number of bytes and returns them as a string, using the default text encoding.
         /// </summary>
-        /// <param name="Count">The number of bytes to read on the current stream.</param>
+        /// <param name="count">The number of bytes to read on the current stream.</param>
         /// <returns></returns>
-        public string ReadText(int Count)
+        public string ReadText(int count)
         {
-            return this.ReadText(Count, Encoding.Default);
+            return this.ReadText(count, Encoding.Default);
         }
         /// <summary>
-        /// Reads a number of bytes and returns them as a string, using ReadEncoding as the text encoding.
+        /// Reads a number of bytes and returns them as a string, using the specified encoding.
         /// </summary>
-        /// <param name="Count">The number of bytes to read on the current stream.</param>
-        /// <param name="ReadEncoding">The text encoding to encode the read bytes with.</param>
+        /// <param name="count">The number of bytes to read on the current stream.</param>
+        /// <param name="encoding">The encoding to use.</param>
         /// <returns></returns>
-        public string ReadText(int Count, Encoding ReadEncoding)
+        public string ReadText(int count, Encoding encoding)
         {
-            byte[] Data = new byte[Count];
-            this.Read(Data, 0, Count);
-            return ReadEncoding.GetString(Data);
+            if (encoding == null)
+            {
+                throw new ArgumentNullException("encoding");
+            }
+            else if (count < 0)
+            {
+                throw new ArgumentOutOfRangeException("count");
+            }
+            byte[] result = new byte[count];
+            this.Read(result, 0, count);
+            return encoding.GetString(result);
         }
         /// <summary>
         /// Reads all the remaining bytes and returns them as an array.
@@ -138,12 +162,12 @@ namespace Serenity.Web
         /// <returns></returns>
         public byte[] ReadToEnd()
         {
-            byte[] Result = new byte[this.Length - this.Position];
+            byte[] result = new byte[this.Length - this.Position];
             for (int I = (int)this.Position, N = 0; I < this.Length; I++, N++)
             {
-                Result[N] = this.contents[I];
+                result[N] = this.contents[I];
             }
-            return Result;
+            return result;
         }
         /// <summary>
         /// Reads to the end of the current RequestDataStream,
@@ -158,38 +182,42 @@ namespace Serenity.Web
         /// <summary>
         /// Reads to the end of the current RequestDataStream,
         /// from the current position, and returns everything read as a
-        /// string using ReadEncoding as the encoding.
+        /// string using the specified encoding.
         /// </summary>
-        /// <param name="ReadEncoding">The encoding to use.</param>
+        /// <param name="encoding">The encoding to use.</param>
         /// <returns>A string containing the remainder of the current RequestDataStream.</returns>
-        public string ReadToEndText(Encoding ReadEncoding)
+        public string ReadToEndText(Encoding encoding)
         {
-            return ReadEncoding.GetString(this.ReadToEnd());
+            if (encoding == null)
+            {
+                throw new ArgumentNullException("encoding");
+            }
+            return encoding.GetString(this.ReadToEnd());
         }
         /// <summary>
         /// Sets the position within the current stream.
         /// </summary>
-        /// <param name="Offset">A Byte offset relative to the origin parameter.</param>
-        /// <param name="Origin">A Input of type System.IO.SeekOrigin indicating
+        /// <param name="offset">A Byte offset relative to the origin parameter.</param>
+        /// <param name="origin">A Input of type System.IO.SeekOrigin indicating
         /// the reference point used to obtain the new position.</param>
         /// <returns>The new position within the current stream.</returns>
-        public override long Seek(long Offset, SeekOrigin Origin)
+        public override long Seek(long offset, SeekOrigin origin)
         {
-            switch (Origin)
+            switch (origin)
             {
                 case SeekOrigin.Begin:
-                    this.position = Offset;
+                    this.position = offset;
                     break;
 
                 case SeekOrigin.Current:
-                    this.position += Offset;
+                    this.position += offset;
                     break;
 
                 case SeekOrigin.End:
-                    this.position = this.contents.Length - Offset;
+                    this.position = this.contents.Length - offset;
                     break;
             }
-            return 0;
+            return this.position;
         }
         /// <summary>
         /// Not supported.
