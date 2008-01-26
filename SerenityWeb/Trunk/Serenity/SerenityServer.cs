@@ -12,7 +12,7 @@ using System.IO;
 using System.Text;
 
 using Serenity.Logging;
-using Serenity.Resources;
+using Serenity.Web.Resources;
 using Serenity.Web;
 using Serenity.Web.Drivers;
 

@@ -10,15 +10,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Serenity.Resources
+namespace Serenity.Web.Resources
 {
     /// <summary>
-    /// Represents a information that can be used to locate a resource.
+    /// Represents a path that can be used to locate a resource.
     /// </summary>
     public sealed class ResourcePath : ICloneable<ResourcePath>, IComparable<ResourcePath>, IEquatable<ResourcePath>
     {
-        #region Constructors - Public
-        public ResourcePath(string path)
+        #region Constructors - Private
+        private ResourcePath(string path)
         {
             if (path == null)
             {
@@ -39,9 +39,6 @@ namespace Serenity.Resources
             {
                 this.path = path;
             }
-        }
-        public ResourcePath(Uri pathUri) : this(pathUri.ToString())
-        {   
         }
         #endregion
         #region Fields - Private
@@ -87,8 +84,16 @@ namespace Serenity.Resources
                 throw new ArgumentNullException("path");
             }
 
-            ResourcePath uri = new ResourcePath(path);
-            return uri;
+            return new ResourcePath(path);
+        }
+        public static ResourcePath Create(Uri uri)
+        {
+            if (uri == null)
+            {
+                throw new ArgumentNullException("uri");
+            }
+
+            return new ResourcePath(uri.ToString());
         }
         public override bool Equals(object obj)
         {

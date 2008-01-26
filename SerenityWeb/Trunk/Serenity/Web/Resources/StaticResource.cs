@@ -13,7 +13,7 @@ using System.Text;
 
 using Serenity.Web;
 
-namespace Serenity.Resources
+namespace Serenity.Web.Resources
 {
 	/// <summary>
 	/// Represents a file on the local filesystem that is exposed as a requestable resource.

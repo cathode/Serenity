@@ -29,7 +29,7 @@ namespace Serenity.Web
             {
                 throw new ArgumentNullException("name");
             }
-            else if (name == string.Empty)
+            else if (name.Length == 0)
             {
                 throw new ArgumentException(__Strings.ArgumentCannotBeEmpty, "name");
             }
@@ -45,7 +45,7 @@ namespace Serenity.Web
         private byte[] contents;
         private MimeType mimeType;
         private string name;
-        private long position = 0;
+        private long position;
         private RequestMethod method = RequestMethod.GET;
         #endregion
         #region Methods - Public

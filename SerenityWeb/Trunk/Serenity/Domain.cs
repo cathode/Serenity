@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using Serenity.Resources;
+using Serenity.Web.Resources;
 
 namespace Serenity
 {

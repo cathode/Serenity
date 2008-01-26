@@ -13,7 +13,7 @@ using System.Reflection;
 using System.Text;
 
 using Serenity.Attributes;
-using Serenity.Resources;
+using Serenity.Web.Resources;
 
 namespace Serenity
 {
@@ -39,7 +39,7 @@ namespace Serenity
             {
                 throw new ArgumentNullException("name");
             }
-            else if (name == string.Empty)
+            else if (name.Length == 0)
             {
                 throw new ArgumentException(__Strings.ArgumentCannotBeEmpty);
             }
@@ -70,9 +70,10 @@ namespace Serenity
             object[] moduleAttributes = moduleAsm.GetCustomAttributes(true);
             foreach (object attrib in moduleAttributes)
             {
-                if (attrib is ModuleTitleAttribute)
+                var a = attrib as ModuleTitleAttribute;
+                if (a != null)
                 {
-                    title = ((ModuleTitleAttribute)attrib).Title;
+                    title = a.Title;
                     break;
                 }
             }

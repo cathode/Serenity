@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Serenity;
-using Serenity.Resources;
+using Serenity.Web.Resources;
 using Serenity.Web;
 using Serenity.Web.Drivers;
 

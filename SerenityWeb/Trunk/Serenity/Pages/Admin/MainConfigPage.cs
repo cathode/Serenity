@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Serenity.Resources;
+using Serenity.Web.Resources;
 using Serenity.Web;
 using Serenity.Web.Drivers;
 

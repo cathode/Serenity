@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 
-namespace Serenity.Resources
+namespace Serenity.Web.Resources
 {
     /// <summary>
     /// Represents a collection of resources.
@@ -31,7 +31,7 @@ namespace Serenity.Resources
         #region Fields - Private
         private bool autoMaintainDirectoryResources = true;
         private UnderlyingResourceCollection uc;
-        private Dictionary<ResourcePath, Resource[]> cachedDirectories = null;
+        private Dictionary<ResourcePath, Resource[]> cachedDirectories;
         #endregion
         #region Indexers - Public
         public Resource this[int index]

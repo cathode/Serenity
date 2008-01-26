@@ -30,15 +30,15 @@ namespace Serenity.Web
         #region Fields - Private
         private CommonContext context;
         private HeaderCollection headers = new HeaderCollection();
-        private bool headersSent = false;
-        private bool lockFlushes = false;
-        private bool lockWrites = false;
+        private bool headersSent;
+        private bool lockFlushes;
+        private bool lockWrites;
         private MimeType mimeType = MimeType.Default;
         private List<byte> outputBuffer = new List<byte>();
-        private int sent = 0;
+        private int sent;
         private StatusCode status = StatusCode.Http500InternalServerError;
-        private bool useChunkedTransferEncoding = false;
-        private bool useCompression = false;
+        private bool useChunkedTransferEncoding;
+        private bool useCompression;
         #endregion
         #region Methods - Public
         public void ClearOutputBuffer()

@@ -12,7 +12,7 @@ using System.IO;
 using System.Text;
 
 using Serenity.Logging;
-using Serenity.Resources;
+using Serenity.Web.Resources;
 using Serenity.Themes;
 using Serenity.Web;
 
@@ -43,59 +43,39 @@ namespace Serenity.Web
                 throw new ArgumentNullException("context");
             }
             Resource resource;
-            ResourcePath path = new ResourcePath(context.Request.Url);
-            try
+            ResourcePath path = ResourcePath.Create(context.Request.Url);
+
+            if (SerenityServer.Resources.Contains(path))
             {
+                resource = SerenityServer.Resources[path];
+            }
+            else
+            {
+                path.IsSchemeUsed = false;
                 if (SerenityServer.Resources.Contains(path))
                 {
                     resource = SerenityServer.Resources[path];
                 }
                 else
                 {
-                    path.IsSchemeUsed = false;
+                    path.IsDomainUsed = false;
                     if (SerenityServer.Resources.Contains(path))
                     {
                         resource = SerenityServer.Resources[path];
                     }
                     else
                     {
-                        path.IsDomainUsed = false;
-                        if (SerenityServer.Resources.Contains(path))
-                        {
-                            resource = SerenityServer.Resources[path];
-                        }
-                        else
-                        {
-                            ErrorHandler.Handle(context, StatusCode.Http404NotFound);
-                            return;
-                        }
+                        ErrorHandler.Handle(context, StatusCode.Http404NotFound);
+                        return;
                     }
                 }
             }
-            catch (Exception e)
-            {
-                ErrorHandler.Handle(context, StatusCode.Http500InternalServerError);
-                SerenityServer.ErrorLog.Write("An error has occured while processing a request. Exception details: "
-                    + e.ToString(), LogMessageLevel.Error);
-                return;
-            }
-            
+
             if (resource != null)
             {
-                try
-                {
-                    resource.PreRequest(context);
-                    resource.OnRequest(context);
-                    resource.PostRequest(context);
-                }
-                catch (Exception e)
-                {
-
-                    ErrorHandler.Handle(context, StatusCode.Http500InternalServerError);
-                    SerenityServer.ErrorLog.Write("Dynamic Resource crash, Exception details:\r\n"
-                        + e.ToString(), LogMessageLevel.Error);
-                    return;
-                }
+                resource.PreRequest(context);
+                resource.OnRequest(context);
+                resource.PostRequest(context);
             }
             else
             {

@@ -22,9 +22,9 @@ namespace Serenity.Data
         {
             throw new NotImplementedException();
 
-            SQLiteConnectionStringBuilder builder = new SQLiteConnectionStringBuilder();
+            //SQLiteConnectionStringBuilder builder = new SQLiteConnectionStringBuilder();
             
-            SQLiteConnection con = new SQLiteConnection();
+            //SQLiteConnection con = new SQLiteConnection();
         }
     }
 }

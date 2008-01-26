@@ -30,7 +30,7 @@ namespace Serenity.Web
             {
                 throw new ArgumentNullException("name");
             }
-            else if (name == string.Empty)
+            else if (name.Length == 0)
             {
                 throw new ArgumentException("Paramater 'name' cannot be empty.", "name");
             }

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Serenity.Resources
+namespace Serenity.Web.Resources
 {
     /// <summary>
     /// Represents a link or redirection to another resource on the server.
@@ -31,8 +31,8 @@ namespace Serenity.Resources
         #endregion
         #region Fields - Private
         private ResourcePath targetPath;
-        private bool isHardRewrite = true;
-        private Resource targetResource = null;
+        private bool isHardRewrite;
+        private Resource targetResource;
         #endregion
         #region Methods - Private
         private void RebuildCache()

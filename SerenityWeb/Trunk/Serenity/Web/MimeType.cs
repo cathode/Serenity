@@ -27,7 +27,7 @@ namespace Serenity.Web
             {
                 throw new ArgumentNullException("type");
             }
-            else if (type == string.Empty)
+            else if (type.Length == 0)
             {
                 throw new ArgumentException("Argument 'type' cannot be empty.", "type");
             }
@@ -154,7 +154,7 @@ namespace Serenity.Web
             {
                 throw new ArgumentNullException("mimeType");
             }
-            else if (mimeType == string.Empty)
+            else if (mimeType.Length == 0)
             {
                 throw new ArgumentException("Argument 'mimeType' cannot be empty.");
             }

@@ -47,7 +47,7 @@ namespace Serenity.Web.Drivers
         private readonly AsyncCallback disconnectDelegate;
         private readonly Dictionary<string, HeaderHandlerCallback> headerHandlers;
         private DriverInfo info;
-        private bool isDisposed = false;
+        private bool isDisposed;
         private Socket listeningSocket;
         private readonly AsyncCallback recieveDelegate;
         private readonly AsyncCallback sendDelegate;

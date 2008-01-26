@@ -28,7 +28,7 @@ namespace Serenity.Web
             {
                 throw new ArgumentNullException("name");
             }
-            else if (name == string.Empty)
+            else if (name.Length == 0)
             {
                 throw new ArgumentException("Argument 'name' cannot be empty.", "name");
             }
@@ -46,7 +46,7 @@ namespace Serenity.Web
         #endregion
         #region Fields - Private
         private readonly string name;
-        private bool complex = false;
+        private bool complex;
         private List<string> secondaryValues = new List<string>();
         private string primaryValue;
         #endregion
@@ -146,7 +146,7 @@ namespace Serenity.Web
                 {
                     throw new ArgumentNullException("value");
                 }
-                else if (value == string.Empty)
+                else if (value.Length == 0)
                 {
                     throw new ArgumentException("Argument 'value' cannot be empty.", "value");
                 }

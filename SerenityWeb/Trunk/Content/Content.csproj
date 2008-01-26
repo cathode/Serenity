@@ -8,7 +8,7 @@
     <ProjectGuid>{6E4CAB48-1A9C-4970-A754-5EBB7B77E6FA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Serenity.Resources</RootNamespace>
+    <RootNamespace>Serenity.Web.Resources</RootNamespace>
     <AssemblyName>Serenity.Resources</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

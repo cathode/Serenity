@@ -12,7 +12,7 @@ using System.Text;
 
 using Serenity.Web;
 
-namespace Serenity.Resources
+namespace Serenity.Web.Resources
 {
     /// <summary>
     /// Represents a requestable file embedded in a module assembly file.

@@ -188,7 +188,7 @@ namespace Serenity.Web.Drivers
                         {
                             string name = line.Substring(0, n);
                             string value = line.Substring(n + 2);
-                            if (value == string.Empty)
+                            if (value.Length == 0)
                             {
                                 ErrorHandler.Handle(context, StatusCode.Http400BadRequest, "A header was specified with no value.");
                                 return context;

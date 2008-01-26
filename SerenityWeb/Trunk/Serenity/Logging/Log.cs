@@ -47,7 +47,7 @@ namespace Serenity.Logging
         }
         #endregion
         #region Fields - Private
-        private bool isDisposed = false;
+        private bool isDisposed;
         private DateTime lastWrite = DateTime.Now;
         private TimeSpan maxWait = TimeSpan.FromMilliseconds(250);
         private Queue<LogMessage> messages = new Queue<LogMessage>();
@@ -80,7 +80,7 @@ namespace Serenity.Logging
             {
                 throw new ArgumentNullException("message");
             }
-            else if (message == string.Empty)
+            else if (message.Length == 0)
             {
                 throw new ArgumentException(__Strings.ArgumentCannotBeEmpty, "message");
             }

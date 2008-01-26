@@ -10,9 +10,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Serenity.Resources
+namespace Serenity.Web.Resources
 {
-    public sealed class ResourceGrouping
+    public struct ResourceGrouping
     {
         /// <summary>
         /// Initializes a new instance of the ResourceGroup class, using a
@@ -23,6 +23,14 @@ namespace Serenity.Resources
         /// <param name="pluralForm">The plural form of the grouping name.</param>
         public ResourceGrouping(string singularForm, string pluralForm)
         {
+            if (singularForm == null)
+            {
+                throw new ArgumentNullException("singularForm");
+            }
+            else if (pluralForm == null)
+            {
+                throw new ArgumentNullException("pluralForm");
+            }
             this.singularForm = singularForm;
             this.pluralForm = pluralForm;
         }

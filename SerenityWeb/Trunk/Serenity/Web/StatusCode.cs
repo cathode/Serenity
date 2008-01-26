@@ -30,10 +30,18 @@ namespace Serenity.Web
         private readonly string message;
         #endregion
 		#region Methods - Public
+        /// <summary>
+        /// Gets a unique hashcode for the current StatusCode.
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
         {
             return this.ToString().GetHashCode() ^ 0x5d1f609c;
         }
+        /// <summary>
+        /// Converts the current StatusCode to it's string representation.
+        /// </summary>
+        /// <returns></returns>
 		public override string ToString()
 		{
 			return this.Code.ToString() + " " + this.Message;

@@ -31,7 +31,7 @@ namespace Serenity.Web
         #region Fields - Private
         private Domain domain;
         private WebDriver driver;
-        private bool headersWritten = false;
+        private bool headersWritten;
         private string protocolType;
         private Version protocolVersion;
         private CommonRequest request;

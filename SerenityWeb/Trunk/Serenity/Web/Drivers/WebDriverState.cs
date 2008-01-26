@@ -15,7 +15,7 @@ namespace Serenity.Web.Drivers
     /// <summary>
     /// Provides a simple data structure used to pass objects to and from async callback methods.
     /// </summary>
-    public sealed class WebDriverState
+    public sealed class WebDriverState : DisposableBase
     {
         #region Constructors - Public
         /// <summary>
@@ -56,6 +56,16 @@ namespace Serenity.Web.Drivers
         /// Holds the default (optimal) buffer size.
         /// </summary>
         public const int DefaultBufferSize = MinBufferSize * 4;
+        #endregion
+        #region Methods - Protected
+        protected override void Dispose(bool disposing)
+        {
+            if (!disposing)
+            {
+                return;
+            }
+            (this.signal as IDisposable).Dispose();
+        }
         #endregion
         #region Properties - Public
         /// <summary>
