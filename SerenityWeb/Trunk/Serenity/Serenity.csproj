@@ -129,6 +129,12 @@
     <Compile Include="Web\Resources\ResourceResource.cs" />
     <Compile Include="Web\Resources\RewriteResource.cs" />
     <Compile Include="Web\Resources\StaticResource.cs" />
+    <None Include="Web\SemanticXml\SXContentElement.cs" />
+    <None Include="Web\SemanticXml\SXDocument.cs" />
+    <None Include="Web\SemanticXml\SXElement.cs" />
+    <None Include="Web\SemanticXml\SXMetaElement.cs" />
+    <None Include="Web\SemanticXml\SXDocumentReader.cs" />
+    <None Include="Web\SemanticXml\SXDocumentWriter.cs" />
     <Compile Include="Web\StatusCode.cs" />
     <Compile Include="Web\Drivers\DriverInfo.cs" />
     <Compile Include="Web\Header.cs" />

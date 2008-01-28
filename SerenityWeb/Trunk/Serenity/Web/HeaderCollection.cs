@@ -43,7 +43,7 @@ namespace Serenity.Web
             {
                 throw new ArgumentNullException("value");
             }
-            else if (value == string.Empty)
+            else if (value.Length == 0)
             {
                 throw new ArgumentException("Argument 'value' cannot be empty.", "value");
             }

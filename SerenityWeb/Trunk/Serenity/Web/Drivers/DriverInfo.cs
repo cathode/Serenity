@@ -36,6 +36,35 @@ namespace Serenity.Web.Drivers
         /// <param name="version"></param>
         public DriverInfo(string provider, string protocol, string uriSchema, Version version)
         {
+            if (provider == null)
+            {
+                throw new ArgumentNullException("provider");
+            }
+            else if (protocol == null)
+            {
+                throw new ArgumentNullException("protocol");
+            }
+            else if (uriSchema == null)
+            {
+                throw new ArgumentNullException("uriSchema");
+            }
+            else if (version == null)
+            {
+                throw new ArgumentNullException("version");
+            }
+            else if (provider.Length == 0)
+            {
+                throw new ArgumentException(__Strings.ArgumentCannotBeEmpty, "provider");
+            }
+            else if (protocol.Length == 0)
+            {
+                throw new ArgumentException(__Strings.ArgumentCannotBeEmpty, "protocol");
+            }
+            else if (uriSchema.Length == 0)
+            {
+                throw new ArgumentException(__Strings.ArgumentCannotBeEmpty, "uriSchema");
+            }
+            
             this.provider = provider;
             this.protocol = protocol;
             this.uriSchema = uriSchema;

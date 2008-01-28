@@ -35,7 +35,7 @@ namespace Serenity.Web
             {
                 throw new ArgumentNullException("subtype");
             }
-            else if (subtype == string.Empty)
+            else if (subtype.Length == 0)
             {
                 throw new ArgumentException("Argument 'subtype' cannot be empty.", "subtype");
             }

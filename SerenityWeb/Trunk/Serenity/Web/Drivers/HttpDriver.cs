@@ -227,7 +227,7 @@ namespace Serenity.Web.Drivers
 
                     context.Domain = SerenityServer.Domains.GetBestMatch(context.Request.Headers["Host"].PrimaryValue);
 
-                    if (context.Request.Url.Query != string.Empty)
+                    if (context.Request.Url.Query.Length > 0)
                     {
                         this.ProcessUrlEncodedRequestData(context.Request.Url.Query.TrimStart('?'), context);
                     }

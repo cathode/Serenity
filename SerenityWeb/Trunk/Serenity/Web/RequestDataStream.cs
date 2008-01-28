@@ -307,10 +307,6 @@ namespace Serenity.Web
             {
                 return this.name;
             }
-            internal set
-            {
-                this.name = value;
-            }
         }
         public RequestMethod Method
         {

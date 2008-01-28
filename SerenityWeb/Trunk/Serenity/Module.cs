@@ -79,18 +79,22 @@ namespace Serenity
             }
             foreach (object attrib in moduleAttributes)
             {
-                if (attrib is ModuleDefaultPageAttribute)
+                var a = attrib as ModuleDefaultPageAttribute;
+                
+                if (a != null)
                 {
-                    ModuleDefaultPageAttribute defaultPageAttribute = (ModuleDefaultPageAttribute)attrib;
+                    ModuleDefaultPageAttribute defaultPageAttribute = a;
                     defaultPage = (DynamicResource)moduleAsm.CreateInstance(defaultPageAttribute.Name);
                     break;
                 }
             }
             foreach (object attrib in moduleAttributes)
             {
-                if (attrib is ModuleResourceNamespaceAttribute)
+                var a = attrib as ModuleResourceNamespaceAttribute;
+
+                if (a != null)
                 {
-                    resourceNamespace = ((ModuleResourceNamespaceAttribute)attrib).ResourceNamespace;
+                    resourceNamespace = a.ResourceNamespace;
                     break;
                 }
             }

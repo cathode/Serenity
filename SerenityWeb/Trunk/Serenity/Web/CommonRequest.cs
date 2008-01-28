@@ -33,7 +33,7 @@ namespace Serenity.Web
         private int contentLength;
         private MimeType contentType = MimeType.Default;
         private CommonContext context;
-        private CookieCollection cookies;
+        private CookieCollection cookies = new CookieCollection();
         private bool hasEntityBody;
         private HeaderCollection headers = new HeaderCollection();
         private bool isAuthenticated;
@@ -50,8 +50,6 @@ namespace Serenity.Web
         private Uri referrer = new Uri("http://localhost/");
         private string userAgent;
         private string userHostName;
-        private string[] userLanguages;
-        private string userPrimaryLanguage;
         #endregion
         #region Properties - Public
         /// <summary>
@@ -106,10 +104,6 @@ namespace Serenity.Web
             get
             {
                 return this.cookies;
-            }
-            set
-            {
-                this.cookies = value;
             }
         }
         /// <summary>
@@ -251,10 +245,6 @@ namespace Serenity.Web
             {
                 return requestData;
             }
-            internal set
-            {
-                requestData = value;
-            }
         }
         public Uri Url
         {
@@ -267,7 +257,6 @@ namespace Serenity.Web
                 url = value;
             }
         }
-
         public string UserAgent
         {
             get
@@ -288,28 +277,6 @@ namespace Serenity.Web
             internal set
             {
                 userHostName = value;
-            }
-        }
-        public string[] UserLanguages
-        {
-            get
-            {
-                return userLanguages;
-            }
-            set
-            {
-                userLanguages = value;
-            }
-        }
-        public string UserPrimaryLanguage
-        {
-            get
-            {
-                return userPrimaryLanguage;
-            }
-            set
-            {
-                userPrimaryLanguage = value;
             }
         }
         #endregion
