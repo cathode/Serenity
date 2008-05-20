@@ -25,6 +25,10 @@ namespace Serenity.Web.Resources
         private ResourcePath uri;
         #endregion
         #region Methods - Public
+        public virtual bool MatchUri(Uri uri)
+        {
+            return false;
+        }
         /// <summary>
         /// When overridden in a derived class, uses the supplied CommonContext to dynamically generate response content.
         /// </summary>

@@ -1,4 +1,12 @@
-﻿using System;
+﻿/******************************************************************************
+ * Serenity - The next evolution of web server technology.                    *
+ * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
+ *----------------------------------------------------------------------------*
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Public License (Ms-PL), a copy of which should have been included with     *
+ * this distribution as License.txt.                                          *
+ *****************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,32 +17,35 @@ namespace Serenity.Web.Controls
 {
     public abstract class Control
     {
-        private string name = Control.DefaultName;
-
-        public const string DefaultName = "control";
-
-        public string Render()
+        #region Constructors - Protected
+        protected Control()
         {
 
         }
-        public void Render(Stream stream)
+        protected Control(params Control[] children)
         {
-            if (stream == null)
-            {
-                throw new ArgumentNullException("stream");
-            }
-        }
 
-        public virtual string Name
+        }
+        #endregion
+        #region Fields - Private
+        private string name = Control.DefaultControlName;
+        private ControlCollection children;
+        #endregion
+        #region Fields - Private
+        public const string DefaultControlName = "control";
+        #endregion
+        #region Properties - Public
+        public string Name
         {
             get
             {
                 return this.name;
             }
-            protected set
+            set
             {
                 this.name = value;
             }
         }
+        #endregion
     }
 }

@@ -48,10 +48,10 @@ namespace Serenity.Web.Resources
         #endregion
         #region Properties - Public
         /// <summary>
-        /// Overridden. Gets the grouping of the current DynamicResource,
-        /// which is always ResourceGrouping.Dynamic.
+        /// Overridden. Gets the grouping of the current <see cref="DynamicResource"/>,
+        /// which is always <see cref="ResourceGrouping.Dynamic"/>.
         /// </summary>
-        public override ResourceGrouping Grouping
+        public sealed override ResourceGrouping Grouping
         {
             get
             {

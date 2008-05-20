@@ -87,6 +87,9 @@
   <ItemGroup>
     <Compile Include="Attributes\AlternateResourcePathAttribute.cs" />
     <Compile Include="Attributes\ModuleTitleAttribute.cs" />
+    <None Include="..\Serenity.build">
+      <Link>Serenity.build</Link>
+    </None>
     <None Include="Cache\CacheManager.cs" />
     <Compile Include="Attributes\ModuleDefaultPageAttribute.cs" />
     <Compile Include="Attributes\ModuleResourceNamespaceAttribute.cs" />
@@ -100,7 +103,12 @@
     <Compile Include="FileTypeEntry.cs" />
     <Compile Include="Logging\LogMessageLevel.cs" />
     <Compile Include="SerenityServer.cs" />
-    <None Include="Web\Controls\Control.cs" />
+    <Compile Include="Web\Controls\Control.cs" />
+    <Compile Include="Web\Controls\ControlCollection.cs" />
+    <Compile Include="Web\Controls\Document.cs" />
+    <Compile Include="Web\Controls\DocumentResource.cs" />
+    <Compile Include="Web\Controls\HtmlRenderer.cs" />
+    <Compile Include="Web\Controls\Renderer.cs" />
     <Compile Include="Web\Drivers\DriverPool.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Pages\DefaultPage.cs" />
@@ -129,12 +137,6 @@
     <Compile Include="Web\Resources\ResourceResource.cs" />
     <Compile Include="Web\Resources\RewriteResource.cs" />
     <Compile Include="Web\Resources\StaticResource.cs" />
-    <None Include="Web\SemanticXml\SXContentElement.cs" />
-    <None Include="Web\SemanticXml\SXDocument.cs" />
-    <None Include="Web\SemanticXml\SXElement.cs" />
-    <None Include="Web\SemanticXml\SXMetaElement.cs" />
-    <None Include="Web\SemanticXml\SXDocumentReader.cs" />
-    <None Include="Web\SemanticXml\SXDocumentWriter.cs" />
     <Compile Include="Web\StatusCode.cs" />
     <Compile Include="Web\Drivers\DriverInfo.cs" />
     <Compile Include="Web\Header.cs" />
@@ -203,6 +205,10 @@
     <EmbeddedResource Include="Resources\icons\page_white_zip.png" />
     <EmbeddedResource Include="Resources\index.css" />
     <EmbeddedResource Include="Resources\index.xslt" />
+    <EmbeddedResource Include="Resources\Admin\Admin.xslt" />
+    <EmbeddedResource Include="Resources\Admin\Admin.css" />
+    <EmbeddedResource Include="Resources\Admin\AdminMockup.html" />
+    <EmbeddedResource Include="Resources\Admin\top_bar.png" />
     <Content Include="Themes\blueish\stylesheet.css" />
     <Content Include="Web\Drivers\multipart test.txt" />
     <Content Include="Web\Drivers\urlencoded test.txt" />

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<project name="Serenity" default="build" basedir=".">
+    <description>Builds the Serenity web server software.</description>
+    <property name="debug" value="true" overwrite="false" />
+    <target name="clean" description="remove all generated files">
+        <delete file="HelloWorld.exe" failonerror="false" />
+        <delete file="HelloWorld.pdb" failonerror="false" />
+    </target>
+    <target name="build" description="compiles the source code">
+        <csc target="exe" output="HelloWorld.exe" debug="${debug}">
+            <sources>
+                <includes name="HelloWorld.cs" />
+            </sources>
+        </csc>
+    </target>
+    <target name="release" description="Compiles Serenity and generates documentation and distribution files">
+        
+    </target>
+</project>

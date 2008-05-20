@@ -11,9 +11,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Serenity.Web.SemanticXml
+namespace Serenity.Web.Controls
 {
-    class SXElement
+    public abstract class Renderer
     {
+        protected abstract void PerformRendering(Control control);
+
+        public void Render(Control control)
+        {
+
+        }
     }
 }

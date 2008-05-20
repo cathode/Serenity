@@ -1,0 +1,42 @@
+﻿body
+{
+    min-width: 320px;
+    min-height: 240px;
+    background-color: Black;
+    color: #FFFFFF;
+}
+div#header
+{
+    height: 32px;
+    width: 100%;
+    text-align: center;
+    background-image: url(top_bar.png);
+    background-repeat: repeat-y;
+    background-attachment: fixed;
+}
+div#sidebar
+{
+    min-height: 60px;
+    min-width: 80px;
+    max-width: 240px;
+    height: auto;
+    width: 15%;
+    text-align: right;
+    float: left;
+    min-height: 80px;
+}
+div#content
+{
+    float: left;
+    width: 724px;
+                height: 196px;
+            }
+div#footer
+{
+    width: 100%;
+    float: none;
+}
+div.layout
+{
+    padding: 2px;
+}

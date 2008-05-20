@@ -15,7 +15,7 @@ namespace Serenity.Web.Resources
     /// <summary>
     /// Represents a path that can be used to locate a resource.
     /// </summary>
-    public sealed class ResourcePath : ICloneable<ResourcePath>, IComparable<ResourcePath>, IEquatable<ResourcePath>
+    public sealed class ResourcePath : IComparable<ResourcePath>, IEquatable<ResourcePath>
     {
         #region Constructors - Private
         private ResourcePath(string path)
@@ -53,10 +53,6 @@ namespace Serenity.Web.Resources
         public const string DefaultScheme = "http";
         #endregion
         #region Methods - Public
-        public ResourcePath Clone()
-        {
-            return new ResourcePath(this.path);
-        }
         public int CompareTo(ResourcePath other)
         {
             if (other == null)
@@ -275,12 +271,6 @@ namespace Serenity.Web.Resources
             {
                 this.path = value;
             }
-        }
-        #endregion
-        #region ICloneable Members
-        object ICloneable.Clone()
-        {
-            return this.Clone();
         }
         #endregion
     }
