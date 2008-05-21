@@ -15,5 +15,6 @@ namespace Serenity.Web.Forms.Controls
 {
     public class Paragraph : Control
     {
+        
     }
 }

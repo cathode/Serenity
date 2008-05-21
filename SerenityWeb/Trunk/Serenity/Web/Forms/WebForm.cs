@@ -21,6 +21,14 @@ namespace Serenity.Web.Forms
         protected WebForm()
         {
             this.Name = "html";
+
+            this.body = new Body();
+            this.body.Name = "body";
+            this.head = new Head();
+            this.head.Name = "head";
+
+            this.Controls.AddRange(this.head,
+                this.body);
         }
         #endregion
         #region Fields - Private

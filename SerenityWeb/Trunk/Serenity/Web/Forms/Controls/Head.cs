@@ -7,5 +7,12 @@ namespace Serenity.Web.Forms.Controls
 {
     public class Head : Control
     {
+        protected override string DefaultName
+        {
+            get
+            {
+                return "head";
+            }
+        }
     }
 }

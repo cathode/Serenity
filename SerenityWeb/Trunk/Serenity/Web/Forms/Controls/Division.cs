@@ -22,5 +22,12 @@ namespace Serenity.Web.Forms.Controls
             : base(controls)
         {
         }
+        protected override string DefaultName
+        {
+            get
+            {
+                return "div";
+            }
+        }
     }
 }

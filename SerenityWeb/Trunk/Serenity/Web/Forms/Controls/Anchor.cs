@@ -15,8 +15,26 @@ namespace Serenity.Web.Forms.Controls
 {
     public class Anchor : Control
     {
+        #region Constructors - Public
+        public Anchor()
+        {
+        }
+        public Anchor(params Control[] controls)
+            : base(controls)
+        {
+        }
+        #endregion
         #region Fields - Private
         private Uri target;
+        #endregion
+        #region Properties - Protected
+        protected override string DefaultName
+        {
+            get
+            {
+                return "a";
+            }
+        }
         #endregion
         #region Properties - Public
         public Uri Target
