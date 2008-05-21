@@ -11,15 +11,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Serenity.Web.Controls
+namespace Serenity.Web.Forms.Controls
 {
-    public abstract class Renderer
+    public class Heading : Control
     {
-        protected abstract void PerformRendering(Control control);
-
-        public void Render(Control control)
-        {
-
-        }
     }
 }

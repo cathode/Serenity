@@ -14,10 +14,11 @@ using Serenity;
 using Serenity.Web.Resources;
 using Serenity.Web;
 using Serenity.Web.Drivers;
+using Serenity.Web.Forms;
 
 namespace Serenity.Pages
 {
-    public sealed class DefaultPage : DynamicResource
+    public sealed class DefaultPage : WebFormResource
     {
         #region Constructors - Public
         public DefaultPage()
@@ -26,10 +27,22 @@ namespace Serenity.Pages
             this.ContentType = MimeType.TextHtml;
         }
         #endregion
-        #region Methods - Public
-        public override void OnRequest(CommonContext context)
+        #region Methods - Protected
+        protected override WebForm Form
         {
-            context.Response.WriteLine("This is the default page of the Serenity module.\r\nPlease visit <a href='http://serenityproject.net/'>http://serenityproject.net/</a> for more information.");
+            get
+            {
+                return new DefaultPage.DefaultPageForm();
+            }
+        }
+        #endregion
+        #region Types - Private
+        private sealed class DefaultPageForm : WebForm
+        {
+            internal DefaultPageForm()
+            {
+                
+            }
         }
         #endregion
     }

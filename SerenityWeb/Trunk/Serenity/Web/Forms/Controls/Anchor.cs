@@ -10,40 +10,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.IO;
-using System.Xml;
 
-namespace Serenity.Web.Controls
+namespace Serenity.Web.Forms.Controls
 {
-    public abstract class Control
+    public class Anchor : Control
     {
-        #region Constructors - Protected
-        protected Control()
-        {
-
-        }
-        protected Control(params Control[] children)
-        {
-
-        }
-        #endregion
         #region Fields - Private
-        private string name = Control.DefaultControlName;
-        private ControlCollection children;
-        #endregion
-        #region Fields - Private
-        public const string DefaultControlName = "control";
+        private Uri target;
         #endregion
         #region Properties - Public
-        public string Name
+        public Uri Target
         {
             get
             {
-                return this.name;
-            }
-            set
-            {
-                this.name = value;
+                return this.target;
             }
         }
         #endregion
