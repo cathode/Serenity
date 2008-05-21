@@ -15,6 +15,7 @@ using Serenity.Web.Resources;
 using Serenity.Web;
 using Serenity.Web.Drivers;
 using Serenity.Web.Forms;
+using Serenity.Web.Forms.Controls;
 
 namespace Serenity.Pages
 {
@@ -28,12 +29,9 @@ namespace Serenity.Pages
         }
         #endregion
         #region Methods - Protected
-        protected override WebForm Form
+        protected override WebForm CreateForm()
         {
-            get
-            {
-                return new DefaultPage.DefaultPageForm();
-            }
+            return new DefaultPage.DefaultPageForm();
         }
         #endregion
         #region Types - Private
@@ -41,7 +39,9 @@ namespace Serenity.Pages
         {
             internal DefaultPageForm()
             {
-                
+                this.Body.Controls.AddRange(
+                    new Division(
+                        new TextControl("Hello World!")));
             }
         }
         #endregion

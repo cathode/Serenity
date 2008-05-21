@@ -11,10 +11,55 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Serenity.Web.Forms.Controls;
+
 namespace Serenity.Web.Forms
 {
     public abstract class WebForm : Control
     {
-
+        #region Constructors - Protected
+        protected WebForm()
+        {
+            this.Name = "html";
+        }
+        #endregion
+        #region Fields - Private
+        private Body body = new Body();
+        private Head head = new Head();
+        private Doctype doctype = Doctype.XHTML11;
+        #endregion
+        #region Properties - Public
+        public Body Body
+        {
+            get
+            {
+                return this.body;
+            }
+        }
+        /// <summary>
+        /// Gets or sets the <see cref="Doctype"/> of the current <see cref="WebForm"/>.
+        /// </summary>
+        /// <remarks>
+        /// This property default to <see cref="Doctype.XHTML11"/> which is the XHTML 1.1 Document Type.
+        /// </remarks>
+        public Doctype Doctype
+        {
+            get
+            {
+                return this.doctype;
+            }
+            set
+            {
+                this.doctype = value;
+            }
+        }
+        public Head Head
+        {
+            get
+            {
+                return this.head;
+            }
+        }
+        #endregion
     }
 }

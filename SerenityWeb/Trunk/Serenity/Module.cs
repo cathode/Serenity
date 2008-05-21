@@ -101,7 +101,7 @@ namespace Serenity
             List<DynamicResource> pages = new List<DynamicResource>();
             foreach (Type type in moduleAsm.GetTypes())
             {
-                if (type.IsSubclassOf(typeof(DynamicResource)) == true)
+                if (type.IsSubclassOf(typeof(DynamicResource)) && !type.IsAbstract)
                 {
                     DynamicResource page = (DynamicResource)moduleAsm.CreateInstance(type.FullName);
 

@@ -122,10 +122,12 @@
     <Compile Include="Web\Forms\ControlAttributeCollection.cs" />
     <Compile Include="Web\Forms\ControlCollection.cs" />
     <Compile Include="Web\Forms\Controls\Anchor.cs" />
+    <Compile Include="Web\Forms\Controls\Body.cs" />
     <Compile Include="Web\Forms\Controls\Division.cs" />
     <None Include="Web\Forms\Controls\Heading.cs" />
     <None Include="Web\Forms\Controls\Paragraph.cs" />
     <None Include="Web\Forms\Controls\Span.cs" />
+    <Compile Include="Web\Forms\Controls\Head.cs" />
     <Compile Include="Web\Forms\RenderingContext.cs" />
     <Compile Include="Web\Forms\TextControl.cs" />
     <Compile Include="Web\Forms\WebForm.cs" />

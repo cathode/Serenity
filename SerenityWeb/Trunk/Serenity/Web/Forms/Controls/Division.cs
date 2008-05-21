@@ -15,5 +15,12 @@ namespace Serenity.Web.Forms.Controls
 {
     public class Division : Control
     {
+        public Division()
+        {
+        }
+        public Division(params Control[] controls)
+            : base(controls)
+        {
+        }
     }
 }

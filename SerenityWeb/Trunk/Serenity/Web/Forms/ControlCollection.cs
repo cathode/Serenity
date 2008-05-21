@@ -29,7 +29,10 @@ namespace Serenity.Web.Forms
         }
         public void AddRange(params Control[] controls)
         {
-            this.AddRange(controls);
+            foreach (Control c in controls)
+            {
+                this.Add(c);
+            }
         }
     }
 }

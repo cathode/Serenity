@@ -17,24 +17,27 @@ namespace Serenity.Web.Forms
 {
     public abstract class WebFormResource : DynamicResource
     {
+        #region Constructors - Public
+        public WebFormResource()
+        {
+        }
+        #endregion
         #region Methods - Public
         public sealed override void OnRequest(CommonContext context)
         {
-            base.OnRequest(context);
-
             using (MemoryStream ms = new MemoryStream())
             {
-                WebForm form = this.Form;
+                WebForm form = this.CreateForm();
 
-                
+                RenderingContext rc = new RenderingContext(ms);
+                form.Render(rc);
+
+                context.Response.Write(ms.ToArray());
             }
         }
         #endregion
         #region Properties - Protected
-        protected abstract WebForm Form
-        {
-            get;
-        }
+        protected abstract WebForm CreateForm();
         #endregion
     }
 }

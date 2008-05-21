@@ -8,6 +8,21 @@ namespace Serenity.Web.Forms
 {
     public sealed class RenderingContext
     {
+        #region Constructors - Public
+        public RenderingContext()
+            : this(new MemoryStream(), Encoding.UTF8)
+        {
+        }
+        public RenderingContext(Stream outputStream)
+            : this(outputStream, Encoding.UTF8)
+        {
+        }
+        public RenderingContext(Stream outputStream, Encoding outputEncoding)
+        {
+            this.outputEncoding = outputEncoding;
+            this.outputStream = outputStream;
+        }
+        #endregion
         #region Fields - Private
         private Stream outputStream;
         private Encoding outputEncoding;

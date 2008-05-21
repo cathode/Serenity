@@ -27,6 +27,12 @@ namespace Serenity.Web.Forms
         protected Control()
         {
             this.controls = new ControlCollection();
+            this.attributes = new ControlAttributeCollection();
+        }
+        protected Control(params Control[] controls)
+            : this()
+        {
+            this.Controls.AddRange(controls);
         }
         #endregion
         #region Fields - Private
@@ -54,27 +60,26 @@ namespace Serenity.Web.Forms
         /// <param name="output"></param>
         protected virtual void RenderBegin(RenderingContext context)
         {
-            using (StreamWriter writer = new StreamWriter(context.OutputStream, context.OutputEncoding))
-            {
-                writer.Write("<" + this.Name);
+            StreamWriter writer = new StreamWriter(context.OutputStream, context.OutputEncoding);
 
-                var v = from a in this.attributes
-                        where a.Include == true
-                        let s = " " + a.Name + "=\"" + a.Value + "\""
-                        select s;
-                
-                foreach (string s in v)
-                {
-                    writer.Write(s);
-                }
-                if (this.Controls.Count == 0)
-                {
-                    writer.Write(" />");
-                }
-                else
-                {
-                    writer.Write(">");
-                }
+            writer.Write("<" + this.Name);
+
+            var v = from a in this.attributes
+                    where a.Include == true
+                    let s = " " + a.Name + "=\"" + a.Value + "\""
+                    select s;
+
+            foreach (string s in v)
+            {
+                writer.Write(s);
+            }
+            if (this.Controls.Count == 0)
+            {
+                writer.Write(" />");
+            }
+            else
+            {
+                writer.Write(">");
             }
         }
         /// <summary>
@@ -87,10 +92,27 @@ namespace Serenity.Web.Forms
         /// <param name="output"></param>
         protected virtual void RenderEnd(RenderingContext context)
         {
-            using (StreamWriter writer = new StreamWriter(context.OutputStream, context.OutputEncoding))
+            StreamWriter writer = new StreamWriter(context.OutputStream, context.OutputEncoding);
+
+            writer.Write("</" + this.Name + ">");
+        }
+        #endregion
+        #region Methods - Public
+        /// <summary>
+        /// Renders the current <see cref="Control"/> against the specified <see cref="RenderingContext"/>.
+        /// </summary>
+        /// <param name="context"></param>
+        public void Render(RenderingContext context)
+        {
+            this.RenderBegin(context);
+            if (this.CanContainChildren)
             {
-                writer.Write("</" + this.Name + ">");
+                foreach (Control c in this.Controls)
+                {
+                    c.Render(context);
+                }
             }
+            this.RenderEnd(context);
         }
         #endregion
         #region Properties - Protected
@@ -103,6 +125,13 @@ namespace Serenity.Web.Forms
         }
         #endregion
         #region Properties - Public
+        public ControlAttributeCollection Attributes
+        {
+            get
+            {
+                return this.attributes;
+            }
+        }
         public string Classification
         {
             get
