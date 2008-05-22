@@ -10,51 +10,61 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Serenity.Web.Forms;
+using Serenity.Web.Forms.Controls;
 
-namespace Serenity.Web.Forms
+namespace Serenity.Pages.Admin
 {
-    /// <summary>
-    /// Represents an attribute of a <see cref="Control"/>.
-    /// </summary>
-    public sealed class ControlAttribute
+    public abstract class AdminFormBase : WebForm
     {
+        #region Constructors - Protected
+        protected AdminFormBase()
+        {
+            this.contentArea = new Division();
+            this.footer = new Division();
+            this.sideBar = new Division();
+            this.topBar = new Division();
+
+            this.Body.Controls.AddRange(
+                this.topBar,
+                this.sideBar,
+                this.contentArea,
+                this.footer);
+        }
+        #endregion
         #region Fields - Private
-        private string name;
-        private string value;
-        private bool include;
+        private Division sideBar;
+        private Division topBar;
+        private Division contentArea;
+        private Division footer;
         #endregion
         #region Properties - Public
-        public string Name
+        public Division ContentArea
         {
             get
             {
-                return this.name;
-            }
-            set
-            {
-                this.name = value;
+                return this.contentArea;
             }
         }
-        public string Value
+        public Division Footer
         {
             get
             {
-                return this.value;
-            }
-            set
-            {
-                this.value = value;
+                return this.footer;
             }
         }
-        public bool Include
+        public Division SideBar
         {
             get
             {
-                return this.include;
+                return this.sideBar;
             }
-            set
+        }
+        public Division TopBar
+        {
+            get
             {
-                this.include = value;
+                return this.topBar;
             }
         }
         #endregion

@@ -41,7 +41,7 @@ namespace Serenity.Pages
             {
                 this.Body.Controls.AddRange(
                     new Division(
-                        new TextControl("Hello World!")));
+                        new TextControl("Hello World")));
             }
         }
         #endregion

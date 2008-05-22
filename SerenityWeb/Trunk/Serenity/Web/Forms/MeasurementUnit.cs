@@ -11,27 +11,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Serenity.Web.Forms.Controls
+namespace Serenity.Web.Forms
 {
-    public class Body : Control
+    public enum MeasurementUnit
     {
-        #region Constructors - Public
-        public Body()
-        {
-        }
-        public Body(params Control[] controls)
-            : base(controls)
-        {
-        }
-        #endregion
-        #region Properties - Protected
-        protected override string DefaultName
-        {
-            get
-            {
-                return "body";
-            }
-        }
-        #endregion
+        Auto,
+        Centimeter,
+        FontHeightRelative,
+        FontRelative,
+        Inch,
+        Milimeter,
+        Percent,
+        Pica,
+        Pixel,
+        Point,
     }
 }

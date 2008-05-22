@@ -13,57 +13,49 @@ using System.Text;
 
 namespace Serenity.Web.Forms
 {
-    /// <summary>
-    /// Represents a web control that only contains text.
-    /// </summary>
-    public sealed class TextControl : Control
+    public sealed class Size
     {
-        #region Constructors - Public
-        public TextControl()
+        public Size()
         {
-        }
-        public TextControl(string content)
-        {
-            this.content = content;
-        }
-        #endregion
-        #region Fields - Private
-        private string content;
-        #endregion
-        #region Methods - Protected
-        protected override void RenderBegin(RenderingContext context)
-        {
-            if (string.IsNullOrEmpty(this.content))
-            {
-                return;
-            }
 
-            byte[] buf = context.OutputEncoding.GetBytes(this.content);
-            context.OutputStream.Write(buf, 0, buf.Length);
         }
-        protected override void RenderEnd(RenderingContext context)
+        public Size(Measurement width, Measurement height)
         {
+            this.width = width;
+            this.height = height;
         }
-        #endregion
-        #region Properties - Protected
-        protected override bool CanContainChildren
-        {
-            get
-            {
-                return false;
-            }
-        }
+        #region Fields - Private
+        private Measurement width;
+        private Measurement height;
         #endregion
         #region Properties - Public
-        public string Content
+        public Measurement Width
         {
             get
             {
-                return this.content;
+                return this.width;
             }
             set
             {
-                this.content = value;
+                this.width = value;
+            }
+        }
+        public Measurement Height
+        {
+            get
+            {
+                return this.height;
+            }
+            set
+            {
+                this.height = value;
+            }
+        }
+        public static Size Empty
+        {
+            get
+            {
+                return new Size();
             }
         }
         #endregion
