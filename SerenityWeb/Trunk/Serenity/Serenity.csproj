@@ -104,6 +104,19 @@
     <Compile Include="FileTypeEntry.cs" />
     <Compile Include="Logging\LogMessageLevel.cs" />
     <Compile Include="SerenityServer.cs" />
+    <Compile Include="Themes\Border.cs" />
+    <Compile Include="Themes\BorderSide.cs" />
+    <Compile Include="Themes\BorderType.cs" />
+    <Compile Include="Themes\Box.cs" />
+    <Compile Include="Themes\Color.cs" />
+    <Compile Include="Themes\IStyleNode.cs" />
+    <Compile Include="Themes\Margin.cs" />
+    <Compile Include="Themes\Padding.cs" />
+    <Compile Include="Themes\Style.cs" />
+    <Compile Include="Themes\StyleType.cs" />
+    <Compile Include="Themes\TextDirection.cs" />
+    <Compile Include="Themes\Unit.cs" />
+    <Compile Include="Themes\Width.cs" />
     <Compile Include="Web\Drivers\DriverPool.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Pages\DefaultPage.cs" />
@@ -223,7 +236,7 @@
     <EmbeddedResource Include="Resources\Admin\Admin.css" />
     <EmbeddedResource Include="Resources\Admin\AdminMockup.html" />
     <EmbeddedResource Include="Resources\Admin\top_bar.png" />
-    <Content Include="Themes\blueish\stylesheet.css" />
+    <Content Include="Themes\template\stylesheet.css" />
     <Content Include="Web\Drivers\multipart test.txt" />
     <Content Include="Web\Drivers\urlencoded test.txt" />
   </ItemGroup>

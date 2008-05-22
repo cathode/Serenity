@@ -12,10 +12,9 @@ using System.Text;
 
 namespace Serenity.Themes
 {
-	public sealed class Theme
-	{
-		private string author;
-		private Uri url;
-		private Version version;
-	}
+    public enum TextDirection
+    {
+        RightToLeft,
+        LeftToRight,
+    }
 }

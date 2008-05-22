@@ -12,10 +12,22 @@ using System.Text;
 
 namespace Serenity.Themes
 {
-	public sealed class Theme
-	{
-		private string author;
-		private Uri url;
-		private Version version;
-	}
+    /// <summary>
+    /// Defines method signatures shared by different parts of the Style DOM.
+    /// </summary>
+    public interface IStyleNode
+    {
+        /// <summary>
+        /// When implemented in an inheriting class, restores the style node to it's default state.
+        /// </summary>
+        void Undefine();
+        /// <summary>
+        /// When implemented in an inheriting class, gets a boolean value that indicates
+        /// if the current style node has had any part of it be defined yet.
+        /// </summary>
+        bool IsDefined
+        {
+            get;
+        }
+    }
 }

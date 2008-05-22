@@ -12,10 +12,19 @@ using System.Text;
 
 namespace Serenity.Themes
 {
-	public sealed class Theme
-	{
-		private string author;
-		private Uri url;
-		private Version version;
-	}
+    /// <summary>
+    /// Represents the border properties of a Style.
+    /// </summary>
+    public sealed class Border : Box<BorderSide>
+    {
+        #region Constructors - Internal
+        internal Border()
+        {
+            this.bottom = new BorderSide();
+            this.left = new BorderSide();
+            this.right = new BorderSide();
+            this.top = new BorderSide();
+        }
+        #endregion
+    }
 }

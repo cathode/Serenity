@@ -12,10 +12,16 @@ using System.Text;
 
 namespace Serenity.Themes
 {
-	public sealed class Theme
-	{
-		private string author;
-		private Uri url;
-		private Version version;
-	}
+    public sealed class Margin : Box<Width>
+    {
+        #region Constructors - Internal
+        internal Margin()
+        {
+            this.bottom = new Width();
+            this.left = new Width();
+            this.right = new Width();
+            this.top = new Width();
+        }
+        #endregion
+    }
 }
