@@ -11,25 +11,51 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Serenity.Web.Forms.Controls
+namespace Serenity.Themes
 {
-    public class Body : Control
+    public sealed class Size
     {
-        #region Constructors - Public
-        public Body()
+        public Size()
         {
+
         }
-        public Body(params Control[] controls)
-            : base(controls)
+        public Size(Measurement width, Measurement height)
         {
+            this.width = width;
+            this.height = height;
         }
+        #region Fields - Private
+        private Measurement width;
+        private Measurement height;
         #endregion
-        #region Properties - Protected
-        protected override string DefaultName
+        #region Properties - Public
+        public Measurement Width
         {
             get
             {
-                return "body";
+                return this.width;
+            }
+            set
+            {
+                this.width = value;
+            }
+        }
+        public Measurement Height
+        {
+            get
+            {
+                return this.height;
+            }
+            set
+            {
+                this.height = value;
+            }
+        }
+        public static Size Empty
+        {
+            get
+            {
+                return new Size();
             }
         }
         #endregion

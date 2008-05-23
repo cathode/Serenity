@@ -10,54 +10,34 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Serenity.Web.Resources;
+using System.IO;
 
 namespace Serenity.Web.Forms
 {
-    public sealed class Size
+    public abstract class DocumentResource : DynamicResource
     {
-        public Size()
+        #region Constructors - Public
+        public DocumentResource()
         {
-
         }
-        public Size(Measurement width, Measurement height)
-        {
-            this.width = width;
-            this.height = height;
-        }
-        #region Fields - Private
-        private Measurement width;
-        private Measurement height;
         #endregion
-        #region Properties - Public
-        public Measurement Width
+        #region Methods - Public
+        public sealed override void OnRequest(CommonContext context)
         {
-            get
+            using (MemoryStream ms = new MemoryStream())
             {
-                return this.width;
-            }
-            set
-            {
-                this.width = value;
+                Document form = this.CreateForm();
+
+                RenderingContext rc = new RenderingContext(ms);
+                form.Render(rc);
+
+                context.Response.Write(ms.ToArray());
             }
         }
-        public Measurement Height
-        {
-            get
-            {
-                return this.height;
-            }
-            set
-            {
-                this.height = value;
-            }
-        }
-        public static Size Empty
-        {
-            get
-            {
-                return new Size();
-            }
-        }
+        #endregion
+        #region Properties - Protected
+        protected abstract Document CreateForm();
         #endregion
     }
 }

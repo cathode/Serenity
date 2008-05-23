@@ -10,34 +10,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Serenity.Web.Resources;
-using System.IO;
 
 namespace Serenity.Web.Forms
 {
-    public abstract class WebFormResource : DynamicResource
+    public class Span : Control
     {
-        #region Constructors - Public
-        public WebFormResource()
-        {
-        }
-        #endregion
-        #region Methods - Public
-        public sealed override void OnRequest(CommonContext context)
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                WebForm form = this.CreateForm();
-
-                RenderingContext rc = new RenderingContext(ms);
-                form.Render(rc);
-
-                context.Response.Write(ms.ToArray());
-            }
-        }
-        #endregion
-        #region Properties - Protected
-        protected abstract WebForm CreateForm();
-        #endregion
     }
 }

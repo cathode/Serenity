@@ -12,15 +12,15 @@ using System.Text;
 
 namespace Serenity.Themes
 {
-    public sealed class Margin : Box<Width>
+    public sealed class Margin : Box<Measurement>
     {
         #region Constructors - Internal
         internal Margin()
         {
-            this.bottom = new Width();
-            this.left = new Width();
-            this.right = new Width();
-            this.top = new Width();
+            this.bottom = new Measurement();
+            this.left = new Measurement();
+            this.right = new Measurement();
+            this.top = new Measurement();
         }
         #endregion
     }

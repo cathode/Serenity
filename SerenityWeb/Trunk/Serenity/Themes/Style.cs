@@ -10,14 +10,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using Serenity.Xml.Html;
-
 namespace Serenity.Themes
 {
     /// <summary>
     /// Represents an individual style of a Theme.
     /// </summary>
-    public sealed class Style : IStyleNode
+    public sealed class Style
     {
         #region Constructors - Internal
         internal Style(string Class)
@@ -41,20 +39,6 @@ namespace Serenity.Themes
         private Padding padding;
         private string styleClass;
         private Color textColor;
-        #endregion
-        #region Methods - Public
-        public void Undefine()
-        {
-            this.backgroundColor.Undefine();
-            this.baseStyle = null;
-            this.border.Undefine();
-            this.custom = "";
-            this.isDefined = false;
-            this.margin.Undefine();
-            this.padding.Undefine();
-            this.textColor.Undefine();
-            
-        }
         #endregion
         #region Properties - Public
         /// <summary>
@@ -117,35 +101,6 @@ namespace Serenity.Themes
             }
         }
         /// <summary>
-        /// Gets a boolean value that indicates if the current Style has any properties that have been defined.
-        /// </summary>
-        public bool IsDefined
-        {
-            get
-            {
-                if (this.isDefined == false)
-                {
-                    if ((this.backgroundColor.IsDefined)
-                        || (this.border.IsDefined)
-                        || (this.margin.IsDefined)
-                        || (this.padding.IsDefined)
-                        || (this.textColor.IsDefined))
-                    {
-                        this.isDefined = true;
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return true;
-                }
-            }
-        }
-        /// <summary>
         /// Gets the Margin properties used for the current Style.
         /// </summary>
         public Margin Margin
@@ -165,97 +120,6 @@ namespace Serenity.Themes
                 return this.padding;
             }
         }
-        public Color QualifiedBackgroundColor
-        {
-            get
-            {
-                if ((this.baseStyle != null) && (this.BackgroundColor.IsDefined == false))
-                {
-                    return this.baseStyle.QualifiedBackgroundColor;
-                }
-                else
-                {
-                    return this.BackgroundColor;
-                }
-            }
-        }
-        public Border QualifiedBorder
-        {
-            get
-            {
-                if ((this.baseStyle != null) && (this.Border.IsDefined == false))
-                {
-                    return this.baseStyle.QualifiedBorder;
-                }
-                else
-                {
-                    return this.Border;
-                }
-            }
-        }
-        public bool QualifiedIsDefined
-        {
-            get
-            {
-                if (this.IsDefined == false)
-                {
-                    if (this.baseStyle != null)
-                    {
-                        return this.BaseStyle.QualifiedIsDefined;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return true;
-                }
-            }
-        }
-        public Margin QualifiedMargin
-        {
-            get
-            {
-                if ((this.baseStyle != null) && (this.Margin.IsDefined == false))
-                {
-                    return this.baseStyle.QualifiedMargin;
-                }
-                else
-                {
-                    return this.Margin;
-                }
-            }
-        }
-        public Padding QualifiedPadding
-        {
-            get
-            {
-                if ((this.baseStyle != null) && (this.Padding.IsDefined == false))
-                {
-                    return this.baseStyle.QualifiedPadding;
-                }
-                else
-                {
-                    return this.Padding;
-                }
-            }
-        }
-        public Color QualifiedTextColor
-        {
-            get
-            {
-                if ((this.baseStyle != null) && (this.TextColor.IsDefined == false))
-                {
-                    return this.baseStyle.QualifiedTextColor;
-                }
-                else
-                {
-                    return this.TextColor;
-                }
-            }
-        }
         /// <summary>
         /// Gets the Color used as the foreground (text) color for the current Style.
         /// </summary>
@@ -266,7 +130,7 @@ namespace Serenity.Themes
                 return this.textColor;
             }
         }
-        
-        #endregion 
+
+        #endregion
     }
 }

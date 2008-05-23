@@ -109,14 +109,14 @@
     <Compile Include="Themes\BorderType.cs" />
     <Compile Include="Themes\Box.cs" />
     <Compile Include="Themes\Color.cs" />
-    <Compile Include="Themes\IStyleNode.cs" />
     <Compile Include="Themes\Margin.cs" />
+    <Compile Include="Themes\Measurement.cs" />
+    <Compile Include="Themes\MeasurementUnit.cs" />
     <Compile Include="Themes\Padding.cs" />
+    <Compile Include="Themes\Size.cs" />
     <Compile Include="Themes\Style.cs" />
     <Compile Include="Themes\StyleType.cs" />
     <Compile Include="Themes\TextDirection.cs" />
-    <Compile Include="Themes\Unit.cs" />
-    <Compile Include="Themes\Width.cs" />
     <Compile Include="Web\Drivers\DriverPool.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Pages\DefaultPage.cs" />
@@ -131,25 +131,32 @@
     <Compile Include="OperationStatus.cs" />
     <Compile Include="Web\Drivers\WebDriverState.cs" />
     <Compile Include="Web\ErrorHandler.cs" />
+    <Compile Include="Web\Forms\Anchor.cs" />
+    <Compile Include="Web\Forms\Body.cs" />
+    <Compile Include="Web\Forms\Button.cs" />
     <Compile Include="Web\Forms\Control.cs" />
     <Compile Include="Web\Forms\ControlAttribute.cs" />
     <Compile Include="Web\Forms\ControlAttributeCollection.cs" />
     <Compile Include="Web\Forms\ControlCollection.cs" />
-    <Compile Include="Web\Forms\Controls\Anchor.cs" />
-    <Compile Include="Web\Forms\Controls\Body.cs" />
-    <Compile Include="Web\Forms\Controls\Division.cs" />
-    <None Include="Web\Forms\Controls\Heading.cs" />
-    <None Include="Web\Forms\Controls\Paragraph.cs" />
-    <None Include="Web\Forms\Controls\Span.cs" />
-    <Compile Include="Web\Forms\Controls\Head.cs" />
-    <Compile Include="Web\Forms\Box.cs" />
-    <Compile Include="Web\Forms\Measurement.cs" />
-    <Compile Include="Web\Forms\MeasurementUnit.cs" />
+    <Compile Include="Web\Forms\Division.cs" />
+    <Compile Include="Web\Forms\Document.cs" />
+    <Compile Include="Web\Forms\DocumentResource.cs" />
+    <Compile Include="Web\Forms\Form.cs" />
+    <Compile Include="Web\Forms\Head.cs" />
+    <Compile Include="Web\Forms\Heading.cs" />
+    <Compile Include="Web\Forms\Label.cs" />
+    <Compile Include="Web\Forms\LineBreak.cs" />
+    <Compile Include="Web\Forms\OrderedList.cs" />
+    <Compile Include="Web\Forms\Paragraph.cs" />
     <Compile Include="Web\Forms\RenderingContext.cs" />
-    <Compile Include="Web\Forms\Size.cs" />
+    <Compile Include="Web\Forms\Script.cs" />
+    <Compile Include="Web\Forms\Span.cs" />
+    <Compile Include="Web\Forms\Table.cs" />
+    <Compile Include="Web\Forms\TableCell.cs" />
+    <Compile Include="Web\Forms\TableFooter.cs" />
+    <Compile Include="Web\Forms\TableHeader.cs" />
+    <Compile Include="Web\Forms\TableRow.cs" />
     <Compile Include="Web\Forms\TextControl.cs" />
-    <Compile Include="Web\Forms\WebForm.cs" />
-    <Compile Include="Web\Forms\WebFormResource.cs" />
     <Compile Include="Web\MimeType.cs" />
     <Compile Include="Web\RequestMethod.cs" />
     <None Include="Web\Services\WebMethodAttribute.cs" />
@@ -179,6 +186,7 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="Web\Doctype.cs" />
+    <Compile Include="Web\Forms\UnorderedList.cs" />
     <Compile Include="__Strings.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -236,6 +244,7 @@
     <EmbeddedResource Include="Resources\Admin\Admin.css" />
     <EmbeddedResource Include="Resources\Admin\AdminMockup.html" />
     <EmbeddedResource Include="Resources\Admin\top_bar.png" />
+    <EmbeddedResource Include="Resources\webforms\webforms.js" />
     <Content Include="Themes\template\stylesheet.css" />
     <Content Include="Web\Drivers\multipart test.txt" />
     <Content Include="Web\Drivers\urlencoded test.txt" />

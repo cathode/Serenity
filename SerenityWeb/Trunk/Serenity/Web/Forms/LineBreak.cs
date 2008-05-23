@@ -13,52 +13,33 @@ using System.Text;
 
 namespace Serenity.Web.Forms
 {
-    /// <summary>
-    /// Represents an attribute of a <see cref="Control"/>.
-    /// </summary>
-    public sealed class ControlAttribute
+    public sealed class LineBreak : Control
     {
-        public ControlAttribute(string name)
+        #region Constructors - Public
+        public LineBreak()
         {
-            this.name = name;
         }
-        #region Fields - Private
-        private string name;
-        private string value;
-        private bool include;
         #endregion
-        #region Properties - Public
-        public string Name
+        #region Properties - Protected
+        protected override bool CanContainAttributes
         {
             get
             {
-                return this.name;
-            }
-            set
-            {
-                this.name = value;
+                return false;
             }
         }
-        public string Value
+        protected override bool CanContainControls
         {
             get
             {
-                return this.value;
-            }
-            set
-            {
-                this.value = value;
+                return false;
             }
         }
-        public bool Include
+        protected override string DefaultName
         {
             get
             {
-                return this.include;
-            }
-            set
-            {
-                this.include = value;
+                return "br";
             }
         }
         #endregion

@@ -15,11 +15,10 @@ using Serenity.Web.Resources;
 using Serenity.Web;
 using Serenity.Web.Drivers;
 using Serenity.Web.Forms;
-using Serenity.Web.Forms.Controls;
 
 namespace Serenity.Pages
 {
-    public sealed class DefaultPage : WebFormResource
+    public sealed class DefaultPage : DocumentResource
     {
         #region Constructors - Public
         public DefaultPage()
@@ -29,19 +28,21 @@ namespace Serenity.Pages
         }
         #endregion
         #region Methods - Protected
-        protected override WebForm CreateForm()
+        protected override Document CreateForm()
         {
             return new DefaultPage.DefaultPageForm();
         }
         #endregion
         #region Types - Private
-        private sealed class DefaultPageForm : WebForm
+        private sealed class DefaultPageForm : Document
         {
             internal DefaultPageForm()
             {
-                this.Body.Controls.AddRange(
-                    new Division(
-                        new TextControl("Hello World")));
+                Division d1 = new Division();
+                d1.Controls.AddRange(new TextControl("Welcome to the Serenity default page."),
+                        new LineBreak(),
+                        new Anchor(new Uri("http://www.codeplex.com/serenity"), "Serenity Home Page"));
+                this.Body.Controls.Add(d1);
             }
         }
         #endregion

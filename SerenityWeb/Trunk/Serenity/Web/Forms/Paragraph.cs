@@ -13,17 +13,8 @@ using System.Text;
 
 namespace Serenity.Web.Forms
 {
-    public enum MeasurementUnit
+    public class Paragraph : Control
     {
-        Auto,
-        Centimeter,
-        FontHeightRelative,
-        FontRelative,
-        Inch,
-        Milimeter,
-        Percent,
-        Pica,
-        Pixel,
-        Point,
+        
     }
 }

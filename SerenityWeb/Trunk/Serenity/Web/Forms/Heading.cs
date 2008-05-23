@@ -11,10 +11,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Serenity.Web.Forms.Controls
+namespace Serenity.Web.Forms
 {
-    public class Paragraph : Control
+    public class Heading : Control
     {
-        
     }
 }

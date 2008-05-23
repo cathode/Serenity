@@ -13,10 +13,10 @@ using System.Text;
 namespace Serenity.Themes
 {
     /// <summary>
-    /// Represents a "box" of a generic type, with top, bottom, left, and right sides.
+    /// Represents a "box", with top, bottom, left, and right values.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class Box<T> : IStyleNode where T : IStyleNode
+    public abstract class Box<T>
     {
         #region Constructors - Internal
         internal Box()
@@ -29,36 +29,7 @@ namespace Serenity.Themes
         protected T left;
         protected T right;
         #endregion
-        #region Methods - Public
-        public void Undefine()
-        {
-            this.bottom.Undefine();
-            this.left.Undefine();
-            this.right.Undefine();
-            this.top.Undefine();
-        }
-        #endregion
         #region Properties - Public
-        /// <summary>
-        /// Gets a boolean value that indicates if any of the sides of the current Box are defined.
-        /// </summary>
-        public bool IsDefined
-        {
-            get
-            {
-                if ((this.Bottom.IsDefined == true)
-                    || (this.Left.IsDefined == true)
-                    || (this.Right.IsDefined == true)
-                    || (this.Top.IsDefined == true))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
         /// <summary>
         /// Gets the bottom value.
         /// </summary>

@@ -11,16 +11,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Serenity.Web.Forms.Controls
+namespace Serenity.Web.Forms
 {
-    public class Head : Control
+    public class OrderedList : Control
     {
-        protected override string DefaultName
-        {
-            get
-            {
-                return "head";
-            }
-        }
     }
 }

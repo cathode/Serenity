@@ -46,7 +46,7 @@ namespace Serenity.Web.Forms
         }
         #endregion
         #region Properties - Protected
-        protected override bool CanContainChildren
+        protected override bool CanContainControls
         {
             get
             {

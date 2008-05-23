@@ -15,33 +15,20 @@ namespace Serenity.Themes
     /// <summary>
     /// Represents the properties of one side of a border properties collection.
     /// </summary>
-    public sealed class BorderSide : IStyleNode
+    public sealed class BorderSide
     {
         #region Constructors - Internal
-        internal BorderSide()
+        public BorderSide()
         {
             this.color = new Color(0, 0, 0);
-            this.width = new Width();
+            this.width = new Measurement();
             this.borderType = BorderType.None;
         }
         #endregion
         #region Fields - Private
         private BorderType borderType;
-        private bool isDefined;
         private Color color;
-        private Width width;
-        #endregion
-        #region Methods - Public
-        /// <summary>
-        /// Restores the current BorderSide to it's default state.
-        /// </summary>
-        public void Undefine()
-        {
-            this.borderType = BorderType.None;
-            this.color.Undefine();
-            this.isDefined = false;
-            this.width.Undefine();
-        }
+        private Measurement width;
         #endregion
         #region Properties - Public
         /// <summary>
@@ -55,7 +42,6 @@ namespace Serenity.Themes
             }
             set
             {
-                this.isDefined = true;
                 this.borderType = value;
             }
         }
@@ -68,37 +54,11 @@ namespace Serenity.Themes
             {
                 return this.color;
             }
-        }
-        /// <summary>
-        /// Gets a boolean value that indicates if the current BorderSide has any properties defined.
-        /// </summary>
-        public bool IsDefined
-        {
-            get
-            {
-                if (this.isDefined == true)
-                {
-                    return true;
-                }
-                else
-                {
-                    if ((this.isDefined == true)
-                        || (this.color.IsDefined == true)
-                        || (this.width.IsDefined == true))
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            }
         }        
         /// <summary>
         /// Gets the Width of the line of the current BorderSide.
         /// </summary>
-        public Width Width
+        public Measurement Width
         {
             get
             {

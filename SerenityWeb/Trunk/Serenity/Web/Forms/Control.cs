@@ -26,18 +26,20 @@ namespace Serenity.Web.Forms
         /// </summary>
         protected Control()
         {
-            this.InitializeControl();
-        }
-        protected Control(params Control[] controls)
-        {
-            this.Controls.AddRange(controls);
-
-            this.InitializeControl();
+            this.Name = this.DefaultName;
+            if (this.CanContainAttributes)
+            {
+                this.attributes = new ControlAttributeCollection();
+            }
+            if (this.CanContainControls)
+            {
+                this.controls = new ControlCollection();
+            }
         }
         #endregion
         #region Fields - Private
         private string name;
-        private readonly ControlCollection controls = new ControlCollection();
+        private ControlCollection controls = new ControlCollection();
         private string id;
         private string classification;
         private string style;
@@ -50,10 +52,6 @@ namespace Serenity.Web.Forms
         public const string DefaultControlName = "control";
         #endregion
         #region Methods - Protected
-        protected virtual void InitializeControl()
-        {
-            this.Name = this.DefaultName;
-        }
         /// <summary>
         /// When overridden in a derived class, performs control rendering.
         /// </summary>
@@ -68,11 +66,14 @@ namespace Serenity.Web.Forms
 
             writer.Write("<" + this.Name);
 
-            writer.Write(string.Join(" ", (from a in this.Attributes
-                                          where a.Include == true
-                                          select a.Name + "=\"" + a.Value + "\"").ToArray()));
+            if (this.CanContainAttributes && this.Attributes.Count > 0)
+            {
+                writer.Write(" " + string.Join(" ", (from a in this.Attributes
+                                               where a.Include == true
+                                               select a.Name + "=\"" + a.Value + "\"").ToArray()));
+            }
 
-            if (this.Controls.Count == 0)
+            if (!this.CanContainControls || this.Controls.Count == 0)
             {
                 writer.Write(" />");
             }
@@ -93,7 +94,11 @@ namespace Serenity.Web.Forms
         /// <param name="output"></param>
         protected virtual void RenderEnd(RenderingContext context)
         {
-            if (this.Controls.Count > 0)
+            if (!this.CanContainControls)
+            {
+                return;
+            }
+            else if (this.Controls.Count > 0)
             {
                 StreamWriter writer = new StreamWriter(context.OutputStream, context.OutputEncoding);
 
@@ -110,7 +115,7 @@ namespace Serenity.Web.Forms
         public void Render(RenderingContext context)
         {
             this.RenderBegin(context);
-            if (this.CanContainChildren)
+            if (this.CanContainControls)
             {
                 foreach (Control c in this.Controls)
                 {
@@ -121,7 +126,14 @@ namespace Serenity.Web.Forms
         }
         #endregion
         #region Properties - Protected
-        protected virtual bool CanContainChildren
+        protected virtual bool CanContainControls
+        {
+            get
+            {
+                return true;
+            }
+        }
+        protected virtual bool CanContainAttributes
         {
             get
             {

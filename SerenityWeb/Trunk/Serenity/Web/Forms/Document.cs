@@ -11,30 +11,46 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Serenity.Web.Forms.Controls;
+using Serenity.Web.Forms;
 
 namespace Serenity.Web.Forms
 {
-    public abstract class WebForm : Control
+    public abstract class Document : Control
     {
         #region Constructors - Protected
-        protected WebForm()
+        protected Document()
         {
-            this.Name = "html";
-
             this.body = new Body();
-            this.body.Name = "body";
             this.head = new Head();
-            this.head.Name = "head";
 
             this.Controls.AddRange(this.head,
                 this.body);
         }
         #endregion
+        #region Events - Public
+        public event EventHandler Loaded;
+        public event EventHandler Unloaded;
+        #endregion
         #region Fields - Private
-        private Body body = new Body();
-        private Head head = new Head();
+        private Body body;
+        private Head head;
         private Doctype doctype = Doctype.XHTML11;
+        #endregion
+        #region Properties - Protected
+        protected override bool CanContainAttributes
+        {
+            get
+            {
+                return false;
+            }
+        }
+        protected override string DefaultName
+        {
+            get
+            {
+                return "html";
+            }
+        }
         #endregion
         #region Properties - Public
         public Body Body

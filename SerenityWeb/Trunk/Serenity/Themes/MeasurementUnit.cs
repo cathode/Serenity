@@ -11,23 +11,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Serenity.Web.Forms.Controls
+namespace Serenity.Themes
 {
-    public class Division : Control
+    public enum MeasurementUnit
     {
-        public Division()
-        {
-        }
-        public Division(params Control[] controls)
-            : base(controls)
-        {
-        }
-        protected override string DefaultName
-        {
-            get
-            {
-                return "div";
-            }
-        }
+        Auto,
+        Centimeter,
+        FontHeightRelative,
+        FontRelative,
+        Inch,
+        Milimeter,
+        Percent,
+        Pica,
+        Pixel,
+        Point,
     }
 }

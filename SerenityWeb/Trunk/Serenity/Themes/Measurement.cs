@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Serenity.Web.Forms
+namespace Serenity.Themes
 {
     public struct Measurement
     {

@@ -11,9 +11,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Serenity.Web.Forms.Controls
+namespace Serenity.Web.Forms
 {
-    public class Heading : Control
+    public class TableRow : Control
     {
     }
 }

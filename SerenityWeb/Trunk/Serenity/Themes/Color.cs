@@ -12,37 +12,28 @@ using System.Text;
 
 namespace Serenity.Themes
 {
-    public class Color : IStyleNode
+    public class Color
     {
         #region Constructors - Internal
         internal Color()
             : this(0, 0, 0)
         {
         }
-        internal Color(Byte R, Byte G, Byte B)
+        internal Color(byte red, byte green, byte blue)
         {
-            this.red = R;
-            this.green = G;
-            this.blue = B;
+            this.red = red;
+            this.green = green;
+            this.blue = blue;
         }
         #endregion
         #region Fields - Private
-        private Byte blue;
-        private Byte green;
+        private byte blue;
+        private byte green;
         private bool isDefined;
-        private Byte red;
-        #endregion
-        #region Methods - Public
-        public void Undefine()
-        {
-            this.blue = 0;
-            this.green = 0;
-            this.isDefined = false;
-            this.red = 0;
-        }
+        private byte red;
         #endregion
         #region Properties - Public
-        public Byte Blue
+        public byte Blue
         {
             get
             {
@@ -54,7 +45,7 @@ namespace Serenity.Themes
                 this.blue = value;
             }
         }
-        public Byte Green
+        public byte Green
         {
             get
             {
@@ -66,14 +57,7 @@ namespace Serenity.Themes
                 this.green = value;
             }
         }
-        public bool IsDefined
-        {
-            get
-            {
-                return this.isDefined;
-            }
-        }
-        public Byte Red
+        public byte Red
         {
             get
             {
@@ -92,7 +76,7 @@ namespace Serenity.Themes
         {
             get
             {
-                return HexEncoder.Convert(new byte[] { this.red, this.green, this.blue });
+                return HexEncoder.Convert(this.red, this.green, this.blue);
             }
             set
             {

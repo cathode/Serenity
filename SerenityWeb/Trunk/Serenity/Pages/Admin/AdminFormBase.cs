@@ -11,11 +11,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Serenity.Web.Forms;
-using Serenity.Web.Forms.Controls;
 
 namespace Serenity.Pages.Admin
 {
-    public abstract class AdminFormBase : WebForm
+    public abstract class AdminFormBase : Document
     {
         #region Constructors - Protected
         protected AdminFormBase()
