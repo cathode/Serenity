@@ -36,6 +36,12 @@ namespace Serenity.Web.Forms
         private Head head;
         private Doctype doctype = Doctype.XHTML11;
         #endregion
+        #region Methods - Public
+        protected override void RenderBegin(RenderingContext context)
+        {
+            base.RenderBegin(context);
+        }
+        #endregion
         #region Properties - Protected
         protected override bool CanContainAttributes
         {
