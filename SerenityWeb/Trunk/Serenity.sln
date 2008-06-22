@@ -2,8 +2,14 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serenity", "Serenity\Serenity.csproj", "{2013CDED-1043-4FF6-A080-9B3C9BD7B140}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6E4CAB48-1A9C-4970-A754-5EBB7B77E6FA} = {6E4CAB48-1A9C-4970-A754-5EBB7B77E6FA}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{36484189-0ED9-48F5-988D-B1398F934F61}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6E4CAB48-1A9C-4970-A754-5EBB7B77E6FA} = {6E4CAB48-1A9C-4970-A754-5EBB7B77E6FA}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Content", "Content\Content.csproj", "{6E4CAB48-1A9C-4970-A754-5EBB7B77E6FA}"
 EndProject

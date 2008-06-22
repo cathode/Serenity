@@ -13,18 +13,69 @@ using System.Data.Common;
 using System.Data.Linq;
 using System.Data.SQLite;
 using System.Text;
+using System.IO;
 
 namespace Serenity.Data
 {
     public static class Database
     {
-        public static DbConnection Open(DataScope scope)
+        private const string GlobalDBPath = "./data/global/db";
+        /// <summary>
+        /// Creates the database of the specified scope if it does not exist.
+        /// </summary>
+        /// <param name="scope"></param>
+        /// <returns></returns>
+        public static bool Create(DataScope scope)
         {
-            throw new NotImplementedException();
+            if (Database.IsCreated(scope))
+            {
+                return true;
+            }
+            else if (scope == DataScope.Global)
+            {
+                SQLiteConnection.CreateFile(Database.GlobalDBPath);
+                if (File.Exists(Database.GlobalDBPath + ".sql"))
+                {
+                    SQLiteConnection conn = new SQLiteConnection("DataSource=" + Database.GlobalDBPath);
+                    SQLiteCommand cmd = new SQLiteCommand(File.ReadAllText(Database.GlobalDBPath + ".sql"), conn);
 
-            //SQLiteConnectionStringBuilder builder = new SQLiteConnectionStringBuilder();
-            
-            //SQLiteConnection con = new SQLiteConnection();
+                    cmd.ExecuteNonQuery();
+                }
+                return true;
+            }
+            else if (scope == DataScope.Module)
+            {
+                throw new NotImplementedException();
+            }
+            else if (scope == DataScope.Domain)
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                throw new ArgumentException("Unrecognized value of scope paramater.");
+            }
+        }
+        /// <summary>
+        /// Creates and returns a connection to the database of the specified scope.
+        /// </summary>
+        /// <param name="scope"></param>
+        /// <returns></returns>
+        public static SQLiteConnection Connect(DataScope scope)
+        {
+            if (!Database.IsCreated(scope) && !Database.Create(scope))
+            {
+                return null;
+            }
+            //TODO: Implement support for multiple scopes.
+            var csb = new SQLiteConnectionStringBuilder();
+            csb.DataSource = Database.GlobalDBPath;
+            return new SQLiteConnection(csb.ConnectionString);
+        }
+        public static bool IsCreated(DataScope scope)
+        {
+            //TODO: Implement support for multiple scopes.
+            return File.Exists(Database.GlobalDBPath);
         }
     }
 }

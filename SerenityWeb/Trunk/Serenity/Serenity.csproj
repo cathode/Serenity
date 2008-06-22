@@ -159,6 +159,10 @@
     <Compile Include="Web\Forms\TextControl.cs" />
     <Compile Include="Web\MimeType.cs" />
     <Compile Include="Web\RequestMethod.cs" />
+    <Content Include="Data\global\schema.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Data\serenity\schema.sql" />
     <None Include="Web\Services\WebMethodAttribute.cs" />
     <None Include="Web\Services\WebService.cs" />
     <Compile Include="Web\Resources\DirectoryResource.cs" />
