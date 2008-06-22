@@ -15,7 +15,7 @@ using System.Threading;
 
 namespace Serenity.Web.Drivers
 {
-    public delegate void HeaderHandlerCallback(CommonContext context, Header header);
+    public delegate void HeaderHandlerCallback(Header header);
 
     /// <summary>
     /// Provides a mechanism for recieving and responding to requests from clients (browsers).
@@ -143,17 +143,17 @@ namespace Serenity.Web.Drivers
                 throw new ArgumentNullException("socket");
             }
             
-            CommonContext context = this.RecieveContext(socket);
-            if (context != null)
+            ;
+
+            if (this.RecieveContext(socket))
             {
-                SerenityServer.ContextHandler.HandleContext(context);
+                SerenityServer.ContextHandler.HandleContext();
             }
             else
             {
-                context = new CommonContext(this);
-                ErrorHandler.Handle(context, StatusCode.Http500InternalServerError);
+                ErrorHandler.Handle(StatusCode.Http500InternalServerError);
             }
-            this.SendContext(socket, context);
+            this.SendContext(socket);
             socket.Disconnect(false);
             socket.Close();
         }
@@ -212,7 +212,7 @@ namespace Serenity.Web.Drivers
         /// <param name="callback"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        public virtual IAsyncResult BeginSendContext(Socket socket, CommonContext context, AsyncCallback callback, object state)
+        public virtual IAsyncResult BeginSendContext(Socket socket, AsyncCallback callback, object state)
         {
             throw new NotSupportedException();
         }
@@ -250,7 +250,7 @@ namespace Serenity.Web.Drivers
         /// </summary>
         /// <param name="result"></param>
         /// <returns></returns>
-        public virtual CommonContext EndRecieveContext(IAsyncResult result)
+        public virtual void EndRecieveContext(IAsyncResult result)
         {
             throw new NotSupportedException();
         }
@@ -279,19 +279,15 @@ namespace Serenity.Web.Drivers
             throw new NotSupportedException();
         }
         [Obsolete]
-        public bool HandleHeader(CommonContext context, Header header)
+        public bool HandleHeader(Header header)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
-            else if (header == null)
+            if (header == null)
             {
                 throw new ArgumentNullException("header");
             }
             else if (this.headerHandlers.ContainsKey(header.Name))
             {
-                this.headerHandlers[header.Name].Invoke(context, header);
+                this.headerHandlers[header.Name].Invoke(header);
                 return true;
             }
             return false;
@@ -345,7 +341,7 @@ namespace Serenity.Web.Drivers
         {
             return this.headerHandlers.ContainsKey(headerName);
         }
-        public abstract CommonContext RecieveContext(Socket socket);
+        public abstract bool RecieveContext(Socket socket);
         [Obsolete]
         public void RegisterHeaderHandler(string headerName, HeaderHandlerCallback callback)
         {
@@ -406,7 +402,7 @@ namespace Serenity.Web.Drivers
         /// When overridden in a derived class, sends the supplied response to
         /// the client.
         /// </summary>
-        public abstract bool SendContext(Socket socket, CommonContext context);
+        public abstract bool SendContext(Socket socket);
         #endregion
         #region Properties - Protected
         /// <summary>

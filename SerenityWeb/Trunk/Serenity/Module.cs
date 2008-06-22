@@ -202,6 +202,17 @@ namespace Serenity
 				return this.Name.ToLower();
 			}
 		}
+        public static Module Current
+        {
+            get
+            {
+                return null;
+            }
+            internal set
+            {
+                
+            }
+        }
         #endregion
     }
 }

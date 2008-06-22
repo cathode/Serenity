@@ -15,28 +15,28 @@ using Serenity.Web;
 
 namespace Serenity.Web.Resources
 {
-	/// <summary>
-	/// Represents a file on the local filesystem that is exposed as a requestable resource.
-	/// </summary>
-	public sealed class StaticResource : Resource
-	{
-		#region Fields - Private
-		private string location;
-		#endregion
-		#region Methods - Public
-        public override void OnRequest(CommonContext context)
+    /// <summary>
+    /// Represents a file on the local filesystem that is exposed as a requestable resource.
+    /// </summary>
+    public sealed class StaticResource : Resource
+    {
+        #region Fields - Private
+        private string location;
+        #endregion
+        #region Methods - Public
+        public override void OnRequest()
         {
             if (File.Exists(this.location))
             {
-                context.Response.Write(File.ReadAllBytes(this.location));
+                Response.Write(File.ReadAllBytes(this.location));
             }
             else
             {
-                ErrorHandler.Handle(context, StatusCode.Http404NotFound);
+                ErrorHandler.Handle(StatusCode.Http404NotFound);
             }
         }
-		#endregion
-		#region Properties - Public
+        #endregion
+        #region Properties - Public
         /// <summary>
         /// Overridden. Returns ResourceGrouping.Files.
         /// </summary>
@@ -47,20 +47,20 @@ namespace Serenity.Web.Resources
                 return ResourceGrouping.Files;
             }
         }
-		/// <summary>
-		/// Gets the local filesystem location which the current StaticResource represents.
-		/// </summary>
-		public string Location
-		{
-			get
-			{
-				return this.location;
-			}
-			internal set
-			{
-				this.location = value;
-			}
-		}
+        /// <summary>
+        /// Gets the local filesystem location which the current StaticResource represents.
+        /// </summary>
+        public string Location
+        {
+            get
+            {
+                return this.location;
+            }
+            internal set
+            {
+                this.location = value;
+            }
+        }
         /// <summary>
         /// Overridden. Returns true, indicating the size of a static file can be known.
         /// </summary>
@@ -81,6 +81,6 @@ namespace Serenity.Web.Resources
                 return (int)new FileInfo(this.location).Length;
             }
         }
-		#endregion
-	}
+        #endregion
+    }
 }

@@ -38,9 +38,9 @@ namespace Serenity.Web.Resources
         private readonly byte[] data;
         #endregion
         #region Methods - Public
-        public override void OnRequest(CommonContext context)
+        public override void OnRequest()
         {
-            context.Response.Write(this.data);
+            Response.Write(this.data);
         }
         #endregion
         #region Properties - Public

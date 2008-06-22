@@ -98,8 +98,6 @@
     <Compile Include="Logging\LogMessage.cs" />
     <Compile Include="ModuleCollection.cs" />
     <Compile Include="DomainCollection.cs" />
-    <Compile Include="Pages\Admin\AdminFormBase.cs" />
-    <Compile Include="Pages\Admin\MainConfigPage.cs" />
     <Compile Include="Domain.cs" />
     <Compile Include="FileTypeEntry.cs" />
     <Compile Include="Logging\LogMessageLevel.cs" />
@@ -127,7 +125,7 @@
     <Compile Include="SPath.cs" />
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Web\CommonContext.cs" />
+    <None Include="Web\CommonContext.cs" />
     <Compile Include="OperationStatus.cs" />
     <Compile Include="Web\Drivers\WebDriverState.cs" />
     <Compile Include="Web\ErrorHandler.cs" />
@@ -158,11 +156,11 @@
     <Compile Include="Web\Forms\TableRow.cs" />
     <Compile Include="Web\Forms\TextControl.cs" />
     <Compile Include="Web\MimeType.cs" />
+    <Compile Include="Web\Request.cs" />
     <Compile Include="Web\RequestMethod.cs" />
     <Content Include="Data\global\schema.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Data\serenity\schema.sql" />
     <None Include="Web\Services\WebMethodAttribute.cs" />
     <None Include="Web\Services\WebService.cs" />
     <Compile Include="Web\Resources\DirectoryResource.cs" />
@@ -175,6 +173,7 @@
     <Compile Include="Web\Resources\ResourceResource.cs" />
     <Compile Include="Web\Resources\RewriteResource.cs" />
     <Compile Include="Web\Resources\StaticResource.cs" />
+    <Compile Include="Web\Response.cs" />
     <Compile Include="Web\Session.cs" />
     <Compile Include="Web\StatusCode.cs" />
     <Compile Include="Web\Drivers\DriverInfo.cs" />
@@ -182,8 +181,8 @@
     <Compile Include="Web\HeaderCollection.cs" />
     <Compile Include="Web\RequestDataCollection.cs" />
     <Compile Include="Web\RequestDataStream.cs" />
-    <Compile Include="Web\CommonRequest.cs" />
-    <Compile Include="Web\CommonResponse.cs" />
+    <None Include="Web\CommonRequest.cs" />
+    <None Include="Web\CommonResponse.cs" />
     <Compile Include="Web\Drivers\HttpDriver.cs" />
     <Compile Include="Web\Drivers\WebDriver.cs" />
     <Compile Include="Web\Drivers\WebDriverSettings.cs" />
@@ -245,10 +244,6 @@
     <EmbeddedResource Include="Resources\icons\page_white_zip.png" />
     <EmbeddedResource Include="Resources\index.css" />
     <EmbeddedResource Include="Resources\index.xslt" />
-    <EmbeddedResource Include="Resources\Admin\Admin.xslt" />
-    <EmbeddedResource Include="Resources\Admin\Admin.css" />
-    <EmbeddedResource Include="Resources\Admin\AdminMockup.html" />
-    <EmbeddedResource Include="Resources\Admin\top_bar.png" />
     <EmbeddedResource Include="Resources\webforms\webforms.js" />
     <Content Include="Themes\template\stylesheet.css" />
     <Content Include="Web\Drivers\multipart test.txt" />

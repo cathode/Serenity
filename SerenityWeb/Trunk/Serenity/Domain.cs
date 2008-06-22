@@ -48,6 +48,17 @@ namespace Serenity
         }
         #endregion
         #region Properties - Public
+        public static Domain Current
+        {
+            get
+            {
+                return null;
+            }
+            internal set
+            {
+
+            }
+        }
         /// <summary>
         /// Gets the root path where static resources are stored.
         /// </summary>

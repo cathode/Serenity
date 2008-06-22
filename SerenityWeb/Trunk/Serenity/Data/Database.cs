@@ -43,17 +43,26 @@ namespace Serenity.Data
                 }
                 return true;
             }
+            //TODO: Implement support for multiple scopes.
             else if (scope == DataScope.Module)
             {
+                if (Module.Current == null)
+                {
+                    return false;
+                }
                 throw new NotImplementedException();
             }
             else if (scope == DataScope.Domain)
             {
+                if (Domain.Current == null)
+                {
+                    return false;
+                }
                 throw new NotImplementedException();
             }
             else
             {
-                throw new ArgumentException("Unrecognized value of scope paramater.");
+                throw new ArgumentException(__Strings.Exceptions.UnrecognizedDataScope);
             }
         }
         /// <summary>
@@ -68,14 +77,60 @@ namespace Serenity.Data
                 return null;
             }
             //TODO: Implement support for multiple scopes.
-            var csb = new SQLiteConnectionStringBuilder();
-            csb.DataSource = Database.GlobalDBPath;
-            return new SQLiteConnection(csb.ConnectionString);
+            if (scope == DataScope.Global)
+            {
+                var csb = new SQLiteConnectionStringBuilder();
+                csb.DataSource = Database.GlobalDBPath;
+                return new SQLiteConnection(csb.ConnectionString);
+            }
+            else if (scope == DataScope.Module)
+            {
+                if (Module.Current == null)
+                {
+                    return null;
+                }
+                throw new NotImplementedException();
+            }
+            else if (scope == DataScope.Domain)
+            {
+                if (Domain.Current == null)
+                {
+                    return null;
+                }
+                throw new NotImplementedException();
+            }
+            else
+            {
+                throw new ArgumentException(__Strings.Exceptions.UnrecognizedDataScope);
+            }
         }
         public static bool IsCreated(DataScope scope)
         {
             //TODO: Implement support for multiple scopes.
-            return File.Exists(Database.GlobalDBPath);
+            if (scope == DataScope.Global)
+            {
+                return File.Exists(Database.GlobalDBPath);
+            }
+            else if (scope == DataScope.Module)
+            {
+                if (Module.Current == null)
+                {
+                    return false;
+                }
+                throw new NotImplementedException();
+            }
+            else if (scope == DataScope.Domain)
+            {
+                if (Domain.Current == null)
+                {
+                    return false;
+                }
+                throw new NotImplementedException();
+            }
+            else
+            {
+                throw new ArgumentException(__Strings.Exceptions.UnrecognizedDataScope);
+            }
         }
     }
 }

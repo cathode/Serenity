@@ -55,13 +55,8 @@ namespace Serenity
         /// Overridden. Renders the dynamic content of the current DirectoryResource.
         /// </summary>
         /// <param name="context"></param>
-        public override void OnRequest(CommonContext context)
+        public override void OnRequest()
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
-
             // collect data
             SortedDictionary<string, List<Resource>> groupedResources = new SortedDictionary<string, List<Resource>>();
 
@@ -145,7 +140,7 @@ namespace Serenity
                     writer.Flush();
                     writer.Close();
                 }
-                context.Response.Write(ms.ToArray());
+                Response.Write(ms.ToArray());
             }
         }
         #endregion

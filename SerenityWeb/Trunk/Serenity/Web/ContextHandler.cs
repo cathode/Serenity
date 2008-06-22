@@ -36,14 +36,10 @@ namespace Serenity.Web
         /// Handles an incoming CommonContext.
         /// </summary>
         /// <param name="context">The incoming CommonContext to be handled.</param>
-        public virtual void HandleContext(CommonContext context)
+        public virtual void HandleContext()
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
             Resource resource;
-            ResourcePath path = ResourcePath.Create(context.Request.Url);
+            ResourcePath path = ResourcePath.Create(Request.Url);
 
             if (SerenityServer.Resources.Contains(path))
             {
@@ -65,7 +61,7 @@ namespace Serenity.Web
                     }
                     else
                     {
-                        ErrorHandler.Handle(context, StatusCode.Http404NotFound);
+                        ErrorHandler.Handle(StatusCode.Http404NotFound);
                         return;
                     }
                 }
@@ -73,13 +69,13 @@ namespace Serenity.Web
 
             if (resource != null)
             {
-                resource.PreRequest(context);
-                resource.OnRequest(context);
-                resource.PostRequest(context);
+                resource.PreRequest();
+                resource.OnRequest();
+                resource.PostRequest();
             }
             else
             {
-                ErrorHandler.Handle(context, StatusCode.Http500InternalServerError);
+                ErrorHandler.Handle(StatusCode.Http500InternalServerError);
                 SerenityServer.ErrorLog.Write("The resource was null", LogMessageLevel.Error);
             }
         }

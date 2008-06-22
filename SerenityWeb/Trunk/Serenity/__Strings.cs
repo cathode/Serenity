@@ -6,6 +6,7 @@ namespace Serenity
 {
     internal static class __Strings
     {
+        #region Fields - Internal
         internal const string ArgumentCannotBeEmpty = "The supplied argument cannot be empty";
         internal const string CannotModifyWhileRunning = "Cannot modify server-wide objects while the server is in a running state";
         internal const string CannotModifyResourceMimetype = "Cannot set MimeType for this Resource kind";
@@ -15,5 +16,14 @@ namespace Serenity
         internal const string MustBeDirectoryResource = "The supplied path must be a directory path";
         internal const string CannotModifyRequestDataStream = "Cannot modify a RequestDataStream";
         internal const string CannotFlushRequestDataStream = "Cannot flush a RequestDataStream";
+        #endregion
+        #region Types - Internal
+        internal static class Exceptions
+        {
+            #region Fields - Internal
+            internal const string UnrecognizedDataScope = "Unrecognized value of scope paramater.";
+            #endregion
+        }
+        #endregion
     }
 }

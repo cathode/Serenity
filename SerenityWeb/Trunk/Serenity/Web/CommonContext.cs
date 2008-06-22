@@ -32,8 +32,7 @@ namespace Serenity.Web
         private Domain domain;
         private WebDriver driver;
         private bool headersWritten;
-        private string protocolType;
-        private Version protocolVersion;
+
         private CommonRequest request;
         private CommonResponse response;
         private bool supportsAuthentication;

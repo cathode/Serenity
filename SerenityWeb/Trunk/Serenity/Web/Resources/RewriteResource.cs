@@ -57,15 +57,15 @@ namespace Serenity.Web.Resources
         }
         #endregion
         #region Methods - Public
-        public override void OnRequest(Serenity.Web.CommonContext context)
+        public override void OnRequest()
         {
             if (this.IsHardRewrite)
             {
-                this.TargetResource.OnRequest(context);
+                this.TargetResource.OnRequest();
             }
             else
             {
-                context.Response.Headers.Add("Location", this.TargetPath.ToUriString());
+                Response.Headers.Add("Location", this.TargetPath.ToUriString());
             }
         }
         #endregion

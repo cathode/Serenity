@@ -14,10 +14,10 @@ using Serenity.Web;
 
 namespace Serenity.Web.Resources
 {
-	/// <summary>
-	/// Provides a base class that all web-accessible resources must inherit from.
-	/// </summary>
-	public abstract class Resource
+    /// <summary>
+    /// Provides a base class that all web-accessible resources must inherit from.
+    /// </summary>
+    public abstract class Resource
     {
         #region Fields - Private
         private MimeType mimeType = MimeType.Default;
@@ -33,40 +33,28 @@ namespace Serenity.Web.Resources
         /// When overridden in a derived class, uses the supplied CommonContext to dynamically generate response content.
         /// </summary>
         /// <param name="context"></param>
-        public virtual void OnRequest(CommonContext context)
+        public virtual void OnRequest()
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
-            ErrorHandler.Handle(context, StatusCode.Http501NotImplemented);
+            ErrorHandler.Handle(StatusCode.Http501NotImplemented);
         }
         /// <summary>
         /// Invoked after OnRequest.
         /// </summary>
         /// <param name="context"></param>
-        public virtual void PostRequest(CommonContext context)
+        public virtual void PostRequest()
         {
-            if (context == null)
+            if (Response.ContentType != this.ContentType)
             {
-                throw new ArgumentNullException("context");
+                Response.ContentType = this.ContentType;
             }
-            else if (context.Response.ContentType != this.ContentType)
-            {
-                context.Response.ContentType = this.ContentType;
-            }
-            context.Response.Status = StatusCode.Http200Ok;
+            Response.Status = StatusCode.Http200Ok;
         }
         /// <summary>
         /// Invoked before OnRequest.
         /// </summary>
         /// <param name="context"></param>
-        public virtual void PreRequest(CommonContext context)
+        public virtual void PreRequest()
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
         }
         #endregion
         #region Properties - Public
@@ -92,28 +80,28 @@ namespace Serenity.Web.Resources
             }
         }
         /// <summary>
-		/// Gets the MimeType that should be used to describe the content of the current Resource.
-		/// </summary>
-		public MimeType ContentType
-		{
-			get
-			{
+        /// Gets the MimeType that should be used to describe the content of the current Resource.
+        /// </summary>
+        public MimeType ContentType
+        {
+            get
+            {
                 return this.mimeType;
-			}
+            }
             protected internal set
             {
                 this.mimeType = value;
             }
-		}
-		/// <summary>
-		/// Gets or sets the name of the current Resource.
-		/// </summary>
-		public string Name
-		{
-			get
-			{
-				return this.name;
-			}
+        }
+        /// <summary>
+        /// Gets or sets the name of the current Resource.
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                return this.name;
+            }
             protected internal set
             {
                 if (value == null)
@@ -122,7 +110,7 @@ namespace Serenity.Web.Resources
                 }
                 this.name = value;
             }
-		}
+        }
         /// <summary>
         /// Gets the ResourcePath of the current Resource.
         /// </summary>
@@ -148,6 +136,6 @@ namespace Serenity.Web.Resources
                 return -1;
             }
         }
-		#endregion
-	}
+        #endregion
+    }
 }
