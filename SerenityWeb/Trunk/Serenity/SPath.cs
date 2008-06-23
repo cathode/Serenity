@@ -14,68 +14,30 @@ using System.Text;
 
 namespace Serenity
 {
-	/// <summary>
-	/// Represents special folders used by Serenity.
-	/// </summary>
-	public enum SpecialFolder
-	{
-		/// <summary>
-		/// Represents the root folder (where all the other data is kept).
-		/// </summary>
-		Root,
-		/// <summary>
-		/// The configuration folder (where server-wide configuration settings are stored)
-		/// </summary>
-		Configuration,
-		/// <summary>
-		/// The folder where domain settings are stored.
-		/// </summary>
-		Domains,
-		/// <summary>
-		/// The folder where module data is stored.
-		/// </summary>
-		Modules,
-		/// <summary>
-		/// The folder where theme data is stored.
-		/// </summary>
-		Themes,
-		/// <summary>
-		/// The folder where log files are stored.
-		/// </summary>
-		Logs,
-	}
-    /// <summary>
-    /// Represents special files used by Serenity.
-    /// </summary>
-	public enum SpecialFile
-	{
-        /// <summary>
-        /// The file where information about file types is stored.
-        /// </summary>
-		FileTypeRegistry,
-	}
+	
+    
 	public static class SPath
 	{
 		#region Constructors - Static
 		static SPath()
 		{
-			SPath.specialFolders = new Dictionary<SpecialFolder, string>();
+			SPath.specialFolders = new Dictionary<SpecialDirectory, string>();
 			SPath.specialFiles = new Dictionary<SpecialFile, string>();
 
 			string root = Path.GetFullPath("./");
 
-			SPath.specialFolders[SpecialFolder.Configuration] = Path.GetFullPath(SPath.Combine(root, "Configuration"));
-			SPath.specialFolders[SpecialFolder.Domains] = Path.GetFullPath(SPath.Combine(root, "Domains"));
-			SPath.specialFolders[SpecialFolder.Logs] = Path.GetFullPath(SPath.Combine(root, "Logs"));
-			SPath.specialFolders[SpecialFolder.Modules] = Path.GetFullPath(SPath.Combine(root, "Modules"));
-			SPath.specialFolders[SpecialFolder.Root] = root;
-			SPath.specialFolders[SpecialFolder.Themes] = Path.GetFullPath(SPath.Combine(root, "Themes"));
+			SPath.specialFolders[SpecialDirectory.Configuration] = Path.GetFullPath(SPath.Combine(root, "Configuration"));
+			SPath.specialFolders[SpecialDirectory.Domains] = Path.GetFullPath(SPath.Combine(root, "Domains"));
+			SPath.specialFolders[SpecialDirectory.Logs] = Path.GetFullPath(SPath.Combine(root, "Logs"));
+			SPath.specialFolders[SpecialDirectory.Modules] = Path.GetFullPath(SPath.Combine(root, "Modules"));
+			SPath.specialFolders[SpecialDirectory.Root] = root;
+			SPath.specialFolders[SpecialDirectory.Themes] = Path.GetFullPath(SPath.Combine(root, "Themes"));
 
-			SPath.specialFiles[SpecialFile.FileTypeRegistry] = SPath.Combine(SPath.specialFolders[SpecialFolder.Configuration], "FileTypeRegistry.ini");
+			SPath.specialFiles[SpecialFile.FileTypeRegistry] = SPath.Combine(SPath.specialFolders[SpecialDirectory.Configuration], "FileTypeRegistry.ini");
 		}
 		#endregion
 		#region Fields - Private
-		private static Dictionary<SpecialFolder, string> specialFolders;
+		private static Dictionary<SpecialDirectory, string> specialFolders;
 		private static Dictionary<SpecialFile, string> specialFiles;
 		#endregion
 		#region Methods - Public
@@ -88,7 +50,7 @@ namespace Serenity
 			}
 			return result;
 		}
-		public static string ResolveSpecialPath(SpecialFolder specialFolder)
+		public static string ResolveSpecialPath(SpecialDirectory specialFolder)
 		{
 			return SPath.specialFolders[specialFolder];
 		}
@@ -105,7 +67,7 @@ namespace Serenity
 		{
 			get
 			{
-				return SPath.ResolveSpecialPath(SpecialFolder.Domains);
+				return SPath.ResolveSpecialPath(SpecialDirectory.Domains);
 			}
 		}
 		/// <summary>
@@ -115,7 +77,7 @@ namespace Serenity
 		{
 			get
 			{
-				return SPath.ResolveSpecialPath(SpecialFolder.Logs);
+				return SPath.ResolveSpecialPath(SpecialDirectory.Logs);
 			}
 		}
 
@@ -126,7 +88,7 @@ namespace Serenity
 		{
 			get
 			{
-				return SPath.ResolveSpecialPath(SpecialFolder.Modules);
+				return SPath.ResolveSpecialPath(SpecialDirectory.Modules);
 			}
 		}
 		/// <summary>
@@ -136,7 +98,7 @@ namespace Serenity
 		{
 			get
 			{
-				return SPath.ResolveSpecialPath(SpecialFolder.Root);
+				return SPath.ResolveSpecialPath(SpecialDirectory.Root);
 			}
 		}
 		/// <summary>
@@ -146,7 +108,7 @@ namespace Serenity
 		{
 			get
 			{
-				return SPath.ResolveSpecialPath(SpecialFolder.Themes);
+				return SPath.ResolveSpecialPath(SpecialDirectory.Themes);
 			}
 		}
 		#endregion

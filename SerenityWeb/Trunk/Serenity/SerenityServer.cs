@@ -30,6 +30,9 @@ namespace Serenity
             SerenityServer.OperationLog.Write("Server created.", LogMessageLevel.Debug);
         }
         #endregion
+        #region Events - Public
+        public static event EventHandler PeriodicMaintenance;
+        #endregion
         #region Fields - Private
         private static Log accessLog = new Log();
         private static ContextHandler contextHandler = new ContextHandler();

@@ -14,12 +14,13 @@ using System.Data.Linq;
 using System.Data.SQLite;
 using System.Text;
 using System.IO;
+using Serenity.IO;
 
 namespace Serenity.Data
 {
     public static class Database
     {
-        private const string GlobalDBPath = "./data/global/db";
+        #region Methods - Public
         /// <summary>
         /// Creates the database of the specified scope if it does not exist.
         /// </summary>
@@ -34,12 +35,15 @@ namespace Serenity.Data
             else if (scope == DataScope.Global)
             {
                 SQLiteConnection.CreateFile(Database.GlobalDBPath);
-                if (File.Exists(Database.GlobalDBPath + ".sql"))
+                if (File.Exists(Database.GlobalSchemaPath))
                 {
-                    SQLiteConnection conn = new SQLiteConnection("DataSource=" + Database.GlobalDBPath);
-                    SQLiteCommand cmd = new SQLiteCommand(File.ReadAllText(Database.GlobalDBPath + ".sql"), conn);
-
+                    SQLiteConnection conn = new SQLiteConnection("Data Source=" + Database.GlobalDBPath);
+                    SQLiteCommand cmd = new SQLiteCommand(File.ReadAllText(Database.GlobalSchemaPath), conn);
+                    conn.Open();
                     cmd.ExecuteNonQuery();
+                    conn.Clone();
+                    conn.Dispose();
+                    cmd.Dispose();
                 }
                 return true;
             }
@@ -54,7 +58,7 @@ namespace Serenity.Data
             }
             else if (scope == DataScope.Domain)
             {
-                if (Domain.Current == null)
+                if (Domain.Current == null || Module.Current == null)
                 {
                     return false;
                 }
@@ -93,7 +97,7 @@ namespace Serenity.Data
             }
             else if (scope == DataScope.Domain)
             {
-                if (Domain.Current == null)
+                if (Domain.Current == null || Module.Current == null)
                 {
                     return null;
                 }
@@ -121,7 +125,7 @@ namespace Serenity.Data
             }
             else if (scope == DataScope.Domain)
             {
-                if (Domain.Current == null)
+                if (Domain.Current == null || Module.Current == null)
                 {
                     return false;
                 }
@@ -132,5 +136,22 @@ namespace Serenity.Data
                 throw new ArgumentException(__Strings.Exceptions.UnrecognizedDataScope);
             }
         }
+        #endregion
+        #region Properties - Public
+        public static string GlobalDBPath
+        {
+            get
+            {
+                return Path.Combine(SerenityPath.DataDirectory, "global/database");
+            }
+        }
+        public static string GlobalSchemaPath
+        {
+            get
+            {
+                return Path.Combine(SerenityPath.DataDirectory, "global/schema.sql");
+            }
+        }
+        #endregion
     }
 }

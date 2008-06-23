@@ -12,7 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-
+using Serenity.IO;
 using Serenity.Web;
 
 namespace Serenity
@@ -36,7 +36,7 @@ namespace Serenity
             IniReader reader = new IniReader(IniReaderSettings.Win32Style);
 
             IniFile file;
-            bool result = reader.Read(File.OpenRead(SPath.ResolveSpecialPath(SpecialFile.FileTypeRegistry)), out file);
+            bool result = reader.Read(File.OpenRead(Path.Combine(SerenityPath.ConfigurationDirectory, "FileTypeRegistry.ini")), out file);
             if (result)
             {
                 file.IsCaseSensitive = false;

@@ -87,14 +87,12 @@
   <ItemGroup>
     <Compile Include="Attributes\AlternateResourcePathAttribute.cs" />
     <Compile Include="Attributes\ModuleTitleAttribute.cs" />
-    <None Include="..\Serenity.build">
-      <Link>Serenity.build</Link>
-    </None>
     <None Include="Cache\CacheManager.cs" />
     <Compile Include="Attributes\ModuleDefaultPageAttribute.cs" />
     <Compile Include="Attributes\ModuleResourceNamespaceAttribute.cs" />
     <Compile Include="Data\Database.cs" />
     <Compile Include="Data\DataScope.cs" />
+    <Compile Include="IO\SerenityPath.cs" />
     <Compile Include="Logging\LogMessage.cs" />
     <Compile Include="ModuleCollection.cs" />
     <Compile Include="DomainCollection.cs" />
@@ -122,7 +120,7 @@
     <Compile Include="Web\ContextHandler.cs" />
     <Compile Include="SerenityInfo.cs" />
     <Compile Include="FileTypeRegistry.cs" />
-    <Compile Include="SPath.cs" />
+    <None Include="SPath.cs" />
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Web\CommonContext.cs" />

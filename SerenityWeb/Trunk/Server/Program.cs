@@ -14,48 +14,54 @@ using System.Threading;
 using Serenity;
 using Serenity.Logging;
 using Serenity.Web.Drivers;
+using Serenity.IO;
+using NDesk.Options;
+using Serenity.Data;
 
 namespace Server
 {
-	internal class Program
-	{
-		internal static void Main(string[] args)
-		{
-			//Print out program name, version, copyright, and contact information.
-			Console.WriteLine("{0}, v{1}\r\n{2} ({3})\r\n",
-				SerenityInfo.Name, SerenityInfo.Version, SerenityInfo.Copyright, "http://serenityproject.net/");
+    internal class Program
+    {
+        internal static void Main(string[] args)
+        {
+            //Print out program name, version, copyright, and contact information.
+            Console.WriteLine("{0}, v{1}\r\n{2} ({3})\r\n",
+                SerenityInfo.Name, SerenityInfo.Version, SerenityInfo.Copyright, "http://serenityproject.net/");
 
-
-            //Make sure the server has the correct folders to use,
-            //if they don't exist we need to create them.
-            foreach (SpecialFolder sf in Program.RecurseEnum<SpecialFolder>())
-            {
-                string dir = SPath.ResolveSpecialPath(sf);
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(dir);
-                    SerenityServer.OperationLog.Write("Creating " + dir, LogMessageLevel.Info);
-                }
-            }
-
-			//Perform loading of the server configuration file.
-			ServerConfig config = new ServerConfig();
-			config.Read("Configuration/Serenity.ini");
-
+            //Set up SerenityPath with correct values.
+            
             
 
-			foreach (KeyValuePair<string, string> pair in config.Modules)
-			{
-				string name = pair.Key;
-				string path = (pair.Value.StartsWith("@")) ? Path.GetFullPath("./Modules/" + pair.Value.TrimStart('@')) : pair.Value;
+            var ops = new OptionSet()
+            {
+                { "a|appdata",
+                    d => SerenityPath.WorkingDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                        "Serenity Project\\Serenity") }
+            };
+            ops.Parse(args);
+
+            Database.Create(DataScope.Global);
+
+            //Perform loading of the server configuration file.
+            ServerConfig config = new ServerConfig();
+            if (!config.Read(Path.Combine(Serenity.IO.SerenityPath.ConfigurationDirectory, "Serenity.ini")))
+            {
+                Console.WriteLine("Failure when reading server configuration.");
+                return;
+            }
+
+            foreach (KeyValuePair<string, string> pair in config.Modules)
+            {
+                string name = pair.Key;
+                string path = (pair.Value.StartsWith("@")) ? Path.GetFullPath("./Modules/" + pair.Value.TrimStart('@')) : pair.Value;
                 SerenityServer.AddModule(Module.LoadModuleFile(name, path));
-			}
+            }
 
             SerenityServer.OperationLog.Write(string.Format("Loaded: {0} domains, {1} modules, {2} themes.",
-				SerenityServer.Domains.Count,
-				SerenityServer.Modules.Count,
-				0), LogMessageLevel.Info);
-			WebDriverSettings driverSettings = new WebDriverSettings();
+                SerenityServer.Domains.Count,
+                SerenityServer.Modules.Count,
+                0), LogMessageLevel.Info);
+            WebDriverSettings driverSettings = new WebDriverSettings();
             driverSettings.Ports = config.Ports;
 
             WebDriver driver = new HttpDriver(driverSettings);
@@ -64,30 +70,30 @@ namespace Server
 
             driver.Initialize();
 
-			if (!driver.Start())
-			{
+            if (!driver.Start())
+            {
                 SerenityServer.ErrorLog.Write("Failed to start web driver", LogMessageLevel.Error);
-			}
-			else
-			{
-				//WS: Temporary loop to keep the main thread from exiting when in async mode.
-				while (driver.Status == OperationStatus.Started)
-				{
-					Thread.Sleep(1000);
-				}
-			}
+            }
+            else
+            {
+                //WS: Temporary loop to keep the main thread from exiting when in async mode.
+                while (driver.Status == OperationStatus.Started)
+                {
+                    Thread.Sleep(1000);
+                }
+            }
 
             SerenityServer.OperationLog.Write("Server shutting down", LogMessageLevel.Info);
-			Console.WriteLine("Press any key...");
-			Console.Read();
-		}
-		private static IEnumerable<T> RecurseEnum<T>()
-		{
-			Array values = Enum.GetValues(typeof(T));
-			foreach (T item in values)
-			{
-				yield return item;
-			}
-		}
-	}
+            Console.WriteLine("Press any key...");
+            Console.Read();
+        }
+        private static IEnumerable<T> RecurseEnum<T>()
+        {
+            Array values = Enum.GetValues(typeof(T));
+            foreach (T item in values)
+            {
+                yield return item;
+            }
+        }
+    }
 }

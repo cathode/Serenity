@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text;
 
 using Serenity.Attributes;
 using Serenity.Web.Resources;
@@ -43,7 +42,7 @@ namespace Serenity
             {
                 throw new ArgumentException(__Strings.ArgumentCannotBeEmpty);
             }
-            return Module.LoadModuleFile(name, SPath.Combine("Modules", name + ".dll"));
+            return Module.LoadModuleFile(name, Serenity.IO.SerenityPath.ModulesDirectory + name + ".dll");
         }
         public static Module LoadModuleFile(string name, string assemblyPath)
         {
