@@ -39,7 +39,7 @@ namespace Serenity.Web
         #endregion
         #region Methods - Public
         /// <summary>
-        /// Disposes the current <see cref="Session"/>.
+        /// Disposes the current <see cref="Session"/>, but does not remove the session information from the database.
         /// </summary>
         public void Dispose()
         {
@@ -98,7 +98,35 @@ namespace Serenity.Web
                 }
             }
         }
+        public static void Remove(Guid sessionID)
+        {
+            var s = Session.GetSession(sessionID);
 
+            if (s != null)
+            {
+                var cmd = new SQLiteCommand(string.Format("DELETE FROM sessions WHERE id == '{0}'",
+                    sessionID.ToString("N")), s.connection);
+
+                s.connection.Open();
+                cmd.ExecuteNonQuery();
+
+                cmd = new SQLiteCommand(string.Format("DELETE FROM session_data WHERE id == '{0}'",
+                    sessionID.ToString("N")), s.connection);
+
+                cmd.ExecuteNonQuery();
+
+                s.connection.Close();
+            }
+        }
+        public static void ClearAll()
+        {
+            var cmd = new SQLiteCommand("DELETE FROM sessions", Database.Connect(DataScope.Global));
+            cmd.Connection.Open();
+            cmd.ExecuteNonQuery();
+            cmd = new SQLiteCommand("DELETE FROM session_data", cmd.Connection);
+            cmd.ExecuteNonQuery();
+            cmd.Connection.Close();
+        }
         public static Session NewSession()
         {
             Session s = new Session();
@@ -164,6 +192,16 @@ namespace Serenity.Web
             this.connection.Close();
 
             return result;
+        }
+        public void RemoveValue(string name)
+        {
+            var cmd = new SQLiteCommand(string.Format("DELETE FROM session_data WHERE id == '{0}' AND name == '{1}'",
+                this.SessionID.ToString("N"),
+                name), this.connection);
+
+            this.connection.Open();
+            cmd.ExecuteNonQuery();
+            this.connection.Close();
         }
         #endregion
         #region Properties - Public
