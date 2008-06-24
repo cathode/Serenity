@@ -45,6 +45,7 @@ namespace Serenity.Data
                     cmd.ExecuteNonQuery();
                     conn.Clone();
                     conn.Dispose();
+                    //Does cmd need to be disposed as well?
                     cmd.Dispose();
                     return true;
                 }

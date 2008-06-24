@@ -108,8 +108,11 @@ namespace Serenity.Web
             s.lifetime = TimeSpan.FromMilliseconds(Session.DefaultLifetime);
             s.connection = Database.Connect(DataScope.Global);
 
-            var cmd = new SQLiteCommand("INSERT INTO sessions VALUES(" + s.SessionID.ToString("N")
-                + ", " + s.created.ToString("s") + ", " + s.lifetime.Milliseconds.ToString() + ")", s.connection);
+            var cmd = new SQLiteCommand(string.Format("INSERT INTO sessions VALUES('{0}','{1}','{2}','{3}')",
+                s.SessionID.ToString("N"),
+                s.created.ToString("s"),
+                s.lifetime.TotalMilliseconds.ToString(),
+                s.modified.ToString("s")), s.connection);
 
             s.connection.Open();
 
@@ -135,7 +138,15 @@ namespace Serenity.Web
         /// <param name="value"></param>
         public void WriteValue(string name, string value)
         {
-            throw new NotImplementedException();
+            this.connection.Open();
+            var cmd = new SQLiteCommand(string.Format("INSERT INTO session_data VALUES('{0}', '{1}', '{2}')",
+                this.sessionID.ToString("N"),
+                name,
+                value), this.connection);
+
+            cmd.ExecuteNonQuery();
+
+            this.connection.Close();
         }
         /// <summary>
         /// Reads a value from the current session.
@@ -144,7 +155,15 @@ namespace Serenity.Web
         /// <returns></returns>
         public string ReadValue(string name)
         {
-            throw new NotImplementedException();
+            var cmd = new SQLiteCommand(string.Format("SELECT value FROM session_data WHERE id == '{0}' AND name == '{1}'",
+                this.SessionID.ToString("N"),
+                name), this.connection);
+
+            this.connection.Open();
+            string result = cmd.ExecuteScalar() as string;
+            this.connection.Close();
+
+            return result;
         }
         #endregion
         #region Properties - Public

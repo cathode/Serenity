@@ -28,10 +28,6 @@ namespace Server
             Console.WriteLine("{0}, v{1}\r\n{2} ({3})\r\n",
                 SerenityInfo.Name, SerenityInfo.Version, SerenityInfo.Copyright, "http://serenityproject.net/");
 
-            //Set up SerenityPath with correct values.
-            
-            
-
             var ops = new OptionSet()
             {
                 { "a|appdata",
