@@ -99,6 +99,12 @@
     <Compile Include="Domain.cs" />
     <Compile Include="FileTypeEntry.cs" />
     <Compile Include="Logging\LogMessageLevel.cs" />
+    <Compile Include="Net\DriverInfo.cs" />
+    <Compile Include="Net\DriverPool.cs" />
+    <Compile Include="Net\HttpDriver.cs" />
+    <Compile Include="Net\WebDriver.cs" />
+    <Compile Include="Net\WebDriverInitializationResult.cs" />
+    <Compile Include="Net\WebDriverState.cs" />
     <Compile Include="SerenityServer.cs" />
     <Compile Include="Themes\Border.cs" />
     <Compile Include="Themes\BorderSide.cs" />
@@ -113,19 +119,16 @@
     <Compile Include="Themes\Style.cs" />
     <Compile Include="Themes\StyleType.cs" />
     <Compile Include="Themes\TextDirection.cs" />
-    <Compile Include="Web\Drivers\DriverPool.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Pages\DefaultPage.cs" />
     <Compile Include="Themes\Theme.cs" />
     <Compile Include="Web\ContextHandler.cs" />
     <Compile Include="SerenityInfo.cs" />
     <Compile Include="FileTypeRegistry.cs" />
-    <None Include="SPath.cs" />
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Web\CommonContext.cs" />
     <Compile Include="OperationStatus.cs" />
-    <Compile Include="Web\Drivers\WebDriverState.cs" />
     <Compile Include="Web\ErrorHandler.cs" />
     <Compile Include="Web\Forms\Anchor.cs" />
     <Compile Include="Web\Forms\Body.cs" />
@@ -174,16 +177,10 @@
     <Compile Include="Web\Response.cs" />
     <Compile Include="Web\Session.cs" />
     <Compile Include="Web\StatusCode.cs" />
-    <Compile Include="Web\Drivers\DriverInfo.cs" />
     <Compile Include="Web\Header.cs" />
     <Compile Include="Web\HeaderCollection.cs" />
     <Compile Include="Web\RequestDataCollection.cs" />
     <Compile Include="Web\RequestDataStream.cs" />
-    <None Include="Web\CommonRequest.cs" />
-    <None Include="Web\CommonResponse.cs" />
-    <Compile Include="Web\Drivers\HttpDriver.cs" />
-    <Compile Include="Web\Drivers\WebDriver.cs" />
-    <Compile Include="Web\Drivers\WebDriverSettings.cs" />
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
@@ -244,8 +241,6 @@
     <EmbeddedResource Include="Resources\index.xslt" />
     <EmbeddedResource Include="Resources\webforms\webforms.js" />
     <Content Include="Themes\template\stylesheet.css" />
-    <Content Include="Web\Drivers\multipart test.txt" />
-    <Content Include="Web\Drivers\urlencoded test.txt" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="LibINI, Version=1.5.5.0, Culture=neutral, processorArchitecture=MSIL">

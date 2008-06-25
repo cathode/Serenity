@@ -13,10 +13,10 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-namespace Serenity.Web.Drivers
-{
-    public delegate void HeaderHandlerCallback(Header header);
+using Serenity.Web;
 
+namespace Serenity.Net
+{
     /// <summary>
     /// Provides a mechanism for recieving and responding to requests from clients (browsers).
     /// </summary>
@@ -26,33 +26,17 @@ namespace Serenity.Web.Drivers
         /// <summary>
         /// Initializes a new instance of the WebDriver class.
         /// </summary>
-        /// <param name="settings">The WebDriverSettings which control the
-        /// behaviour of the new WebDriver instance.</param>
-        protected WebDriver(WebDriverSettings settings)
+        protected WebDriver()
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException("settings");
-            }
-            this.settings = settings;
-            this.acceptDelegate = new AsyncCallback(this.AcceptCallback);
-            this.disconnectDelegate = new AsyncCallback(this.DisconnectCallback);
-            this.headerHandlers = new Dictionary<string, HeaderHandlerCallback>();
-            this.recieveDelegate = new AsyncCallback(this.RecieveCallback);
-            this.sendDelegate = new AsyncCallback(this.SendCallback);
         }
         #endregion
         #region Fields - Private
-        private readonly AsyncCallback acceptDelegate;
-        private readonly AsyncCallback disconnectDelegate;
-        private readonly Dictionary<string, HeaderHandlerCallback> headerHandlers;
         private DriverInfo info;
         private bool isDisposed;
         private Socket listeningSocket;
-        private readonly AsyncCallback recieveDelegate;
-        private readonly AsyncCallback sendDelegate;
-        private readonly WebDriverSettings settings;
-        private OperationStatus status = OperationStatus.None;
+        private bool isRunning;
+        private ushort listeningPort;
+        private bool isInitialized;
         #endregion
         #region Methods - Protected
         /// <summary>
@@ -142,10 +126,10 @@ namespace Serenity.Web.Drivers
             {
                 throw new ArgumentNullException("socket");
             }
-            
+
             ;
 
-            if (this.RecieveContext(socket))
+            if (this.RecieveRequest(socket))
             {
                 SerenityServer.ContextHandler.HandleContext();
             }
@@ -153,7 +137,7 @@ namespace Serenity.Web.Drivers
             {
                 ErrorHandler.Handle(StatusCode.Http500InternalServerError);
             }
-            this.SendContext(socket);
+            this.SendResponse(socket);
             socket.Disconnect(false);
             socket.Close();
         }
@@ -200,7 +184,7 @@ namespace Serenity.Web.Drivers
         /// <param name="callback">The System.AsyncCallback delegate.</param>
         /// <param name="state"></param>
         /// <returns></returns>
-        public virtual IAsyncResult BeginRecieveContext(Socket socket, AsyncCallback callback, object state)
+        public virtual IAsyncResult BeginRecieveRequest(Socket socket, AsyncCallback callback, object state)
         {
             throw new NotSupportedException();
         }
@@ -212,7 +196,7 @@ namespace Serenity.Web.Drivers
         /// <param name="callback"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        public virtual IAsyncResult BeginSendContext(Socket socket, AsyncCallback callback, object state)
+        public virtual IAsyncResult BeginSendResponse(Socket socket, AsyncCallback callback, object state)
         {
             throw new NotSupportedException();
         }
@@ -250,7 +234,7 @@ namespace Serenity.Web.Drivers
         /// </summary>
         /// <param name="result"></param>
         /// <returns></returns>
-        public virtual void EndRecieveContext(IAsyncResult result)
+        public virtual void EndRecieveRequest(IAsyncResult result)
         {
             throw new NotSupportedException();
         }
@@ -258,7 +242,7 @@ namespace Serenity.Web.Drivers
         /// Ends a pending asynchronous context send operation.
         /// </summary>
         /// <param name="result"></param>
-        public virtual void EndSendContext(IAsyncResult result)
+        public virtual void EndSendResponse(IAsyncResult result)
         {
             throw new NotSupportedException();
         }
@@ -278,88 +262,36 @@ namespace Serenity.Web.Drivers
         {
             throw new NotSupportedException();
         }
-        [Obsolete]
-        public bool HandleHeader(Header header)
-        {
-            if (header == null)
-            {
-                throw new ArgumentNullException("header");
-            }
-            else if (this.headerHandlers.ContainsKey(header.Name))
-            {
-                this.headerHandlers[header.Name].Invoke(header);
-                return true;
-            }
-            return false;
-        }
         /// <summary>
         /// Creates and binds the listening socket, preparing the WebDriver so that it can be started.
         /// </summary>
-        public virtual bool Initialize()
+        public virtual WebDriverInitializationResult Initialize()
         {
             if (this.IsDisposed)
             {
                 throw new ObjectDisposedException(this.GetType().FullName);
             }
-
-            if (this.status < OperationStatus.Initialized)
+            if (this.IsInitialized)
             {
-                this.ListeningSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
-
-                foreach (ushort port in this.Settings.Ports)
-                {
-                    //TODO: Try and add some input-checking to avoid try/catch usage.
-                    try
-                    {
-                        this.ListeningSocket.Bind(new IPEndPoint(IPAddress.Any, port));
-                        break;
-                    }
-                    catch (SocketException socketEx)
-                    {
-                        SerenityServer.ErrorLog.Write("Could not bind listening socket to desired port.\r\n" + socketEx.ToString(), Serenity.Logging.LogMessageLevel.Warning);
-                    }
-                }
-                if (this.ListeningSocket.IsBound)
-                {
-                    //TODO: Log "socket bind succeded" informative message.
-                    this.status = OperationStatus.Initialized;
-                    return true;
-                }
-                else
-                {
-                    SerenityServer.ErrorLog.Write("Failed to bind listening socket to any port.", Serenity.Logging.LogMessageLevel.Error);
-                    return false;
-                }
+                return WebDriverInitializationResult.AlreadyInitialized;
             }
-            else
+            this.isInitialized = true;
+            this.ListeningSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
+
+            //TODO: Try and add some input-checking to avoid try/catch usage.
+            try
             {
-                return false;
+                this.ListeningSocket.Bind(new IPEndPoint(IPAddress.Any, this.ListeningPort));
+                SerenityServer.OperationLog.Write("Listening socket bound to port " + this.ListeningPort.ToString(), Serenity.Logging.LogMessageLevel.Info);
+                return WebDriverInitializationResult.Suceeded;
+            }
+            catch (SocketException socketEx)
+            {
+                SerenityServer.ErrorLog.Write("Could not bind listening socket to desired port.\r\n" + socketEx.ToString(), Serenity.Logging.LogMessageLevel.Warning);
+                return WebDriverInitializationResult.FailedSocketBinding;
             }
         }
-        [Obsolete]
-        public bool IsHeaderHandlerRegistered(string headerName)
-        {
-            return this.headerHandlers.ContainsKey(headerName);
-        }
-        public abstract bool RecieveContext(Socket socket);
-        [Obsolete]
-        public void RegisterHeaderHandler(string headerName, HeaderHandlerCallback callback)
-        {
-            if (headerName == null)
-            {
-                throw new ArgumentNullException("headerName");
-            }
-            else if (callback == null)
-            {
-                throw new ArgumentNullException("callback");
-            }
-            else if (this.IsHeaderHandlerRegistered(headerName))
-            {
-                throw new InvalidOperationException("A header handler has already been registered for that header name.");
-            }
-
-            this.headerHandlers.Add(headerName, callback);
-        }
+        public abstract bool RecieveRequest(Socket socket);
         /// <summary>
         /// Starts the WebDriver.
         /// </summary>
@@ -370,21 +302,24 @@ namespace Serenity.Web.Drivers
                 throw new ObjectDisposedException(this.GetType().FullName);
             }
 
-            if (this.Status >= OperationStatus.Initialized)
-            {
-                this.Status = OperationStatus.Started;
-                this.ListeningSocket.Listen(10);
-
-                while (this.Status == OperationStatus.Started)
-                {
-                    ThreadPool.QueueUserWorkItem(new WaitCallback(this.HandleAcceptedConnection), this.ListeningSocket.Accept());
-                }
-                return true;
-            }
-            else
+            if (!this.IsInitialized)
             {
                 return false;
             }
+            else if (this.IsRunning)
+            {
+                return true;
+            }
+
+            this.isRunning = true;
+
+            this.ListeningSocket.Listen(10);
+
+            while (this.IsRunning)
+            {
+                ThreadPool.QueueUserWorkItem(new WaitCallback(this.HandleAcceptedConnection), this.ListeningSocket.Accept());
+            }
+            return true;
         }
         /// <summary>
         /// Stops the WebDriver.
@@ -396,37 +331,15 @@ namespace Serenity.Web.Drivers
                 throw new ObjectDisposedException(this.GetType().FullName);
             }
 
-            this.status = OperationStatus.Stopped;
+            this.isRunning = false;
         }
         /// <summary>
         /// When overridden in a derived class, sends the supplied response to
         /// the client.
         /// </summary>
-        public abstract bool SendContext(Socket socket);
+        public abstract bool SendResponse(Socket socket);
         #endregion
         #region Properties - Protected
-        /// <summary>
-        /// Gets a delegate which allows invocation of the callback method
-        /// used when performing an asynchronous accept operation.
-        /// </summary>
-        protected AsyncCallback AcceptDelegate
-        {
-            get
-            {
-                return this.acceptDelegate;
-            }
-        }
-        /// <summary>
-        /// Gets a delegate which allows invocation of the callback method
-        /// used when performing an asynchronous disconnect operation.
-        /// </summary>
-        protected AsyncCallback DisconnectDelegate
-        {
-            get
-            {
-                return this.disconnectDelegate;
-            }
-        }
         /// <summary>
         /// Gets or sets the socket that the current WebDriver uses to listen
         /// for incoming connections on.
@@ -445,28 +358,6 @@ namespace Serenity.Web.Drivers
                 }
 
                 this.listeningSocket = value;
-            }
-        }
-        /// <summary>
-        /// Gets a delegate which allows invocation of the callback method
-        /// used when performing an asynchronous recieve operation.
-        /// </summary>
-        protected AsyncCallback RecieveDelegate
-        {
-            get
-            {
-                return this.recieveDelegate;
-            }
-        }
-        /// <summary>
-        /// Gets a delegate which allows invocation of the callback method
-        /// used when performing an asynchronous send operation.
-        /// </summary>
-        protected AsyncCallback SendDelegate
-        {
-            get
-            {
-                return this.sendDelegate;
             }
         }
         #endregion
@@ -531,101 +422,37 @@ namespace Serenity.Web.Drivers
         {
             get
             {
-                if (this.status >= OperationStatus.Initialized)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return this.isInitialized;
+            }
+            protected set
+            {
+                this.isInitialized = value;
             }
         }
         /// <summary>
         /// Gets a boolean value that indicates whether the current WebDriver
         /// is in a started status.
         /// </summary>
-        public bool IsStarted
+        public bool IsRunning
         {
             get
             {
-                if (this.status == OperationStatus.Started)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
-        /// <summary>
-        /// Gets a boolean value that indicates whether the current WebDriver
-        /// is in a stopped status.
-        /// </summary>
-        public bool IsStopped
-        {
-            get
-            {
-                if (this.status == OperationStatus.Stopped)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return this.isRunning;
             }
         }
         /// <summary>
         /// Gets the port number that the current WebDriver is listening on
         /// for incoming connections.
         /// </summary>
-        /// <exception cref="System.ObjectDisposedException">
-        /// Thrown if the current WebDriver has already been disposed.
-        /// </exception>
-        /// <exception cref="System.InvalidOperationException">
-        /// Thrown if the current WebDriver has not been initialized.
-        /// </exception>
         public ushort ListeningPort
         {
             get
             {
-                if (this.IsDisposed)
-                {
-                    throw new ObjectDisposedException(this.GetType().FullName);
-                }
-                else if (!this.ListeningSocket.IsBound)
-                {
-                    throw new InvalidOperationException("The current WebDriver is not initialized.");
-                }
-                //TODO: Maybe try and improve performance or reliability here.
-                return (ushort)((IPEndPoint)this.listeningSocket.LocalEndPoint).Port;
+                return this.listeningPort;
             }
-        }
-        /// <summary>
-        /// Gets the WebDriverSettings which determine the behaviour of the
-        /// current WebDriver.
-        /// </summary>
-        public WebDriverSettings Settings
-        {
-            get
+            set
             {
-                return this.settings;
-            }
-        }
-        /// <summary>
-        /// Gets the status of the current WebDriver.
-        /// </summary>
-        public OperationStatus Status
-        {
-            get
-            {
-                return this.status;
-            }
-            protected set
-            {
-                this.status = value;
+                this.listeningPort = value;
             }
         }
         #endregion

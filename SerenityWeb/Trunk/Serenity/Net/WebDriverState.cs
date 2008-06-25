@@ -10,7 +10,7 @@ using System;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace Serenity.Web.Drivers
+namespace Serenity.Net
 {
     /// <summary>
     /// Provides a simple data structure used to pass objects to and from async callback methods.

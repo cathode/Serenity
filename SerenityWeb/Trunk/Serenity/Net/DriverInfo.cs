@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Serenity.Web.Drivers
+namespace Serenity.Net
 {
     /// <summary>
     /// Provides a way for WebDrivers to expose information about themselves.

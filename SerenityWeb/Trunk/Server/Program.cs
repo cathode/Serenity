@@ -13,7 +13,7 @@ using System.Threading;
 
 using Serenity;
 using Serenity.Logging;
-using Serenity.Web.Drivers;
+using Serenity.Net;
 using Serenity.IO;
 using NDesk.Options;
 using Serenity.Data;
@@ -57,10 +57,9 @@ namespace Server
                 SerenityServer.Domains.Count,
                 SerenityServer.Modules.Count,
                 0), LogMessageLevel.Info);
-            WebDriverSettings driverSettings = new WebDriverSettings();
-            driverSettings.Ports = config.Ports;
 
-            WebDriver driver = new HttpDriver(driverSettings);
+            WebDriver driver = new HttpDriver();
+            driver.ListeningPort = 80;
 
             SerenityServer.DriverPool.Add(driver);
 
@@ -73,7 +72,7 @@ namespace Server
             else
             {
                 //WS: Temporary loop to keep the main thread from exiting when in async mode.
-                while (driver.Status == OperationStatus.Started)
+                while (driver.IsRunning)
                 {
                     Thread.Sleep(1000);
                 }

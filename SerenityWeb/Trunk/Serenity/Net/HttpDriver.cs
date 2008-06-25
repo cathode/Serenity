@@ -13,7 +13,9 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-namespace Serenity.Web.Drivers
+using Serenity.Web;
+
+namespace Serenity.Net
 {
     /// <summary>
     /// Provides a WebDriver implementation that provides support for the HTTP protocol.
@@ -27,11 +29,10 @@ namespace Serenity.Web.Drivers
         /// </summary>
         /// <param name="settings">The WebDriverSettings which control the
         /// behaviour of the new WebDriver instance.</param>
-        public HttpDriver(WebDriverSettings settings)
-            : base(settings)
+        public HttpDriver()
         {
             this.Info = new DriverInfo("Serenity", "HyperText Transmission Protocol", "http", new Version(1, 1));
-            this.RegisterHeaderHandler("Content-Type", new HeaderHandlerCallback(this.ContentTypeHeaderCallback));
+            //this.RegisterHeaderHandler("Content-Type", new HeaderHandlerCallback(this.ContentTypeHeaderCallback));
         }
         #endregion
         #region Methods - Private
@@ -81,7 +82,7 @@ namespace Serenity.Web.Drivers
         }
         #endregion
         #region Methods - Public
-        public override bool RecieveContext(Socket socket)
+        public override bool RecieveRequest(Socket socket)
         {
             if (this.IsDisposed)
             {
@@ -234,10 +235,10 @@ namespace Serenity.Web.Drivers
                     return true;
                 }
 
-                foreach (Header header in Request.Headers)
-                {
-                    this.HandleHeader(header);
-                }
+                //foreach (Header header in Request.Headers)
+                //{
+                //    this.HandleHeader(header);
+                //}
 
                 bool hasContentLength = Request.Headers.Contains("Content-Length");
                 bool hasTransferEncoding = Request.Headers.Contains("Transfer-Encoding");
@@ -287,7 +288,7 @@ namespace Serenity.Web.Drivers
             }
             return false;
         }
-        public override bool SendContext(Socket socket)
+        public override bool SendResponse(Socket socket)
         {
             if (this.IsDisposed)
             {

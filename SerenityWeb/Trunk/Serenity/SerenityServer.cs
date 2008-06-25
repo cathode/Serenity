@@ -14,7 +14,7 @@ using System.Text;
 using Serenity.Logging;
 using Serenity.Web.Resources;
 using Serenity.Web;
-using Serenity.Web.Drivers;
+using Serenity.Net;
 
 namespace Serenity
 {

@@ -13,7 +13,7 @@ using System.Text;
 using Serenity;
 using Serenity.Web.Resources;
 using Serenity.Web;
-using Serenity.Web.Drivers;
+using Serenity.Net;
 using Serenity.Web.Forms;
 
 namespace Serenity.Pages
