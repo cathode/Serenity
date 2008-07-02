@@ -26,18 +26,26 @@ namespace Serenity.Web
         }
         #endregion
         #region Fields - Private
-        private readonly Guid sessionID;
         private DateTime created;
+        private bool isDisposed;
         private TimeSpan lifetime;
         private DateTime modified;
-        private SQLiteConnection connection;
-        private bool isDisposed;
         private static readonly SessionCollection pool = new SessionCollection();
+        private readonly Guid sessionID;
         #endregion
         #region Fields - Public
         public const int DefaultLifetime = 300000;
         #endregion
         #region Methods - Public
+        public static void ClearAll()
+        {
+            var conn = Database.Connect(DataScope.Global);
+            conn.EnsureOpen();
+            var cmd = new SQLiteCommand("DELETE FROM sessions", conn);
+            cmd.ExecuteNonQuery();
+            cmd = new SQLiteCommand("DELETE FROM session_data", conn);
+            cmd.ExecuteNonQuery();
+        }
         /// <summary>
         /// Disposes the current <see cref="Session"/>, but does not remove the session information from the database.
         /// </summary>
@@ -48,10 +56,6 @@ namespace Serenity.Web
             lock (Session.pool)
             {
                 Session.pool.Remove(this);
-            }
-            if (this.connection != null)
-            {
-                this.connection.Dispose();
             }
             GC.SuppressFinalize(this);
         }
@@ -71,11 +75,10 @@ namespace Serenity.Web
             }
 
             var con = Database.Connect(DataScope.Global);
+            con.EnsureOpen();
 
             var cmd = new SQLiteCommand("SELECT (created, modified, lifetime) FROM sessions WHERE id == "
                 + sessionID.ToString("N") + " LIMIT 1", con);
-
-            con.Open();
 
             using (SQLiteDataReader reader = cmd.ExecuteReader())
             {
@@ -83,7 +86,6 @@ namespace Serenity.Web
                 {
                     object o = reader["created"];
                     Session s = new Session(sessionID);
-                    s.connection = con;
 
                     lock (Session.pool)
                     {
@@ -98,37 +100,12 @@ namespace Serenity.Web
                 }
             }
         }
-        public static void Remove(Guid sessionID)
-        {
-            var s = Session.GetSession(sessionID);
-
-            if (s != null)
-            {
-                var cmd = new SQLiteCommand(string.Format("DELETE FROM sessions WHERE id == '{0}'",
-                    sessionID.ToString("N")), s.connection);
-
-                s.connection.Open();
-                cmd.ExecuteNonQuery();
-
-                cmd = new SQLiteCommand(string.Format("DELETE FROM session_data WHERE id == '{0}'",
-                    sessionID.ToString("N")), s.connection);
-
-                cmd.ExecuteNonQuery();
-
-                s.connection.Close();
-            }
-        }
-        public static void ClearAll()
-        {
-            var cmd = new SQLiteCommand("DELETE FROM sessions", Database.Connect(DataScope.Global));
-            if (cmd.Connection.State == ConnectionState.Closed)
-            {
-                cmd.Connection.Open();
-            }
-            cmd.ExecuteNonQuery();
-            cmd = new SQLiteCommand("DELETE FROM session_data", cmd.Connection);
-            cmd.ExecuteNonQuery();
-        }
+        /// <summary>
+        /// Creates and returns a new <see cref="Session"/>.
+        /// </summary>
+        /// <returns>
+        /// This method adds the newly created session information into the database before returning.
+        /// </returns>
         public static Session NewSession()
         {
             Session s = new Session();
@@ -136,15 +113,15 @@ namespace Serenity.Web
             s.created = DateTime.Now;
             s.modified = s.created;
             s.lifetime = TimeSpan.FromMilliseconds(Session.DefaultLifetime);
-            s.connection = Database.Connect(DataScope.Global);
+            var connection = Database.Connect(DataScope.Global);
 
-            var cmd = new SQLiteCommand(string.Format("INSERT INTO sessions VALUES('{0}','{1}','{2}','{3}')",
+            var cmd = new SQLiteCommand(string.Format("INSERT INTO sessions('id', 'created', 'lifetime', 'modified') VALUES('{0}','{1}','{2}','{3}')",
                 s.SessionID.ToString("N"),
                 s.created.ToString("s"),
                 s.lifetime.TotalMilliseconds.ToString(),
-                s.modified.ToString("s")), s.connection);
+                s.modified.ToString("s")), connection);
 
-            s.connection.Open();
+            connection.EnsureOpen();
 
             if (cmd.ExecuteNonQuery() == 1)
             {
@@ -152,31 +129,12 @@ namespace Serenity.Web
                 {
                     Session.pool.Add(s);
                 }
-                s.connection.Close();
                 return s;
             }
             else
             {
-                s.connection.Close();
                 return null;
             }
-        }
-        /// <summary>
-        /// Writes a value to the current session.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        public void WriteValue(string name, string value)
-        {
-            this.connection.Open();
-            var cmd = new SQLiteCommand(string.Format("INSERT INTO session_data VALUES('{0}', '{1}', '{2}')",
-                this.sessionID.ToString("N"),
-                name,
-                value), this.connection);
-
-            cmd.ExecuteNonQuery();
-
-            this.connection.Close();
         }
         /// <summary>
         /// Reads a value from the current session.
@@ -185,28 +143,75 @@ namespace Serenity.Web
         /// <returns></returns>
         public string ReadValue(string name)
         {
+            var connection = Database.Connect(DataScope.Global);
             var cmd = new SQLiteCommand(string.Format("SELECT value FROM session_data WHERE id == '{0}' AND name == '{1}'",
                 this.SessionID.ToString("N"),
-                name), this.connection);
+                name), connection);
+            connection.EnsureOpen();
 
-            this.connection.Open();
-            string result = cmd.ExecuteScalar() as string;
-            this.connection.Close();
-
-            return result;
+            return cmd.ExecuteScalar() as string;
         }
+        public static void Remove(Guid sessionID)
+        {
+            var s = Session.GetSession(sessionID);
+            var connection = Database.Connect(DataScope.Global);
+            if (s != null)
+            {
+                connection.EnsureOpen();
+
+                var cmd = new SQLiteCommand(string.Format("DELETE FROM sessions WHERE id == '{0}'",
+                    sessionID.ToString("N")), connection);
+                cmd.ExecuteNonQuery();
+
+                cmd = new SQLiteCommand(string.Format("DELETE FROM session_data WHERE id == '{0}'",
+                    sessionID.ToString("N")), connection);
+                cmd.ExecuteNonQuery();
+            }
+        }
+        /// <summary>
+        /// Removes a value associated with the current <see cref="Session"/>
+        /// </summary>
+        /// <param name="name"></param>
         public void RemoveValue(string name)
         {
+            var connection = Database.Connect(DataScope.Global);
+            connection.EnsureOpen();
             var cmd = new SQLiteCommand(string.Format("DELETE FROM session_data WHERE id == '{0}' AND name == '{1}'",
                 this.SessionID.ToString("N"),
-                name), this.connection);
-
-            this.connection.Open();
+                name), connection);
             cmd.ExecuteNonQuery();
-            this.connection.Close();
+        }
+        /// <summary>
+        /// Writes a value to the current session.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        public void WriteValue(string name, string value)
+        {
+            var connection = Database.Connect(DataScope.Global);
+            connection.EnsureOpen();
+            var cmd = new SQLiteCommand(string.Format("INSERT INTO session_data VALUES('{0}', '{1}', '{2}')",
+                this.sessionID.ToString("N"),
+                name,
+                value), connection);
+            cmd.ExecuteNonQuery();
         }
         #endregion
         #region Properties - Public
+        /// <summary>
+        /// Gets a value that indicates if the current <see cref="Session"/> has been disposed.
+        /// </summary>
+        /// <remarks>
+        /// Disposing refers to the in-memory <see cref="Session"/> object only.
+        /// Disposing a session does not remove the session data from the database.
+        /// </remarks>
+        public bool IsDisposed
+        {
+            get
+            {
+                return this.isDisposed;
+            }
+        }
         /// <summary>
         /// Gets the <see cref="Guid"/> associated with the current session.
         /// </summary>

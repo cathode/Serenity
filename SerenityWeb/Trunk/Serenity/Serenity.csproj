@@ -92,6 +92,7 @@
     <Compile Include="Attributes\ModuleResourceNamespaceAttribute.cs" />
     <Compile Include="Data\Database.cs" />
     <Compile Include="Data\DataScope.cs" />
+    <Compile Include="Data\DataExtensions.cs" />
     <Compile Include="IO\SerenityPath.cs" />
     <Compile Include="Logging\LogMessage.cs" />
     <Compile Include="ModuleCollection.cs" />
@@ -100,7 +101,7 @@
     <Compile Include="FileTypeEntry.cs" />
     <Compile Include="Logging\LogMessageLevel.cs" />
     <Compile Include="Net\DriverPool.cs" />
-    <None Include="Data\domain\schemas\serenity_errorhandling.sql">
+    <None Include="Data\domain\schemas\error_documents.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Data\global\schemas\serenity_global.sql">
@@ -111,22 +112,22 @@
     <Compile Include="Net\ProtocolDriverInitializationResult.cs" />
     <Compile Include="Net\ProtocolDriverState.cs" />
     <Compile Include="SerenityServer.cs" />
-    <Compile Include="Themes\Border.cs" />
-    <Compile Include="Themes\BorderSide.cs" />
-    <Compile Include="Themes\BorderType.cs" />
-    <Compile Include="Themes\Box.cs" />
-    <Compile Include="Themes\Color.cs" />
-    <Compile Include="Themes\Margin.cs" />
-    <Compile Include="Themes\Measurement.cs" />
-    <Compile Include="Themes\MeasurementUnit.cs" />
-    <Compile Include="Themes\Padding.cs" />
-    <Compile Include="Themes\Size.cs" />
-    <Compile Include="Themes\Style.cs" />
-    <Compile Include="Themes\StyleType.cs" />
-    <Compile Include="Themes\TextDirection.cs" />
+    <None Include="Themes\Border.cs" />
+    <None Include="Themes\BorderSide.cs" />
+    <None Include="Themes\BorderType.cs" />
+    <None Include="Themes\Box.cs" />
+    <None Include="Themes\Color.cs" />
+    <None Include="Themes\Margin.cs" />
+    <None Include="Themes\Measurement.cs" />
+    <None Include="Themes\MeasurementUnit.cs" />
+    <None Include="Themes\Padding.cs" />
+    <None Include="Themes\Size.cs" />
+    <None Include="Themes\Style.cs" />
+    <None Include="Themes\StyleType.cs" />
+    <None Include="Themes\TextDirection.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Pages\DefaultPage.cs" />
-    <Compile Include="Themes\Theme.cs" />
+    <None Include="Themes\Theme.cs" />
     <Compile Include="Web\ContextHandler.cs" />
     <Compile Include="SerenityInfo.cs" />
     <Compile Include="FileTypeRegistry.cs" />

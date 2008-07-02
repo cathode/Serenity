@@ -77,8 +77,12 @@ namespace Serenity.Data
             {
                 Database.Create(scope);
             }
+            var builder = new SQLiteConnectionStringBuilder();
+            builder.DataSource = Database.GetDatafilePath(scope);
+            builder.Pooling = true;
+            builder.DateTimeFormat = SQLiteDateFormats.ISO8601;
 
-            return new SQLiteConnection("Data Source=" + Database.GetDatafilePath(scope));
+            return new SQLiteConnection(builder.ConnectionString);
         }
         /// <summary>
         /// Determines if the database of the specified scope has been created.
