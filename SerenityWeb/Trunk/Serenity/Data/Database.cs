@@ -15,9 +15,13 @@ using System.Data.SQLite;
 using System.Text;
 using System.IO;
 using Serenity.IO;
+using System.Linq;
 
 namespace Serenity.Data
 {
+    /// <summary>
+    /// Provides access to fast local data stores.
+    /// </summary>
     public static class Database
     {
         #region Methods - Public
@@ -34,19 +38,29 @@ namespace Serenity.Data
             }
             else
             {
-                string datafilePath = Database.GetDatafilePath(scope);
-                string schemaPath = Database.GetSchemaPath(scope);
+                var datafilePath = Database.GetDatafilePath(scope);
+                var schemaPaths = Database.GetSchemaPaths(scope);
                 SQLiteConnection.CreateFile(datafilePath);
-                if (File.Exists(schemaPath))
+                if (schemaPaths != null && schemaPaths.Count() > 0)
                 {
-                    SQLiteConnection conn = new SQLiteConnection("Data Source=" + datafilePath);
-                    SQLiteCommand cmd = new SQLiteCommand(File.ReadAllText(schemaPath), conn);
+                    SQLiteConnectionStringBuilder csb = new SQLiteConnectionStringBuilder();
+                    csb.DataSource = datafilePath;
+                    csb.DateTimeFormat = SQLiteDateFormats.ISO8601;
+                    csb.Pooling = true;
+
+                    SQLiteConnection conn = new SQLiteConnection(csb.ConnectionString);
                     conn.Open();
-                    cmd.ExecuteNonQuery();
-                    conn.Clone();
+                    foreach (string path in schemaPaths)
+                    {
+                        SQLiteCommand cmd = new SQLiteCommand(File.ReadAllText(path), conn);
+
+                        cmd.ExecuteNonQuery();
+                        //Does cmd need to be disposed as well?
+                        cmd.Dispose();
+                    }
+                    conn.Close();
                     conn.Dispose();
-                    //Does cmd need to be disposed as well?
-                    cmd.Dispose();
+
                     return true;
                 }
                 return false;
@@ -76,24 +90,6 @@ namespace Serenity.Data
             return File.Exists(Database.GetDatafilePath(scope));
         }
         /// <summary>
-        /// Gets the path of the global datafile.
-        /// </summary>
-        /// <returns></returns>
-        public static string GetDatafilePath()
-        {
-            return Path.Combine(SerenityPath.DataDirectory, "global/database");
-        }
-        /// <summary>
-        /// Gets the path of the datafile of the specified module.
-        /// </summary>
-        /// <param name="module"></param>
-        /// <returns></returns>
-        public static string GetDatafilePath(string module)
-        {
-            return Path.Combine(SerenityPath.DataDirectory,
-                Path.Combine(Path.GetFileNameWithoutExtension(module), "database"));
-        }
-        /// <summary>
         /// Gets the path of the datafile of the specified module and domain.
         /// </summary>
         /// <param name="module"></param>
@@ -114,7 +110,7 @@ namespace Serenity.Data
         {
             if (scope == DataScope.Global)
             {
-                return Database.GetDatafilePath();
+                return Path.Combine(SerenityPath.DataDirectory, "global/database.s3db");
             }
             else if (scope == DataScope.Module)
             {
@@ -122,72 +118,82 @@ namespace Serenity.Data
                 {
                     return null;
                 }
-
-                return Database.GetDatafilePath(Module.Current.Name);
+                return PathExt.Combine(SerenityPath.DataDirectory, "module",
+                    Path.GetFileNameWithoutExtension(Module.Current.Name), "database.s3db");
             }
             else if (scope == DataScope.Domain)
+            {
+                if (Domain.Current == null)
+                {
+                    return null;
+                }
+                return PathExt.Combine(SerenityPath.DataDirectory, "domain",
+                    Path.GetFileNameWithoutExtension(Domain.Current.HostName), "database.s3db");
+            }
+            else if (scope == DataScope.ModuleAndDomain)
             {
                 if (Domain.Current == null || Module.Current == null)
                 {
                     return null;
                 }
-                return Database.GetDatafilePath(Module.Current.Name, Domain.Current.HostName);
+                return PathExt.Combine(SerenityPath.DataDirectory, "module",
+                    Path.GetFileNameWithoutExtension(Module.Current.Name),
+                    Path.GetFileNameWithoutExtension(Domain.Current.HostName), "database.s3db");
             }
             else
             {
                 throw new ArgumentException(__Strings.Exceptions.UnrecognizedDataScope);
             }
-        }
-        /// <summary>
-        /// Gets the path of the database schema file for the global scope.
-        /// </summary>
-        /// <returns></returns>
-        public static string GetSchemaPath()
-        {
-            return Path.Combine(SerenityPath.DataDirectory, "global/schema.sql");
-        }
-        /// <summary>
-        /// Gets the path of the database schema file for the specified module.
-        /// </summary>
-        /// <param name="module"></param>
-        /// <returns></returns>
-        public static string GetSchemaPath(string module)
-        {
-            return Path.Combine(SerenityPath.DataDirectory,
-                Path.Combine(Path.GetFileNameWithoutExtension(module), "schema.sql"));
         }
         /// <summary>
         /// Gets the path of the database schema file for the specified scope.
         /// </summary>
         /// <param name="scope"></param>
         /// <returns></returns>
-        public static string GetSchemaPath(DataScope scope)
+        public static IEnumerable<string> GetSchemaPaths(DataScope scope)
         {
             if (scope == DataScope.Global)
             {
-                return Database.GetSchemaPath();
-            }
-            else if (scope == DataScope.Module)
-            {
-                if (Module.Current == null)
+                string dir = PathExt.Combine(SerenityPath.DataDirectory, "global", "schemas");
+                if (Directory.Exists(dir))
                 {
-                    return null;
+                    return from p in Directory.GetFiles(dir)
+                           where Path.GetExtension(p) == ".sql"
+                           select p;
                 }
-
-                return Database.GetSchemaPath(Module.Current.Name);
+            }
+            else if (scope == DataScope.Module || scope == DataScope.ModuleAndDomain)
+            {
+                if (Module.Current != null)
+                {
+                    string dir = PathExt.Combine(SerenityPath.DataDirectory, "module",
+                               Path.GetFileNameWithoutExtension(Module.Current.Name), "schemas");
+                    if (Directory.Exists(dir))
+                    {
+                        return from p in Directory.GetFiles(dir)
+                               where Path.GetExtension(p) == ".sql"
+                               select p;
+                    }
+                }
             }
             else if (scope == DataScope.Domain)
             {
-                if (Domain.Current == null || Module.Current == null)
+                if (Domain.Current != null)
                 {
-                    return null;
+                    string dir = PathExt.Combine(SerenityPath.DataDirectory, "domain", "schemas");
+                    if (Directory.Exists(dir))
+                    {
+                        return from p in Directory.GetFiles(dir)
+                               where Path.GetExtension(p) == ".sql"
+                               select p;
+                    }
                 }
-                return Database.GetSchemaPath(Module.Current.Name);
             }
             else
             {
                 throw new ArgumentException(__Strings.Exceptions.UnrecognizedDataScope);
             }
+            return null;
         }
         #endregion
     }

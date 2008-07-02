@@ -55,7 +55,7 @@ namespace Serenity
         /// Overridden. Renders the dynamic content of the current DirectoryResource.
         /// </summary>
         /// <param name="context"></param>
-        public override void OnRequest()
+        public override void OnRequest(Request request, Response response)
         {
             // collect data
             SortedDictionary<string, List<Resource>> groupedResources = new SortedDictionary<string, List<Resource>>();
@@ -140,7 +140,7 @@ namespace Serenity
                     writer.Flush();
                     writer.Close();
                 }
-                Response.Write(ms.ToArray());
+                response.Write(ms.ToArray());
             }
         }
         #endregion

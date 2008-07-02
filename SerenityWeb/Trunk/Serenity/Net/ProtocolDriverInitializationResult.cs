@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Serenity.Net
 {
-    public enum WebDriverInitializationResult
+    public enum ProtocolDriverInitializationResult
     {
         Suceeded = 0x0,
         FailedSocketBinding,

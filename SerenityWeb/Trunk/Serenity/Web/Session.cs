@@ -121,11 +121,13 @@ namespace Serenity.Web
         public static void ClearAll()
         {
             var cmd = new SQLiteCommand("DELETE FROM sessions", Database.Connect(DataScope.Global));
-            cmd.Connection.Open();
+            if (cmd.Connection.State == ConnectionState.Closed)
+            {
+                cmd.Connection.Open();
+            }
             cmd.ExecuteNonQuery();
             cmd = new SQLiteCommand("DELETE FROM session_data", cmd.Connection);
             cmd.ExecuteNonQuery();
-            cmd.Connection.Close();
         }
         public static Session NewSession()
         {

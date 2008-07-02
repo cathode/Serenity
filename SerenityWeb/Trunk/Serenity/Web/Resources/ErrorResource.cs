@@ -15,7 +15,7 @@ namespace Serenity.Web.Resources
     /// <summary>
     /// Represents an error page/response that is returned to the client.
     /// </summary>
-    public class ErrorResource
+    public sealed class ErrorResource : DynamicResource
     {
         //TODO: Implement ErrorResource class.
     }

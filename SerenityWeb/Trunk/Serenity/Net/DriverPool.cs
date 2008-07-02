@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace Serenity.Net
 {
@@ -24,35 +25,25 @@ namespace Serenity.Net
         }
         #endregion
         #region Fields - Private
-        private List<WebDriver> drivers = new List<WebDriver>();
+        private List<ProtocolDriver> drivers = new List<ProtocolDriver>();
         #endregion
         #region Methods - Public
-        public void Add(WebDriver driver)
+        public void Add(ProtocolDriver driver)
         {
             this.drivers.Add(driver);
         }
-        public IEnumerable<WebDriver> GetDriversByProvider(string provider)
+        public IEnumerable<ProtocolDriver> GetDriversByProvider(string provider)
         {
-            foreach (WebDriver driver in this.drivers)
-            {
-                if (driver.Info.Provider.Equals(provider))
-                {
-                    yield return driver;
-                }
-            }
+            return from d in this.drivers
+                   where d.ProviderName == provider
+                   select d;
         }
-        public IEnumerable<WebDriver> GetDriversBySchema(string schema)
+        public IEnumerable<ProtocolDriver> GetDriversBySchema(string schema)
         {
-            foreach (WebDriver driver in this.drivers)
-            {
-                if (driver.Info.UriSchema.Equals(schema))
-                {
-                    yield return driver;
-                }
-            }
+            return from d in this.drivers
+                   where d.SchemaName == schema
+                   select d;
         }
-        #endregion
-        #region Properties - Public
         #endregion
     }
 }

@@ -15,25 +15,25 @@ namespace Serenity.Net
     /// <summary>
     /// Provides a simple data structure used to pass objects to and from async callback methods.
     /// </summary>
-    public sealed class WebDriverState : DisposableBase
+    public sealed class ProtocolDriverState : DisposableBase
     {
         #region Constructors - Public
         /// <summary>
         /// Initializes a new instance of the WebDriverState class using the default buffer size.
         /// </summary>
-        public WebDriverState()
-            : this(WebDriverState.DefaultBufferSize)
+        public ProtocolDriverState()
+            : this(ProtocolDriverState.DefaultBufferSize)
         {
         }
         /// <summary>
         /// Initializes a new instance of the WebDriverState class using the supplied buffer size.
         /// </summary>
         /// <param name="bufferSize"></param>
-        public WebDriverState(int bufferSize)
+        public ProtocolDriverState(int bufferSize)
         {
-            if (bufferSize > WebDriverState.MaxBufferSize || bufferSize < WebDriverState.MinBufferSize)
+            if (bufferSize > ProtocolDriverState.MaxBufferSize || bufferSize < ProtocolDriverState.MinBufferSize)
             {
-                throw new ArgumentOutOfRangeException("Invalid value specified for bufferSize. Valid values are between " + WebDriverState.MinBufferSize.ToString() + " and " + WebDriverState.MaxBufferSize + ".");
+                throw new ArgumentOutOfRangeException("Invalid value specified for bufferSize. Valid values are between " + ProtocolDriverState.MinBufferSize.ToString() + " and " + ProtocolDriverState.MaxBufferSize + ".");
             }
             this.buffer = new byte[bufferSize];
         }
@@ -83,10 +83,10 @@ namespace Serenity.Net
                 {
                     throw new ArgumentNullException("value");
                 }
-                else if (value.Length > WebDriverState.MaxBufferSize || value.Length < WebDriverState.MinBufferSize)
+                else if (value.Length > ProtocolDriverState.MaxBufferSize || value.Length < ProtocolDriverState.MinBufferSize)
                 {
                     throw new ArgumentOutOfRangeException("Argument 'value' must be a byte[] with a length between "
-                        + WebDriverState.MinBufferSize + " and " + WebDriverState.MaxBufferSize + ".", "value");
+                        + ProtocolDriverState.MinBufferSize + " and " + ProtocolDriverState.MaxBufferSize + ".", "value");
                 }
                 this.buffer = value;
             }

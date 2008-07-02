@@ -99,12 +99,17 @@
     <Compile Include="Domain.cs" />
     <Compile Include="FileTypeEntry.cs" />
     <Compile Include="Logging\LogMessageLevel.cs" />
-    <Compile Include="Net\DriverInfo.cs" />
     <Compile Include="Net\DriverPool.cs" />
+    <None Include="Data\domain\schemas\serenity_errorhandling.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\global\schemas\serenity_global.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Compile Include="Net\HttpDriver.cs" />
-    <Compile Include="Net\WebDriver.cs" />
-    <Compile Include="Net\WebDriverInitializationResult.cs" />
-    <Compile Include="Net\WebDriverState.cs" />
+    <Compile Include="Net\ProtocolDriver.cs" />
+    <Compile Include="Net\ProtocolDriverInitializationResult.cs" />
+    <Compile Include="Net\ProtocolDriverState.cs" />
     <Compile Include="SerenityServer.cs" />
     <Compile Include="Themes\Border.cs" />
     <Compile Include="Themes\BorderSide.cs" />
@@ -156,12 +161,11 @@
     <Compile Include="Web\Forms\TableHeader.cs" />
     <Compile Include="Web\Forms\TableRow.cs" />
     <Compile Include="Web\Forms\TextControl.cs" />
+    <Compile Include="Web\Forms\WebFormsEventAttribute.cs" />
     <Compile Include="Web\MimeType.cs" />
     <Compile Include="Web\Request.cs" />
+    <Compile Include="Web\RequestContent.cs" />
     <Compile Include="Web\RequestMethod.cs" />
-    <Content Include="Data\global\schema.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Web\Services\WebMethodAttribute.cs" />
     <None Include="Web\Services\WebService.cs" />
     <Compile Include="Web\Resources\DirectoryResource.cs" />
@@ -294,6 +298,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Data\module\serenity\schemas\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

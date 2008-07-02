@@ -36,10 +36,10 @@ namespace Serenity.Web
         /// Handles an incoming CommonContext.
         /// </summary>
         /// <param name="context">The incoming CommonContext to be handled.</param>
-        public virtual void HandleContext()
+        public virtual void HandleRequest(Request request, Response response)
         {
             Resource resource;
-            ResourcePath path = ResourcePath.Create(Request.Url);
+            ResourcePath path = ResourcePath.Create(request.Url);
 
             if (SerenityServer.Resources.Contains(path))
             {
@@ -69,9 +69,9 @@ namespace Serenity.Web
 
             if (resource != null)
             {
-                resource.PreRequest();
-                resource.OnRequest();
-                resource.PostRequest();
+                resource.PreRequest(request, response);
+                resource.OnRequest(request, response);
+                resource.PostRequest(request, response);
             }
             else
             {

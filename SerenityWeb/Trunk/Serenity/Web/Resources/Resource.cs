@@ -33,7 +33,7 @@ namespace Serenity.Web.Resources
         /// When overridden in a derived class, uses the supplied CommonContext to dynamically generate response content.
         /// </summary>
         /// <param name="context"></param>
-        public virtual void OnRequest()
+        public virtual void OnRequest(Request request, Response response)
         {
             ErrorHandler.Handle(StatusCode.Http501NotImplemented);
         }
@@ -41,19 +41,19 @@ namespace Serenity.Web.Resources
         /// Invoked after OnRequest.
         /// </summary>
         /// <param name="context"></param>
-        public virtual void PostRequest()
+        public virtual void PostRequest(Request request, Response response)
         {
-            if (Response.ContentType != this.ContentType)
+            if (response.ContentType != this.ContentType)
             {
-                Response.ContentType = this.ContentType;
+                response.ContentType = this.ContentType;
             }
-            Response.Status = StatusCode.Http200Ok;
+            response.Status = StatusCode.Http200Ok;
         }
         /// <summary>
         /// Invoked before OnRequest.
         /// </summary>
         /// <param name="context"></param>
-        public virtual void PreRequest()
+        public virtual void PreRequest(Request request, Response response)
         {
         }
         #endregion

@@ -6,347 +6,326 @@ using System.Net;
 
 namespace Serenity.Web
 {
-    public static class Request
+    public sealed class Request
     {
-        #region Fields - Private
-        [ThreadStatic]
-        private static Encoding contentEncoding;
-        [ThreadStatic]
-        private static int contentLength;
-        [ThreadStatic]
-        private static MimeType contentType;
-        [ThreadStatic]
-        private static CookieCollection cookies;
-        [ThreadStatic]
-        private static bool hasEntityBody;
-        [ThreadStatic]
-        private static HeaderCollection headers;
-        [ThreadStatic]
-        private static bool isAuthenticated;
-        [ThreadStatic]
-        private static bool isInitialized;
-        [ThreadStatic]
-        private static bool isLocal;
-        [ThreadStatic]
-        private static bool isSecureConnection;
-        [ThreadStatic]
-        private static bool keepAlive;
-        [ThreadStatic]
-        private static IPEndPoint localEndPoint;
-        [ThreadStatic]
-        private static RequestMethod method;
-        [ThreadStatic]
-        private static RequestDataCollection requestData;
-        [ThreadStatic]
-        private static string rawRequest;
-        [ThreadStatic]
-        private static string rawUrl;
-        [ThreadStatic]
-        private static IPEndPoint remoteEndPoint;
-        [ThreadStatic]
-        private static Uri url;
-        [ThreadStatic]
-        private static Uri referrer;
-        [ThreadStatic]
-        private static string userAgent;
-        [ThreadStatic]
-        private static string userHostName;
-        [ThreadStatic]
-        private static string protocolType;
-        [ThreadStatic]
-        private static Version protocolVersion;
+        #region Constructors - Public
+        public Request()
+        {
+            this.contentEncoding = null;
+            this.contentLength = 0;
+            this.contentType = MimeType.Default;
+            this.cookies = new CookieCollection();
+            this.hasEntityBody = false;
+            this.headers = new HeaderCollection();
+            this.isAuthenticated = false;
+            this.isLocal = false;
+            this.isSecureConnection = false;
+            this.keepAlive = false;
+            this.localEndPoint = null;
+            this.method = RequestMethod.GET;
+            this.protocolType = null;
+            this.protocolVersion = null;
+            this.rawRequest = null;
+            this.rawUrl = null;
+            this.referrer = null;
+            this.remoteEndPoint = null;
+            this.requestData = new RequestDataCollection();
+            this.url = null;
+            this.userAgent = null;
+            this.userHostName = null;
+        }
         #endregion
-        #region Methods - Public
-        public static void Initialize()
-        {
-            if (!Request.isInitialized)
-            {
-                Request.contentEncoding = null;
-                Request.contentLength = 0;
-                Request.contentType = MimeType.Default;
-                Request.cookies = new CookieCollection();
-                Request.hasEntityBody = false;
-                Request.headers = new HeaderCollection();
-                Request.isAuthenticated = false;
-                Request.isLocal = false;
-                Request.isSecureConnection = false;
-                Request.keepAlive = false;
-                Request.localEndPoint = null;
-                Request.method = RequestMethod.GET;
-                Request.protocolType = null;
-                Request.protocolVersion = null;
-                Request.rawRequest = null;
-                Request.rawUrl = null;
-                Request.referrer = null;
-                Request.remoteEndPoint = null;
-                Request.requestData = new RequestDataCollection();
-                Request.url = null;
-                Request.userAgent = null;
-                Request.userHostName = null;
-                
-                Request.isInitialized = true;
-            }
-        }
-        public static void Reset()
-        {
-            Request.isInitialized = false;
-            Request.Initialize();
-        }
+        #region Fields - Private
+        private Encoding contentEncoding;
+        private int contentLength;
+        private MimeType contentType;
+        private CookieCollection cookies;
+        [ThreadStatic]
+        private static Request current;
+        private bool hasEntityBody;
+        private HeaderCollection headers;
+        private bool isAuthenticated;
+        private bool isLocal;
+        private bool isSecureConnection;
+        private bool keepAlive;
+        private IPEndPoint localEndPoint;
+        private RequestMethod method;
+        private RequestDataCollection requestData;
+        private string rawRequest;
+        private string rawUrl;
+        private IPEndPoint remoteEndPoint;
+        private  Uri url;
+        private Uri referrer;
+        private string userAgent;
+        private string userHostName;
+        private string protocolType;
+        private Version protocolVersion;
         #endregion
         #region Properties - Public
+        
         /// <summary>
         /// Gets or sets the content encoding used for content sent with the
         /// current request.
         /// </summary>
-        public static Encoding ContentEncoding
+        public Encoding ContentEncoding
         {
             get
             {
-                return Request.contentEncoding;
+                return this.contentEncoding;
             }
             set
             {
-                Request.contentEncoding = value;
+                this.contentEncoding = value;
             }
         }
         /// <summary>
         /// Gets or sets the length of content sent with the current request.
         /// </summary>
-        public static int ContentLength
+        public int ContentLength
         {
             get
             {
-                return Request.contentLength;
+                return this.contentLength;
             }
             set
             {
-                Request.contentLength = value;
+                this.contentLength = value;
             }
         }
         /// <summary>
         /// Gets or sets the mime type of the content sent with the current
         /// request.
         /// </summary>
-        public static MimeType ContentType
+        public MimeType ContentType
         {
             get
             {
-                return Request.contentType;
+                return this.contentType;
             }
             set
             {
-                Request.contentType = value;
+                this.contentType = value;
             }
         }
         /// <summary>
         /// Gets a collection of cookies sent with the current request.
         /// </summary>
-        public static CookieCollection Cookies
+        public CookieCollection Cookies
         {
             get
             {
-                return Request.cookies;
+                return this.cookies;
+            }
+        }
+        public static Request Current
+        {
+            get
+            {
+                return Request.current;
+            }
+            internal set
+            {
+                Request.current = value;
             }
         }
         /// <summary>
         /// Gets or sets an indication of whether or not the current request
         /// was sent containing any entity body.
         /// </summary>
-        public static bool HasEntityBody
+        public bool HasEntityBody
         {
             get
             {
-                return Request.hasEntityBody;
+                return this.hasEntityBody;
             }
             set
             {
-                Request.hasEntityBody = value;
+                this.hasEntityBody = value;
             }
         }
-        public static HeaderCollection Headers
+        public HeaderCollection Headers
         {
             get
             {
-                return Request.headers;
+                return this.headers;
             }
         }
-        public static bool IsAuthenticated
+        public bool IsAuthenticated
         {
             get
             {
-                return Request.isAuthenticated;
+                return this.isAuthenticated;
             }
             set
             {
-                Request.isAuthenticated = value;
+                this.isAuthenticated = value;
             }
         }
-        public static bool IsLocal
+        public bool IsLocal
         {
             get
             {
-                return Request.isLocal;
+                return this.isLocal;
             }
             set
             {
-                Request.isLocal = value;
+                this.isLocal = value;
             }
         }
-        public static bool IsSecureConnection
+        public bool IsSecureConnection
         {
             get
             {
-                return Request.isSecureConnection;
+                return this.isSecureConnection;
             }
             set
             {
-                Request.isSecureConnection = value;
+                this.isSecureConnection = value;
             }
         }
-        public static bool KeepAlive
+        public bool KeepAlive
         {
             get
             {
-                return Request.keepAlive;
+                return this.keepAlive;
             }
             set
             {
-                Request.keepAlive = value;
+                this.keepAlive = value;
             }
         }
-        public static IPEndPoint LocalEndPoint
+        public IPEndPoint LocalEndPoint
         {
             get
             {
-                return Request.localEndPoint;
+                return this.localEndPoint;
             }
             set
             {
-                Request.localEndPoint = value;
+                this.localEndPoint = value;
             }
         }
-        public static RequestMethod Method
+        public RequestMethod Method
         {
             get
             {
-                return Request.method;
+                return this.method;
             }
             set
             {
-                Request.method = value;
+                this.method = value;
             }
         }
-        public static string RawRequest
+        public string RawRequest
         {
             get
             {
-                return Request.rawRequest;
+                return this.rawRequest;
             }
             set
             {
-                Request.rawRequest = value;
+                this.rawRequest = value;
             }
         }
-        public static string RawUrl
+        public string RawUrl
         {
             get
             {
-                return Request.rawUrl;
+                return this.rawUrl;
             }
             set
             {
-                Request.rawUrl = value;
+                this.rawUrl = value;
             }
         }
-
-        public static Uri Referrer
+        public Uri Referrer
         {
             get
             {
-                return Request.referrer;
+                return this.referrer;
             }
             set
             {
-                Request.referrer = value;
+                this.referrer = value;
             }
         }
-        public static IPEndPoint RemoteEndPoint
+        public IPEndPoint RemoteEndPoint
         {
             get
             {
-                return Request.remoteEndPoint;
+                return this.remoteEndPoint;
             }
             internal set
             {
-                Request.remoteEndPoint = value;
+                this.remoteEndPoint = value;
             }
         }
-        public static RequestDataCollection RequestData
+        public RequestDataCollection RequestData
         {
             get
             {
-                return Request.requestData;
+                return this.requestData;
             }
         }
-        public static Uri Url
+        public Uri Url
         {
             get
             {
-                return Request.url;
+                return this.url;
             }
             set
             {
-                Request.url = value;
+                this.url = value;
             }
         }
-        public static string UserAgent
+        public string UserAgent
         {
             get
             {
-                return Request.userAgent;
+                return this.userAgent;
             }
             set
             {
-                Request.userAgent = value;
+                this.userAgent = value;
             }
         }
-        public static string UserHostName
+        public string UserHostName
         {
             get
             {
-                return Request.userHostName;
+                return this.userHostName;
             }
             internal set
             {
-                Request.userHostName = value;
+                this.userHostName = value;
             }
         }
         /// <summary>
         /// Gets a string describing the protocol type that handled the current CommonContext.
         /// </summary>
-        public static string ProtocolType
+        public string ProtocolType
         {
             get
             {
-                return Request.protocolType;
+                return this.protocolType;
             }
             set
             {
-                Request.protocolType = value;
+                this.protocolType = value;
             }
         }
         /// <summary>
         /// Gets the Version of the protocol type that handled the current CommonContext.
         /// </summary>
-        public static Version ProtocolVersion
+        public Version ProtocolVersion
         {
             get
             {
-                return Request.protocolVersion;
+                return this.protocolVersion;
             }
             set
             {
-                Request.protocolVersion = value;
+                this.protocolVersion = value;
             }
         }
         #endregion

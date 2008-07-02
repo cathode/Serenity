@@ -20,23 +20,27 @@ namespace Serenity.Net
     /// <summary>
     /// Provides a mechanism for recieving and responding to requests from clients (browsers).
     /// </summary>
-    public abstract class WebDriver : IDisposable
+    public abstract class ProtocolDriver : IDisposable
     {
         #region Constructors - Protected
         /// <summary>
-        /// Initializes a new instance of the WebDriver class.
+        /// Initializes a new instance of the <see cref="Serenity.Net.ProtocolDriver"/> class.
         /// </summary>
-        protected WebDriver()
+        protected ProtocolDriver()
         {
+            this.ProviderName = this.DefaultProviderName;
         }
         #endregion
         #region Fields - Private
-        private DriverInfo info;
+        private string providerName;
         private bool isDisposed;
         private Socket listeningSocket;
         private bool isRunning;
         private ushort listeningPort;
         private bool isInitialized;
+        private string schemaName;
+        private string description;
+        private Version version;
         #endregion
         #region Methods - Protected
         /// <summary>
@@ -57,9 +61,9 @@ namespace Serenity.Net
             {
                 throw new ArgumentNullException("ar");
             }
-            else if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
+            else if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(ProtocolDriverState).TypeHandle))
             {
-                WebDriverState state = (WebDriverState)ar.AsyncState;
+                ProtocolDriverState state = (ProtocolDriverState)ar.AsyncState;
                 Socket workSocket = state.WorkSocket;
                 Socket socket = workSocket.EndAccept(ar);
                 workSocket.BeginAccept(new AsyncCallback(this.AcceptCallback), state);
@@ -82,9 +86,9 @@ namespace Serenity.Net
                 throw new ObjectDisposedException(this.GetType().FullName);
             }
 
-            if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
+            if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(ProtocolDriverState).TypeHandle))
             {
-                WebDriverState state = ar.AsyncState as WebDriverState;
+                ProtocolDriverState state = ar.AsyncState as ProtocolDriverState;
                 state.WorkSocket.EndDisconnect(ar);
             }
         }
@@ -127,17 +131,17 @@ namespace Serenity.Net
                 throw new ArgumentNullException("socket");
             }
 
-            ;
-
-            if (this.RecieveRequest(socket))
+            var request = this.RecieveRequest(socket);
+            var response = new Response();
+            if (request != null)
             {
-                SerenityServer.ContextHandler.HandleContext();
+                SerenityServer.ContextHandler.HandleRequest(request, response);
             }
             else
             {
                 ErrorHandler.Handle(StatusCode.Http500InternalServerError);
             }
-            this.SendResponse(socket);
+            this.SendResponse(socket, response);
             socket.Disconnect(false);
             socket.Close();
         }
@@ -152,9 +156,9 @@ namespace Serenity.Net
                 throw new ObjectDisposedException(this.GetType().FullName);
             }
 
-            if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
+            if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(ProtocolDriverState).TypeHandle))
             {
-                WebDriverState state = ar.AsyncState as WebDriverState;
+                ProtocolDriverState state = ar.AsyncState as ProtocolDriverState;
                 state.WorkSocket.EndReceive(ar);
             }
         }
@@ -169,9 +173,9 @@ namespace Serenity.Net
                 throw new ObjectDisposedException(this.GetType().FullName);
             }
 
-            if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(WebDriverState).TypeHandle))
+            if (ar.AsyncState.GetType().TypeHandle.Equals(typeof(ProtocolDriverState).TypeHandle))
             {
-                WebDriverState state = ar.AsyncState as WebDriverState;
+                ProtocolDriverState state = ar.AsyncState as ProtocolDriverState;
                 state.WorkSocket.EndSend(ar);
             }
         }
@@ -234,7 +238,7 @@ namespace Serenity.Net
         /// </summary>
         /// <param name="result"></param>
         /// <returns></returns>
-        public virtual void EndRecieveRequest(IAsyncResult result)
+        public virtual Request EndRecieveRequest(IAsyncResult result)
         {
             throw new NotSupportedException();
         }
@@ -265,7 +269,7 @@ namespace Serenity.Net
         /// <summary>
         /// Creates and binds the listening socket, preparing the WebDriver so that it can be started.
         /// </summary>
-        public virtual WebDriverInitializationResult Initialize()
+        public virtual ProtocolDriverInitializationResult Initialize()
         {
             if (this.IsDisposed)
             {
@@ -273,7 +277,7 @@ namespace Serenity.Net
             }
             if (this.IsInitialized)
             {
-                return WebDriverInitializationResult.AlreadyInitialized;
+                return ProtocolDriverInitializationResult.AlreadyInitialized;
             }
             this.isInitialized = true;
             this.ListeningSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
@@ -283,15 +287,15 @@ namespace Serenity.Net
             {
                 this.ListeningSocket.Bind(new IPEndPoint(IPAddress.Any, this.ListeningPort));
                 SerenityServer.OperationLog.Write("Listening socket bound to port " + this.ListeningPort.ToString(), Serenity.Logging.LogMessageLevel.Info);
-                return WebDriverInitializationResult.Suceeded;
+                return ProtocolDriverInitializationResult.Suceeded;
             }
             catch (SocketException socketEx)
             {
                 SerenityServer.ErrorLog.Write("Could not bind listening socket to desired port.\r\n" + socketEx.ToString(), Serenity.Logging.LogMessageLevel.Warning);
-                return WebDriverInitializationResult.FailedSocketBinding;
+                return ProtocolDriverInitializationResult.FailedSocketBinding;
             }
         }
-        public abstract bool RecieveRequest(Socket socket);
+        public abstract Request RecieveRequest(Socket socket);
         /// <summary>
         /// Starts the WebDriver.
         /// </summary>
@@ -337,7 +341,7 @@ namespace Serenity.Net
         /// When overridden in a derived class, sends the supplied response to
         /// the client.
         /// </summary>
-        public abstract bool SendResponse(Socket socket);
+        public abstract bool SendResponse(Socket socket, Response response);
         #endregion
         #region Properties - Protected
         /// <summary>
@@ -360,49 +364,28 @@ namespace Serenity.Net
                 this.listeningSocket = value;
             }
         }
+        protected abstract ushort DefaultListeningPort
+        {
+            get;
+        }
+        protected abstract string DefaultProviderName
+        {
+            get;
+        }
+        protected abstract string DefaultSchemaName
+        {
+            get;
+        }
+        protected abstract string DefaultDescription
+        {
+            get;
+        }
+        protected abstract Version DefaultVersion
+        {
+            get;
+        }
         #endregion
         #region Properties - Public
-        /// <summary>
-        /// Gets an indicator of the current WebDriver's level of support for
-        /// recieving in an asynchronous manner.
-        /// </summary>
-        /// <remarks>Returns false always unless overridden in a derived class.
-        /// </remarks>
-        public virtual bool CanRecieveAsync
-        {
-            get
-            {
-                return false;
-            }
-        }
-        /// <summary>
-        /// Gets an indicator of the current WebDriver's level of support for
-        /// sending in an asynchronous manner.
-        /// </summary>
-        /// <remarks>Returns false always unless overridden in a derived class.
-        /// </remarks>
-        public virtual bool CanSendAsync
-        {
-            get
-            {
-                return false;
-            }
-        }
-        /// <summary>
-        /// Gets a DriverInfo object which contains information about the
-        /// current WebDriver.
-        /// </summary>
-        public DriverInfo Info
-        {
-            get
-            {
-                return this.info;
-            }
-            protected set
-            {
-                this.info = value;
-            }
-        }
         /// <summary>
         /// Gets an indication of whether the current object has already been
         /// disposed (cleaned up) or not.
@@ -453,6 +436,50 @@ namespace Serenity.Net
             set
             {
                 this.listeningPort = value;
+            }
+        }
+        public string ProviderName
+        {
+            get
+            {
+                return this.providerName;
+            }
+            set
+            {
+                this.providerName = value;
+            }
+        }
+        public string SchemaName
+        {
+            get
+            {
+                return this.schemaName;
+            }
+            set
+            {
+                this.schemaName = value;
+            }
+        }
+        public string Description
+        {
+            get
+            {
+                return this.description;
+            }
+            set
+            {
+                this.description = value;
+            }
+        }
+        public Version Version
+        {
+            get
+            {
+                return this.version;
+            }
+            set
+            {
+                this.version = value;
             }
         }
         #endregion

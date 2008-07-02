@@ -23,7 +23,7 @@ namespace Serenity.Web.Forms
         }
         #endregion
         #region Methods - Public
-        public sealed override void OnRequest()
+        public sealed override void OnRequest(Request request, Response response)
         {
             using (MemoryStream ms = new MemoryStream())
             {
@@ -32,7 +32,7 @@ namespace Serenity.Web.Forms
                 RenderingContext rc = new RenderingContext(ms);
                 form.Render(rc);
 
-                Response.Write(ms.ToArray());
+                response.Write(ms.ToArray());
             }
         }
         #endregion

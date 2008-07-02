@@ -58,7 +58,7 @@ namespace Server
                 SerenityServer.Modules.Count,
                 0), LogMessageLevel.Info);
 
-            WebDriver driver = new HttpDriver();
+            ProtocolDriver driver = new HttpDriver();
             driver.ListeningPort = 80;
 
             SerenityServer.DriverPool.Add(driver);

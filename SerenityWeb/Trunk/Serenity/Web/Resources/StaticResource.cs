@@ -24,11 +24,12 @@ namespace Serenity.Web.Resources
         private string location;
         #endregion
         #region Methods - Public
-        public override void OnRequest()
+        public override void OnRequest(Request request, Response response)
         {
             if (File.Exists(this.location))
             {
-                Response.Write(File.ReadAllBytes(this.location));
+                //TODO: Fix this so it works with large files.
+                response.Write(File.ReadAllBytes(this.location));
             }
             else
             {

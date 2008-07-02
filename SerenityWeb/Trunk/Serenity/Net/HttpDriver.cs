@@ -18,34 +18,30 @@ using Serenity.Web;
 namespace Serenity.Net
 {
     /// <summary>
-    /// Provides a WebDriver implementation that provides support for the HTTP protocol.
+    /// Provides a <see cref="Serenity.Net.ProtocolDriver"/> implementation that provides support for the HTTP protocol.
     /// This class cannot be inherited.
     /// </summary>
-    public sealed class HttpDriver : WebDriver
+    public sealed class HttpDriver : ProtocolDriver
     {
         #region Constructors - Public
         /// <summary>
-        /// Initializes a new instance of the HttpDriver class.
+        /// Initializes a new instance of the <see cref="Serenity.Net.HttpDriver"/> class.
         /// </summary>
-        /// <param name="settings">The WebDriverSettings which control the
-        /// behaviour of the new WebDriver instance.</param>
         public HttpDriver()
         {
-            this.Info = new DriverInfo("Serenity", "HyperText Transmission Protocol", "http", new Version(1, 1));
-            //this.RegisterHeaderHandler("Content-Type", new HeaderHandlerCallback(this.ContentTypeHeaderCallback));
         }
         #endregion
         #region Methods - Private
-        private void ContentTypeHeaderCallback(Header header)
-        {
-            if (header.PrimaryValue.Contains(";"))
-            {
-                string[] segments = header.PrimaryValue.Split(new char[] { ';' }, 2);
-                header.PrimaryValue = segments[0];
-            }
-            Request.ContentType = MimeType.FromString(header.PrimaryValue);
-        }
-        private bool ProcessUrlEncodedRequestData(string input)
+        //private void ContentTypeHeaderCallback(Header header)
+        //{
+        //    if (header.PrimaryValue.Contains(";"))
+        //    {
+        //        string[] segments = header.PrimaryValue.Split(new char[] { ';' }, 2);
+        //        header.PrimaryValue = segments[0];
+        //    }
+        //    Request.ContentType = MimeType.FromString(header.PrimaryValue);
+        //}
+        private bool ProcessUrlEncodedRequestData(Request request, string input)
         {
             if (input == null)
             {
@@ -60,29 +56,29 @@ namespace Serenity.Net
                 {
                     string name = pair.Substring(0, pair.IndexOf('='));
                     string value = pair.Substring(pair.IndexOf('=') + 1);
-                    Request.RequestData.AddDataStream(name, Encoding.UTF8.GetBytes(value)).Method = RequestMethod.GET;
+                    request.RequestData.AddDataStream(name, Encoding.UTF8.GetBytes(value)).Method = RequestMethod.GET;
                 }
             }
             return true;
         }
-        private bool ProcessMultipartFormDataContent(string input)
+        private bool ProcessMultipartFormDataContent(Request request, string input)
         {
             if (input == null)
             {
                 throw new ArgumentNullException("input");
             }
-            else if (!Request.Headers.Contains("Content-Type"))
+            else if (!request.Headers.Contains("Content-Type"))
             {
                 //throw new InvalidOperationException("
             }
 
-            Header ct = Request.Headers["Content-Type"];
+            Header ct = request.Headers["Content-Type"];
 
             return true;
         }
         #endregion
         #region Methods - Public
-        public override bool RecieveRequest(Socket socket)
+        public override Request RecieveRequest(Socket socket)
         {
             if (this.IsDisposed)
             {
@@ -103,12 +99,10 @@ namespace Serenity.Net
                 }
                 if (socket.Available == 0)
                 {
-                    return false;
+                    return null;
                 }
             }
-
-            Request.Reset();
-            Response.Reset();
+            var request = new Request();
 
             byte[] buffer;
             List<byte> listBuffer = new List<byte>();
@@ -120,7 +114,7 @@ namespace Serenity.Net
             }
             buffer = listBuffer.ToArray();
             string requestContent = Encoding.ASCII.GetString(buffer);
-            Request.RawRequest = requestContent;
+            request.RawRequest = requestContent;
             int headerSize = requestContent.IndexOf("\r\n\r\n");
             if (headerSize != -1)
             {
@@ -138,12 +132,12 @@ namespace Serenity.Net
                 {
                     try
                     {
-                        Request.Method = (RequestMethod)Enum.Parse(typeof(RequestMethod), methodParts[0]);
+                        request.Method = (RequestMethod)Enum.Parse(typeof(RequestMethod), methodParts[0]);
                     }
                     catch
                     {
                         ErrorHandler.Handle(StatusCode.Http405MethodNotAllowed, methodParts[0]);
-                        return true;
+                        return request;
                     }
 
                     //Request URI is the "middle"
@@ -152,25 +146,25 @@ namespace Serenity.Net
                     switch (methodParts[2])
                     {
                         case "HTTP/0.9":
-                            Request.ProtocolVersion = new Version(0, 9);
+                            request.ProtocolVersion = new Version(0, 9);
                             break;
                         case "HTTP/1.0":
-                            Request.ProtocolVersion = new Version(1, 0);
+                            request.ProtocolVersion = new Version(1, 0);
                             break;
                         case "HTTP/1.1":
-                            Request.ProtocolVersion = new Version(1, 1);
+                            request.ProtocolVersion = new Version(1, 1);
                             break;
 
                         default:
                             ErrorHandler.Handle(StatusCode.Http505HttpVersionNotSupported,
                                 "The HTTP version specified with the request is not supported.");
-                            return true;
+                            return request;
                     }
                 }
                 else
                 {
                     ErrorHandler.Handle(StatusCode.Http400BadRequest, "The first line of the request was invalid");
-                    return true;
+                    return request;
                 }
                 indexOf = requestContent.IndexOf("\r\n");
                 while (indexOf != -1)
@@ -187,12 +181,12 @@ namespace Serenity.Net
                             if (value.Length == 0)
                             {
                                 ErrorHandler.Handle(StatusCode.Http400BadRequest, "A header was specified with no value.");
-                                return true;
+                                return request;
                             }
-                            if (!Request.Headers.Contains(name))
+                            if (!request.Headers.Contains(name))
                             {
                                 //TODO: Make sure ignoring duplicated headers is acceptable.
-                                Request.Headers.Add(name, value);
+                                request.Headers.Add(name, value);
                             }
                         }
                     }
@@ -200,39 +194,39 @@ namespace Serenity.Net
                 }
                 //HTTP 1.1 states that requests must define a "Host" header even if an absolute
                 //request URI is requested.
-                if (Request.Headers.Contains("Host"))
+                if (request.Headers.Contains("Host"))
                 {
                     //HTTP 1.1 and later allows a relative URI or an absolute URI to be requested.
                     if (requestUriRaw.StartsWith("/"))
                     {
                         //relative requesturi
-                        Request.Url = new Uri("http://"
-                            + Request.Headers["Host"].PrimaryValue + requestUriRaw);
+                        request.Url = new Uri("http://"
+                            + request.Headers["Host"].PrimaryValue + requestUriRaw);
                     }
                     else if (requestUriRaw.StartsWith("http://") || requestUriRaw.StartsWith("https://"))
                     {
                         //absolute requesturi
-                        Request.Url = new Uri(requestUriRaw);
+                        request.Url = new Uri(requestUriRaw);
                     }
                     else
                     {
                         //invalid url scheme for HTTP.
                         ErrorHandler.Handle(StatusCode.Http400BadRequest, "Invalid request URI scheme");
-                        return true;
+                        return request;
                     }
 
-                    Domain.Current = SerenityServer.Domains.GetBestMatch(Request.Headers["Host"].PrimaryValue);
+                    Domain.Current = SerenityServer.Domains.GetBestMatch(request.Headers["Host"].PrimaryValue);
 
-                    if (Request.Url.Query.Length > 0)
+                    if (request.Url.Query.Length > 0)
                     {
-                        this.ProcessUrlEncodedRequestData(Request.Url.Query.TrimStart('?'));
+                        this.ProcessUrlEncodedRequestData(request, request.Url.Query.TrimStart('?'));
                     }
                 }
                 else
                 {
                     //Request is invalid because it doesnt have a Host header.
                     ErrorHandler.Handle(StatusCode.Http400BadRequest, "No Host header included");
-                    return true;
+                    return request;
                 }
 
                 //foreach (Header header in Request.Headers)
@@ -240,15 +234,15 @@ namespace Serenity.Net
                 //    this.HandleHeader(header);
                 //}
 
-                bool hasContentLength = Request.Headers.Contains("Content-Length");
-                bool hasTransferEncoding = Request.Headers.Contains("Transfer-Encoding");
+                bool hasContentLength = request.Headers.Contains("Content-Length");
+                bool hasTransferEncoding = request.Headers.Contains("Transfer-Encoding");
                 bool hasBody = hasContentLength | hasTransferEncoding;
 
                 if (hasBody)
                 {
                     //Check if the client sent the Content-Type header, which is required if
                     //a message body is included with the request. 
-                    if (Request.Headers.Contains("Content-Type"))
+                    if (request.Headers.Contains("Content-Type"))
                     {
                         //Content-Length and Transfer-Encoding headers can't coexist.
                         if (hasContentLength && hasTransferEncoding)
@@ -258,18 +252,18 @@ namespace Serenity.Net
                         }
                         else
                         {
-                            if (Request.ContentType == MimeType.ApplicationXWwwFormUrlEncoded)
+                            if (request.ContentType == MimeType.ApplicationXWwwFormUrlEncoded)
                             {
-                                if (!this.ProcessUrlEncodedRequestData(requestContent))
+                                if (!this.ProcessUrlEncodedRequestData(request, requestContent))
                                 {
-                                    return true;
+                                    return request;
                                 }
                             }
-                            else if (Request.ContentType == MimeType.MultipartFormData)
+                            else if (request.ContentType == MimeType.MultipartFormData)
                             {
-                                if (!this.ProcessMultipartFormDataContent(requestContent))
+                                if (!this.ProcessMultipartFormDataContent(request, requestContent))
                                 {
-                                    return true;
+                                    return request;
                                 }
                             }
                             else
@@ -284,11 +278,11 @@ namespace Serenity.Net
                         ErrorHandler.Handle(StatusCode.Http400BadRequest, "No Content-Type header included with request that includes a message body.");
                     }
                 }
-                return true;
+                return request;
             }
-            return false;
+            return null;
         }
-        public override bool SendResponse(Socket socket)
+        public override bool SendResponse(Socket socket, Response response)
         {
             if (this.IsDisposed)
             {
@@ -298,29 +292,29 @@ namespace Serenity.Net
             {
                 throw new ArgumentNullException("socket");
             }
-            if (!Response.HeadersSent)
+            if (!response.HeadersSent)
             {
                 StringBuilder outputText = new StringBuilder();
 
-                if (!Response.Headers.Contains("Content-Length"))
+                if (!response.Headers.Contains("Content-Length"))
                 {
-                    Response.Headers.Add("Content-Length", Response.OutputBuffer.Count.ToString());
+                    response.Headers.Add("Content-Length", response.OutputBuffer.Count.ToString());
                 }
-                if (!Response.Headers.Contains("Content-Type"))
+                if (!response.Headers.Contains("Content-Type"))
                 {
-                    Response.Headers.Add("Content-Type", Response.ContentType.ToString() + "; charset=UTF-8");
+                    response.Headers.Add("Content-Type", response.ContentType.ToString() + "; charset=UTF-8");
                 }
-                else if (Response.Headers["Content-Type"].PrimaryValue != Response.ContentType.ToString())
+                else if (response.Headers["Content-Type"].PrimaryValue != response.ContentType.ToString())
                 {
-                    Response.Headers["Content-Type"].PrimaryValue = Response.ContentType.ToString();
+                    response.Headers["Content-Type"].PrimaryValue = response.ContentType.ToString();
                 }
-                if (!Response.Headers.Contains("Server"))
+                if (!response.Headers.Contains("Server"))
                 {
-                    Response.Headers.Add(new Header("Server", SerenityInfo.Name + "/" + SerenityInfo.Version));
+                    response.Headers.Add(new Header("Server", SerenityInfo.Name + "/" + SerenityInfo.Version));
                 }
 
-                outputText.Append("HTTP/1.1 " + Response.Status.ToString() + "\r\n");
-                foreach (Header header in Response.Headers)
+                outputText.Append("HTTP/1.1 " + response.Status.ToString() + "\r\n");
+                foreach (Header header in response.Headers)
                 {
                     string value;
                     if (header.Complex == true)
@@ -351,9 +345,9 @@ namespace Serenity.Net
                     return false;
                 }
             }
-            if (Response.OutputBuffer.Count > 0)
+            if (response.OutputBuffer.Count > 0)
             {
-                byte[] buffer = Response.OutputBuffer.ToArray();
+                byte[] buffer = response.OutputBuffer.ToArray();
                 int sent = socket.Send(buffer);
                 while (sent < buffer.Length)
                 {
@@ -361,29 +355,53 @@ namespace Serenity.Net
                     buffer.CopyTo(newBuffer, sent);
                     buffer = newBuffer;
                     sent = socket.Send(buffer);
-                    Response.Sent += sent;
+                    response.Sent += sent;
                 }
-                Response.ClearOutputBuffer();
+                response.ClearOutputBuffer();
             }
 
             return true;
         }
         #endregion
-        #region Properties - Public
-        public override bool CanRecieveAsync
+
+        protected override ushort DefaultListeningPort
         {
             get
             {
-                return false;
+                return 80;
             }
         }
-        public override bool CanSendAsync
+
+        protected override string DefaultProviderName
         {
             get
             {
-                return false;
+                return "SerenityProject.net";
             }
         }
-        #endregion
+
+        protected override string DefaultSchemaName
+        {
+            get
+            {
+                return "http";
+            }
+        }
+
+        protected override string DefaultDescription
+        {
+            get
+            {
+                return "Protocol driver for the Hyper Text Transfer Protocol";
+            }
+        }
+
+        protected override Version DefaultVersion
+        {
+            get
+            {
+                return new Version(1, 1, 0, 0);
+            }
+        }
     }
 }

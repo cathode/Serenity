@@ -116,7 +116,11 @@ namespace Serenity.Web.Resources
                     }
                 }
             }
-            this.uc.Add(item);
+            //TODO: Figure out why duplicate items are being added.
+            if (!this.uc.Contains(item.Path))
+            {
+                this.uc.Add(item);
+            }
         }
         public void Clear()
         {
