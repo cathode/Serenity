@@ -64,6 +64,7 @@
     <AssemblyName>Serenity</AssemblyName>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -153,6 +154,7 @@
     <Compile Include="Web\Forms\LineBreak.cs" />
     <Compile Include="Web\Forms\OrderedList.cs" />
     <Compile Include="Web\Forms\Paragraph.cs" />
+    <Compile Include="Web\Forms\PathLink.cs" />
     <Compile Include="Web\Forms\RenderingContext.cs" />
     <Compile Include="Web\Forms\Script.cs" />
     <Compile Include="Web\Forms\Span.cs" />

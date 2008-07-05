@@ -37,6 +37,9 @@ namespace Serenity.Web
         public const int DefaultLifetime = 300000;
         #endregion
         #region Methods - Public
+        /// <summary>
+        /// Removes all session information.
+        /// </summary>
         public static void ClearAll()
         {
             var conn = Database.Connect(DataScope.Global);
