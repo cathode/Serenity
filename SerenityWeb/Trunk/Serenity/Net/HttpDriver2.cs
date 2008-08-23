@@ -92,7 +92,9 @@ namespace Serenity.Net
                 return;
             }
 
-            Request request = pc.Request; //For readability
+            Request request = pc.Request;
+            Response response = pc.Response;
+            bool completed = false;
             string sbuffer;
 
             lock (pc.DataBuffer)
@@ -202,7 +204,32 @@ namespace Serenity.Net
                                 string headerName = sbuffer.Substring(0, n);
                                 string headerValue = sbuffer.Substring(n + 2, i - (n + 2));
 
-                                request.Headers.Add(headerName, headerValue);
+                                Header h = request.Headers.Add(headerName, headerValue);
+
+                                switch (h.Name)
+                                {
+                                    case "Host":
+                                        if (request.RawUrl.StartsWith("/"))
+                                        {
+                                            //relative requesturi
+                                            request.Url = new Uri("http://"
+                                                + h.PrimaryValue + request.RawUrl);
+                                        }
+                                        else if (request.RawUrl.StartsWith("http://") || request.RawUrl.StartsWith("https://"))
+                                        {
+                                            //absolute requesturi
+                                            request.Url = new Uri(request.RawUrl);
+                                        }
+                                        break;
+
+                                    case "Content-Length":
+                                        int cl;
+                                        if (int.TryParse(h.PrimaryValue, out cl))
+                                        {
+                                            request.ContentLength = cl;
+                                        }
+                                        break;
+                                }
 
                                 pc.Stage = RequestProcessingStage.HeaderProcessed;
                             }
@@ -221,13 +248,20 @@ namespace Serenity.Net
                             {
                                 //TODO: Further process the entity data of the request into individual named data streams if appropriate.
                                 request.RequestData.AddDataStream("", Encoding.ASCII.GetBytes(sbuffer.Substring(0, request.ContentLength)));
+
+                                sbuffer = sbuffer.Substring(request.ContentLength);
                             }
                             pc.Stage = RequestProcessingStage.ProcessingComplete;
+                        }
+                        else
+                        {
+                            break;
                         }
                     }
                     if (pc.Stage == RequestProcessingStage.ProcessingComplete)
                     {
-                        //TODO: Send "completed" request to the handling pipeline so a response can be generated.
+                        completed = true;
+                        pc.Reset();
                         break;
                     }
                 }
@@ -246,6 +280,12 @@ namespace Serenity.Net
                             pc.DataBuffer.Dequeue();
                         }
                     }
+                }
+                if (completed)
+                {
+                    SerenityServer.ContextHandler.HandleRequest(request, response);
+
+                    //TODO: Send response back to client.
                 }
             }
         }
@@ -320,6 +360,24 @@ namespace Serenity.Net
                     },
                     receiveBuffer = new byte[s.Available],
                 };
+            }
+            /// <summary>
+            /// After the request has been fully received and processed, resets the current <see cref="RequestProcessingContext"/>.
+            /// </summary>
+            /// <remarks>
+            /// Resetting allows the connection and received data to be reused which allows for pipelining support.
+            /// </remarks>
+            public void Reset()
+            {
+                this.request = new Request()
+                {
+                    Connection = this.connection
+                };
+                this.response = new Response()
+                {
+                    Connection = this.connection
+                };
+                this.stage = RequestProcessingStage.None;
             }
             /// <summary>
             /// Swaps the receive buffer to the data buffer.

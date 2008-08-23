@@ -33,7 +33,7 @@ namespace Serenity.Web
         #endregion
         #region Methods - Public
         /// <summary>
-        /// Handles an incoming CommonContext.
+        /// Handles an incoming request/response pair.
         /// </summary>
         /// <param name="request">The incoming <see cref="Request"/>.</param>
         /// <param name="response">The outgoing <see cref="Response"/>.</param>
