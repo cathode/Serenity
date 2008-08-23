@@ -13,6 +13,9 @@ using System.Text;
 
 namespace Serenity.Web.Forms
 {
+    /// <summary>
+    /// Represents an XHTML form which allows information to be submitted to the server.
+    /// </summary>
     public class Form : Control
     {
     }

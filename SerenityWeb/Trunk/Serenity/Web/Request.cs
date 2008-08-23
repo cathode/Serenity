@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Net;
+using System.Net.Sockets;
 
 namespace Serenity.Web
 {
@@ -25,6 +26,7 @@ namespace Serenity.Web
             this.method = RequestMethod.GET;
             this.protocolType = null;
             this.protocolVersion = null;
+            this.rawMethod = null;
             this.rawRequest = null;
             this.rawUrl = null;
             this.referrer = null;
@@ -36,6 +38,7 @@ namespace Serenity.Web
         }
         #endregion
         #region Fields - Private
+        private Socket connection;
         private Encoding contentEncoding;
         private int contentLength;
         private MimeType contentType;
@@ -51,18 +54,33 @@ namespace Serenity.Web
         private IPEndPoint localEndPoint;
         private RequestMethod method;
         private RequestDataCollection requestData;
+        private string rawMethod;
         private string rawRequest;
         private string rawUrl;
         private IPEndPoint remoteEndPoint;
-        private  Uri url;
+        private Uri url;
         private Uri referrer;
         private string userAgent;
         private string userHostName;
         private string protocolType;
         private Version protocolVersion;
+      
         #endregion
         #region Properties - Public
-        
+        /// <summary>
+        /// Gets or sets the <see cref="Socket"/> used to communicate the current <see cref="Request"/>.
+        /// </summary>
+        public Socket Connection
+        {
+            get
+            {
+                return this.connection;
+            }
+            set
+            {
+                this.connection = value;
+            }
+        }
         /// <summary>
         /// Gets or sets the content encoding used for content sent with the
         /// current request.
@@ -205,6 +223,9 @@ namespace Serenity.Web
                 this.localEndPoint = value;
             }
         }
+        /// <summary>
+        /// Gets or sets the supported method of the current <see cref="Request"/>.
+        /// </summary>
         public RequestMethod Method
         {
             get
@@ -214,6 +235,20 @@ namespace Serenity.Web
             set
             {
                 this.method = value;
+            }
+        }
+        /// <summary>
+        /// Gets or sets the actual string representing the method of the current <see cref="Request"/>.
+        /// </summary>
+        public string RawMethod
+        {
+            get
+            {
+                return this.rawMethod;
+            }
+            set
+            {
+                this.rawMethod = value;
             }
         }
         public string RawRequest

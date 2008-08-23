@@ -23,6 +23,17 @@ namespace Serenity.IO
         private static readonly string applicationDirectory;
         private static string workingDirectory;
         #endregion
+        #region Methods - Public
+        public static string Combine(params string[] segments)
+        {
+            string result = segments[0];
+            for (int i = 1; i < segments.Length; i++)
+            {
+                result = Path.Combine(result, segments[i]);
+            }
+            return result;
+        }
+        #endregion
         #region Properties - Public
         /// <summary>
         /// Gets the directory where the application is installed.

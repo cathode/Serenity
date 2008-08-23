@@ -76,10 +76,10 @@ namespace Serenity.Web.Forms
             }
         }
         /// <summary>
-        /// Gets or sets the <see cref="Doctype"/> of the current <see cref="WebForm"/>.
+        /// Gets or sets the <see cref="Doctype"/> of the current <see cref="Document"/>.
         /// </summary>
         /// <remarks>
-        /// This property default to <see cref="Doctype.XHTML11"/> which is the XHTML 1.1 Document Type.
+        /// This property default to <see cref="p:Doctype.XHTML11"/> which is the XHTML 1.1 Document Type.
         /// </remarks>
         public Doctype Doctype
         {

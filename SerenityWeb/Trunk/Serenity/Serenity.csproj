@@ -101,17 +101,22 @@
     <Compile Include="Domain.cs" />
     <Compile Include="FileTypeEntry.cs" />
     <Compile Include="Logging\LogMessageLevel.cs" />
-    <Compile Include="Net\DriverPool.cs" />
     <None Include="Data\domain\schemas\error_documents.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Data\global\schemas\serenity_global.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Compile Include="Net\HttpDriver.cs" />
-    <Compile Include="Net\ProtocolDriver.cs" />
+    <None Include="Net\HttpDriver.cs" />
+    <Compile Include="Net\HttpDriver2.cs" />
+    <None Include="Net\ProtocolDriver.cs" />
+    <Compile Include="Net\ProtocolDriver2.cs" />
     <Compile Include="Net\ProtocolDriverInitializationResult.cs" />
     <Compile Include="Net\ProtocolDriverState.cs" />
+    <Compile Include="Net\RequestAvailableEventArgs.cs" />
+    <Compile Include="Net\RequestProcessingStage.cs" />
+    <Compile Include="Net\StartedEventArgs.cs" />
+    <Compile Include="Net\StartMode.cs" />
     <Compile Include="SerenityServer.cs" />
     <None Include="Themes\Border.cs" />
     <None Include="Themes\BorderSide.cs" />
@@ -254,7 +259,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\LibINI.dll</HintPath>
     </Reference>
-    <Reference Include="SPCore, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aafe07b9ddf0a2a4, processorArchitecture=MSIL">
+    <Reference Include="SerenityProject.Common, Version=1.2.0.0, Culture=neutral, PublicKeyToken=aafe07b9ddf0a2a4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Common\SerenityProject.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="SPCore, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\SPCore.dll</HintPath>
     </Reference>
@@ -304,6 +313,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\module\serenity\schemas\" />
+    <Folder Include="Web\Forms\Renderers\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

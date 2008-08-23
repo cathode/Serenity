@@ -122,7 +122,7 @@ namespace Serenity.Data
                 {
                     return null;
                 }
-                return PathExt.Combine(SerenityPath.DataDirectory, "module",
+                return SerenityPath.Combine(SerenityPath.DataDirectory, "module",
                     Path.GetFileNameWithoutExtension(Module.Current.Name), "database.s3db");
             }
             else if (scope == DataScope.Domain)
@@ -131,7 +131,7 @@ namespace Serenity.Data
                 {
                     return null;
                 }
-                return PathExt.Combine(SerenityPath.DataDirectory, "domain",
+                return SerenityPath.Combine(SerenityPath.DataDirectory, "domain",
                     Path.GetFileNameWithoutExtension(Domain.Current.HostName), "database.s3db");
             }
             else if (scope == DataScope.ModuleAndDomain)
@@ -140,7 +140,7 @@ namespace Serenity.Data
                 {
                     return null;
                 }
-                return PathExt.Combine(SerenityPath.DataDirectory, "module",
+                return SerenityPath.Combine(SerenityPath.DataDirectory, "module",
                     Path.GetFileNameWithoutExtension(Module.Current.Name),
                     Path.GetFileNameWithoutExtension(Domain.Current.HostName), "database.s3db");
             }
@@ -158,7 +158,7 @@ namespace Serenity.Data
         {
             if (scope == DataScope.Global)
             {
-                string dir = PathExt.Combine(SerenityPath.DataDirectory, "global", "schemas");
+                string dir = SerenityPath.Combine(SerenityPath.DataDirectory, "global", "schemas");
                 if (Directory.Exists(dir))
                 {
                     return from p in Directory.GetFiles(dir)
@@ -170,7 +170,7 @@ namespace Serenity.Data
             {
                 if (Module.Current != null)
                 {
-                    string dir = PathExt.Combine(SerenityPath.DataDirectory, "module",
+                    string dir = SerenityPath.Combine(SerenityPath.DataDirectory, "module",
                                Path.GetFileNameWithoutExtension(Module.Current.Name), "schemas");
                     if (Directory.Exists(dir))
                     {
@@ -184,7 +184,7 @@ namespace Serenity.Data
             {
                 if (Domain.Current != null)
                 {
-                    string dir = PathExt.Combine(SerenityPath.DataDirectory, "domain", "schemas");
+                    string dir = SerenityPath.Combine(SerenityPath.DataDirectory, "domain", "schemas");
                     if (Directory.Exists(dir))
                     {
                         return from p in Directory.GetFiles(dir)

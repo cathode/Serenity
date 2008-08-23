@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Net.Sockets;
 
 namespace Serenity.Web
 {
@@ -12,7 +13,7 @@ namespace Serenity.Web
         {
             this.headers = new HeaderCollection();
             this.headersSent = false;
-            this.mimeType = MimeType.Default;
+            this.contentType = MimeType.Default;
             this.outputBuffer = new List<byte>();
             this.sent = 0;
             this.status = StatusCode.Http500InternalServerError;
@@ -21,16 +22,19 @@ namespace Serenity.Web
         }
         #endregion
         #region Fields - Private
+        private Socket connection;
+        private MimeType contentType;
         [ThreadStatic]
         private static Response current;
         private HeaderCollection headers;
         private bool headersSent;
-        private MimeType mimeType;
+        
         private List<byte> outputBuffer;
         private int sent;
         private StatusCode status;
         private bool useChunkedTransferEncoding;
         private bool useCompression;
+        
         #endregion
         #region Methods - Public
         public void ClearOutputBuffer()
@@ -84,17 +88,31 @@ namespace Serenity.Web
         #endregion
         #region Properties - Public
         /// <summary>
+        /// Gets or sets the <see cref="Socket"/> used to communicate the current <see cref="Response"/>.
+        /// </summary>
+        public Socket Connection
+        {
+            get
+            {
+                return this.connection;
+            }
+            set
+            {
+                this.connection = value;
+            }
+        }
+        /// <summary>
         /// Gets or sets the mimetype associated with the content returned to the client.
         /// </summary>
         public MimeType ContentType
         {
             get
             {
-                return this.mimeType;
+                return this.contentType;
             }
             set
             {
-                this.mimeType = value;
+                this.contentType = value;
             }
         }
         public static Response Current
@@ -208,7 +226,7 @@ namespace Serenity.Web
                 this.useCompression = value;
             }
         }
-
+        
         #endregion
     }
 }

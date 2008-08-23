@@ -35,7 +35,8 @@ namespace Serenity.Web
         /// <summary>
         /// Handles an incoming CommonContext.
         /// </summary>
-        /// <param name="context">The incoming CommonContext to be handled.</param>
+        /// <param name="request">The incoming <see cref="Request"/>.</param>
+        /// <param name="response">The outgoing <see cref="Response"/>.</param>
         public virtual void HandleRequest(Request request, Response response)
         {
             Resource resource;

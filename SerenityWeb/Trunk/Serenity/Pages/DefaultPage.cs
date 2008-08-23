@@ -45,7 +45,8 @@ namespace Serenity.Pages
                         new LineBreak(),
                         new PathLink()
                         {
-                            Target = new Uri("http://serenityproject.net/img/misc/")
+                            Target = new Uri("http://serenityproject.net/img/misc/"),
+                            ShowTargetHostname = true,
                         });
                 this.Body.Controls.Add(d1);
             }

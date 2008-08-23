@@ -9,13 +9,14 @@
 using System;
 using System.Net.Sockets;
 using System.Threading;
+using SerenityProject.Common;
 
 namespace Serenity.Net
 {
     /// <summary>
     /// Provides a simple data structure used to pass objects to and from async callback methods.
     /// </summary>
-    public sealed class ProtocolDriverState : DisposableBase
+    public sealed class ProtocolDriverState : Disposable
     {
         #region Constructors - Public
         /// <summary>

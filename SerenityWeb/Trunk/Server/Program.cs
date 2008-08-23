@@ -58,25 +58,17 @@ namespace Server
                 SerenityServer.Modules.Count,
                 0), LogMessageLevel.Info);
 
-            ProtocolDriver driver = new HttpDriver();
+            ProtocolDriver2 driver = new HttpDriver2();
             driver.ListeningPort = 80;
 
-            SerenityServer.DriverPool.Add(driver);
+            driver.Start();
 
-            driver.Initialize();
+            //WS: Temporary loop to keep the main thread from exiting when in async mode.
+            while (driver.IsRunning)
+            {
+                Thread.Sleep(1000);
+            }
 
-            if (!driver.Start())
-            {
-                SerenityServer.ErrorLog.Write("Failed to start web driver", LogMessageLevel.Error);
-            }
-            else
-            {
-                //WS: Temporary loop to keep the main thread from exiting when in async mode.
-                while (driver.IsRunning)
-                {
-                    Thread.Sleep(1000);
-                }
-            }
 
             SerenityServer.OperationLog.Write("Server shutting down", LogMessageLevel.Info);
             Console.WriteLine("Press any key...");

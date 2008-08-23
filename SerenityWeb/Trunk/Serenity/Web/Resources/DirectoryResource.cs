@@ -54,7 +54,8 @@ namespace Serenity
         /// <summary>
         /// Overridden. Renders the dynamic content of the current DirectoryResource.
         /// </summary>
-        /// <param name="context"></param>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
         public override void OnRequest(Request request, Response response)
         {
             // collect data

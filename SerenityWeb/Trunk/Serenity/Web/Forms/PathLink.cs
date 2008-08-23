@@ -87,12 +87,18 @@ namespace Serenity.Web.Forms
             {
                 return false;
             }
+            set
+            {
+            }
         }
         public bool ShowTargetHostname
         {
             get
             {
                 return false;
+            }
+            set
+            {
             }
         }
         #endregion

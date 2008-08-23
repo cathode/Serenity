@@ -59,7 +59,7 @@ namespace Serenity.Web.Forms
         /// This method is invo0ked before any children of the current <see cref="Control"/> have started their rendering.
         /// Use it to begin XML or XHTML tags, for example.
         /// </remarks>
-        /// <param name="output"></param>
+        /// <param name="context"></param>
         protected virtual void RenderBegin(RenderingContext context)
         {
             StreamWriter writer = new StreamWriter(context.OutputStream, context.OutputEncoding);
@@ -91,7 +91,7 @@ namespace Serenity.Web.Forms
         /// This method is invoked after all the children of the current <see cref="Control"/> have completed their rendering.
         /// It should be used to close any open XML or XHTML tags, for example.
         /// </remarks>
-        /// <param name="output"></param>
+        /// <param name="context"></param>
         protected virtual void RenderEnd(RenderingContext context)
         {
             if (!this.CanContainControls)

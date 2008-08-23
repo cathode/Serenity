@@ -25,14 +25,11 @@ namespace Serenity.Web.Resources
         private ResourcePath uri;
         #endregion
         #region Methods - Public
-        public virtual bool MatchUri(Uri uri)
-        {
-            return false;
-        }
         /// <summary>
         /// When overridden in a derived class, uses the supplied CommonContext to dynamically generate response content.
         /// </summary>
-        /// <param name="context"></param>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
         public virtual void OnRequest(Request request, Response response)
         {
             ErrorHandler.Handle(StatusCode.Http501NotImplemented);
@@ -40,7 +37,8 @@ namespace Serenity.Web.Resources
         /// <summary>
         /// Invoked after OnRequest.
         /// </summary>
-        /// <param name="context"></param>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
         public virtual void PostRequest(Request request, Response response)
         {
             if (response.ContentType != this.ContentType)
@@ -52,7 +50,8 @@ namespace Serenity.Web.Resources
         /// <summary>
         /// Invoked before OnRequest.
         /// </summary>
-        /// <param name="context"></param>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
         public virtual void PreRequest(Request request, Response response)
         {
         }

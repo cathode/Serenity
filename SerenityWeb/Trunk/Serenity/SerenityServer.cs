@@ -37,7 +37,7 @@ namespace Serenity
         private static Log accessLog = new Log();
         private static ContextHandler contextHandler = new ContextHandler();
         private static readonly DomainCollection domains = new DomainCollection();
-        private static readonly DriverPool driverPool = new DriverPool();
+        //private static readonly DriverPool driverPool = new DriverPool();
         private static Log errorLog = new Log();
         private static readonly ModuleCollection modules = new ModuleCollection();
         private static Log operationLog = new Log();
@@ -196,16 +196,6 @@ namespace Serenity
                     throw new InvalidOperationException(__Strings.CannotModifyWhileRunning);
                 }
                 SerenityServer.contextHandler = value;
-            }
-        }
-        /// <summary>
-        /// Gets the DriverPool containing WebDrivers used by the current SerenityServer.
-        /// </summary>
-        public static DriverPool DriverPool
-        {
-            get
-            {
-                return SerenityServer.driverPool;
             }
         }
         public static DomainCollection Domains
