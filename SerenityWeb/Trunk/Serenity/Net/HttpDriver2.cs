@@ -286,6 +286,77 @@ namespace Serenity.Net
                     SerenityServer.ContextHandler.HandleRequest(request, response);
 
                     //TODO: Send response back to client.
+                    if (this.IsDisposed)
+                    {
+                        throw new ObjectDisposedException(this.GetType().FullName);
+                    }
+                    if (!response.HeadersSent)
+                    {
+                        StringBuilder outputText = new StringBuilder();
+
+                        if (!response.Headers.Contains("Content-Length"))
+                        {
+                            response.Headers.Add("Content-Length", response.OutputBuffer.Count.ToString());
+                        }
+                        if (!response.Headers.Contains("Content-Type"))
+                        {
+                            response.Headers.Add("Content-Type", response.ContentType.ToString() + "; charset=UTF-8");
+                        }
+                        else if (response.Headers["Content-Type"].PrimaryValue != response.ContentType.ToString())
+                        {
+                            response.Headers["Content-Type"].PrimaryValue = response.ContentType.ToString();
+                        }
+                        if (!response.Headers.Contains("Server"))
+                        {
+                            response.Headers.Add(new Header("Server", SerenityInfo.Name + "/" + SerenityInfo.Version));
+                        }
+
+                        outputText.Append("HTTP/1.1 " + response.Status.ToString() + "\r\n");
+                        foreach (Header header in response.Headers)
+                        {
+                            string value;
+                            if (header.Complex == true)
+                            {
+                                //TODO: Get rid of this switch or make it useful.
+                                switch (header.Name)
+                                {
+                                    default:
+                                        value = string.Format("{0},{1}", header.PrimaryValue, string.Join(",", header.SecondaryValues)).TrimEnd('\r', '\n');
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                value = header.PrimaryValue.TrimEnd('\r', '\n');
+                            }
+                            outputText.Append(header.Name + ": " + value + "\r\n");
+                        }
+                        outputText.Append("\r\n");
+
+                        byte[] output = Encoding.ASCII.GetBytes(outputText.ToString());
+                        try
+                        {
+                            response.Connection.Send(output);
+                        }
+                        catch
+                        {
+                           
+                        }
+                    }
+                    if (response.OutputBuffer.Count > 0)
+                    {
+                        byte[] buffer = response.OutputBuffer.ToArray();
+                        int sent = response.Connection.Send(buffer);
+                        while (sent < buffer.Length)
+                        {
+                            byte[] newBuffer = new byte[buffer.Length - sent];
+                            buffer.CopyTo(newBuffer, sent);
+                            buffer = newBuffer;
+                            sent = response.Connection.Send(buffer);
+                            response.Sent += sent;
+                        }
+                        response.ClearOutputBuffer();
+                    }
                 }
             }
         }

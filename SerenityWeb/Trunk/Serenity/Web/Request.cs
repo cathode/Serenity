@@ -64,7 +64,6 @@ namespace Serenity.Web
         private string userHostName;
         private string protocolType;
         private Version protocolVersion;
-      
         #endregion
         #region Properties - Public
         /// <summary>
