@@ -140,8 +140,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Web\CommonContext.cs" />
     <Compile Include="OperationStatus.cs" />
-    <None Include="Web\Cookie.cs" />
-    <None Include="Web\CookieCollection.cs" />
+    <Compile Include="Web\Cookie.cs" />
+    <Compile Include="Web\CookieCollection.cs" />
     <Compile Include="Web\ErrorHandler.cs" />
     <Compile Include="Web\Forms\Anchor.cs" />
     <Compile Include="Web\Forms\Body.cs" />

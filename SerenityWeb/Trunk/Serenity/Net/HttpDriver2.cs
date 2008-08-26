@@ -311,6 +311,10 @@ namespace Serenity.Net
                             response.Headers.Add(new Header("Server", SerenityInfo.Name + "/" + SerenityInfo.Version));
                         }
 
+                        response.Headers.Add("Set-Cookie2", string.Join(",", (from c in response.Cookies
+                                                                              where !string.IsNullOrEmpty(c.Name)
+                                                                              select c.ToString()).ToArray()));
+
                         outputText.Append("HTTP/1.1 " + response.Status.ToString() + "\r\n");
                         foreach (Header header in response.Headers)
                         {
@@ -340,7 +344,7 @@ namespace Serenity.Net
                         }
                         catch
                         {
-                           
+
                         }
                     }
                     if (response.OutputBuffer.Count > 0)

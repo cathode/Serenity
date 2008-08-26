@@ -11,6 +11,7 @@ namespace Serenity.Web
         #region Constructors - Public
         public Response()
         {
+            this.cookies = new CookieCollection();
             this.headers = new HeaderCollection();
             this.headersSent = false;
             this.contentType = MimeType.Default;
@@ -28,7 +29,7 @@ namespace Serenity.Web
         private static Response current;
         private HeaderCollection headers;
         private bool headersSent;
-        
+        private readonly CookieCollection cookies;
         private List<byte> outputBuffer;
         private int sent;
         private StatusCode status;
@@ -124,6 +125,13 @@ namespace Serenity.Web
             internal set
             {
                 Response.current = value;
+            }
+        }
+        public CookieCollection Cookies
+        {
+            get
+            {
+                return this.cookies;
             }
         }
         /// <summary>

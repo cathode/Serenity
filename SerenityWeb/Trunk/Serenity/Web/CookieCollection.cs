@@ -6,7 +6,14 @@ using System.Collections.ObjectModel;
 
 namespace Serenity.Web
 {
-    public sealed class CookieCollection : Collection<Cookie>
+    /// <summary>
+    /// Represents a collection of <see cref="Cookie"/>s.
+    /// </summary>
+    public sealed class CookieCollection : KeyedCollection<string, Cookie>
     {
+        protected override string GetKeyForItem(Cookie item)
+        {
+            return item.Name;
+        }
     }
 }

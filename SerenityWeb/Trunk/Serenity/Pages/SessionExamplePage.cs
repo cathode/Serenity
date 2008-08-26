@@ -31,6 +31,26 @@ namespace Serenity.Pages
 
                 writer.WriteElementString("h1", "Session Example");
 
+                if (request.Cookies.Contains("session_id"))
+                {
+                    writer.WriteElementString("p", "Welcome back, " + request.Cookies["session_id"].Value + ".");
+                }
+                else
+                {
+                    writer.WriteElementString("p", "Welcome, anonymous.");
+
+                    Session s = Session.NewSession();
+
+                    Cookie c = new Cookie();
+                    c.Name = "session_id";
+                    c.Value = s.SessionID.ToString("d");
+                    c.ExpiresOn = DateTime.Now + TimeSpan.FromMinutes(1);
+
+                    response.Cookies.Add(c);
+
+                    writer.WriteElementString("p", "Your new session id is " + c.Value + ", and will expire at " + c.ExpiresOn.ToString() + ".");
+                }
+
                 writer.WriteEndDocument();
 
                 writer.Flush();

@@ -122,7 +122,7 @@ namespace Serenity.Web
             s.lifetime = TimeSpan.FromMilliseconds(Session.DefaultLifetime);
             var connection = Database.Connect(DataScope.Global);
 
-            var cmd = new SQLiteCommand(string.Format("INSERT INTO sessions('id', 'created', 'lifetime', 'modified') VALUES('{0}','{1}','{2}','{3}')",
+            var cmd = new SQLiteCommand(string.Format("INSERT INTO sessions('id', 'created', 'lifetime', 'last_modified') VALUES('{0}','{1}','{2}','{3}')",
                 s.SessionID.ToString("N"),
                 s.created.ToString("s"),
                 s.lifetime.TotalMilliseconds.ToString(),
