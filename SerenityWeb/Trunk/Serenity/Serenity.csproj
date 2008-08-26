@@ -107,9 +107,7 @@
     <None Include="Data\global\schemas\serenity_global.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Net\HttpDriver.cs" />
     <Compile Include="Net\HttpDriver2.cs" />
-    <None Include="Net\ProtocolDriver.cs" />
     <Compile Include="Net\ProtocolDriver2.cs" />
     <Compile Include="Net\ProtocolDriverInitializationResult.cs" />
     <Compile Include="Net\ProtocolDriverState.cs" />
@@ -117,6 +115,7 @@
     <Compile Include="Net\RequestProcessingStage.cs" />
     <Compile Include="Net\StartedEventArgs.cs" />
     <Compile Include="Net\StartMode.cs" />
+    <Compile Include="Pages\SessionExamplePage.cs" />
     <Compile Include="SerenityServer.cs" />
     <None Include="Themes\Border.cs" />
     <None Include="Themes\BorderSide.cs" />
@@ -141,6 +140,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Web\CommonContext.cs" />
     <Compile Include="OperationStatus.cs" />
+    <None Include="Web\Cookie.cs" />
+    <None Include="Web\CookieCollection.cs" />
     <Compile Include="Web\ErrorHandler.cs" />
     <Compile Include="Web\Forms\Anchor.cs" />
     <Compile Include="Web\Forms\Body.cs" />
@@ -313,7 +314,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\module\serenity\schemas\" />
-    <Folder Include="Web\Forms\Renderers\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

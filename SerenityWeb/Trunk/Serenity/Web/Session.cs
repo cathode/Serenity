@@ -62,6 +62,10 @@ namespace Serenity.Web
             }
             GC.SuppressFinalize(this);
         }
+        //public static Session GetSession(Request request)
+        //{
+            
+        //}
         /// <summary>
         /// Gets a stored <see cref="Session"/>.
         /// </summary>

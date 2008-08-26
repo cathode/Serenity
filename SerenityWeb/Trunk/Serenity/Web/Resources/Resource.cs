@@ -32,7 +32,7 @@ namespace Serenity.Web.Resources
         /// <param name="response"></param>
         public virtual void OnRequest(Request request, Response response)
         {
-            ErrorHandler.Handle(StatusCode.Http501NotImplemented);
+            
         }
         /// <summary>
         /// Invoked after OnRequest.
