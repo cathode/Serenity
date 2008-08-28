@@ -39,14 +39,7 @@ namespace Serenity.Web
             {
                 throw new ArgumentException("Argument 'name' cannot be empty.", "name");
             }
-            else if (value == null)
-            {
-                throw new ArgumentNullException("value");
-            }
-            else if (value.Length == 0)
-            {
-                throw new ArgumentException("Argument 'value' cannot be empty.", "value");
-            }
+
 			Header header = new Header(name, value);
 			this.Add(header);
 			return header;

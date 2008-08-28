@@ -20,6 +20,9 @@ namespace Serenity.Net
     public abstract class ProtocolDriver2 : Disposable
     {
         #region Constructors - Protected
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProtocolDriver2"/> class.
+        /// </summary>
         protected ProtocolDriver2()
         {
             this.Description = this.DefaultDescription;

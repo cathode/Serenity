@@ -34,6 +34,7 @@ namespace Serenity.Pages
                 if (request.Cookies.Contains("session_id"))
                 {
                     writer.WriteElementString("p", "Welcome back, " + request.Cookies["session_id"].Value + ".");
+                    writer.WriteElementString("p", "Just remember, your session will expire at *TODO*"); //TODO: insert date.
                 }
                 else
                 {

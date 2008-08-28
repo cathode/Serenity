@@ -29,6 +29,7 @@ namespace Serenity.Web
         #region Methods - Public
         public override string ToString()
         {
+            //if (string.IsNullOrEmpty(this.Name)
             string result = this.Name + "=\"" + this.Value + "\"";
             if (!string.IsNullOrEmpty(this.Comment))
             {
@@ -52,7 +53,7 @@ namespace Serenity.Web
             }
             else
             {
-                result += ";Max-Age=" + (DateTime.Now - this.ExpiresOn).Seconds;
+                result += ";Max-Age=" + (this.ExpiresOn - DateTime.Now).Seconds;
             }
             if (this.Path != null)
             {

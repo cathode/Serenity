@@ -116,6 +116,7 @@
     <Compile Include="Net\StartedEventArgs.cs" />
     <Compile Include="Net\StartMode.cs" />
     <Compile Include="Pages\SessionExamplePage.cs" />
+    <Compile Include="Pages\ViewSessionsPage.cs" />
     <Compile Include="SerenityServer.cs" />
     <None Include="Themes\Border.cs" />
     <None Include="Themes\BorderSide.cs" />

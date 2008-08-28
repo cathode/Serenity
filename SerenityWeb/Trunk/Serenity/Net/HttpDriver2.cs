@@ -23,6 +23,9 @@ namespace Serenity.Net
     public class HttpDriver2 : ProtocolDriver2
     {
         #region Constructors - Public
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HttpDriver2"/> class.
+        /// </summary>
         public HttpDriver2()
         {
         }
@@ -31,6 +34,10 @@ namespace Serenity.Net
         private TcpListener listener;
         #endregion
         #region Methods - Protected
+        /// <summary>
+        /// Callback method that is used when incoming connections are asynchronously accepted.
+        /// </summary>
+        /// <param name="result"></param>
         protected virtual void AcceptCallback(IAsyncResult result)
         {
             if (result == null)
@@ -47,6 +54,10 @@ namespace Serenity.Net
 
             s.BeginReceive(pc.ReceiveBuffer, 0, pc.ReceiveBuffer.Length, SocketFlags.None, new AsyncCallback(this.RecieveCallback), pc);
         }
+        /// <summary>
+        /// Overridden. Invokes the Started event and performs tasks that must be done when the <see cref="HttpDriver2"/> starts from a stopped state.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnStarted(EventArgs e)
         {
             this.listener = new TcpListener(IPAddress.IPv6Any, this.ListeningPort);
@@ -57,6 +68,10 @@ namespace Serenity.Net
 
             base.OnStarted(e);
         }
+        /// <summary>
+        /// Callback method that is used when data is asynchronously received from a connected client.
+        /// </summary>
+        /// <param name="result"></param>
         protected virtual void RecieveCallback(IAsyncResult result)
         {
             if (result == null)
@@ -72,7 +87,7 @@ namespace Serenity.Net
                 }
                 catch (SocketException ex)
                 {
-                    SerenityServer.OperationLog.Write("Client connection error", Serenity.Logging.LogMessageLevel.Notice);
+                    SerenityServer.OperationLog.Write("Client connection error: " + ex.Message, Serenity.Logging.LogMessageLevel.Notice);
                 }
             }
             else
@@ -285,7 +300,6 @@ namespace Serenity.Net
                 {
                     SerenityServer.ContextHandler.HandleRequest(request, response);
 
-                    //TODO: Send response back to client.
                     if (this.IsDisposed)
                     {
                         throw new ObjectDisposedException(this.GetType().FullName);
@@ -311,9 +325,12 @@ namespace Serenity.Net
                             response.Headers.Add(new Header("Server", SerenityInfo.Name + "/" + SerenityInfo.Version));
                         }
 
-                        response.Headers.Add("Set-Cookie2", string.Join(",", (from c in response.Cookies
-                                                                              where !string.IsNullOrEmpty(c.Name)
-                                                                              select c.ToString()).ToArray()));
+                        if (response.Cookies.Count > 0)
+                        {
+                            response.Headers.Add("Set-Cookie", string.Join(",", (from c in response.Cookies
+                                                                                 where !string.IsNullOrEmpty(c.Name)
+                                                                                 select c.ToString()).ToArray()));
+                        }
 
                         outputText.Append("HTTP/1.1 " + response.Status.ToString() + "\r\n");
                         foreach (Header header in response.Headers)
@@ -321,13 +338,7 @@ namespace Serenity.Net
                             string value;
                             if (header.Complex == true)
                             {
-                                //TODO: Get rid of this switch or make it useful.
-                                switch (header.Name)
-                                {
-                                    default:
-                                        value = string.Format("{0},{1}", header.PrimaryValue, string.Join(",", header.SecondaryValues)).TrimEnd('\r', '\n');
-                                        break;
-                                }
+                                value = string.Format("{0},{1}", header.PrimaryValue, string.Join(",", header.SecondaryValues)).TrimEnd('\r', '\n');
                             }
                             else
                             {
@@ -350,13 +361,21 @@ namespace Serenity.Net
                     if (response.OutputBuffer.Count > 0)
                     {
                         byte[] buffer = response.OutputBuffer.ToArray();
-                        int sent = response.Connection.Send(buffer);
+                        int sent = 0;
                         while (sent < buffer.Length)
                         {
                             byte[] newBuffer = new byte[buffer.Length - sent];
                             buffer.CopyTo(newBuffer, sent);
                             buffer = newBuffer;
-                            sent = response.Connection.Send(buffer);
+                            try
+                            {
+                                sent = response.Connection.Send(buffer);
+                            }
+                            catch (SocketException ex)
+                            {
+                                SerenityServer.ErrorLog.Write(ex.Message, Serenity.Logging.LogMessageLevel.Error);
+                                break;
+                            }
                             response.Sent += sent;
                         }
                         response.ClearOutputBuffer();
@@ -366,6 +385,9 @@ namespace Serenity.Net
         }
         #endregion
         #region Properties - Protected
+        /// <summary>
+        /// Overridden. Gets the default description of the current <see cref="ProtocolDriver2"/>.
+        /// </summary>
         protected override string DefaultDescription
         {
             get
@@ -373,6 +395,9 @@ namespace Serenity.Net
                 return "HyperText Transfer Protocol driver";
             }
         }
+        /// <summary>
+        /// Overridden. Gets the default listening port number of the current <see cref="ProtocolDriver2"/>.
+        /// </summary>
         protected override ushort DefaultListeningPort
         {
             get
@@ -380,6 +405,9 @@ namespace Serenity.Net
                 return 80;
             }
         }
+        /// <summary>
+        /// Overridden. Gets the default provider name of the current <see cref="ProtocolDriver2"/>.
+        /// </summary>
         protected override string DefaultProviderName
         {
             get
@@ -387,6 +415,9 @@ namespace Serenity.Net
                 return "SerenityProject";
             }
         }
+        /// <summary>
+        /// Overridden. Gets the default URI scheme name of the current <see cref="ProtocolDriver2"/>.
+        /// </summary>
         protected override string DefaultSchemeName
         {
             get
@@ -394,6 +425,10 @@ namespace Serenity.Net
                 return "http";
             }
         }
+
+        /// <summary>
+        /// Overridden. Gets the default range of versions that are supported by the current <see cref="ProtocolDriver2"/>.
+        /// </summary>
         protected override VersionRange DefaultSupportedVersions
         {
             get
@@ -403,6 +438,9 @@ namespace Serenity.Net
         }
         #endregion
         #region Types - Protected
+        /// <summary>
+        /// Provides a helper class for the <see cref="HttpDriver2"/> class that is used when processing incoming requests.
+        /// </summary>
         protected sealed class RequestProcessingContext
         {
             #region Constructors - Private
@@ -420,6 +458,11 @@ namespace Serenity.Net
             private RequestProcessingStage stage;
             #endregion
             #region Methods - Public
+            /// <summary>
+            /// Creates a new <see cref="RequestProcessingContext"/> and returns it.
+            /// </summary>
+            /// <param name="s"></param>
+            /// <returns></returns>
             public static RequestProcessingContext Create(Socket s)
             {
                 return new RequestProcessingContext()
@@ -470,6 +513,9 @@ namespace Serenity.Net
                 }
                 this.ResetReceiveBuffer();
             }
+            /// <summary>
+            /// Resets the receive buffer.
+            /// </summary>
             public void ResetReceiveBuffer()
             {
                 this.receiveBuffer = new byte[this.connection.Available];
