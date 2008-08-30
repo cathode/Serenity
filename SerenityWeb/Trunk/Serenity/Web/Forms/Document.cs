@@ -68,6 +68,9 @@ namespace Serenity.Web.Forms
         }
         #endregion
         #region Properties - Public
+        /// <summary>
+        /// Gets the element that represents the body section of the current <see cref="Document"/>.
+        /// </summary>
         public Body Body
         {
             get
@@ -79,7 +82,7 @@ namespace Serenity.Web.Forms
         /// Gets or sets the <see cref="Doctype"/> of the current <see cref="Document"/>.
         /// </summary>
         /// <remarks>
-        /// This property default to <see cref="p:Doctype.XHTML11"/> which is the XHTML 1.1 Document Type.
+        /// This property defaults to <see cref="p:Doctype.XHTML11"/> which is the XHTML 1.1 Document Type.
         /// </remarks>
         public Doctype Doctype
         {
@@ -92,6 +95,9 @@ namespace Serenity.Web.Forms
                 this.doctype = value;
             }
         }
+        /// <summary>
+        /// Gets the element that represents the head section of the current <see cref="Document"/>.
+        /// </summary>
         public Head Head
         {
             get

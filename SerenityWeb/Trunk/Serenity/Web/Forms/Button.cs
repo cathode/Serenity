@@ -13,7 +13,11 @@ using System.Text;
 
 namespace Serenity.Web.Forms
 {
+    /// <summary>
+    /// Represents a button in a document.
+    /// </summary>
     public class Button : Control
     {
+        //TODO: Implement button control class.
     }
 }

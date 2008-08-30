@@ -126,6 +126,9 @@ namespace Serenity.Web.Forms
         }
         #endregion
         #region Properties - Protected
+        /// <summary>
+        /// Gets a value that indicates if the current <see cref="Control"/> supports containing other controls.
+        /// </summary>
         protected virtual bool CanContainControls
         {
             get
@@ -133,6 +136,9 @@ namespace Serenity.Web.Forms
                 return true;
             }
         }
+        /// <summary>
+        /// Gets a value that indicates if the current <see cref="Control"/> supports containing attributes.
+        /// </summary>
         protected virtual bool CanContainAttributes
         {
             get
@@ -140,6 +146,9 @@ namespace Serenity.Web.Forms
                 return true;
             }
         }
+        /// <summary>
+        /// Gets the default name of the current <see cref="Control"/> if none is specified elsewhere.
+        /// </summary>
         protected virtual string DefaultName
         {
             get
@@ -149,6 +158,9 @@ namespace Serenity.Web.Forms
         }
         #endregion
         #region Properties - Public
+        /// <summary>
+        /// Gets a collection of attributes that belong to the current <see cref="Control"/>.
+        /// </summary>
         public ControlAttributeCollection Attributes
         {
             get
@@ -156,6 +168,9 @@ namespace Serenity.Web.Forms
                 return this.attributes;
             }
         }
+        /// <summary>
+        /// Gets a string that classifies the current <see cref="Control"/>.
+        /// </summary>
         public string Classification
         {
             get
@@ -167,6 +182,9 @@ namespace Serenity.Web.Forms
                 this.classification = value;
             }
         }
+        /// <summary>
+        /// Gets the id of the current <see cref="Control"/>.
+        /// </summary>
         public string Id
         {
             get
@@ -178,6 +196,9 @@ namespace Serenity.Web.Forms
                 this.id = value;
             }
         }
+        /// <summary>
+        /// Gets the name of the current <see cref="Control"/>.
+        /// </summary>
         public string Name
         {
             get
@@ -199,6 +220,9 @@ namespace Serenity.Web.Forms
                 return this.controls;
             }
         }
+        /// <summary>
+        /// Gets a string that contains style information for the current <see cref="Control"/>.
+        /// </summary>
         public string Style
         {
             get

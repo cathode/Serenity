@@ -522,6 +522,9 @@ namespace Serenity.Net
             }
             #endregion
             #region Properties - Public
+            /// <summary>
+            /// Gets the socket that is connected to the client.
+            /// </summary>
             public Socket Connection
             {
                 get
@@ -529,6 +532,9 @@ namespace Serenity.Net
                     return this.connection;
                 }
             }
+            /// <summary>
+            /// Gets a queue of bytes that represents data that has not been processed.
+            /// </summary>
             public Queue<byte> DataBuffer
             {
                 get
@@ -536,6 +542,10 @@ namespace Serenity.Net
                     return this.dataBuffer;
                 }
             }
+            /// <summary>
+            /// Gets a byte array that is used by networking code to put received data in.
+            /// After a receive operation completes the data in this buffer is swapped into <see cref="DataBuffer"/>.
+            /// </summary>
             public byte[] ReceiveBuffer
             {
                 get
@@ -543,6 +553,9 @@ namespace Serenity.Net
                     return this.receiveBuffer;
                 }
             }
+            /// <summary>
+            /// Gets the <see cref="Request"/> that is being processed.
+            /// </summary>
             public Request Request
             {
                 get
@@ -550,6 +563,9 @@ namespace Serenity.Net
                     return this.request;
                 }
             }
+            /// <summary>
+            /// Gets the <see cref="Response"/> that is being processed.
+            /// </summary>
             public Response Response
             {
                 get
@@ -557,6 +573,9 @@ namespace Serenity.Net
                     return this.response;
                 }
             }
+            /// <summary>
+            /// Gets the current stage of processing.
+            /// </summary>
             public RequestProcessingStage Stage
             {
                 get

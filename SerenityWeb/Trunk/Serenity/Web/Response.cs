@@ -6,9 +6,15 @@ using System.Net.Sockets;
 
 namespace Serenity.Web
 {
+    /// <summary>
+    /// Represents a response to a request from a client.
+    /// </summary>
     public sealed class Response
     {
         #region Constructors - Public
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Response"/> class.
+        /// </summary>
         public Response()
         {
             this.cookies = new CookieCollection();
@@ -35,9 +41,14 @@ namespace Serenity.Web
         private StatusCode status;
         private bool useChunkedTransferEncoding;
         private bool useCompression;
-        
         #endregion
         #region Methods - Public
+        /// <summary>
+        /// Clears the output buffer of the current <see cref="Response"/>.
+        /// </summary>
+        /// <remarks>
+        /// If data has already been sent, this cannot un-send already sent data.
+        /// </remarks>
         public void ClearOutputBuffer()
         {
             this.outputBuffer.Clear();
@@ -49,6 +60,7 @@ namespace Serenity.Web
         /// <returns>The number of bytes flushed, or -1 if an error occurred.</returns>
         public int Flush()
         {
+            //TODO: Implement Response.Flush method.
             throw new NotImplementedException();
         }
         /// <summary>
@@ -116,6 +128,9 @@ namespace Serenity.Web
                 this.contentType = value;
             }
         }
+        /// <summary>
+        /// Gets the current <see cref="Response"/> for the active thread.
+        /// </summary>
         public static Response Current
         {
             get
@@ -127,6 +142,9 @@ namespace Serenity.Web
                 Response.current = value;
             }
         }
+        /// <summary>
+        /// Gets a collection of cookies that will be sent with the request.
+        /// </summary>
         public CookieCollection Cookies
         {
             get

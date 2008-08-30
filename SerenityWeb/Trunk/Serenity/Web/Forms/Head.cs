@@ -13,8 +13,14 @@ using System.Text;
 
 namespace Serenity.Web.Forms
 {
+    /// <summary>
+    /// Represents the head section of a document.
+    /// </summary>
     public class Head : Control
     {
+        /// <summary>
+        /// Overridden. Gets the default name of the head section which is "head".
+        /// </summary>
         protected override string DefaultName
         {
             get

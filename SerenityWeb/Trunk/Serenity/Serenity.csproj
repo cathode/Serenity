@@ -109,11 +109,11 @@
     </None>
     <Compile Include="Net\HttpDriver2.cs" />
     <Compile Include="Net\ProtocolDriver2.cs" />
-    <Compile Include="Net\ProtocolDriverInitializationResult.cs" />
+    <None Include="Net\ProtocolDriverInitializationResult.cs" />
     <Compile Include="Net\ProtocolDriverState.cs" />
     <Compile Include="Net\RequestAvailableEventArgs.cs" />
     <Compile Include="Net\RequestProcessingStage.cs" />
-    <Compile Include="Net\StartedEventArgs.cs" />
+    <None Include="Net\StartedEventArgs.cs" />
     <Compile Include="Net\StartMode.cs" />
     <Compile Include="Pages\SessionExamplePage.cs" />
     <Compile Include="Pages\ViewSessionsPage.cs" />
@@ -157,7 +157,7 @@
     <Compile Include="Web\Forms\Form.cs" />
     <Compile Include="Web\Forms\Head.cs" />
     <Compile Include="Web\Forms\Heading.cs" />
-    <Compile Include="Web\Forms\Label.cs" />
+    <None Include="Web\Forms\Label.cs" />
     <Compile Include="Web\Forms\LineBreak.cs" />
     <Compile Include="Web\Forms\OrderedList.cs" />
     <Compile Include="Web\Forms\Paragraph.cs" />

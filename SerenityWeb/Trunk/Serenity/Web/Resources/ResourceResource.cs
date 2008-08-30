@@ -20,6 +20,11 @@ namespace Serenity.Web.Resources
     public sealed class ResourceResource : Resource
     {
         #region Constructors - Public
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResourceResource"/> class.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="data"></param>
         public ResourceResource(string name, byte[] data)
         {
             if (name == null)

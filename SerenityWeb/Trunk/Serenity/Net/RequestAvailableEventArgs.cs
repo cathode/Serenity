@@ -7,11 +7,15 @@ using Serenity.Web;
 namespace Serenity.Net
 {
     /// <summary>
-    /// Represents event data for the <see cref="ProtocolDriver.RequestAvailable"/> event.
+    /// Represents event data for the <see cref="ProtocolDriver2.RequestAvailable"/> event.
     /// </summary>
     public sealed class RequestAvailableEventArgs : EventArgs
     {
         #region Constructors - Public
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RequestAvailableEventArgs"/> class.
+        /// </summary>
+        /// <param name="request"></param>
         public RequestAvailableEventArgs(Request request)
         {
             this.request = request;
@@ -21,6 +25,9 @@ namespace Serenity.Net
         private Request request;
         #endregion
         #region Properties - Public
+        /// <summary>
+        /// Gets the <see cref="Request"/> that has been made available.
+        /// </summary>
         public Request Request
         {
             get

@@ -20,6 +20,10 @@ namespace Serenity.Web.Forms
     /// </summary>
     public sealed class ControlCollection : Collection<Control>
     {
+        /// <summary>
+        /// Adds a range of controls to the current <see cref="ControlCollection"/>.
+        /// </summary>
+        /// <param name="controls">The controls to add.</param>
         public void AddRange(IEnumerable<Control> controls)
         {
             foreach (Control c in controls)
@@ -27,6 +31,10 @@ namespace Serenity.Web.Forms
                 this.Add(c);
             }
         }
+        /// <summary>
+        /// Adds a range of controls to the current <see cref="ControlCollection"/>.
+        /// </summary>
+        /// <param name="controls">The controls to add.</param>
         public void AddRange(params Control[] controls)
         {
             foreach (Control c in controls)

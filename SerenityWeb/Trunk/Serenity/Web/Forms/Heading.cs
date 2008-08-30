@@ -13,7 +13,11 @@ using System.Text;
 
 namespace Serenity.Web.Forms
 {
+    /// <summary>
+    /// Represents a heading in a document.
+    /// </summary>
     public class Heading : Control
     {
+        //TODO: Implement Heading control class.
     }
 }
