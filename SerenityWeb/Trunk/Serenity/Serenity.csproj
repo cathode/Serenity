@@ -134,6 +134,7 @@
     <Compile Include="Module.cs" />
     <Compile Include="Pages\DefaultPage.cs" />
     <None Include="Themes\Theme.cs" />
+    <Compile Include="SuppressLoadCreationAttribute.cs" />
     <Compile Include="Web\ContextHandler.cs" />
     <Compile Include="SerenityInfo.cs" />
     <Compile Include="FileTypeRegistry.cs" />
@@ -158,6 +159,8 @@
     <Compile Include="Web\Forms\Head.cs" />
     <Compile Include="Web\Forms\Heading.cs" />
     <None Include="Web\Forms\Label.cs" />
+    <Compile Include="Web\Forms\HeadingLevel.cs" />
+    <Compile Include="Web\Forms\Image.cs" />
     <Compile Include="Web\Forms\LineBreak.cs" />
     <Compile Include="Web\Forms\OrderedList.cs" />
     <Compile Include="Web\Forms\Paragraph.cs" />
@@ -178,6 +181,7 @@
     <Compile Include="Web\RequestMethod.cs" />
     <None Include="Web\Services\WebMethodAttribute.cs" />
     <None Include="Web\Services\WebService.cs" />
+    <None Include="Web\Resources\DirectoryDocument.cs" />
     <Compile Include="Web\Resources\DirectoryResource.cs" />
     <Compile Include="Web\Resources\DynamicResource.cs" />
     <Compile Include="Web\Resources\ErrorResource.cs" />

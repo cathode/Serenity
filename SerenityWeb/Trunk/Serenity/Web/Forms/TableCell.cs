@@ -15,5 +15,20 @@ namespace Serenity.Web.Forms
 {
     public class TableCell : Control
     {
+        public TableCell()
+        {
+            
+        }
+        public TableCell(params Control[] contents)
+        {
+            this.Controls.AddRange(contents);
+        }
+        protected override string DefaultName
+        {
+            get
+            {
+                return "td";
+            }
+        }
     }
 }

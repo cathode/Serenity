@@ -15,5 +15,12 @@ namespace Serenity.Web.Forms
 {
     public class Span : Control
     {
+        protected override string DefaultName
+        {
+            get
+            {
+                return "span";
+            }
+        }
     }
 }

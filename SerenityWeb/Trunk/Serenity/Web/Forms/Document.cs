@@ -15,7 +15,7 @@ using Serenity.Web.Forms;
 
 namespace Serenity.Web.Forms
 {
-    public abstract class Document : Control
+    public class Document : Control
     {
         #region Constructors - Protected
         protected Document()

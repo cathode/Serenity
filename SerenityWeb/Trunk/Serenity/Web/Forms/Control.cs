@@ -69,8 +69,8 @@ namespace Serenity.Web.Forms
             if (this.CanContainAttributes && this.Attributes.Count > 0)
             {
                 writer.Write(" " + string.Join(" ", (from a in this.Attributes
-                                               where a.Include == true
-                                               select a.Name + "=\"" + a.Value + "\"").ToArray()));
+                                                     where a.Include == true
+                                                     select a.Name + "=\"" + a.Value + "\"").ToArray()));
             }
 
             if (!this.CanContainControls || this.Controls.Count == 0)

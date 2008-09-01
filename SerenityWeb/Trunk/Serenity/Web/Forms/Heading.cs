@@ -18,6 +18,33 @@ namespace Serenity.Web.Forms
     /// </summary>
     public class Heading : Control
     {
-        //TODO: Implement Heading control class.
+        public Heading()
+            : this(HeadingLevel.H1)
+        {
+        }
+        public Heading(HeadingLevel level)
+        {
+            this.Level = level;
+        }
+        private HeadingLevel level;
+        protected override string DefaultName
+        {
+            get
+            {
+                return "FIXME";
+            }
+        }
+        public HeadingLevel Level
+        {
+            get
+            {
+                return this.level;
+            }
+            set
+            {
+                this.level = value;
+                this.Name = this.level.ToString().ToLower();
+            }
+        }
     }
 }

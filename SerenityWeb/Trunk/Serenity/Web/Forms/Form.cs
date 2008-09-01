@@ -18,5 +18,13 @@ namespace Serenity.Web.Forms
     /// </summary>
     public class Form : Control
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Form"/> control class.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        public Form()
+        {
+        }
     }
 }

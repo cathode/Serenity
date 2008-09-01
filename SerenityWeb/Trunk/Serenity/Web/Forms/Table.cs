@@ -13,7 +13,23 @@ using System.Text;
 
 namespace Serenity.Web.Forms
 {
+    /// <summary>
+    /// Represents a control that contains tabular data.
+    /// </summary>
     public class Table : Control
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Table"/> control class.
+        /// </summary>
+        public Table()
+        {
+        }
+        protected override string DefaultName
+        {
+            get
+            {
+                return "table";
+            }
+        }
     }
 }

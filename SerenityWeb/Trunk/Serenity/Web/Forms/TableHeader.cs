@@ -15,5 +15,19 @@ namespace Serenity.Web.Forms
 {
     public class TableHeader : TableCell
     {
+        public TableHeader()
+        {
+        }
+        public TableHeader(params Control[] contents)
+            : base(contents)
+        {
+        }
+        protected override string DefaultName
+        {
+            get
+            {
+                return "th";
+            }
+        }
     }
 }

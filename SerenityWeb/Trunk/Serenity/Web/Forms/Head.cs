@@ -18,6 +18,9 @@ namespace Serenity.Web.Forms
     /// </summary>
     public class Head : Control
     {
+        public Head()
+        {
+        }
         /// <summary>
         /// Overridden. Gets the default name of the head section which is "head".
         /// </summary>

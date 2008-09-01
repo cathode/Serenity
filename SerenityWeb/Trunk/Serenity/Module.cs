@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Linq;
 
 using Serenity.Attributes;
 using Serenity.Web.Resources;
@@ -25,14 +26,14 @@ namespace Serenity
         }
         #endregion
         #region Fields - Private
-		private Assembly assembly;
+        private Assembly assembly;
         private readonly string name;
         private Dictionary<string, DynamicResource> pages = new Dictionary<string, DynamicResource>();
         private string title;
         private string resourceNamespace;
         #endregion
-		#region Methods - Public
-		public static Module LoadModule(string name)
+        #region Methods - Public
+        public static Module LoadModule(string name)
         {
             if (name == null)
             {
@@ -59,7 +60,7 @@ namespace Serenity
                 SerenityServer.ErrorLog.Write("Failed to find module assembly file at " + assemblyPath, Serenity.Logging.LogMessageLevel.Error);
                 throw new FileNotFoundException("The module was not found at the supplied assemblyPath", assemblyPath);
             }
-			string title = name;
+            string title = name;
             DynamicResource defaultPage = null;
 
             Assembly moduleAsm = Assembly.LoadFile(Path.GetFullPath(assemblyPath));
@@ -79,7 +80,7 @@ namespace Serenity
             foreach (object attrib in moduleAttributes)
             {
                 var a = attrib as ModuleDefaultPageAttribute;
-                
+
                 if (a != null)
                 {
                     ModuleDefaultPageAttribute defaultPageAttribute = a;
@@ -100,7 +101,7 @@ namespace Serenity
             List<DynamicResource> pages = new List<DynamicResource>();
             foreach (Type type in moduleAsm.GetTypes())
             {
-                if (type.IsSubclassOf(typeof(DynamicResource)) && !type.IsAbstract)
+                if (type.IsSubclassOf(typeof(DynamicResource)) && !type.IsAbstract && type.GetCustomAttributes(false).OfType<SuppressLoadCreationAttribute>().Count() == 0)
                 {
                     DynamicResource page = (DynamicResource)moduleAsm.CreateInstance(type.FullName);
 
@@ -109,9 +110,9 @@ namespace Serenity
             }
             if (pages.Count == 0)
             {
-				Module module = new Module(name);
-				module.assembly = moduleAsm;
-				return module;
+                Module module = new Module(name);
+                module.assembly = moduleAsm;
+                return module;
             }
             else
             {
@@ -121,7 +122,7 @@ namespace Serenity
                 }
 
                 Module module = new Module(name);
-				module.assembly = moduleAsm;
+                module.assembly = moduleAsm;
                 module.title = title;
                 module.resourceNamespace = resourceNamespace;
                 module.AddPages(pages);
@@ -143,33 +144,33 @@ namespace Serenity
                 this.AddPage(page);
             }
         }
-		public DynamicResource GetPage(string name)
-		{
-			if (this.pages.ContainsKey(name.ToLower()))
-			{
-				return this.pages[name.ToLower()];
-			}
-			else
-			{
-				return null;
-			}
-		}
+        public DynamicResource GetPage(string name)
+        {
+            if (this.pages.ContainsKey(name.ToLower()))
+            {
+                return this.pages[name.ToLower()];
+            }
+            else
+            {
+                return null;
+            }
+        }
         #endregion
         #region Properties - Public
-		public Assembly Assembly
-		{
-			get
-			{
-				return this.assembly;
-			}
-		}
-		public DynamicResource DefaultPage
-		{
-			get
-			{
+        public Assembly Assembly
+        {
+            get
+            {
+                return this.assembly;
+            }
+        }
+        public DynamicResource DefaultPage
+        {
+            get
+            {
                 return this.pages["default"];
-			}
-		}
+            }
+        }
         public string Name
         {
             get
@@ -194,13 +195,13 @@ namespace Serenity
                 return this.resourceNamespace;
             }
         }
-		public string SystemName
-		{
-			get
-			{
-				return this.Name.ToLower();
-			}
-		}
+        public string SystemName
+        {
+            get
+            {
+                return this.Name.ToLower();
+            }
+        }
         public static Module Current
         {
             get
@@ -209,7 +210,7 @@ namespace Serenity
             }
             internal set
             {
-                
+
             }
         }
         #endregion

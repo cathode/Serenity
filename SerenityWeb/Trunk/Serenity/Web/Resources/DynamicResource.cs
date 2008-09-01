@@ -51,7 +51,7 @@ namespace Serenity.Web.Resources
         /// Overridden. Gets the grouping of the current <see cref="DynamicResource"/>,
         /// which is always <see cref="ResourceGrouping.Dynamic"/>.
         /// </summary>
-        public sealed override ResourceGrouping Grouping
+        public override ResourceGrouping Grouping
         {
             get
             {

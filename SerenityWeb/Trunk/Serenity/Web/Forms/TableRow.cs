@@ -15,5 +15,19 @@ namespace Serenity.Web.Forms
 {
     public class TableRow : Control
     {
+        public TableRow()
+        {
+        }
+        public TableRow(params Control[] contents)
+        {
+            this.Controls.AddRange(contents);
+        }
+        protected override string DefaultName
+        {
+            get
+            {
+                return "tr";
+            }
+        }
     }
 }

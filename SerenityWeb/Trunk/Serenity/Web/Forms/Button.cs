@@ -19,5 +19,8 @@ namespace Serenity.Web.Forms
     public class Button : Control
     {
         //TODO: Implement button control class.
+        public Button()
+        {
+        }
     }
 }
