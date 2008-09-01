@@ -11,15 +11,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Serenity.Web.Forms
+namespace Serenity
 {
-    public enum HeadingLevel
+    /// <summary>
+    /// Allows a module's resources to expose configurable options.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
+    public sealed class ConfigurationOptionAttribute : Attribute
     {
-        H1,
-        H2,
-        H3,
-        H4,
-        H5,
-        H6,
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConfigurationOptionAttribute"/> class.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="kind"></param>
+        public ConfigurationOptionAttribute(string name, ConfigurationOptionKind kind)
+        {
+        }
     }
 }

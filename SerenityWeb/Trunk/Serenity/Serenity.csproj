@@ -88,6 +88,8 @@
   <ItemGroup>
     <Compile Include="AlternateResourcePathAttribute.cs" />
     <None Include="Cache\CacheManager.cs" />
+    <Compile Include="ConfigurationOptionAttribute.cs" />
+    <Compile Include="ConfigurationOptionKind.cs" />
     <Compile Include="Data\Database.cs" />
     <Compile Include="Data\DataScope.cs" />
     <Compile Include="Data\DataExtensions.cs" />
@@ -140,7 +142,6 @@
     <Compile Include="FileTypeRegistry.cs" />
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="Web\CommonContext.cs" />
     <Compile Include="OperationStatus.cs" />
     <Compile Include="Web\Cookie.cs" />
     <Compile Include="Web\CookieCollection.cs" />

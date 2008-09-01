@@ -1,6 +1,6 @@
-/******************************************************************************
+﻿/******************************************************************************
  * Serenity - The next evolution of web server technology.                    *
- * Copyright � 2006-2008 Serenity Project - http://SerenityProject.net/       *
+ * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
  *----------------------------------------------------------------------------*
  * This software is released under the terms and conditions of the Microsoft  *
  * Public License (Ms-PL), a copy of which should have been included with     *
@@ -8,11 +8,14 @@
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
-namespace Serenity.Web.Services
+namespace Serenity
 {
-    public sealed class WebMethodAttribute : Attribute
+    public enum ConfigurationOptionKind
     {
+        Text = 0x0,
+        Number,
     }
 }
