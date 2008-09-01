@@ -14,7 +14,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-using Serenity.Attributes;
+using Serenity;
 
 [assembly: AssemblyTitle("Serenity")]
 [assembly: AssemblyDescription("Core Class Library")]

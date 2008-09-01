@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Serenity.Attributes
+namespace Serenity
 {
     /// <summary>
     /// Provides a way to specify the title of a module.

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Serenity.Attributes
+namespace Serenity
 {
     /// <summary>
     /// Provides a way to specify alternate paths for a resource.

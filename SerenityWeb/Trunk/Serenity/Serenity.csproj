@@ -86,11 +86,8 @@
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Attributes\AlternateResourcePathAttribute.cs" />
-    <Compile Include="Attributes\ModuleTitleAttribute.cs" />
+    <Compile Include="AlternateResourcePathAttribute.cs" />
     <None Include="Cache\CacheManager.cs" />
-    <Compile Include="Attributes\ModuleDefaultPageAttribute.cs" />
-    <Compile Include="Attributes\ModuleResourceNamespaceAttribute.cs" />
     <Compile Include="Data\Database.cs" />
     <Compile Include="Data\DataScope.cs" />
     <Compile Include="Data\DataExtensions.cs" />
@@ -107,6 +104,9 @@
     <None Include="Data\global\schemas\serenity_global.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Compile Include="ModuleDefaultPageAttribute.cs" />
+    <Compile Include="ModuleResourceNamespaceAttribute.cs" />
+    <Compile Include="ModuleTitleAttribute.cs" />
     <Compile Include="Net\HttpDriver2.cs" />
     <Compile Include="Net\ProtocolDriver2.cs" />
     <None Include="Net\ProtocolDriverInitializationResult.cs" />

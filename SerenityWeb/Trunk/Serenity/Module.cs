@@ -12,7 +12,6 @@ using System.IO;
 using System.Reflection;
 using System.Linq;
 
-using Serenity.Attributes;
 using Serenity.Web.Resources;
 
 namespace Serenity

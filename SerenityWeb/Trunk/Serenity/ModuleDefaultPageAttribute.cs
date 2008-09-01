@@ -10,29 +10,29 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Serenity.Attributes
+namespace Serenity
 {
     /// <summary>
-    /// Provides a way to specify the resource namespace of a module.
+    ///	Provides a way to specify the default page of a given Module.
     /// </summary>
     [AttributeUsage(AttributeTargets.Assembly)]
-    public sealed class ModuleResourceNamespaceAttribute : Attribute
+    public sealed class ModuleDefaultPageAttribute : Attribute
     {
         #region Constructors - Public
         /// <summary>
-        /// Initializes a new instance of the ModuleResourceNamespaceAttribute class.
+        /// Initializes a new instance of the ModuleDefaultPageAttribute class.
         /// </summary>
-        /// <param name="resourceNamespace">The Resource Namespace of the module.</param>
-        public ModuleResourceNamespaceAttribute(string resourceNamespace)
+        /// <param name="name"></param>
+        public ModuleDefaultPageAttribute(string name)
         {
-            this.ResourceNamespace = resourceNamespace;
+            this.Name = name;
         }
         #endregion
         #region Fields - Public
         /// <summary>
-        /// Holds the Resource Namespace of the module.
+        /// Holds the name of the default page for a Module. This field is read-only.
         /// </summary>
-        public readonly string ResourceNamespace;
+        public readonly string Name;
         #endregion
     }
 }
