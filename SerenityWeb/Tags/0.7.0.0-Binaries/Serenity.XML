@@ -1,0 +1,2249 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Serenity</name>
+    </assembly>
+    <members>
+        <member name="T:Serenity.Web.Forms.TextControl">
+            <summary>
+            Represents a web control that only contains text.
+            </summary>
+        </member>
+        <member name="T:Serenity.Web.Forms.Control">
+            <summary>
+            Represents a control in the WebForms API.
+            </summary>
+        </member>
+        <member name="F:Serenity.Web.Forms.Control.DefaultControlName">
+            <summary>
+            Holds the default control name.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.Forms.Control.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Serenity.Web.Forms.Control"/> class.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.Forms.Control.RenderBegin(Serenity.Web.Forms.RenderingContext)">
+            <summary>
+            When overridden in a derived class, performs control rendering.
+            </summary>
+            <remarks>
+            This method is invo0ked before any children of the current <see cref="T:Serenity.Web.Forms.Control"/> have started their rendering.
+            Use it to begin XML or XHTML tags, for example.
+            </remarks>
+            <param name="context"></param>
+        </member>
+        <member name="M:Serenity.Web.Forms.Control.RenderEnd(Serenity.Web.Forms.RenderingContext)">
+            <summary>
+            When overridden in a derived class, performs control rendering.
+            </summary>
+            <remarks>
+            This method is invoked after all the children of the current <see cref="T:Serenity.Web.Forms.Control"/> have completed their rendering.
+            It should be used to close any open XML or XHTML tags, for example.
+            </remarks>
+            <param name="context"></param>
+        </member>
+        <member name="M:Serenity.Web.Forms.Control.Render(Serenity.Web.Forms.RenderingContext)">
+            <summary>
+            Renders the current <see cref="T:Serenity.Web.Forms.Control"/> against the specified <see cref="T:Serenity.Web.Forms.RenderingContext"/>.
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="P:Serenity.Web.Forms.Control.CanContainControls">
+            <summary>
+            Gets a value that indicates if the current <see cref="T:Serenity.Web.Forms.Control"/> supports containing other controls.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Forms.Control.CanContainAttributes">
+            <summary>
+            Gets a value that indicates if the current <see cref="T:Serenity.Web.Forms.Control"/> supports containing attributes.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Forms.Control.DefaultName">
+            <summary>
+            Gets the default name of the current <see cref="T:Serenity.Web.Forms.Control"/> if none is specified elsewhere.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Forms.Control.Attributes">
+            <summary>
+            Gets a collection of attributes that belong to the current <see cref="T:Serenity.Web.Forms.Control"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Forms.Control.Classification">
+            <summary>
+            Gets a string that classifies the current <see cref="T:Serenity.Web.Forms.Control"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Forms.Control.Id">
+            <summary>
+            Gets the id of the current <see cref="T:Serenity.Web.Forms.Control"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Forms.Control.Name">
+            <summary>
+            Gets the name of the current <see cref="T:Serenity.Web.Forms.Control"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Forms.Control.Controls">
+            <summary>
+            Gets the controls that are children of the current <see cref="T:Serenity.Web.Forms.Control"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Forms.Control.Style">
+            <summary>
+            Gets a string that contains style information for the current <see cref="T:Serenity.Web.Forms.Control"/>.
+            </summary>
+        </member>
+        <member name="T:Serenity.Web.Resources.ResourcePath">
+            <summary>
+            Represents a path that can be used to locate a resource.
+            </summary>
+        </member>
+        <member name="T:Serenity.Web.Forms.ControlCollection">
+            <summary>
+            Represents a collection of controls.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.Forms.ControlCollection.AddRange(System.Collections.Generic.IEnumerable{Serenity.Web.Forms.Control})">
+            <summary>
+            Adds a range of controls to the current <see cref="T:Serenity.Web.Forms.ControlCollection"/>.
+            </summary>
+            <param name="controls">The controls to add.</param>
+        </member>
+        <member name="M:Serenity.Web.Forms.ControlCollection.AddRange(Serenity.Web.Forms.Control[])">
+            <summary>
+            Adds a range of controls to the current <see cref="T:Serenity.Web.Forms.ControlCollection"/>.
+            </summary>
+            <param name="controls">The controls to add.</param>
+        </member>
+        <member name="T:Serenity.Web.Forms.Button">
+            <summary>
+            Represents a button in a document.
+            </summary>
+        </member>
+        <member name="T:Serenity.ModuleTitleAttribute">
+            <summary>
+            Provides a way to specify the title of a module.
+            </summary>
+        </member>
+        <member name="M:Serenity.ModuleTitleAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the ModuleTitleAttribute class.
+            </summary>
+            <param name="title"></param>
+        </member>
+        <member name="P:Serenity.ModuleTitleAttribute.Title">
+            <summary>
+            Holds the title of the module.
+            </summary>
+        </member>
+        <member name="T:Serenity.Domain">
+            <summary>
+            Represents a domain.
+            </summary>
+        </member>
+        <member name="M:Serenity.Domain.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the Domain class.
+            </summary>
+            <param name="hostName">The host name of the new Domain instance.</param>
+        </member>
+        <member name="P:Serenity.Domain.DocumentRoot">
+            <summary>
+            Gets the root path where static resources are stored.
+            </summary>
+        </member>
+        <member name="P:Serenity.Domain.HostName">
+            <summary>
+            Gets the hostname represented by the current Domain.
+            </summary>
+        </member>
+        <member name="T:Serenity.ModuleCollection">
+            <summary>
+            Represents a collection of Modules.
+            </summary>
+        </member>
+        <member name="M:Serenity.ModuleCollection.#ctor">
+            <summary>
+            Initializes a new instance of the ModuleCollection class.
+            </summary>
+        </member>
+        <member name="M:Serenity.ModuleCollection.GetKeyForItem(Serenity.Module)">
+            <summary>
+            Overridden. Used by KeyedCollection.
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Serenity.Web.Forms.Form">
+            <summary>
+            Represents an XHTML form which allows information to be submitted to the server.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.Forms.Form.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Serenity.Web.Forms.Form"/> control class.
+            </summary>
+            <param name="request"></param>
+            <param name="response"></param>
+        </member>
+        <member name="T:Serenity.Web.Resources.StaticResource">
+            <summary>
+            Represents a file on the local filesystem that is exposed as a requestable resource.
+            </summary>
+        </member>
+        <member name="T:Serenity.Web.Resources.Resource">
+            <summary>
+            Provides a base class that all web-accessible resources must inherit from.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.Resources.Resource.OnRequest(Serenity.Web.Request,Serenity.Web.Response)">
+            <summary>
+            When overridden in a derived class, uses the supplied CommonContext to dynamically generate response content.
+            </summary>
+            <param name="request"></param>
+            <param name="response"></param>
+        </member>
+        <member name="M:Serenity.Web.Resources.Resource.PostRequest(Serenity.Web.Request,Serenity.Web.Response)">
+            <summary>
+            Invoked after OnRequest.
+            </summary>
+            <param name="request"></param>
+            <param name="response"></param>
+        </member>
+        <member name="M:Serenity.Web.Resources.Resource.PreRequest(Serenity.Web.Request,Serenity.Web.Response)">
+            <summary>
+            Invoked before OnRequest.
+            </summary>
+            <param name="request"></param>
+            <param name="response"></param>
+        </member>
+        <member name="P:Serenity.Web.Resources.Resource.Grouping">
+            <summary>
+            Gets the grouping of the current Resource.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Resources.Resource.IsSizeKnown">
+            <summary>
+            Gets a value that indicates if the size in bytes of the current
+            Resource is known or can be determined.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Resources.Resource.ContentType">
+            <summary>
+            Gets the MimeType that should be used to describe the content of the current Resource.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Resources.Resource.Name">
+            <summary>
+            Gets or sets the name of the current Resource.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Resources.Resource.Path">
+            <summary>
+            Gets the ResourcePath of the current Resource.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Resources.Resource.Size">
+            <summary>
+            When overridden in a derived class, gets the size in bytes of the
+            content of the current Resource.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Resources.StaticResource.Grouping">
+            <summary>
+            Overridden. Returns ResourceGrouping.Files.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Resources.StaticResource.Location">
+            <summary>
+            Gets the local filesystem location which the current StaticResource represents.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Resources.StaticResource.IsSizeKnown">
+            <summary>
+            Overridden. Returns true, indicating the size of a static file can be known.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Resources.StaticResource.Size">
+            <summary>
+            Overridden. Gets the size of the file represented by the current StaticResource.
+            </summary>
+        </member>
+        <member name="T:Serenity.SerenityInfo">
+            <summary>
+            Contains values which describe Serenity.
+            </summary>
+        </member>
+        <member name="F:Serenity.SerenityInfo.Version">
+            <summary>
+            Holds the version string for Serenity.
+            </summary>
+        </member>
+        <member name="F:Serenity.SerenityInfo.Copyright">
+            <summary>
+            Holds the copyright notice for Serenity.
+            </summary>
+        </member>
+        <member name="F:Serenity.SerenityInfo.Name">
+            <summary>
+            Holds the assembly name for Serenity.
+            </summary>
+        </member>
+        <member name="F:Serenity.SerenityInfo.Company">
+            <summary>
+            Holds the company name for the assembly.
+            </summary>
+        </member>
+        <member name="F:Serenity.SerenityInfo.SystemName">
+            <summary>
+            Holds the actual name of anything that is named the "system" name.
+            </summary>
+        </member>
+        <member name="T:Serenity.Web.Resources.RewriteResource">
+            <summary>
+            Represents a link or redirection to another resource on the server.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.Resources.RewriteResource.#ctor(Serenity.Web.Resources.ResourcePath,Serenity.Web.Resources.ResourcePath)">
+            <summary>
+            Initializes a new instance of the RewriteResource class.
+            </summary>
+            <param name="path"></param>
+            <param name="target"></param>
+        </member>
+        <member name="P:Serenity.Web.Resources.RewriteResource.IsHardRewrite">
+            <summary>
+            Gets or sets a value which determines if the rewriting is a "hard" rewrite.
+            where the rewrite is silently handled on the server side, or a "soft" rewrite,
+            where a redirect response is sent back to the client.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Resources.RewriteResource.TargetPath">
+            <summary>
+            Gets or sets the path of the target Resource.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Resources.RewriteResource.TargetResource">
+            <summary>
+            Gets the target resource.
+            </summary>
+        </member>
+        <member name="T:Serenity.Web.Resources.ResourceCollection">
+            <summary>
+            Represents a collection of resources.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.Resources.ResourceCollection.#ctor">
+            <summary>
+            Initializes a new instance of the ResourceCollection class.
+            </summary>
+        </member>
+        <member name="T:Serenity.Web.RequestMethod">
+            <summary>
+            Represents supported request methods.
+            </summary>
+        </member>
+        <member name="F:Serenity.Web.RequestMethod.Unknown">
+            <summary>
+            Indicates an unknown, invalid, or otherwise not supported request method.
+            </summary>
+        </member>
+        <member name="F:Serenity.Web.RequestMethod.GET">
+            <summary>
+            The GET method means retrieve whatever information (in the form of an entity) is identified by the Request-URI.
+            </summary>
+        </member>
+        <member name="F:Serenity.Web.RequestMethod.POST">
+            <summary>
+            The POST method is used to request that the origin server accept the entity enclosed in the request as a new
+            subordinate of the resource identified by the Request-URI in the Request-Line.
+            </summary>
+        </member>
+        <member name="F:Serenity.Web.RequestMethod.HEAD">
+            <summary>
+            The HEAD method is identical to GET except that the server MUST NOT return a message-body in the response.
+            </summary>
+        </member>
+        <member name="F:Serenity.Web.RequestMethod.OPTIONS">
+            <summary>
+            The OPTIONS method represents a request for information about the communication options available on the
+            request/response chain identified by the Request-URI.
+            </summary>
+        </member>
+        <member name="T:Serenity.Logging.LogMessageLevel">
+            <summary>
+            Used to indicate the severity or type of a log message.
+            </summary>
+        </member>
+        <member name="F:Serenity.Logging.LogMessageLevel.Debug">
+            <summary>
+            Indicates that the message is only useful for debugging purposes,
+            the message is only useful to developers.
+            </summary>
+        </member>
+        <member name="F:Serenity.Logging.LogMessageLevel.Info">
+            <summary>
+            Indicates that the message contains informational content about
+            something that has taken place.
+            </summary>
+        </member>
+        <member name="F:Serenity.Logging.LogMessageLevel.Notice">
+            <summary>
+            Indicates that the message might be related to an issue with the
+            current behaviour of the server.
+            </summary>
+        </member>
+        <member name="F:Serenity.Logging.LogMessageLevel.Warning">
+            <summary>
+            Indicates that the message is informing the reader about unstable
+            or unsafe behaviour or configuration of the server.
+            </summary>
+        </member>
+        <member name="F:Serenity.Logging.LogMessageLevel.Error">
+            <summary>
+            Indicates that the message describes a critical problem that has taken place.
+            </summary>
+        </member>
+        <member name="T:Serenity.Web.RequestDataStream">
+            <summary>
+            Represents a request data field as a read-only stream. This class is read-only.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.RequestDataStream.Flush">
+            <summary>
+            Not supported.
+            </summary>
+            <exception cref="T:System.NotSupportedException">Cannot flush a RequestDataStream.</exception>
+        </member>
+        <member name="M:Serenity.Web.RequestDataStream.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Reads a number of bytes into Buffer
+            </summary>
+            <param name="buffer">An array of bytes. When this method returns,
+            buffer contains the values between offset and (offset + count - 1) replaced
+            by the bytes read from the current stream.</param>
+            <param name="offset">The zero-based index in Buffer at which to begin storing the read bytes.</param>
+            <param name="count">The maximum of bytes to read from the current stream.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Web.RequestDataStream.ReadAll">
+            <summary>
+            Reads the entire stream, starting at the beginning.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Web.RequestDataStream.ReadAllText">
+            <summary>
+            Reads the entire stream into a string, starting at the beginning
+            and using the default text encoding.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Web.RequestDataStream.ReadAllText(System.Text.Encoding)">
+            <summary>
+            Reads the entire stream into a string, starting at the beginning
+            and using the specified text encoding.
+            </summary>
+            <param name="encoding">The encoding to use.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Web.RequestDataStream.ReadText(System.Int32)">
+            <summary>
+            Reads a number of bytes and returns them as a string, using the default text encoding.
+            </summary>
+            <param name="count">The number of bytes to read on the current stream.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Web.RequestDataStream.ReadText(System.Int32,System.Text.Encoding)">
+            <summary>
+            Reads a number of bytes and returns them as a string, using the specified encoding.
+            </summary>
+            <param name="count">The number of bytes to read on the current stream.</param>
+            <param name="encoding">The encoding to use.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Web.RequestDataStream.ReadToEnd">
+            <summary>
+            Reads all the remaining bytes and returns them as an array.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Web.RequestDataStream.ReadToEndText">
+            <summary>
+            Reads to the end of the current RequestDataStream,
+            from the current position, and returns everything read as a
+            string using the default encoding.
+            </summary>
+            <returns>A string containing the remainder of the current RequestDataStream.</returns>
+        </member>
+        <member name="M:Serenity.Web.RequestDataStream.ReadToEndText(System.Text.Encoding)">
+            <summary>
+            Reads to the end of the current RequestDataStream,
+            from the current position, and returns everything read as a
+            string using the specified encoding.
+            </summary>
+            <param name="encoding">The encoding to use.</param>
+            <returns>A string containing the remainder of the current RequestDataStream.</returns>
+        </member>
+        <member name="M:Serenity.Web.RequestDataStream.Seek(System.Int64,System.IO.SeekOrigin)">
+            <summary>
+            Sets the position within the current stream.
+            </summary>
+            <param name="offset">A Byte offset relative to the origin parameter.</param>
+            <param name="origin">A Input of type System.IO.SeekOrigin indicating
+            the reference point used to obtain the new position.</param>
+            <returns>The new position within the current stream.</returns>
+        </member>
+        <member name="M:Serenity.Web.RequestDataStream.SetLength(System.Int64)">
+            <summary>
+            Not supported.
+            </summary>
+            <exception cref="T:System.NotSupportedException">
+            Cannot modify a RequestDataStream.
+            </exception>
+        </member>
+        <member name="M:Serenity.Web.RequestDataStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Not supported.
+            </summary>
+            <exception cref="T:System.NotSupportedException">
+            Cannot modify a RequestDataStream.
+            </exception>
+        </member>
+        <member name="P:Serenity.Web.RequestDataStream.CanRead">
+            <summary>
+            Gets a Input that indicates whether the current RequestDataReader supports reading.
+            </summary>
+            <remarks>Always returns true.</remarks>
+        </member>
+        <member name="P:Serenity.Web.RequestDataStream.CanSeek">
+            <summary>
+            Gets a Input that indicates whether the current RequestDataReader supports seeking.
+            </summary>
+            <remarks>Always returns true.</remarks>
+        </member>
+        <member name="P:Serenity.Web.RequestDataStream.CanWrite">
+            <summary>
+            Gets a Input that indicates whether the current RequestDataReader supports writing.
+            </summary>
+            <remarks>Always returns false.</remarks>
+        </member>
+        <member name="P:Serenity.Web.RequestDataStream.Length">
+            <summary>
+            Gets the length in bytes of the current stream.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.RequestDataStream.MimeType">
+            <summary>
+            Gets or sets the mime-type associated with the current RequestDataStream.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.RequestDataStream.Name">
+            <summary>
+            Gets the name of the request data field which the current RequestDataReader provides access to.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.RequestDataStream.Position">
+            <summary>
+            Gets or sets the position within the current stream.
+            </summary>
+        </member>
+        <member name="T:Serenity.Web.Forms.Head">
+            <summary>
+            Represents the head section of a document.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Forms.Head.DefaultName">
+            <summary>
+            Overridden. Gets the default name of the head section which is "head".
+            </summary>
+        </member>
+        <member name="T:Serenity.Web.Response">
+            <summary>
+            Represents a response to a request from a client.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.Response.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Serenity.Web.Response"/> class.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.Response.ClearOutputBuffer">
+            <summary>
+            Clears the output buffer of the current <see cref="T:Serenity.Web.Response"/>.
+            </summary>
+            <remarks>
+            If data has already been sent, this cannot un-send already sent data.
+            </remarks>
+        </member>
+        <member name="M:Serenity.Web.Response.Flush">
+            <summary>
+            Causes the currently buffered data to be written to the underlying client socket, then clears the Buffer.
+            Note: The underlying Socket is unaffected if the current CommonResponse does not support chunked transmission.
+            </summary>
+            <returns>The number of bytes flushed, or -1 if an error occurred.</returns>
+        </member>
+        <member name="M:Serenity.Web.Response.Write(System.Byte[])">
+            <summary>
+            Writes a series of bytes to the output buffer.
+            </summary>
+            <param name="value">The array of bytes to write.</param>
+            <returns>The number of bytes written, or -1 if an error occurred.</returns>
+        </member>
+        <member name="M:Serenity.Web.Response.Write(System.String)">
+            <summary>
+            Writes a string to the output buffer.
+            </summary>
+            <param name="value">The value to write.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Web.Response.WriteLine(System.String)">
+            <summary>
+            Writes a string followed by a newline to the output buffer.
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Serenity.Web.Response.Connection">
+            <summary>
+            Gets or sets the <see cref="T:System.Net.Sockets.Socket"/> used to communicate the current <see cref="T:Serenity.Web.Response"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Response.ContentType">
+            <summary>
+            Gets or sets the mimetype associated with the content returned to the client.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Response.Current">
+            <summary>
+            Gets the current <see cref="T:Serenity.Web.Response"/> for the active thread.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Response.Cookies">
+            <summary>
+            Gets a collection of cookies that will be sent with the request.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Response.Headers">
+            <summary>
+            Gets the HeaderCollection containing the headers returned to the client.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Response.HeadersSent">
+            <summary>
+            Gets an indication of whether or not header data has already been
+            sent to the client.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Response.OutputBuffer">
+            <summary>
+            Gets the buffer of data that has not yet been sent.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Response.Sent">
+            <summary>
+            Gets or sets a value which indicates how much data has actually
+            been sent to the client.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Response.Status">
+            <summary>
+            Gets or sets the StatusCode associated with the current
+            CommonResponse.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Response.UseChunkedTransferEncoding">
+            <summary>
+            Gets or sets a value which determines if the current CommonResponse
+            should be sent using chunked transfer encoding.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Response.UseCompression">
+            <summary>
+            Gets or sets a value used to determine if the data sent back
+            to the client with the response should be compressed or not.
+            </summary>
+            <remarks>
+            Compression can decrease the amount of data to be sent by a large
+            amount if used on highly compressable data such as text. For other
+            types of data, like images, compression should not be used.
+            </remarks>
+        </member>
+        <member name="T:Serenity.Web.Resources.ResourceResource">
+            <summary>
+            Represents a requestable file embedded in a module assembly file.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.Resources.ResourceResource.#ctor(System.String,System.Byte[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Serenity.Web.Resources.ResourceResource"/> class.
+            </summary>
+            <param name="name"></param>
+            <param name="data"></param>
+        </member>
+        <member name="T:Serenity.Web.Forms.Table">
+            <summary>
+            Represents a control that contains tabular data.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.Forms.Table.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Serenity.Web.Forms.Table"/> control class.
+            </summary>
+        </member>
+        <member name="T:Serenity.Logging.Log">
+            <summary>
+            Provides a method which allows other parts of Serenity or
+            loaded modules to write messages to a central log file.
+            </summary>
+        </member>
+        <member name="M:Serenity.Logging.Log.#ctor">
+            <summary>
+            Initializes a new instance of the Log class, using the standard output stream of the console.
+            </summary>
+        </member>
+        <member name="M:Serenity.Logging.Log.#ctor(System.IO.Stream)">
+            <summary>
+            Initializes a new instance of the Log class, using the specified outputStream.
+            </summary>
+            <param name="outputStream">A stream to which log messages will be written to.</param>
+        </member>
+        <member name="M:Serenity.Logging.Log.Dispose">
+            <summary>
+            Releases unmanaged resources used by the current Log.
+            </summary>
+        </member>
+        <member name="M:Serenity.Logging.Log.Write(System.String,Serenity.Logging.LogMessageLevel)">
+            <summary>
+            Logs a message.
+            </summary>
+            <param name="message">A string containing a description of the message.</param>
+            <param name="level">A LogMessageLevel object describing the severity of the message.</param>
+        </member>
+        <member name="T:Serenity.Web.Resources.DynamicResource">
+            <summary>
+            Provides the base class for dynamic resources.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.Resources.DynamicResource.#ctor">
+            <summary>
+            Initializes a new instance of the DynamicResource class.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.Resources.DynamicResource.OnInitialization">
+            <summary>
+            When overridden in a derived class, performs actions when the module is loaded into the server,
+            usually when the server first starts up.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.Resources.DynamicResource.OnShutdown">
+            <summary>
+            When overridden in a derived class, performs actions when the module is unloaded or the server
+            is shut down.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Resources.DynamicResource.Grouping">
+            <summary>
+            Overridden. Gets the grouping of the current <see cref="T:Serenity.Web.Resources.DynamicResource"/>,
+            which is always <see cref="F:Serenity.Web.Resources.ResourceGrouping.Dynamic"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Resources.DynamicResource.Module">
+            <summary>
+            Gets the Module which the current DynamicResource belongs to.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when setting
+            if the value to be assigned is null.</exception>
+        </member>
+        <member name="P:Serenity.Web.Forms.Document.Body">
+            <summary>
+            Gets the element that represents the body section of the current <see cref="T:Serenity.Web.Forms.Document"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Forms.Document.Doctype">
+            <summary>
+            Gets or sets the <see cref="P:Serenity.Web.Forms.Document.Doctype"/> of the current <see cref="T:Serenity.Web.Forms.Document"/>.
+            </summary>
+            <remarks>
+            This property defaults to <see cref="p:Doctype.XHTML11"/> which is the XHTML 1.1 Document Type.
+            </remarks>
+        </member>
+        <member name="P:Serenity.Web.Forms.Document.Head">
+            <summary>
+            Gets the element that represents the head section of the current <see cref="T:Serenity.Web.Forms.Document"/>.
+            </summary>
+        </member>
+        <member name="T:Serenity.Net.ProtocolDriverState">
+            <summary>
+            Provides a simple data structure used to pass objects to and from async callback methods.
+            </summary>
+        </member>
+        <member name="F:Serenity.Net.ProtocolDriverState.MaxBufferSize">
+            <summary>
+            Holds the maximum buffer size.
+            </summary>
+        </member>
+        <member name="F:Serenity.Net.ProtocolDriverState.MinBufferSize">
+            <summary>
+            Holds the minimum buffer size.
+            </summary>
+        </member>
+        <member name="F:Serenity.Net.ProtocolDriverState.DefaultBufferSize">
+            <summary>
+            Holds the default (optimal) buffer size.
+            </summary>
+        </member>
+        <member name="M:Serenity.Net.ProtocolDriverState.#ctor">
+            <summary>
+            Initializes a new instance of the WebDriverState class using the default buffer size.
+            </summary>
+        </member>
+        <member name="M:Serenity.Net.ProtocolDriverState.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the WebDriverState class using the supplied buffer size.
+            </summary>
+            <param name="bufferSize"></param>
+        </member>
+        <member name="P:Serenity.Net.ProtocolDriverState.Buffer">
+            <summary>
+            Gets or sets the data buffer associated with the current WebDriverState.
+            </summary>
+        </member>
+        <member name="P:Serenity.Net.ProtocolDriverState.WorkSocket">
+            <summary>
+            Gets or sets the socket, used to perform operations on, associated with the
+            current WebDriverState.
+            </summary>
+        </member>
+        <member name="T:Serenity.IO.SerenityPath">
+            <summary>
+            Provides Serenity-specific methods for working with path strings.
+            </summary>
+        </member>
+        <member name="P:Serenity.IO.SerenityPath.ApplicationDirectory">
+            <summary>
+            Gets the directory where the application is installed.
+            </summary>
+        </member>
+        <member name="P:Serenity.IO.SerenityPath.WorkingDirectory">
+            <summary>
+            Gets or sets the working directory of the application.
+            </summary>
+        </member>
+        <member name="P:Serenity.IO.SerenityPath.ModulesDirectory">
+            <summary>
+            Gets the directory where module assemblies are stored.
+            </summary>
+        </member>
+        <member name="P:Serenity.IO.SerenityPath.LogsDirectory">
+            <summary>
+            Gets the directory where log files are stored.
+            </summary>
+        </member>
+        <member name="P:Serenity.IO.SerenityPath.DataDirectory">
+            <summary>
+            Gets the directory where database files are stored.
+            </summary>
+        </member>
+        <member name="P:Serenity.IO.SerenityPath.ConfigurationDirectory">
+            <summary>
+            Gets the directory where configuration files are stored.
+            </summary>
+        </member>
+        <member name="T:Serenity.Web.Session">
+            <summary>
+            Represents a client session, and allows state data to be persisted between requests.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.Session.ClearAll">
+            <summary>
+            Removes all session information.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.Session.Dispose">
+            <summary>
+            Disposes the current <see cref="T:Serenity.Web.Session"/>, but does not remove the session information from the database.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.Session.GetSession(System.Guid)">
+            <summary>
+            Gets a stored <see cref="T:Serenity.Web.Session"/>.
+            </summary>
+            <param name="sessionID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Web.Session.NewSession">
+            <summary>
+            Creates and returns a new <see cref="T:Serenity.Web.Session"/>.
+            </summary>
+            <returns>
+            This method adds the newly created session information into the database before returning.
+            </returns>
+        </member>
+        <member name="M:Serenity.Web.Session.ReadValue(System.String)">
+            <summary>
+            Reads a value from the current session.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Web.Session.RemoveValue(System.String)">
+            <summary>
+            Removes a value associated with the current <see cref="T:Serenity.Web.Session"/>
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:Serenity.Web.Session.WriteValue(System.String,System.String)">
+            <summary>
+            Writes a value to the current session.
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+        </member>
+        <member name="P:Serenity.Web.Session.IsDisposed">
+            <summary>
+            Gets a value that indicates if the current <see cref="T:Serenity.Web.Session"/> has been disposed.
+            </summary>
+            <remarks>
+            Disposing refers to the in-memory <see cref="T:Serenity.Web.Session"/> object only.
+            Disposing a session does not remove the session data from the database.
+            </remarks>
+        </member>
+        <member name="P:Serenity.Web.Session.SessionID">
+            <summary>
+            Gets the <see cref="T:System.Guid"/> associated with the current session.
+            </summary>
+        </member>
+        <member name="T:Serenity.DirectoryResource">
+            <summary>
+            Provides a dynamic resource that represents a virtual directory and can
+            provide indexing services for virtual directories.
+            </summary>
+        </member>
+        <member name="F:Serenity.DirectoryResource.XsltStylesheetUrl">
+            <summary>
+            Holds the path of the XSLT stylesheet used to render the XML index output.
+            </summary>
+        </member>
+        <member name="M:Serenity.DirectoryResource.OnRequest(Serenity.Web.Request,Serenity.Web.Response)">
+            <summary>
+            Overridden. Renders the dynamic content of the current DirectoryResource.
+            </summary>
+            <param name="request"></param>
+            <param name="response"></param>
+        </member>
+        <member name="P:Serenity.DirectoryResource.Grouping">
+            <summary>
+            Gets the resource grouping of the current DirectoryResource.
+            </summary>
+        </member>
+        <member name="T:Serenity.Web.ContextHandler">
+            <summary>
+            Provides a handler for incoming CommonContexts by directing them to the proper resource class.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.ContextHandler.#ctor">
+            <summary>
+            Initializes a new instance of the ContextHandler class.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.ContextHandler.HandleRequest(Serenity.Web.Request,Serenity.Web.Response)">
+            <summary>
+            Handles an incoming request/response pair.
+            </summary>
+            <param name="request">The incoming <see cref="T:Serenity.Web.Request"/>.</param>
+            <param name="response">The outgoing <see cref="T:Serenity.Web.Response"/>.</param>
+        </member>
+        <member name="T:Serenity.AlternateResourcePathAttribute">
+            <summary>
+            Provides a way to specify alternate paths for a resource.
+            </summary>
+        </member>
+        <member name="T:Serenity.Web.Cookie">
+            <summary>
+            Represents a web cookie used to maintain state with http.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Cookie.IsTemporary">
+            <summary>
+            Gets or sets a value that indicates if the client should discard the current <see cref="T:Serenity.Web.Cookie"/> when it exits.
+            </summary>
+        </member>
+        <member name="T:Serenity.Logging.LogMessage">
+            <summary>
+            Represents an individual log message.
+            </summary>
+        </member>
+        <member name="T:Serenity.Web.HeaderCollection">
+            <summary>
+            Represents a collection of Header objects.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.HeaderCollection.Add(System.String,System.String)">
+            <summary>
+            Creates and adds a new Header to the current HeaderCollection.
+            </summary>
+            <param name="name">The name of the new Header.</param>
+            <param name="value">The value of the new Header.</param>
+            <returns>The newly created Header.</returns>
+        </member>
+        <member name="M:Serenity.Web.Resources.ResourceGrouping.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the ResourceGroup class, using a
+            provided singular and plural form of the grouping name represented
+            by the new ResourceGroup instance.
+            </summary>
+            <param name="singularForm">The singular form of the grouping name.</param>
+            <param name="pluralForm">The plural form of the grouping name.</param>
+        </member>
+        <member name="M:Serenity.Web.Resources.ResourceGrouping.ToString">
+            <summary>
+            Gets the singular form of the grouping name.
+            </summary>
+            <returns>A string containing the singular form of the grouping name.</returns>
+        </member>
+        <member name="M:Serenity.Web.Resources.ResourceGrouping.ToString(System.Boolean)">
+            <summary>
+            Gets the singular or the plural form of the grouping name.
+            </summary>
+            <param name="useSingular">If true, singular form is returned;
+            otherwise plural form is returned.</param>
+            <returns>A string containing the singular or plural form of the grouping name.</returns>
+        </member>
+        <member name="P:Serenity.Web.Resources.ResourceGrouping.SingularForm">
+            <summary>
+            Gets the singular form of the grouping name.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Resources.ResourceGrouping.PluralForm">
+            <summary>
+            Gets the plural form of the grouping name.
+            </summary>
+        </member>
+        <member name="T:Serenity.Web.Resources.ErrorResource">
+            <summary>
+            Represents an error page/response that is returned to the client.
+            </summary>
+        </member>
+        <member name="T:Serenity.Net.HttpDriver2">
+            <summary>
+            Provides support for HTTP (Hyper Text Transfer Protocol), implemented as a <see cref="T:Serenity.Net.ProtocolDriver2"/>.
+            </summary>
+        </member>
+        <member name="T:Serenity.Net.ProtocolDriver2">
+            <summary>
+            Represents an object that provides support for an application-layer network protocol.
+            </summary>
+        </member>
+        <member name="M:Serenity.Net.ProtocolDriver2.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Serenity.Net.ProtocolDriver2"/> class.
+            </summary>
+        </member>
+        <member name="M:Serenity.Net.ProtocolDriver2.Dispose(System.Boolean)">
+            <summary>
+            Disposes the current <see cref="T:Serenity.Net.ProtocolDriver2"/>.
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:Serenity.Net.ProtocolDriver2.OnRequestAvailable(Serenity.Net.RequestAvailableEventArgs)">
+            <summary>
+            Raises the <see cref="E:Serenity.Net.ProtocolDriver2.RequestAvailable"/> event.
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Serenity.Net.ProtocolDriver2.OnStarted(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:Serenity.Net.ProtocolDriver2.Started"/> event.
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Serenity.Net.ProtocolDriver2.OnStopped(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:Serenity.Net.ProtocolDriver2.Stopped"/> event.
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Serenity.Net.ProtocolDriver2.Start">
+            <summary>
+            Starts the current <see cref="T:Serenity.Net.ProtocolDriver2"/>.
+            </summary>
+        </member>
+        <member name="M:Serenity.Net.ProtocolDriver2.Stop">
+            <summary>
+            Stops the current <see cref="T:Serenity.Net.ProtocolDriver2"/>.
+            </summary>
+        </member>
+        <member name="E:Serenity.Net.ProtocolDriver2.RequestAvailable">
+            <summary>
+            Raised when a recieved request is available to be processed.
+            </summary>
+        </member>
+        <member name="E:Serenity.Net.ProtocolDriver2.Started">
+            <summary>
+            Raised when the current <see cref="T:Serenity.Net.ProtocolDriver2"/> has been started.
+            </summary>
+        </member>
+        <member name="E:Serenity.Net.ProtocolDriver2.Stopped">
+            <summary>
+            Raised when the current <see cref="T:Serenity.Net.ProtocolDriver2"/> has been stopped.
+            </summary>
+        </member>
+        <member name="P:Serenity.Net.ProtocolDriver2.DefaultDescription">
+            <summary>
+            When overridden in a derived class, gets the default description for the current <see cref="T:Serenity.Net.ProtocolDriver2"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Net.ProtocolDriver2.DefaultListeningPort">
+            <summary>
+            When overridden in a derived class, gets the default listening port for the current <see cref="T:Serenity.Net.ProtocolDriver2"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Net.ProtocolDriver2.DefaultProviderName">
+            <summary>
+            When overridden in a derived class, gets the default provider name for the current <see cref="T:Serenity.Net.ProtocolDriver2"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Net.ProtocolDriver2.DefaultSchemeName">
+            <summary>
+            When overridden in a derived class, gets the default scheme name for the current <see cref="T:Serenity.Net.ProtocolDriver2"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Net.ProtocolDriver2.DefaultSupportedVersions">
+            <summary>
+            When overridden in a derived class, gets the default supported version range for the current <see cref="T:Serenity.Net.ProtocolDriver2"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Net.ProtocolDriver2.Description">
+            <summary>
+            Gets or sets a description of the current <see cref="T:Serenity.Net.ProtocolDriver2"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Net.ProtocolDriver2.IsRunning">
+            <summary>
+            Gets a value that indicates if the current <see cref="T:Serenity.Net.ProtocolDriver2"/> is running.
+            </summary>
+        </member>
+        <member name="P:Serenity.Net.ProtocolDriver2.ListeningPort">
+            <summary>
+            Gets or sets the port number to use when listening for connections.
+            </summary>
+        </member>
+        <member name="P:Serenity.Net.ProtocolDriver2.ProviderName">
+            <summary>
+            Gets or sets the name of the vendor that provides the current <see cref="T:Serenity.Net.ProtocolDriver2"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Net.ProtocolDriver2.SchemeName">
+            <summary>
+            Gets or sets the URI scheme used by the current <see cref="T:Serenity.Net.ProtocolDriver2"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Net.ProtocolDriver2.SupportedVersions">
+            <summary>
+            Gets or sets a <see cref="T:SerenityProject.Common.VersionRange"/> that indicates the version(s) supported by the current <see cref="T:Serenity.Net.ProtocolDriver2"/>.
+            </summary>
+        </member>
+        <member name="M:Serenity.Net.HttpDriver2.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Serenity.Net.HttpDriver2"/> class.
+            </summary>
+        </member>
+        <member name="M:Serenity.Net.HttpDriver2.AcceptCallback(System.IAsyncResult)">
+            <summary>
+            Callback method that is used when incoming connections are asynchronously accepted.
+            </summary>
+            <param name="result"></param>
+        </member>
+        <member name="M:Serenity.Net.HttpDriver2.OnStarted(System.EventArgs)">
+            <summary>
+            Overridden. Invokes the Started event and performs tasks that must be done when the <see cref="T:Serenity.Net.HttpDriver2"/> starts from a stopped state.
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Serenity.Net.HttpDriver2.RecieveCallback(System.IAsyncResult)">
+            <summary>
+            Callback method that is used when data is asynchronously received from a connected client.
+            </summary>
+            <param name="result"></param>
+        </member>
+        <member name="P:Serenity.Net.HttpDriver2.DefaultDescription">
+            <summary>
+            Overridden. Gets the default description of the current <see cref="T:Serenity.Net.ProtocolDriver2"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Net.HttpDriver2.DefaultListeningPort">
+            <summary>
+            Overridden. Gets the default listening port number of the current <see cref="T:Serenity.Net.ProtocolDriver2"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Net.HttpDriver2.DefaultProviderName">
+            <summary>
+            Overridden. Gets the default provider name of the current <see cref="T:Serenity.Net.ProtocolDriver2"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Net.HttpDriver2.DefaultSchemeName">
+            <summary>
+            Overridden. Gets the default URI scheme name of the current <see cref="T:Serenity.Net.ProtocolDriver2"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Net.HttpDriver2.DefaultSupportedVersions">
+            <summary>
+            Overridden. Gets the default range of versions that are supported by the current <see cref="T:Serenity.Net.ProtocolDriver2"/>.
+            </summary>
+        </member>
+        <member name="T:Serenity.Net.HttpDriver2.RequestProcessingContext">
+            <summary>
+            Provides a helper class for the <see cref="T:Serenity.Net.HttpDriver2"/> class that is used when processing incoming requests.
+            </summary>
+        </member>
+        <member name="M:Serenity.Net.HttpDriver2.RequestProcessingContext.Create(System.Net.Sockets.Socket)">
+            <summary>
+            Creates a new <see cref="T:Serenity.Net.HttpDriver2.RequestProcessingContext"/> and returns it.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Net.HttpDriver2.RequestProcessingContext.Reset">
+            <summary>
+            After the request has been fully received and processed, resets the current <see cref="T:Serenity.Net.HttpDriver2.RequestProcessingContext"/>.
+            </summary>
+            <remarks>
+            Resetting allows the connection and received data to be reused which allows for pipelining support.
+            </remarks>
+        </member>
+        <member name="M:Serenity.Net.HttpDriver2.RequestProcessingContext.SwapBuffers">
+            <summary>
+            Swaps the receive buffer to the data buffer.
+            </summary>
+            <remarks>
+            The data buffer is appended, not replaced by this operation.
+            The receive buffer is emptied and it's new size is set to the number of available bytes
+            that can be read from the socket.
+            </remarks>
+        </member>
+        <member name="M:Serenity.Net.HttpDriver2.RequestProcessingContext.ResetReceiveBuffer">
+            <summary>
+            Resets the receive buffer.
+            </summary>
+        </member>
+        <member name="P:Serenity.Net.HttpDriver2.RequestProcessingContext.Connection">
+            <summary>
+            Gets the socket that is connected to the client.
+            </summary>
+        </member>
+        <member name="P:Serenity.Net.HttpDriver2.RequestProcessingContext.DataBuffer">
+            <summary>
+            Gets a queue of bytes that represents data that has not been processed.
+            </summary>
+        </member>
+        <member name="P:Serenity.Net.HttpDriver2.RequestProcessingContext.ReceiveBuffer">
+            <summary>
+            Gets a byte array that is used by networking code to put received data in.
+            After a receive operation completes the data in this buffer is swapped into <see cref="P:Serenity.Net.HttpDriver2.RequestProcessingContext.DataBuffer"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Net.HttpDriver2.RequestProcessingContext.Request">
+            <summary>
+            Gets the <see cref="P:Serenity.Net.HttpDriver2.RequestProcessingContext.Request"/> that is being processed.
+            </summary>
+        </member>
+        <member name="P:Serenity.Net.HttpDriver2.RequestProcessingContext.Response">
+            <summary>
+            Gets the <see cref="P:Serenity.Net.HttpDriver2.RequestProcessingContext.Response"/> that is being processed.
+            </summary>
+        </member>
+        <member name="P:Serenity.Net.HttpDriver2.RequestProcessingContext.Stage">
+            <summary>
+            Gets the current stage of processing.
+            </summary>
+        </member>
+        <member name="M:Serenity.Data.DataExtensions.EnsureOpen(System.Data.Common.DbConnection)">
+            <summary>
+            Ensures that the current <see cref="T:System.Data.Common.DbConnection"/> is in an open state.
+            </summary>
+            <param name="connection"></param>
+        </member>
+        <member name="T:Serenity.Web.Forms.PathLink">
+            <summary>
+            Provides a control that renders a target URL and creates links to each segment of the target URL.
+            </summary>
+        </member>
+        <member name="T:Serenity.Web.Forms.ControlAttribute">
+            <summary>
+            Represents an attribute of a <see cref="T:Serenity.Web.Forms.Control"/>.
+            </summary>
+        </member>
+        <member name="T:Serenity.OperationStatus">
+            <summary>
+            Represents the status of a continuous or maintained operation/action.
+            </summary>
+        </member>
+        <member name="F:Serenity.OperationStatus.None">
+            <summary>
+            Indicates that the operation is newly created and has not carried
+            out any action so far.
+            </summary>
+        </member>
+        <member name="F:Serenity.OperationStatus.Initialized">
+            <summary>
+            Indicates that the operation has been initialized with a set of
+            parameters which define it's behaviour, but has not carried out any
+            action so far.
+            </summary>
+        </member>
+        <member name="F:Serenity.OperationStatus.Stopped">
+            <summary>
+            Indicates that the operation is in a stopped state. It is not
+            performing any action.
+            </summary>
+        </member>
+        <member name="F:Serenity.OperationStatus.Started">
+            <summary>
+            Indicates that the operation is in a started state. It is 
+            performing it's actions normally.
+            </summary>
+        </member>
+        <member name="T:Serenity.Net.StartMode">
+            <summary>
+            Represents ways that a <see cref="T:Serenity.Net.ProtocolDriver2"/> can be started.
+            </summary>
+        </member>
+        <member name="F:Serenity.Net.StartMode.Normal">
+            <summary>
+            Represents normal blocking mode.
+            </summary>
+        </member>
+        <member name="F:Serenity.Net.StartMode.Threaded">
+            <summary>
+            Represents normal blocking mode, but a new thread is used to start the <see cref="T:Serenity.Net.ProtocolDriver2"/> on.
+            </summary>
+        </member>
+        <member name="F:Serenity.Net.StartMode.Async">
+            <summary>
+            Represents asynchronous mode.
+            </summary>
+        </member>
+        <member name="F:Serenity.Net.StartMode.BlockingAsync">
+            <summary>
+            Represents asynchronous mode, but the 
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Request.Connection">
+            <summary>
+            Gets or sets the <see cref="T:System.Net.Sockets.Socket"/> used to communicate the current <see cref="T:Serenity.Web.Request"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Request.ContentEncoding">
+            <summary>
+            Gets or sets the content encoding used for content sent with the
+            current request.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Request.ContentLength">
+            <summary>
+            Gets or sets the length of content sent with the current request.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Request.ContentType">
+            <summary>
+            Gets or sets the mime type of the content sent with the current
+            request.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Request.Cookies">
+            <summary>
+            Gets a collection of cookies sent with the current request.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Request.HasEntityBody">
+            <summary>
+            Gets or sets an indication of whether or not the current request
+            was sent containing any entity body.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Request.Method">
+            <summary>
+            Gets or sets the supported method of the current <see cref="T:Serenity.Web.Request"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Request.RawMethod">
+            <summary>
+            Gets or sets the actual string representing the method of the current <see cref="T:Serenity.Web.Request"/>.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Request.ProtocolType">
+            <summary>
+            Gets a string describing the protocol type that handled the current CommonContext.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Request.ProtocolVersion">
+            <summary>
+            Gets the Version of the protocol type that handled the current CommonContext.
+            </summary>
+        </member>
+        <member name="T:Serenity.ModuleResourceNamespaceAttribute">
+            <summary>
+            Provides a way to specify the resource namespace of a module.
+            </summary>
+        </member>
+        <member name="M:Serenity.ModuleResourceNamespaceAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the ModuleResourceNamespaceAttribute class.
+            </summary>
+            <param name="resourceNamespace">The Resource Namespace of the module.</param>
+        </member>
+        <member name="F:Serenity.ModuleResourceNamespaceAttribute.ResourceNamespace">
+            <summary>
+            Holds the Resource Namespace of the module.
+            </summary>
+        </member>
+        <member name="T:Serenity.Web.Header">
+            <summary>
+            Represents a name and a set of values associated with a request or response.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.Header.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the Header class.
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Serenity.Web.Header.Add(System.String)">
+            <summary>
+            Adds a secondary value to the current Header.
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Serenity.Web.Header.AddRange(System.String[])">
+            <summary>
+            Adds a range of secondary values to the current Header.
+            </summary>
+            <param name="values">The string array containing the secondary values to add.</param>
+        </member>
+        <member name="P:Serenity.Web.Header.Item(System.Int32)">
+            <summary>
+            Gets the header value at the specified index.
+            </summary>
+            <param name="index">The zero-based index</param>
+            <returns>The header value at the specified index.</returns>
+            <remarks>
+            Any values less than 0 return the primary value for the header.
+            </remarks>
+        </member>
+        <member name="P:Serenity.Web.Header.Complex">
+            <summary>
+            Gets a boolean value that indicates whether the current Header
+            has multiple values (secondary values).
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Header.SecondaryValues">
+            <summary>
+            Gets a string array containing all the values of the current Header.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Header.Name">
+            <summary>
+            Gets the name of the current Header.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Header.PrimaryValue">
+            <summary>
+            Gets or sets the primary value of the current Header.
+            </summary>
+        </member>
+        <member name="T:Serenity.ModuleDefaultPageAttribute">
+            <summary>
+            Provides a way to specify the default page of a given Module.
+            </summary>
+        </member>
+        <member name="M:Serenity.ModuleDefaultPageAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the ModuleDefaultPageAttribute class.
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="F:Serenity.ModuleDefaultPageAttribute.Name">
+            <summary>
+            Holds the name of the default page for a Module. This field is read-only.
+            </summary>
+        </member>
+        <member name="T:Serenity.DomainCollection">
+            <summary>
+            Represents a collection of DomainSettings objects.
+            </summary>
+        </member>
+        <member name="T:Serenity.Data.DataScope">
+            <summary>
+            Used to determine which database is used for any data operations.
+            </summary>
+        </member>
+        <member name="F:Serenity.Data.DataScope.Global">
+            <summary>
+            Specifies global scope. Data in the global scope is accessible from all modules and across all domains.
+            </summary>
+        </member>
+        <member name="F:Serenity.Data.DataScope.Module">
+            <summary>
+            Specifies module-level scope. Data in the module scope is accessible from a single module,
+            but is available to that module on any domain. This scope uses the module's schemas.
+            </summary>
+        </member>
+        <member name="F:Serenity.Data.DataScope.Domain">
+            <summary>
+            Specifies domain-level scope. Data in the domain scope is accessible from a single domain,
+            but is available to any module on that domain. This scope uses the domain schemas.
+            </summary>
+        </member>
+        <member name="F:Serenity.Data.DataScope.ModuleAndDomain">
+            <summary>
+            Specifies module-and-domain-level scope. Data in this scope is accessible from a single module,
+            and only on a single domain. This scope uses the module's schemas.
+            </summary>
+            <remarks>
+            This scope should be used when you wish to store data for a module on a per-domain basis.
+            </remarks>
+        </member>
+        <member name="T:Serenity.Data.Database">
+            <summary>
+            Provides access to fast local data stores.
+            </summary>
+        </member>
+        <member name="M:Serenity.Data.Database.Create(Serenity.Data.DataScope)">
+            <summary>
+            Creates the database of the specified scope if it does not exist.
+            </summary>
+            <param name="scope"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Data.Database.Connect(Serenity.Data.DataScope)">
+            <summary>
+            Creates and returns a connection to the database of the specified scope.
+            </summary>
+            <param name="scope"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Data.Database.IsCreated(Serenity.Data.DataScope)">
+            <summary>
+            Determines if the database of the specified scope has been created.
+            </summary>
+            <param name="scope"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Data.Database.GetDatafilePath(System.String,System.String)">
+            <summary>
+            Gets the path of the datafile of the specified module and domain.
+            </summary>
+            <param name="module"></param>
+            <param name="domain"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Data.Database.GetDatafilePath(Serenity.Data.DataScope)">
+            <summary>
+            Gets the path of the datafile of the specified scope.
+            </summary>
+            <param name="scope"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Data.Database.GetSchemaPaths(Serenity.Data.DataScope)">
+            <summary>
+            Gets the path of the database schema file for the specified scope.
+            </summary>
+            <param name="scope"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Serenity.Web.StatusCode">
+            <summary>
+            Represents a code returned to a client along with a web response,
+            which indicates the state of the response.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.StatusCode.GetHashCode">
+            <summary>
+            Gets a unique hashcode for the current StatusCode.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Web.StatusCode.ToString">
+            <summary>
+            Converts the current StatusCode to it's string representation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Code">
+            <summary>
+            Gets the numeric portion of the current ResponseCode.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http100Continue">
+            <summary>
+            Gets a status code indicating an HTTP 100 Continue response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http101SwitchingProtocols">
+            <summary>
+            Gets a status code indicating an HTTP 101 Switching Protocols response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http200Ok">
+            <summary>
+            Gets a status code indicating an HTTP 200 Ok response.
+            This is the most common status code.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http201Created">
+            <summary>
+            Gets a status code indicating an HTTP 201 Created response.
+            This means that the client's request caused the requested URI to be created on the server.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http202Accepted">
+            <summary>
+            Gets a status code indicating an HTTP 202 Accepted response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http203NonAuthoritativeInformation">
+            <summary>
+            Gets a status code indicating an HTTP 203 Non-Authoritative Information response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http204NoContent">
+            <summary>
+            Gets a status code indicating an HTTP 204 No Content response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http205ResetContent">
+            <summary>
+            Gets a status code indicating an HTTP 205 Reset Content response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http206PartialContent">
+            <summary>
+            Gets a status code indicating an HTTP 206 Partial Content response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http300MultipleChoices">
+            <summary>
+            Gets a status code indicating an HTTP 300 Multiple Choices response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http301MovedPermenently">
+            <summary>
+            Gets a status code indicating an HTTP 301 Moved Permenently response.
+            This is used when the requested URI is located elsewhere, permenently.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http302Found">
+            <summary>
+            Gets a status code indicating an HTTP 302 Found response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http303SeeOther">
+            <summary>
+            Gets a status code indicating an HTTP 303 See Other response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http304NotModified">
+            <summary>
+            Gets a status code indicating an HTTP 304 Not Modified response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http305UseProxy">
+            <summary>
+            Gets a status code indicating an HTTP 305 Use Proxy response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http306SwitchProxy">
+            <summary>
+            Gets a status code indicating an HTTP 306 Switch Proxy response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http307TemporaryRedirect">
+            <summary>
+            Gets a status code indicating an HTTP 307 Temporary Redirect response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http400BadRequest">
+            <summary>
+            Gets a status code indicating an HTTP 400 Bad Request response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http401Unauthorized">
+            <summary>
+            Gets a status code indicating an HTTP 401 Unauthorized response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http402PaymentRequired">
+            <summary>
+            Gets a status code indicating an HTTP 402 Payment Required response.
+            This status code is not used.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http403Forbidden">
+            <summary>
+            Gets a status code indicating an HTTP 403 Forbidden response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http404NotFound">
+            <summary>
+            Gets a status code indicating an HTTP 404 Not Found response.
+            This is used when the requested URI does not exist on the server.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http405MethodNotAllowed">
+            <summary>
+            Gets a status code indicating an HTTP 405 Method Not Allowed response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http406NotAcceptable">
+            <summary>
+            Gets a status code indicating an HTTP 406 Not Acceptable response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http407ProxyAuthenticationRequired">
+            <summary>
+            Gets a status code indicating an HTTP 407 Proxy Authentication Required response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http408RequestTimeout">
+            <summary>
+            Gets a status code indicating an HTTP 408 Request Timeout response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http409Conflict">
+            <summary>
+            Gets a status code indicating an HTTP 409 Conflict response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http410Gone">
+            <summary>
+            Gets a status code indicating an HTTP 410 Gone response.
+            This is used when a resource on the server has been intentionally removed.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http411LengthRequired">
+            <summary>
+            Gets a status code indicating an HTTP 411 Length Required response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http412PreconditionFailed">
+            <summary>
+            Gets a status code indicating an HTTP 412 Precondition Failed response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http413RequestEntityTooLarge">
+            <summary>
+            Gets a status code indicating an HTTP 413 Request Entity Too Large response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http414RequestUriTooLong">
+            <summary>
+            Gets a status code indicating an HTTP 414 Request-URI Too Long response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http415UnsupportedMediaType">
+            <summary>
+            Gets a status code indicating an HTTP 415 Unsupported Media Type response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http416RequestedRangeNotSatisfiable">
+            <summary>
+            Gets a status code indicating an HTTP 416 Requested Range Not Satisfiable response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http417ExpectationFailed">
+            <summary>
+            Gets a status code indicating an HTTP 417 Expectation Failed response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http426UpgradeRequired">
+            <summary>
+            Gets a status code indicating an HTTP 426 Upgrade Required response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http500InternalServerError">
+            <summary>
+            Gets a status code indicating an HTTP 500 Internal Server Error response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http501NotImplemented">
+            <summary>
+            Gets a status code indicating an HTTP 501 Not Implemented response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http502BadGateway">
+            <summary>
+            Gets a status code indicating an HTTP 502 Bad Gateway response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http503ServiceUnavailable">
+            <summary>
+            Gets a status code indicating an HTTP 503 Service Unavailable response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http504GatewayTimeout">
+            <summary>
+            Gets a status code indicating an HTTP 504 Gateway Timeout response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Http505HttpVersionNotSupported">
+            <summary>
+            Gets a status code indicating an HTTP 505 HTTP Version Not Supported response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.Message">
+            <summary>
+            Gets the description or command word associated with the current ResponseCode.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.WebDav102Processing">
+            <summary>
+            Gets a status code indicating a WebDAV 102 Processing response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.WebDav207MultiStatus">
+            <summary>
+            Gets a status code indicating a WebDAV 207 Multi-status response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.WebDav422UnprocessableEntity">
+            <summary>
+            Gets a status code indicating a WebDAV 422 Unprocessable Entity response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.WebDav423Locked">
+            <summary>
+            Gets a status code indicating a WebDAV 423 Locked response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.WebDav424FailedDependency">
+            <summary>
+            Gets a status code indicating a WebDAV 424 Failed Dependency response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.WebDav425UnorderedCollection">
+            <summary>
+            Gets a status code indicating a WebDAV 425 Unordered Collection response.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.StatusCode.WebDav507InsufficientStorage">
+            <summary>
+            Gets a status code indicating a WebDAV 507 Insufficient Storage response.
+            </summary>
+        </member>
+        <member name="T:Serenity.SuppressLoadCreationAttribute">
+            <summary>
+            Used to direct the module loader to ignore the class this attribute is applied to
+            when building a resource tree from the module.
+            </summary>
+            <remarks>
+            This attribute is useful for special types of resources. For example, resources created
+            during runtime or after the module is loaded.
+            </remarks>
+        </member>
+        <member name="M:Serenity.SuppressLoadCreationAttribute.#ctor(System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Serenity.SuppressLoadCreationAttribute"/> class.
+            </summary>
+            <param name="suppress">True if loading should be suppressed, otherwise false.</param>
+        </member>
+        <member name="P:Serenity.SuppressLoadCreationAttribute.Suppress">
+            <summary>
+            Gets a value that indicates if loading should be suppressed for the class this attribute is applied to.
+            </summary>
+        </member>
+        <member name="T:Serenity.SerenityServer">
+            <summary>
+            Provides a structured representation of a running Serenity server instance.
+            </summary>
+        </member>
+        <member name="P:Serenity.SerenityServer.ContextHandler">
+            <summary>
+            Gets or sets the ContextHandler used to handle recieved CommonContexts.
+            </summary>
+        </member>
+        <member name="T:Serenity.Web.MimeType">
+            <summary>
+            Represents a MIME type, usually used to identify the type of content in a message.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.MimeType.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the MimeType class using the supplied type/subtype.
+            </summary>
+            <param name="type">The primary type of the new MimeType.</param>
+            <param name="subtype">The secondary type of the new MimeType.</param>
+        </member>
+        <member name="M:Serenity.Web.MimeType.Equals(Serenity.Web.MimeType,Serenity.Web.MimeType)">
+            <summary>
+            Determines if two MimeType objects are equal to each other.
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Web.MimeType.Equals(Serenity.Web.MimeType,Serenity.Web.MimeType,System.StringComparison)">
+            <summary>
+            Determines if two MimeType objects are equal to each other.
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <param name="comparison"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Web.MimeType.Equals(Serenity.Web.MimeType)">
+            <summary>
+            Determines if the current MimeType is equal to another MimeType.
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Web.MimeType.Equals(Serenity.Web.MimeType,System.StringComparison)">
+            <summary>
+            Determines if the current MimeType is equal to another MimeType.
+            </summary>
+            <param name="value"></param>
+            <param name="comparison"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Web.MimeType.Equals(System.Object)">
+            <summary>
+            Determines if the current MimeType is equal to another object.
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Web.MimeType.Equals(System.Object,System.StringComparison)">
+            <summary>
+            Determines if the current MimeType is equal to another object.
+            </summary>
+            <param name="obj"></param>
+            <param name="comparison"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Web.MimeType.FromString(System.String)">
+            <summary>
+            Creates a new MimeType given a supplied string in the format:
+            "type/subtype"
+            </summary>
+            <param name="mimeType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Web.MimeType.GetHashCode">
+            <summary>
+            Overridden. Gets the hash code for the current MimeType.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Web.MimeType.ToString">
+            <summary>
+            Overridden. Returns a string representation of the current MimeType.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Web.MimeType.op_Inequality(Serenity.Web.MimeType,Serenity.Web.MimeType)">
+            <summary>
+            Compares two MimeType objects and determines if they are inequal.
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Serenity.Web.MimeType.op_Equality(Serenity.Web.MimeType,Serenity.Web.MimeType)">
+            <summary>
+            Compares two MimeType objects and determines if they are equal.
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Serenity.Web.MimeType.Subtype">
+            <summary>
+            Gets the secondary type associated with the current MimeType.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.Type">
+            <summary>
+            Gets the primary type associated with the current MimeType.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.ApplicationEdiX12">
+            <summary>
+            application/EDI-X12
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.ApplicationEdiFact">
+            <summary>
+            application/EDIFACT
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.ApplicationJavascript">
+            <summary>
+            application/javascript
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.ApplicationOctetStream">
+            <summary>
+            application/octet-stream
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.ApplicationOgg">
+            <summary>
+            application/ogg
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.ApplicationXhtmlPlusXml">
+            <summary>
+            application/xhtml+xml
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.ApplicationXml">
+            <summary>
+            application/xml
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.ApplicationXShockwaveFlash">
+            <summary>
+            application/x-shockwave-flash
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.ApplicationXWwwFormUrlEncoded">
+            <summary>
+            application/x-www-form-urlencoded
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.AudioMpeg">
+            <summary>
+            audio/mpeg
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.AudioXMSWma">
+            <summary>
+            audio/x-ms-wma
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.AudioVendorRNRealAudio">
+            <summary>
+            audio/vnd.rn-realaudio
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.AudioXWav">
+            <summary>
+            audio/x-wav
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.ImageGif">
+            <summary>
+            image/gif
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.ImageJpeg">
+            <summary>
+            image/jpeg
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.ImagePng">
+            <summary>
+            image/png
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.ImageTiff">
+            <summary>
+            image/tiff
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.ImageVendorMicrosoftIcon">
+            <summary>
+            image/vnd.microsoft.icon
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.MultipartMixed">
+            <summary>
+            multipart/mixed
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.MultipartAlternative">
+            <summary>
+            multipart/alternative
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.MultipartFormData">
+            <summary>
+            multipart/form-data
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.MultipartRelated">
+            <summary>
+            multipart/related
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.TextCss">
+            <summary>
+            text/css
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.TextHtml">
+            <summary>
+            text/html
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.TextJavascript">
+            <summary>
+            text/javascript
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.MimeType.TextPlain">
+            <summary>
+            text/plain
+            </summary>
+        </member>
+        <member name="T:Serenity.Web.ErrorHandler">
+            <summary>
+            Provides a unified way for status code error messages to be displayed to the client.
+            </summary>
+        </member>
+        <member name="T:Serenity.Web.Forms.Heading">
+            <summary>
+            Represents a heading in a document.
+            </summary>
+        </member>
+        <member name="T:Serenity.Web.Doctype">
+            <summary>
+            Provides object-oriented access to a Document Type Declaration
+            that should appear in any SGML-based document, e.g. HTML, SVG, MathML, etc.
+            This class cannot be inherited.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.Doctype.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the Doctype class
+            </summary>
+            <param name="rootElement">Defines the root element that the current Doctype applies to.</param>
+            <param name="publicIdentifier">Defines the public identifier of the current Doctype.</param>
+            <param name="systemIdentifier">Defines the system identifier of the current Doctype.</param>
+        </member>
+        <member name="M:Serenity.Web.Doctype.ToString">
+            <summary>
+            Returns the string representation of the current Doctype.
+            </summary>
+            <returns>The string representation of the current Doctype.</returns>
+        </member>
+        <member name="P:Serenity.Web.Doctype.HTML401Frameset">
+            <summary>
+            Gets the HTML 4.01 Frameset Doctype.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Doctype.HTML401Strict">
+            <summary>
+            Gets the HTML 4.01 Strict Doctype.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Doctype.HTML401Transitional">
+            <summary>
+            Gets the HTML 4.01 Transitional Doctype.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Doctype.MathML20">
+            <summary>
+            Gets the MathML 2.0 Doctype.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Doctype.PublicIdentifier">
+            <summary>
+            Gets or sets the Public Identifier portion of the current Doctype.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Doctype.RootElement">
+            <summary>
+            Gets or sets the Root Element portion of the current Doctype.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Doctype.SVG10">
+            <summary>
+            Gets the SVG (Scalable Vector Graphics) 1.0 Doctype.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Doctype.SVG11Basic">
+            <summary>
+            Gets the SVG (Scalable Vector Graphics) 1.1 Basic Doctype.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Doctype.SVG11Full">
+            <summary>
+            Gets the SVG (Scalable Vector Graphics) 1.1 Full Doctype.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Doctype.SVG11Tiny">
+            <summary>
+            Gets the SVG (Scalable Vector Graphics) 1.1 Tiny Doctype.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Doctype.SystemIdentifier">
+            <summary>
+            Gets or sets the System Identifier portion of the current Doctype.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Doctype.XHTML10Frameset">
+            <summary>
+            Gets the XHTML 1.0 Frameset Doctype.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Doctype.XHTML10Strict">
+            <summary>
+            Gets the XHTML 1.0 Strict Doctype.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Doctype.XHTML10Transitional">
+            <summary>
+            Gets the XHTML 1.0 Transitional Doctype.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Doctype.XHTML11">
+            <summary>
+            Gets the XHTML 1.1 Doctype. This is the reccomended doctype.
+            </summary>
+        </member>
+        <member name="P:Serenity.Web.Doctype.XHTMLMathMLSVG">
+            <summary>
+            Gets the XHTML + MathML + SVG Doctype.
+            </summary>
+        </member>
+        <member name="T:Serenity.Web.RequestDataCollection">
+            <summary>
+            Represents a collection of RequestDataStreams that are associated with an incoming or outgoing request.
+            </summary>
+        </member>
+        <member name="M:Serenity.Web.RequestDataCollection.AddDataStream(System.String,System.Byte[])">
+            <summary>
+            Creates and adds a new RequestDataStream to the current RequestDataCollection.
+            </summary>
+            <param name="name">The name of the new stream.</param>
+            <param name="data">The data to populate the new stream with.</param>
+            <returns>The created RequestDataStream.</returns>
+        </member>
+        <member name="T:Serenity.Web.CookieCollection">
+            <summary>
+            Represents a collection of <see cref="T:Serenity.Web.Cookie"/>s.
+            </summary>
+        </member>
+        <member name="T:Serenity.Net.RequestAvailableEventArgs">
+            <summary>
+            Represents event data for the <see cref="E:Serenity.Net.ProtocolDriver2.RequestAvailable"/> event.
+            </summary>
+        </member>
+        <member name="M:Serenity.Net.RequestAvailableEventArgs.#ctor(Serenity.Web.Request)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Serenity.Net.RequestAvailableEventArgs"/> class.
+            </summary>
+            <param name="request"></param>
+        </member>
+        <member name="P:Serenity.Net.RequestAvailableEventArgs.Request">
+            <summary>
+            Gets the <see cref="P:Serenity.Net.RequestAvailableEventArgs.Request"/> that has been made available.
+            </summary>
+        </member>
+    </members>
+</doc>
