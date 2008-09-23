@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Serenity.Data;
+
 namespace Serenity.Web.Resources
 {
     /// <summary>
@@ -18,5 +20,15 @@ namespace Serenity.Web.Resources
     public sealed class ErrorResource : DynamicResource
     {
         //TODO: Implement ErrorResource class.
+
+        //public override void OnRequest(Request request, Response response)
+        //{
+        //    var conn = Database.Connect(DataScope.Domain);
+
+        //    var cmd = conn.CreateCommand();
+        //    cmd.CommandText = "SELECT * FROM `error_documents` WHERE 'code' == '" + response.Status.Code + "'";
+
+
+        //}
     }
 }

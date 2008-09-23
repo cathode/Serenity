@@ -19,19 +19,26 @@ namespace Serenity.Web.Forms
     public class Heading : Control
     {
         public Heading()
-            : this(HeadingLevel.H1)
+            : this(HeadingLevel.H1, null)
         {
         }
         public Heading(HeadingLevel level)
+            : this(level, null)
+        {
+        }
+        public Heading(HeadingLevel level, string content)
         {
             this.Level = level;
+            this.Controls.Add(new TextControl(content));
         }
+        #region Fields - Private
         private HeadingLevel level;
+        #endregion
         protected override string DefaultName
         {
             get
             {
-                return "FIXME";
+                return "h1";
             }
         }
         public HeadingLevel Level

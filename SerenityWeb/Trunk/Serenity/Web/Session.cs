@@ -71,13 +71,13 @@ namespace Serenity.Web
         /// </summary>
         /// <param name="sessionID"></param>
         /// <returns></returns>
-        public static Session GetSession(Guid sessionID)
+        public static Session GetSession(Guid sessionId)
         {
             lock (Session.pool)
             {
-                if (Session.pool.Contains(sessionID))
+                if (Session.pool.Contains(sessionId))
                 {
-                    return Session.pool[sessionID];
+                    return Session.pool[sessionId];
                 }
             }
 
@@ -85,14 +85,14 @@ namespace Serenity.Web
             con.EnsureOpen();
 
             var cmd = new SQLiteCommand("SELECT (created, modified, lifetime) FROM sessions WHERE id == "
-                + sessionID.ToString("N") + " LIMIT 1", con);
+                + sessionId.ToString("N") + " LIMIT 1", con);
 
             using (SQLiteDataReader reader = cmd.ExecuteReader())
             {
                 if (reader.Read())
                 {
                     object o = reader["created"];
-                    Session s = new Session(sessionID);
+                    Session s = new Session(sessionId);
 
                     lock (Session.pool)
                     {
@@ -158,20 +158,20 @@ namespace Serenity.Web
 
             return cmd.ExecuteScalar() as string;
         }
-        public static void Remove(Guid sessionID)
+        public static void Remove(Guid sessionId)
         {
-            var s = Session.GetSession(sessionID);
+            var s = Session.GetSession(sessionId);
             var connection = Database.Connect(DataScope.Global);
             if (s != null)
             {
                 connection.EnsureOpen();
 
                 var cmd = new SQLiteCommand(string.Format("DELETE FROM sessions WHERE id == '{0}'",
-                    sessionID.ToString("N")), connection);
+                    sessionId.ToString("N")), connection);
                 cmd.ExecuteNonQuery();
 
                 cmd = new SQLiteCommand(string.Format("DELETE FROM session_data WHERE id == '{0}'",
-                    sessionID.ToString("N")), connection);
+                    sessionId.ToString("N")), connection);
                 cmd.ExecuteNonQuery();
             }
         }

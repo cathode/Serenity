@@ -94,18 +94,17 @@
     <Compile Include="Data\DataScope.cs" />
     <Compile Include="Data\DataExtensions.cs" />
     <Compile Include="IO\SerenityPath.cs" />
-    <Compile Include="Logging\LogMessage.cs" />
+    <Compile Include="Logging\Severity.cs" />
     <Compile Include="ModuleCollection.cs" />
     <Compile Include="DomainCollection.cs" />
     <Compile Include="Domain.cs" />
     <Compile Include="FileTypeEntry.cs" />
-    <Compile Include="Logging\LogMessageLevel.cs" />
-    <None Include="Data\domain\schemas\error_documents.sql">
+    <Content Include="Data\domain\schemas\error_documents.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Data\global\schemas\serenity_global.sql">
+    </Content>
+    <Content Include="Data\global\schemas\serenity_global.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
     <Compile Include="ModuleDefaultPageAttribute.cs" />
     <Compile Include="ModuleResourceNamespaceAttribute.cs" />
     <Compile Include="ModuleTitleAttribute.cs" />
@@ -117,8 +116,9 @@
     <Compile Include="Net\RequestProcessingStage.cs" />
     <None Include="Net\StartedEventArgs.cs" />
     <Compile Include="Net\StartMode.cs" />
+    <Compile Include="Pages\EventViewer.cs" />
     <Compile Include="Pages\SessionExamplePage.cs" />
-    <Compile Include="Pages\ViewSessionsPage.cs" />
+    <Compile Include="Pages\SessionViewer.cs" />
     <Compile Include="SerenityServer.cs" />
     <None Include="Themes\Border.cs" />
     <None Include="Themes\BorderSide.cs" />
@@ -126,8 +126,8 @@
     <None Include="Themes\Box.cs" />
     <None Include="Themes\Color.cs" />
     <None Include="Themes\Margin.cs" />
-    <None Include="Themes\Measurement.cs" />
-    <None Include="Themes\MeasurementUnit.cs" />
+    <Compile Include="Themes\Measurement.cs" />
+    <Compile Include="Themes\MeasurementUnit.cs" />
     <None Include="Themes\Padding.cs" />
     <None Include="Themes\Size.cs" />
     <None Include="Themes\Style.cs" />
@@ -161,14 +161,19 @@
     <Compile Include="Web\Forms\Heading.cs" />
     <None Include="Web\Forms\Label.cs" />
     <Compile Include="Web\Forms\HeadingLevel.cs" />
+    <Compile Include="Web\Forms\Html\HtmlDocument.cs" />
     <Compile Include="Web\Forms\Image.cs" />
     <Compile Include="Web\Forms\LineBreak.cs" />
     <Compile Include="Web\Forms\OrderedList.cs" />
     <Compile Include="Web\Forms\Paragraph.cs" />
     <Compile Include="Web\Forms\PathLink.cs" />
+    <Compile Include="Web\Forms\RenderEventArgs.cs" />
     <Compile Include="Web\Forms\RenderingContext.cs" />
     <Compile Include="Web\Forms\Script.cs" />
     <Compile Include="Web\Forms\Span.cs" />
+    <Compile Include="Web\Forms\Svg\SvgDocument.cs" />
+    <Compile Include="Web\Forms\Svg\SvgRectangle.cs" />
+    <Compile Include="Web\Forms\Svg\SvgShape.cs" />
     <Compile Include="Web\Forms\Table.cs" />
     <Compile Include="Web\Forms\TableCell.cs" />
     <Compile Include="Web\Forms\TableFooter.cs" />
@@ -289,6 +294,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\System.Data.SQLite.DLL</HintPath>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>

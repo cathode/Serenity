@@ -20,7 +20,11 @@ namespace Serenity.Web.Forms
         #region Constructors - Public
         public DocumentResource()
         {
+            this.ContentType = MimeType.TextHtml;
         }
+        #endregion
+        #region Methods - Protected
+        protected abstract Document CreateForm();
         #endregion
         #region Methods - Public
         public sealed override void OnRequest(Request request, Response response)
@@ -30,14 +34,14 @@ namespace Serenity.Web.Forms
                 Document form = this.CreateForm();
 
                 RenderingContext rc = new RenderingContext(ms);
+                rc.Request = request;
+                rc.Response = response;
                 form.Render(rc);
 
                 response.Write(ms.ToArray());
             }
         }
         #endregion
-        #region Properties - Protected
-        protected abstract Document CreateForm();
-        #endregion
+       
     }
 }

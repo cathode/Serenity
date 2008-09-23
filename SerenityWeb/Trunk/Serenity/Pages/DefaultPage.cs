@@ -41,13 +41,7 @@ namespace Serenity.Pages
                 Division d1 = new Division();
                 d1.Controls.AddRange(new TextControl("Welcome to the Serenity default page."),
                         new LineBreak(),
-                        new Anchor(new Uri("http://www.codeplex.com/serenity"), "Serenity Home Page"),
-                        new LineBreak(),
-                        new PathLink()
-                        {
-                            Target = new Uri("http://serenityproject.net/img/misc/"),
-                            ShowTargetHostname = true,
-                        });
+                        new Anchor(new Uri("http://www.codeplex.com/serenity"), "Serenity Home Page"));
                 this.Body.Controls.Add(d1);
             }
         }

@@ -17,11 +17,15 @@ namespace Serenity.Web.Forms
     {
         public TableCell()
         {
-            
+
         }
         public TableCell(params Control[] contents)
         {
             this.Controls.AddRange(contents);
+        }
+        public TableCell(string content)
+            : this(new TextControl(content))
+        {
         }
         protected override string DefaultName
         {

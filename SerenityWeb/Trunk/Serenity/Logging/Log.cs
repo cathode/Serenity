@@ -12,95 +12,58 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using System.Data.SQLite;
+
+using Serenity.Data;
 
 namespace Serenity.Logging
 {
     /// <summary>
     /// Provides a method which allows other parts of Serenity or
-    /// loaded modules to write messages to a central log file.
+    /// loaded modules to write messages to a central log store.
     /// </summary>
-    public sealed class Log : IDisposable
+    public static class Log 
     {
-        #region Constructors - Private
-        /// <summary>
-        /// Initializes a new instance of the Log class, using the standard output stream of the console.
-        /// </summary>
-        public Log() : this(Console.OpenStandardOutput())
-        {
-        }
-        /// <summary>
-        /// Initializes a new instance of the Log class, using the specified outputStream.
-        /// </summary>
-        /// <param name="outputStream">A stream to which log messages will be written to.</param>
-        public Log(Stream outputStream)
-        {
-            if (outputStream == null)
-            {
-                throw new ArgumentNullException("outputStream");
-            }
-            else if (!outputStream.CanWrite)
-            {
-                throw new ArgumentException(__Strings.StreamMustSupportWriting, "outputStream");
-            }
-
-            this.outputStream = outputStream;
-        }
-        #endregion
-        #region Fields - Private
-        private bool isDisposed;
-        private DateTime lastWrite = DateTime.Now;
-        private TimeSpan maxWait = TimeSpan.FromMilliseconds(250);
-        private Queue<LogMessage> messages = new Queue<LogMessage>();
-        private Stream outputStream;
-        #endregion
         #region Methods - Public
         /// <summary>
-        /// Releases unmanaged resources used by the current Log.
+        /// Logs a message to the log store.
         /// </summary>
-        public void Dispose()
+        /// <param name="message">The message of the logged entry.</param>
+        /// <remarks>
+        /// The default <see cref="Severity"/> used is <see cref="Severity.Info"/>.
+        /// </remarks>
+        public static void RecordEvent(string message)
         {
-            this.outputStream.Dispose();
-            this.outputStream = null;
-            this.messages = null;
-            this.isDisposed = true;
-            GC.SuppressFinalize(this);
+            Log.RecordEvent(message, Severity.Info, null);
         }
         /// <summary>
-        /// Logs a message.
+        /// Logs a message to the log store.
         /// </summary>
-        /// <param name="message">A string containing a description of the message.</param>
-        /// <param name="level">A LogMessageLevel object describing the severity of the message.</param>
-        public void Write(string message, LogMessageLevel level)
+        /// <param name="message">The message of the logged entry.</param>
+        /// <param name="severity">How severe the entry is. See the <see cref="Severity"/> enum for more info.</param>
+        public static void RecordEvent(string message, Severity severity)
         {
-            if (this.isDisposed)
-            {
-                throw new ObjectDisposedException(this.GetType().FullName);
-            }
-            else if (message == null)
-            {
-                throw new ArgumentNullException("message");
-            }
-            else if (message.Length == 0)
-            {
-                throw new ArgumentException(__Strings.ArgumentCannotBeEmpty, "message");
-            }
+            Log.RecordEvent(message, severity, null);
+        }
+        /// <summary>
+        /// Logs a message to the log store
+        /// </summary>
+        /// <param name="message">The message of the logged entry.</param>
+        /// <param name="severity">How severe the entry is. See the <see cref="Severity"/> enum for more info.</param>
+        /// <param name="debugInfo">Information used to debug the cause of the logged entry. Usually used if an error occured.</param>
+        public static void RecordEvent(string message, Severity severity, string debugInfo)
+        {
+            var conn = Database.Connect(DataScope.Global);
+            Guid eventId = Guid.NewGuid();
+            var cmd = new SQLiteCommand(string.Format("INSERT INTO 'log' ('event_id', 'message', 'severity', 'debug', 'assembly') VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')",
+                eventId.ToString(),
+                message,
+                ((int)severity).ToString(),
+                debugInfo,
+                null), conn);
 
-            lock (this)
-            {
-                this.messages.Enqueue(new LogMessage(message, level));
-
-                if (DateTime.Now - this.lastWrite > this.maxWait)
-                {
-                    LogMessage logMessage;
-                    while (this.messages.Count > 0)
-                    {
-                        logMessage = this.messages.Dequeue();
-
-                        byte[] buffer = Encoding.UTF8.GetBytes(logMessage.ToString() + "\r\n");
-                        this.outputStream.Write(buffer, 0, buffer.Length);
-                    }
-                }
-            }
+            conn.Open();
+            cmd.ExecuteNonQuery();
         }
         #endregion
     }

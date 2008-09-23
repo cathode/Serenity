@@ -15,7 +15,7 @@ using System.Collections.ObjectModel;
 namespace Serenity.Web
 {
     /// <summary>
-    /// Represents a collection of <see cref="Cookie"/>s.
+    /// Represents a collection of <see cref="Cookie"/> objects.
     /// </summary>
     public sealed class CookieCollection : KeyedCollection<string, Cookie>
     {

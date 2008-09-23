@@ -22,6 +22,11 @@ namespace Serenity.Web.Forms
             : base(contents)
         {
         }
+        public TableHeader(string content)
+            : base(new TextControl(content))
+        {
+
+        }
         protected override string DefaultName
         {
             get

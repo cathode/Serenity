@@ -18,9 +18,18 @@ namespace Serenity.Web.Forms
     /// </summary>
     public class Head : Control
     {
+        #region Constructors - Public
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Head"/> class.
+        /// </summary>
         public Head()
         {
         }
+        #endregion
+        #region Fields - Private
+        private string title;
+        #endregion
+        #region Properties - Protected
         /// <summary>
         /// Overridden. Gets the default name of the head section which is "head".
         /// </summary>
@@ -31,5 +40,19 @@ namespace Serenity.Web.Forms
                 return "head";
             }
         }
+        #endregion
+        #region Properties - Public
+        public string Title
+        {
+            get
+            {
+                return this.title;
+            }
+            set
+            {
+                this.title = value;
+            }
+        }
+        #endregion
     }
 }

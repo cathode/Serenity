@@ -17,8 +17,11 @@ namespace Serenity.Web.Forms
 {
     public class Document : Control
     {
-        #region Constructors - Protected
-        protected Document()
+        #region Constructors - Public
+        /// <summary>
+        /// Intializes a new instance of the <see cref="Document"/> class.
+        /// </summary>
+        public Document()
         {
             this.body = new Body();
             this.head = new Head();
@@ -28,8 +31,8 @@ namespace Serenity.Web.Forms
         }
         #endregion
         #region Events - Public
-        public event EventHandler Loaded;
-        public event EventHandler Unloaded;
+        public event EventHandler ClientLoaded;
+        public event EventHandler ClientUnloaded;
         #endregion
         #region Fields - Private
         private Body body;
@@ -37,11 +40,18 @@ namespace Serenity.Web.Forms
         private Doctype doctype = Doctype.XHTML11;
         #endregion
         #region Methods - Protected
-        protected virtual void OnLoaded(EventArgs e)
+        protected virtual void OnClientLoaded(EventArgs e)
         {
-            if (this.Loaded != null)
+            if (this.ClientLoaded != null)
             {
-                this.Loaded(this, e);
+                this.ClientLoaded(this, e);
+            }
+        }
+        protected virtual void OnClientUnloaded(EventArgs e)
+        {
+            if (this.ClientUnloaded != null)
+            {
+                this.ClientUnloaded(this, e);
             }
         }
         #endregion

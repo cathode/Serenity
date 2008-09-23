@@ -15,7 +15,7 @@ namespace Serenity.Logging
     /// <summary>
     /// Used to indicate the severity or type of a log message.
     /// </summary>
-    public enum LogMessageLevel
+    public enum Severity
     {
         /// <summary>
         /// Indicates that the message is only useful for debugging purposes,

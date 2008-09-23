@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Linq;
 
 using Serenity.Web.Resources;
+using Serenity.Logging;
 
 namespace Serenity
 {
@@ -56,7 +57,7 @@ namespace Serenity
             }
             else if (!File.Exists(assemblyPath))
             {
-                SerenityServer.ErrorLog.Write("Failed to find module assembly file at " + assemblyPath, Serenity.Logging.LogMessageLevel.Error);
+                Log.RecordEvent("Failed to find module assembly file at " + assemblyPath, Serenity.Logging.Severity.Error);
                 throw new FileNotFoundException("The module was not found at the supplied assemblyPath", assemblyPath);
             }
             string title = name;

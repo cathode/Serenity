@@ -37,13 +37,21 @@ namespace Serenity.Web.Forms
             }
         }
         #endregion
+        #region Events - Public
+        public event EventHandler<RenderEventArgs> PreRender;
+        public event EventHandler<RenderEventArgs> PostRender;
+        #endregion
         #region Fields - Private
-        private string name;
+        private ControlAttributeCollection attributes = new ControlAttributeCollection();
+        private string classification;
         private ControlCollection controls = new ControlCollection();
         private string id;
-        private string classification;
+        private string name;
         private string style;
-        private ControlAttributeCollection attributes = new ControlAttributeCollection();
+        [ThreadStatic]
+        private ControlAttributeCollection volatileAttributes;
+        [ThreadStatic]
+        private ControlCollection volatileControls;
         #endregion
         #region Fields - Public
         /// <summary>
@@ -52,11 +60,12 @@ namespace Serenity.Web.Forms
         public const string DefaultControlName = "control";
         #endregion
         #region Methods - Protected
+
         /// <summary>
         /// When overridden in a derived class, performs control rendering.
         /// </summary>
         /// <remarks>
-        /// This method is invo0ked before any children of the current <see cref="Control"/> have started their rendering.
+        /// This method is invoked before any children of the current <see cref="Control"/> have started their rendering.
         /// Use it to begin XML or XHTML tags, for example.
         /// </remarks>
         /// <param name="context"></param>
@@ -68,9 +77,11 @@ namespace Serenity.Web.Forms
 
             if (this.CanContainAttributes && this.Attributes.Count > 0)
             {
-                writer.Write(" " + string.Join(" ", (from a in this.Attributes
+                writer.Write(" " + string.Join(" ", (from a in this.Attributes.Concat(this.VolatileAttributes)
                                                      where a.Include == true
                                                      select a.Name + "=\"" + a.Value + "\"").ToArray()));
+
+
             }
 
             if (!this.CanContainControls || this.Controls.Count == 0)
@@ -109,20 +120,47 @@ namespace Serenity.Web.Forms
         #endregion
         #region Methods - Public
         /// <summary>
+        /// Raises the <see cref="PreRender"/> event.
+        /// </summary>
+        /// <param name="context"></param>
+        public virtual void OnPreRender(RenderingContext context)
+        {
+            if (this.PreRender != null)
+            {
+                this.PreRender(this, new RenderEventArgs(context));
+            }
+        }
+        /// <summary>
+        /// Raises the <see cref="PostRender"/> event.
+        /// </summary>
+        /// <param name="context"></param>
+        public virtual void OnPostRender(RenderingContext context)
+        {
+            if (this.PostRender != null)
+            {
+                this.PostRender(this, new RenderEventArgs(context));
+            }
+        }
+
+        /// <summary>
         /// Renders the current <see cref="Control"/> against the specified <see cref="RenderingContext"/>.
         /// </summary>
         /// <param name="context"></param>
         public void Render(RenderingContext context)
         {
+            this.OnPreRender(context);
+
             this.RenderBegin(context);
             if (this.CanContainControls)
             {
-                foreach (Control c in this.Controls)
+                foreach (Control c in this.Controls.Concat(this.VolatileControls))
                 {
                     c.Render(context);
                 }
             }
             this.RenderEnd(context);
+
+            this.OnPostRender(context);
         }
         #endregion
         #region Properties - Protected
@@ -232,6 +270,28 @@ namespace Serenity.Web.Forms
             set
             {
                 this.style = value;
+            }
+        }
+        public ControlAttributeCollection VolatileAttributes
+        {
+            get
+            {
+                if (this.volatileAttributes == null)
+                {
+                    this.volatileAttributes = new ControlAttributeCollection();
+                }
+                return this.volatileAttributes;
+            }
+        }
+        public ControlCollection VolatileControls
+        {
+            get
+            {
+                if (this.volatileControls == null)
+                {
+                    this.volatileControls = new ControlCollection();
+                }
+                return this.volatileControls;
             }
         }
         #endregion

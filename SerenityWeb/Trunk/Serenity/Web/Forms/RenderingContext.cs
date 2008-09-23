@@ -32,8 +32,10 @@ namespace Serenity.Web.Forms
         }
         #endregion
         #region Fields - Private
-        private Stream outputStream;
         private Encoding outputEncoding;
+        private Stream outputStream;
+        private Request request;
+        private Response response;
         #endregion
         #region Properties - Public
         public Stream OutputStream
@@ -56,6 +58,28 @@ namespace Serenity.Web.Forms
             set
             {
                 this.outputEncoding = value;
+            }
+        }
+        public Request Request
+        {
+            get
+            {
+                return this.request;
+            }
+            set
+            {
+                this.request = value;
+            }
+        }
+        public Response Response
+        {
+            get
+            {
+                return this.response;
+            }
+            set
+            {
+                this.response = value;
             }
         }
         #endregion

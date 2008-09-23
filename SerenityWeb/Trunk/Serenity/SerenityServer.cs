@@ -27,20 +27,15 @@ namespace Serenity
         static SerenityServer()
         {
             FileTypeRegistry.Initialize();
-            SerenityServer.OperationLog.Write("Server created.", LogMessageLevel.Debug);
         }
         #endregion
         #region Events - Public
         public static event EventHandler PeriodicMaintenance;
         #endregion
         #region Fields - Private
-        private static Log accessLog = new Log();
         private static ContextHandler contextHandler = new ContextHandler();
         private static readonly DomainCollection domains = new DomainCollection();
-        //private static readonly DriverPool driverPool = new DriverPool();
-        private static Log errorLog = new Log();
         private static readonly ModuleCollection modules = new ModuleCollection();
-        private static Log operationLog = new Log();
         private static OperationStatus status = OperationStatus.None;
         private static readonly ResourceCollection resources = new ResourceCollection();
         #endregion
@@ -159,27 +154,6 @@ namespace Serenity
         }
         #endregion
         #region Properties - Public
-        public static Log AccessLog
-        {
-            get
-            {
-                return SerenityServer.accessLog;
-            }
-        }
-        public static Log ErrorLog
-        {
-            get
-            {
-                return SerenityServer.errorLog;
-            }
-        }
-        public static Log OperationLog
-        {
-            get
-            {
-                return SerenityServer.operationLog;
-            }
-        }
         /// <summary>
         /// Gets or sets the ContextHandler used to handle recieved CommonContexts.
         /// </summary>

@@ -77,7 +77,7 @@ namespace Serenity.Web
             else
             {
                 ErrorHandler.Handle(StatusCode.Http500InternalServerError);
-                SerenityServer.ErrorLog.Write("The resource was null", LogMessageLevel.Error);
+                Log.RecordEvent("The resource was null", Severity.Error);
             }
         }
         #endregion

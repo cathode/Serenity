@@ -47,3 +47,10 @@ CREATE TABLE [sessions] (
 [last_modified] TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL
 );
 
+CREATE TABLE [log] (
+[event_id] CHAR(32) NOT NULL PRIMARY KEY UNIQUE,
+[severity] INTEGER  NOT NULL DEFAULT '0',
+[assembly] VARCHAR(32) NULL,
+[message] VARCHAR(64) NOT NULL,
+[debug] TEXT NULL
+);

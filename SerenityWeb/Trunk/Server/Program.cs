@@ -53,10 +53,10 @@ namespace Server
                 SerenityServer.AddModule(Module.LoadModuleFile(name, path));
             }
 
-            SerenityServer.OperationLog.Write(string.Format("Loaded: {0} domains, {1} modules, {2} themes.",
+            Log.RecordEvent(string.Format("Loaded: {0} domains, {1} modules, {2} themes.",
                 SerenityServer.Domains.Count,
                 SerenityServer.Modules.Count,
-                0), LogMessageLevel.Info);
+                0));
 
             ProtocolDriver2 driver = new HttpDriver2();
             driver.ListeningPort = 80;
@@ -70,7 +70,7 @@ namespace Server
             }
 
 
-            SerenityServer.OperationLog.Write("Server shutting down", LogMessageLevel.Info);
+            Log.RecordEvent("Server shutting down");
             Console.WriteLine("Press any key...");
             Console.Read();
         }

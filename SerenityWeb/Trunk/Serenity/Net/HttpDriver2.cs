@@ -14,6 +14,7 @@ using SerenityProject.Common;
 using System.Net;
 using System.Net.Sockets;
 using Serenity.Web;
+using Serenity.Logging;
 
 namespace Serenity.Net
 {
@@ -60,7 +61,7 @@ namespace Serenity.Net
         /// <param name="e"></param>
         protected override void OnStarted(EventArgs e)
         {
-            this.listener = new TcpListener(IPAddress.IPv6Any, this.ListeningPort);
+            this.listener = new TcpListener(IPAddress.Any, this.ListeningPort);
 
             this.listener.Start();
 
@@ -87,7 +88,7 @@ namespace Serenity.Net
                 }
                 catch (SocketException ex)
                 {
-                    SerenityServer.OperationLog.Write("Client connection error: " + ex.Message, Serenity.Logging.LogMessageLevel.Notice);
+                   Log.RecordEvent("Client connection error: " + ex.Message, Serenity.Logging.Severity.Notice);
                 }
             }
             else
@@ -373,7 +374,7 @@ namespace Serenity.Net
                             }
                             catch (SocketException ex)
                             {
-                                SerenityServer.ErrorLog.Write(ex.Message, Serenity.Logging.LogMessageLevel.Error);
+                                Log.RecordEvent(ex.Message, Severity.Error, ex.ToString());
                                 break;
                             }
                             response.Sent += sent;
