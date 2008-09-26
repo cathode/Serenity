@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace Serenity.Web.Forms.Svg
 {
-    public class SvgShape
+    public abstract class SvgShape : Control
     {
         private Point location;
 

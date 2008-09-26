@@ -8,8 +8,15 @@ namespace Serenity.Web.Forms.Svg
     /// <summary>
     /// Represents a rectangular shape.
     /// </summary>
-    public class SvgRectangle
+    public class SvgRectangle : SvgShape
     {
-
+        protected override string DefaultName
+        {
+            get
+            {
+                return "rect";
+            }
+        }
+        
     }
 }
