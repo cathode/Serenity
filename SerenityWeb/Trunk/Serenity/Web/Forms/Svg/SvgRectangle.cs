@@ -10,6 +10,13 @@ namespace Serenity.Web.Forms.Svg
     /// </summary>
     public class SvgRectangle : SvgShape
     {
+        #region Fields - Private
+        private int x;
+        private int y;
+        private int rx;
+        private int ry;
+        #endregion
+        #region Properties - Protected
         protected override string DefaultName
         {
             get
@@ -17,6 +24,15 @@ namespace Serenity.Web.Forms.Svg
                 return "rect";
             }
         }
-        
+        #endregion
+        #region Properties - Public
+        public int X
+        {
+            get
+            {
+                
+            }
+        }
+        #endregion
     }
 }

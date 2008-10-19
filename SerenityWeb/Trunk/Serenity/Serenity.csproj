@@ -171,9 +171,9 @@
     <Compile Include="Web\Forms\RenderingContext.cs" />
     <Compile Include="Web\Forms\Script.cs" />
     <Compile Include="Web\Forms\Span.cs" />
-    <Compile Include="Web\Forms\Svg\SvgDocument.cs" />
-    <Compile Include="Web\Forms\Svg\SvgRectangle.cs" />
-    <Compile Include="Web\Forms\Svg\SvgShape.cs" />
+    <None Include="Web\Forms\Svg\SvgDocument.cs" />
+    <None Include="Web\Forms\Svg\SvgRectangle.cs" />
+    <None Include="Web\Forms\Svg\SvgShape.cs" />
     <Compile Include="Web\Forms\Table.cs" />
     <Compile Include="Web\Forms\TableCell.cs" />
     <Compile Include="Web\Forms\TableFooter.cs" />
