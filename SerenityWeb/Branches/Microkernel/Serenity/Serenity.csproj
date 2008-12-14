@@ -1,0 +1,338 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2013CDED-1043-4FF6-A080-9B3C9BD7B140}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Serenity</RootNamespace>
+    <AssemblyName>Serenity</AssemblyName>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\WShelley.public.snk</AssemblyOriginatorKeyFile>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <DelaySign>true</DelaySign>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>../Output/</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <FileAlignment>512</FileAlignment>
+    <BaseAddress>0</BaseAddress>
+    <DocumentationFile>
+    </DocumentationFile>
+    <LangVersion>default</LangVersion>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Serenity</AssemblyName>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>../Output/</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <FileAlignment>512</FileAlignment>
+    <BaseAddress>0</BaseAddress>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <DocumentationFile>..\Output\Serenity.XML</DocumentationFile>
+    <LangVersion>default</LangVersion>
+    <DebugSymbols>False</DebugSymbols>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Serenity</AssemblyName>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="AlternateResourcePathAttribute.cs" />
+    <None Include="Cache\CacheManager.cs" />
+    <Compile Include="ConfigurationOptionAttribute.cs" />
+    <Compile Include="ConfigurationOptionKind.cs" />
+    <Compile Include="Data\Database.cs" />
+    <Compile Include="Data\DataScope.cs" />
+    <Compile Include="Data\DataExtensions.cs" />
+    <Compile Include="IO\SerenityPath.cs" />
+    <Compile Include="Logging\Severity.cs" />
+    <Compile Include="ModuleCollection.cs" />
+    <Compile Include="DomainCollection.cs" />
+    <Compile Include="Domain.cs" />
+    <Compile Include="FileTypeEntry.cs" />
+    <Content Include="Data\domain\schemas\error_documents.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\global\schemas\serenity_global.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Compile Include="ModuleDefaultPageAttribute.cs" />
+    <Compile Include="ModuleResourceNamespaceAttribute.cs" />
+    <Compile Include="ModuleTitleAttribute.cs" />
+    <Compile Include="Net\HttpDriver2.cs" />
+    <Compile Include="Net\ProtocolDriver2.cs" />
+    <None Include="Net\ProtocolDriverInitializationResult.cs" />
+    <Compile Include="Net\ProtocolDriverState.cs" />
+    <Compile Include="Net\RequestAvailableEventArgs.cs" />
+    <Compile Include="Net\RequestProcessingStage.cs" />
+    <None Include="Net\StartedEventArgs.cs" />
+    <Compile Include="Net\StartMode.cs" />
+    <Compile Include="Pages\EventViewer.cs" />
+    <Compile Include="Pages\SessionExamplePage.cs" />
+    <Compile Include="Pages\SessionViewer.cs" />
+    <Compile Include="SerenityServer.cs" />
+    <None Include="Themes\Border.cs" />
+    <None Include="Themes\BorderSide.cs" />
+    <None Include="Themes\BorderType.cs" />
+    <None Include="Themes\Box.cs" />
+    <None Include="Themes\Color.cs" />
+    <None Include="Themes\Margin.cs" />
+    <Compile Include="Themes\Measurement.cs" />
+    <Compile Include="Themes\MeasurementUnit.cs" />
+    <None Include="Themes\Padding.cs" />
+    <None Include="Themes\Size.cs" />
+    <None Include="Themes\Style.cs" />
+    <None Include="Themes\StyleType.cs" />
+    <None Include="Themes\TextDirection.cs" />
+    <Compile Include="Module.cs" />
+    <Compile Include="Pages\DefaultPage.cs" />
+    <None Include="Themes\Theme.cs" />
+    <Compile Include="SuppressLoadCreationAttribute.cs" />
+    <Compile Include="Web\ContextHandler.cs" />
+    <Compile Include="SerenityInfo.cs" />
+    <Compile Include="FileTypeRegistry.cs" />
+    <Compile Include="Logging\Log.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="OperationStatus.cs" />
+    <Compile Include="Web\Cookie.cs" />
+    <Compile Include="Web\CookieCollection.cs" />
+    <Compile Include="Web\ErrorHandler.cs" />
+    <Compile Include="Web\Forms\Anchor.cs" />
+    <Compile Include="Web\Forms\Body.cs" />
+    <Compile Include="Web\Forms\Button.cs" />
+    <Compile Include="Web\Forms\Control.cs" />
+    <Compile Include="Web\Forms\ControlAttribute.cs" />
+    <Compile Include="Web\Forms\ControlAttributeCollection.cs" />
+    <Compile Include="Web\Forms\ControlCollection.cs" />
+    <Compile Include="Web\Forms\Division.cs" />
+    <Compile Include="Web\Forms\Document.cs" />
+    <Compile Include="Web\Forms\DocumentResource.cs" />
+    <Compile Include="Web\Forms\Form.cs" />
+    <Compile Include="Web\Forms\Head.cs" />
+    <Compile Include="Web\Forms\Heading.cs" />
+    <None Include="Web\Forms\Label.cs" />
+    <Compile Include="Web\Forms\HeadingLevel.cs" />
+    <Compile Include="Web\Forms\Html\HtmlDocument.cs" />
+    <Compile Include="Web\Forms\Image.cs" />
+    <Compile Include="Web\Forms\LineBreak.cs" />
+    <Compile Include="Web\Forms\OrderedList.cs" />
+    <Compile Include="Web\Forms\Paragraph.cs" />
+    <Compile Include="Web\Forms\PathLink.cs" />
+    <Compile Include="Web\Forms\RenderEventArgs.cs" />
+    <Compile Include="Web\Forms\RenderingContext.cs" />
+    <Compile Include="Web\Forms\Script.cs" />
+    <Compile Include="Web\Forms\Span.cs" />
+    <None Include="Web\Forms\Svg\SvgDocument.cs" />
+    <None Include="Web\Forms\Svg\SvgRectangle.cs" />
+    <None Include="Web\Forms\Svg\SvgShape.cs" />
+    <Compile Include="Web\Forms\Table.cs" />
+    <Compile Include="Web\Forms\TableCell.cs" />
+    <Compile Include="Web\Forms\TableFooter.cs" />
+    <Compile Include="Web\Forms\TableHeader.cs" />
+    <Compile Include="Web\Forms\TableRow.cs" />
+    <Compile Include="Web\Forms\TextControl.cs" />
+    <Compile Include="Web\Forms\WebFormsEventAttribute.cs" />
+    <Compile Include="Web\MimeType.cs" />
+    <Compile Include="Web\Request.cs" />
+    <Compile Include="Web\RequestContent.cs" />
+    <Compile Include="Web\RequestMethod.cs" />
+    <None Include="Web\Services\WebMethodAttribute.cs" />
+    <None Include="Web\Services\WebService.cs" />
+    <None Include="Web\Resources\DirectoryDocument.cs" />
+    <Compile Include="Web\Resources\DirectoryResource.cs" />
+    <Compile Include="Web\Resources\DynamicResource.cs" />
+    <Compile Include="Web\Resources\ErrorResource.cs" />
+    <Compile Include="Web\Resources\Resource.cs" />
+    <Compile Include="Web\Resources\ResourceCollection.cs" />
+    <Compile Include="Web\Resources\ResourceGrouping.cs" />
+    <Compile Include="Web\Resources\ResourcePath.cs" />
+    <Compile Include="Web\Resources\ResourceResource.cs" />
+    <Compile Include="Web\Resources\RewriteResource.cs" />
+    <Compile Include="Web\Resources\StaticResource.cs" />
+    <Compile Include="Web\Response.cs" />
+    <Compile Include="Web\Session.cs" />
+    <Compile Include="Web\StatusCode.cs" />
+    <Compile Include="Web\Header.cs" />
+    <Compile Include="Web\HeaderCollection.cs" />
+    <Compile Include="Web\RequestDataCollection.cs" />
+    <Compile Include="Web\RequestDataStream.cs" />
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
+    <Compile Include="Web\Doctype.cs" />
+    <Compile Include="Web\Forms\UnorderedList.cs" />
+    <Compile Include="__Strings.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\icons\arrow_down.png" />
+    <EmbeddedResource Include="Resources\icons\arrow_up.png" />
+    <EmbeddedResource Include="Resources\icons\folder.png" />
+    <EmbeddedResource Include="Resources\icons\page_white.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_acrobat.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_actionscript.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_c.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_cd.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_code.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_code_red.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_coldfusion.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_compressed.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_cplusplus.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_csharp.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_cup.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_database.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_delete.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_dvd.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_excel.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_flash.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_freehand.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_gear.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_h.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_key.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_lightning.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_link.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_office.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_paint.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_paintbrush.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_paste.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_php.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_picture.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_powerpoint.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_ruby.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_stack.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_star.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_swoosh.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_text.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_tux.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_vector.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_visualstudio.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_word.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_wrench.png" />
+    <EmbeddedResource Include="Resources\icons\page_white_zip.png" />
+    <EmbeddedResource Include="Resources\index.css" />
+    <EmbeddedResource Include="Resources\index.xslt" />
+    <EmbeddedResource Include="Resources\webforms\webforms.js" />
+    <Content Include="Themes\template\stylesheet.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="LibINI, Version=1.5.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\LibINI.dll</HintPath>
+    </Reference>
+    <Reference Include="SerenityProject.Common, Version=1.2.0.0, Culture=neutral, PublicKeyToken=aafe07b9ddf0a2a4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Common\SerenityProject.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="SPCore, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\SPCore.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.SQLite, Version=1.0.48.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\System.Data.SQLite.DLL</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.SQL.Server.Compact.3.5">
+      <Visible>False</Visible>
+      <ProductName>SQL Server Compact 3.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Data\module\serenity\schemas\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <ProjectGuid>{2013CDED-1043-4FF6-A080-9B3C9BD7B140}</ProjectGuid>
+  </PropertyGroup>
+</Project>
