@@ -15,6 +15,10 @@ namespace Serenity.Web
     public sealed class Session : IDisposable
     {
         #region Constructors - Private
+        static Session()
+        {
+
+        }
         private Session()
         {
             this.sessionID = Guid.NewGuid();
@@ -32,6 +36,8 @@ namespace Serenity.Web
         private DateTime modified;
         private static readonly SessionCollection pool = new SessionCollection();
         private readonly Guid sessionID;
+
+        private static readonly SQLiteCommand clearAllSessions = new SQLiteCommand("DELETE FROM [Sessions]; DELETE FROM [SessionData]");
         #endregion
         #region Fields - Public
         public const int DefaultLifetime = 300000;
