@@ -29,9 +29,6 @@ namespace Serenity
             FileTypeRegistry.Initialize();
         }
         #endregion
-        #region Events - Public
-        public static event EventHandler PeriodicMaintenance;
-        #endregion
         #region Fields - Private
         private static ContextHandler contextHandler = new ContextHandler();
         private static readonly DomainCollection domains = new DomainCollection();

@@ -87,7 +87,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AlternateResourcePathAttribute.cs" />
-    <None Include="Cache\CacheManager.cs" />
     <Compile Include="ConfigurationOptionAttribute.cs" />
     <Compile Include="ConfigurationOptionKind.cs" />
     <Compile Include="Data\Database.cs" />
@@ -110,32 +109,13 @@
     <Compile Include="ModuleTitleAttribute.cs" />
     <Compile Include="Net\HttpDriver2.cs" />
     <Compile Include="Net\ProtocolDriver2.cs" />
-    <None Include="Net\ProtocolDriverInitializationResult.cs" />
     <Compile Include="Net\ProtocolDriverState.cs" />
     <Compile Include="Net\RequestAvailableEventArgs.cs" />
     <Compile Include="Net\RequestProcessingStage.cs" />
-    <None Include="Net\StartedEventArgs.cs" />
     <Compile Include="Net\StartMode.cs" />
-    <Compile Include="Pages\EventViewer.cs" />
-    <Compile Include="Pages\SessionExamplePage.cs" />
-    <Compile Include="Pages\SessionViewer.cs" />
     <Compile Include="SerenityServer.cs" />
-    <None Include="Themes\Border.cs" />
-    <None Include="Themes\BorderSide.cs" />
-    <None Include="Themes\BorderType.cs" />
-    <None Include="Themes\Box.cs" />
-    <None Include="Themes\Color.cs" />
-    <None Include="Themes\Margin.cs" />
-    <Compile Include="Themes\Measurement.cs" />
-    <Compile Include="Themes\MeasurementUnit.cs" />
-    <None Include="Themes\Padding.cs" />
-    <None Include="Themes\Size.cs" />
-    <None Include="Themes\Style.cs" />
-    <None Include="Themes\StyleType.cs" />
-    <None Include="Themes\TextDirection.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Pages\DefaultPage.cs" />
-    <None Include="Themes\Theme.cs" />
     <Compile Include="SuppressLoadCreationAttribute.cs" />
     <Compile Include="Web\ContextHandler.cs" />
     <Compile Include="SerenityInfo.cs" />
@@ -185,9 +165,6 @@
     <Compile Include="Web\Request.cs" />
     <Compile Include="Web\RequestContent.cs" />
     <Compile Include="Web\RequestMethod.cs" />
-    <None Include="Web\Services\WebMethodAttribute.cs" />
-    <None Include="Web\Services\WebService.cs" />
-    <None Include="Web\Resources\DirectoryDocument.cs" />
     <Compile Include="Web\Resources\DirectoryResource.cs" />
     <Compile Include="Web\Resources\DynamicResource.cs" />
     <Compile Include="Web\Resources\ErrorResource.cs" />
@@ -264,7 +241,6 @@
     <EmbeddedResource Include="Resources\index.css" />
     <EmbeddedResource Include="Resources\index.xslt" />
     <EmbeddedResource Include="Resources\webforms\webforms.js" />
-    <Content Include="Themes\template\stylesheet.css" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="LibINI, Version=1.5.5.0, Culture=neutral, processorArchitecture=MSIL">
