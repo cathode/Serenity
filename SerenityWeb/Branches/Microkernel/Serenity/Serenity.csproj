@@ -108,6 +108,7 @@
     <Compile Include="ModuleResourceNamespaceAttribute.cs" />
     <Compile Include="ModuleTitleAttribute.cs" />
     <Compile Include="Net\HttpDriver2.cs" />
+    <Compile Include="Net\HttpServer.cs" />
     <Compile Include="Net\ProtocolDriver2.cs" />
     <Compile Include="Net\ProtocolDriverState.cs" />
     <Compile Include="Net\RequestAvailableEventArgs.cs" />
@@ -116,6 +117,8 @@
     <Compile Include="SerenityServer.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Pages\DefaultPage.cs" />
+    <Compile Include="Net\Server.cs" />
+    <Compile Include="Net\ServerProfile.cs" />
     <Compile Include="SuppressLoadCreationAttribute.cs" />
     <Compile Include="Web\ContextHandler.cs" />
     <Compile Include="SerenityInfo.cs" />
