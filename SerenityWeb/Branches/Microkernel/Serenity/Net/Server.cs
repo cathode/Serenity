@@ -17,9 +17,17 @@ using System.Net;
 
 namespace Serenity.Net
 {
+    /// <summary>
+    /// Represents basic functionality for server objects. A server handles
+    /// network communication with clients and directs request/response
+    /// generation.
+    /// </summary>
     public abstract class Server : IDisposable
     {
         #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Server"/> class.
+        /// </summary>
         protected Server()
         {
             
@@ -64,6 +72,11 @@ namespace Serenity.Net
         {
             this.isDisposed = true;
         }
+        /// <summary>
+        /// Initializes the current <see cref="Server"/>. Commonly, tasks such
+        /// as creating and binding sockets, loading modules, and other similar
+        /// actions are carried out during initialization.
+        /// </summary>
         public void Initialize()
         {
             if (!this.IsInitialized)
@@ -72,6 +85,10 @@ namespace Serenity.Net
                 this.isInitialized = true;
             }
         }
+        /// <summary>
+        /// Raises the <see cref="Initializing"/> event.
+        /// </summary>
+        /// <param name="e"></param>
         protected virtual void OnInitializing(EventArgs e)
         {
             if (this.Initializing != null)
@@ -80,7 +97,7 @@ namespace Serenity.Net
             }
         }
         /// <summary>
-        /// Raises the <see cref="Started"/> event.
+        /// Raises the <see cref="Starting"/> event.
         /// </summary>
         /// <param name="e"></param>
         protected virtual void OnStarting(EventArgs e)
@@ -91,7 +108,7 @@ namespace Serenity.Net
             }
         }
         /// <summary>
-        /// Raises the <see cref="Stopped"/> event.
+        /// Raises the <see cref="Stopping"/> event.
         /// </summary>
         /// <param name="e"></param>
         protected virtual void OnStopping(EventArgs e)
@@ -121,6 +138,10 @@ namespace Serenity.Net
         }
         #endregion
         #region Properties
+        /// <summary>
+        /// Gets a value that indicates if the current <see cref="Server"/> 
+        /// has been initialized.
+        /// </summary>
         public bool IsInitialized
         {
             get
@@ -128,6 +149,10 @@ namespace Serenity.Net
                 return this.isInitialized;
             }
         }
+        /// <summary>
+        /// Gets a value that indicates if the current <see cref="Server"/>
+        /// has been disposed.
+        /// </summary>
         public bool IsDisposed
         {
             get
@@ -145,6 +170,19 @@ namespace Serenity.Net
                 return this.isRunning;
             }
         }
+        /// <summary>
+        /// Gets or sets the <see cref="ServerProfile"/> which controls the
+        /// operating behavior of the current <see cref="Server"/>.
+        /// </summary>
+        /// <remarks>
+        /// This property can only be set when the <see cref="Server"/> is not
+        /// running. That is, when <see cref="IsRunning"/> returns false. If
+        /// an attempt is made to alter the server's profile while it is
+        /// running, a <see cref="InvalidOperationException"/> will be thrown.
+        /// </remarks>
+        /// <exception cref="InvalidOperationException">Thrown when an attempt
+        /// is made to alter the profile of the current <see cref="Server"/>
+        /// while it is running.</exception>
         public ServerProfile Profile
         {
             get

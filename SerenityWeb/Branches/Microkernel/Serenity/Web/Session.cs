@@ -1,4 +1,15 @@
-﻿using System;
+﻿/******************************************************************************
+ * Serenity - The next evolution of web server technology.                    *
+ * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
+ *----------------------------------------------------------------------------*
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Public License (Ms-PL), a copy of which should have been included with     *
+ * this distribution as License.txt.                                          *
+ *----------------------------------------------------------------------------*
+ * Authors:                                                                   *
+ * - Will 'AnarkiNet' Shelley (AnarkiNet@gmail.com): Original Author          *
+ *****************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -75,7 +86,7 @@ namespace Serenity.Web
         /// <summary>
         /// Gets a stored <see cref="Session"/>.
         /// </summary>
-        /// <param name="sessionID"></param>
+        /// <param name="sessionId"></param>
         /// <returns></returns>
         public static Session GetSession(Guid sessionId)
         {

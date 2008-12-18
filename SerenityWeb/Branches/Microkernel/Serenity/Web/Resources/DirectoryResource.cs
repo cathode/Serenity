@@ -16,7 +16,7 @@ using Serenity.Web.Resources;
 using Serenity.Web;
 using Serenity.Web.Forms;
 
-namespace Serenity
+namespace Serenity.Web.Resources
 {
     /// <summary>
     /// Provides a dynamic resource that represents a virtual directory and can
@@ -26,6 +26,11 @@ namespace Serenity
     public sealed class DirectoryResource : Resource
     {
         #region Constructors - internal
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DirectoryResource"/>
+        /// class.
+        /// </summary>
+        /// <param name="path"></param>
         public DirectoryResource(ResourcePath path)
         {
             if (path == null)
@@ -52,14 +57,7 @@ namespace Serenity
         /// </summary>
         public const string XsltStylesheetUrl = "/resource/serenity/index.xslt";
         #endregion
-        //#region Methods - Protected
-        //protected override Document CreateForm()
-        //{
-        //    return new DirectoryDocument(this.Path);
-        //}
-        //#endregion
         #region Methods - Public
-
         /// <summary>
         /// Overridden. Renders the dynamic content of the current DirectoryResource.
         /// </summary>

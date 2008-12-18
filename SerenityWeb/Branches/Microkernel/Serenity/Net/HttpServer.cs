@@ -22,17 +22,14 @@ namespace Serenity.Net
     /// Provides <see cref="Server"/> implementation that communicates requests
     /// and responses using the HTTP protocol version 1.1.
     /// </summary>
-    public class HttpServer : Server
+    public class HttpServer : AsyncServer
     {
-        #region Fields - Private
-        private TcpListener listener;
-        #endregion
         #region Methods
-        protected override void OnStarting(EventArgs e)
+        protected override void ReceiveCallback(IAsyncResult result)
         {
-            this.listener = new TcpListener(this.Profile.LocalEndPoint);
+            base.ReceiveCallback(result);
 
-            base.OnStarting(e);
+
         }
         #endregion
         #region Properties

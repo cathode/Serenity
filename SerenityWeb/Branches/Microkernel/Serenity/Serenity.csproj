@@ -107,10 +107,11 @@
     <Compile Include="ModuleDefaultPageAttribute.cs" />
     <Compile Include="ModuleResourceNamespaceAttribute.cs" />
     <Compile Include="ModuleTitleAttribute.cs" />
+    <Compile Include="Net\AsyncServer.cs" />
+    <Compile Include="Net\AsyncServerState.cs" />
     <Compile Include="Net\HttpDriver2.cs" />
     <Compile Include="Net\HttpServer.cs" />
     <Compile Include="Net\ProtocolDriver2.cs" />
-    <Compile Include="Net\ProtocolDriverState.cs" />
     <Compile Include="Net\RequestAvailableEventArgs.cs" />
     <Compile Include="Net\RequestProcessingStage.cs" />
     <Compile Include="Net\StartMode.cs" />
