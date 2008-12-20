@@ -107,13 +107,13 @@
     <Compile Include="ModuleDefaultPageAttribute.cs" />
     <Compile Include="ModuleResourceNamespaceAttribute.cs" />
     <Compile Include="ModuleTitleAttribute.cs" />
-    <Compile Include="Net\AsyncServer.cs" />
-    <Compile Include="Net\AsyncServerState.cs" />
     <Compile Include="Net\HttpDriver2.cs" />
     <Compile Include="Net\HttpServer.cs" />
+    <Compile Include="Net\HttpServerAsyncState.cs" />
     <Compile Include="Net\ProtocolDriver2.cs" />
     <Compile Include="Net\RequestAvailableEventArgs.cs" />
     <Compile Include="Net\RequestProcessingStage.cs" />
+    <Compile Include="Net\ServerAsyncState.cs" />
     <Compile Include="Net\StartMode.cs" />
     <Compile Include="SerenityServer.cs" />
     <Compile Include="Module.cs" />
@@ -247,18 +247,6 @@
     <EmbeddedResource Include="Resources\webforms\webforms.js" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="LibINI, Version=1.5.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\LibINI.dll</HintPath>
-    </Reference>
-    <Reference Include="SerenityProject.Common, Version=1.2.0.0, Culture=neutral, PublicKeyToken=aafe07b9ddf0a2a4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Common\SerenityProject.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="SPCore, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\SPCore.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -274,7 +262,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\System.Data.SQLite.DLL</HintPath>
     </Reference>
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>

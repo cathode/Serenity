@@ -14,7 +14,6 @@ using System.Data.Linq;
 using System.Data.SQLite;
 using System.Text;
 using System.IO;
-using Serenity.IO;
 using System.Linq;
 
 namespace Serenity.Data

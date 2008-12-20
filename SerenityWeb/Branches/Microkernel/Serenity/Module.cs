@@ -43,7 +43,7 @@ namespace Serenity
             {
                 throw new ArgumentException(__Strings.ArgumentCannotBeEmpty);
             }
-            return Module.LoadModuleFile(name, Serenity.IO.SerenityPath.ModulesDirectory + name + ".dll");
+            return Module.LoadModuleFile(name, SerenityPath.ModulesDirectory + name + ".dll");
         }
         public static Module LoadModuleFile(string name, string assemblyPath)
         {

@@ -6,13 +6,10 @@
  * Public License (Ms-PL), a copy of which should have been included with     *
  * this distribution as License.txt.                                          *
  *****************************************************************************/
-using LibINI;
-using LibINI.IO;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Serenity.IO;
 using Serenity.Web;
 
 namespace Serenity
@@ -32,6 +29,7 @@ namespace Serenity
 		#region Methods - Public
 		public static void Initialize()
 		{
+            /*
             FileTypeRegistry.entries = new Dictionary<string, FileTypeEntry>();
             IniReader reader = new IniReader(IniReaderSettings.Win32Style);
 
@@ -91,7 +89,7 @@ namespace Serenity
                         FileTypeRegistry.entries.Add(extension, typeEntry);
                     }
                 }
-            }
+            }*/
 		}
 
 		private static Dictionary<string, FileTypeEntry> entries = new Dictionary<string, FileTypeEntry>();

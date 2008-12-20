@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SerenityProject.Common;
 using System.Net;
 using System.Net.Sockets;
 using Serenity.Web;
@@ -33,6 +32,7 @@ namespace Serenity.Net
         #endregion
         #region Fields - Private
         private TcpListener listener;
+        
         #endregion
         #region Methods - Protected
         /// <summary>
@@ -430,11 +430,11 @@ namespace Serenity.Net
         /// <summary>
         /// Overridden. Gets the default range of versions that are supported by the current <see cref="ProtocolDriver2"/>.
         /// </summary>
-        protected override VersionRange DefaultSupportedVersions
+        protected override Version DefaultSupportedVersion
         {
             get
             {
-                return new VersionRange(new Version(1, 1), new Version(1, 1));
+                return new Version(1, 1);
             }
         }
         #endregion

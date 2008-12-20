@@ -10,14 +10,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SerenityProject.Common;
+
 
 namespace Serenity.Net
 {
     /// <summary>
     /// Represents an object that provides support for an application-layer network protocol.
     /// </summary>
-    public abstract class ProtocolDriver2 : Disposable
+    public abstract class ProtocolDriver2 : IDisposable
     {
         #region Constructors - Protected
         /// <summary>
@@ -29,7 +29,7 @@ namespace Serenity.Net
             this.ListeningPort = this.DefaultListeningPort;
             this.ProviderName = this.DefaultProviderName;
             this.SchemeName = this.DefaultSchemeName;
-            this.SupportedVersions = this.DefaultSupportedVersions;
+            this.SupportedVersion = this.DefaultSupportedVersion;
         }
         #endregion
         #region Events - Public
@@ -52,16 +52,25 @@ namespace Serenity.Net
         private ushort listeningPort;
         private string providerName;
         private string schemeName;
-        private VersionRange supportedVersions;
+        private Version supportedVersions;
+        private bool isDisposed;
         #endregion
         #region Methods - Protected
+        public void Dispose()
+        {
+            if (!this.IsDisposed)
+            {
+                this.Dispose(true);
+                this.isDisposed = true;
+            }
+        }
         /// <summary>
         /// Disposes the current <see cref="ProtocolDriver2"/>.
         /// </summary>
         /// <param name="disposing"></param>
-        protected override void Dispose(bool disposing)
+        protected void Dispose(bool disposing)
         {
-            throw new NotImplementedException();
+
         }
         /// <summary>
         /// Raises the <see cref="RequestAvailable"/> event.
@@ -149,7 +158,7 @@ namespace Serenity.Net
         /// <summary>
         /// When overridden in a derived class, gets the default supported version range for the current <see cref="ProtocolDriver2"/>.
         /// </summary>
-        protected abstract VersionRange DefaultSupportedVersions
+        protected abstract Version DefaultSupportedVersion
         {
             get;
         }
@@ -224,7 +233,7 @@ namespace Serenity.Net
         /// <summary>
         /// Gets or sets a <see cref="VersionRange"/> that indicates the version(s) supported by the current <see cref="ProtocolDriver2"/>.
         /// </summary>
-        public VersionRange SupportedVersions
+        public Version SupportedVersion
         {
             get
             {
@@ -233,6 +242,13 @@ namespace Serenity.Net
             set
             {
                 this.supportedVersions = value;
+            }
+        }
+        public bool IsDisposed
+        {
+            get
+            {
+                return this.isDisposed;
             }
         }
         #endregion

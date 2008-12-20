@@ -14,6 +14,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Net;
+using System.Xml;
+using System.IO;
 
 namespace Serenity.Net
 {
@@ -21,32 +23,119 @@ namespace Serenity.Net
     /// Represents a set of properties that controls the behavior of a
     /// <see cref="Server"/>.
     /// </summary>
-    public struct ServerProfile
+    /// <remarks>
+    /// Altering values of a <see cref="ServerProfile"/> after it has been
+    /// assigned to a <see cref="Server"/> while that server is running may
+    /// produce undesired results. At the very least, some options may not
+    /// take effect until the server is stopped and restarted.
+    /// </remarks>
+    public class ServerProfile
     {
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ServerProfile"/>
-        /// struct.
+        /// class with default values.
+        /// </summary>
+        public ServerProfile()
+        {
+        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ServerProfile"/>
+        /// class with a specified name.
         /// </summary>
         /// <param name="name"></param>
         public ServerProfile(string name)
         {
-            this.connectionBacklog = 10;
-            this.maxReceiveRateTotal = 0;
-            this.maxSendRateTotal = 0;
-            this.modules = new string[0];
             this.name = name;
-            this.localEndPoint = new IPEndPoint(IPAddress.Any, 0);
         }
         #endregion
         #region Fields
         private static ServerProfile defaultProfile = new ServerProfile();
-        private string name;
-        private IPEndPoint localEndPoint;
-        private int connectionBacklog;
-        private int maxReceiveRateTotal;
-        private int maxSendRateTotal;
-        private string[] modules;
+        private string name = null;
+        private IPEndPoint localEndPoint = new IPEndPoint(IPAddress.IPv6Any, 0);
+        private int connectionBacklog = 20;
+        private int maxReceiveRateTotal = 0;
+        private int maxSendRateTotal = 0;
+        private string[] modules = new string[0];
+        private string path = null;
+        #endregion
+        #region Methods
+        /// <summary>
+        /// Loads profile values defined in an XML file located at the 
+        /// specified path into the current <see cref="ServerProfile"/>.
+        /// </summary>
+        /// <param name="path">The location of the XML file to load from.
+        /// </param>
+        /// <remarks>
+        /// This method is provided as an instance method to enable multiple
+        /// profiles to be effectively "merged", however for best results, use
+        /// this method on a new <see cref="ServerProfile"/> instance.
+        /// </remarks>
+        public void LoadXmlProfile(string path)
+        {
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+            else if (!File.Exists(path))
+            {
+                throw new FileNotFoundException("The specified file was not found.", path);
+            }
+
+            XmlReader reader = XmlReader.Create(path, new XmlReaderSettings(){ CheckCharacters = true,
+                ConformanceLevel = ConformanceLevel.Document,
+                IgnoreComments = true,
+            });
+
+            reader.Read();
+            //reader.ReadStartElement("
+        }
+        /// <summary>
+        /// Saves profile values defined in the current
+        /// <see cref="ServerProfile"/> to an XML file located at the specified
+        /// path.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <remarks>
+        /// This will overwrite the target file. If the <see cref="Path"/>
+        /// property has not been set on the current
+        /// <see cref="ServerProfile"/>, then it will be set to
+        /// <paramref name="path"/>.
+        /// </remarks>
+        public void SaveXmlProfile(string path)
+        {
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+
+            using (XmlTextWriter writer = new XmlTextWriter(path, Encoding.UTF8))
+            {
+                writer.Formatting = Formatting.Indented;
+                writer.Indentation = 4;
+                writer.IndentChar = ' ';
+
+                writer.WriteStartDocument();
+                writer.WriteStartElement("ServerProfile");
+                if (this.Name != null)
+                {
+                    writer.WriteAttributeString("Name", this.Name);
+                }
+                writer.WriteElementString("ConnectionBacklog", this.ConnectionBacklog.ToString());
+                writer.WriteElementString("MaxReceiveRateTotal", this.MaxReceiveRateTotal.ToString());
+                writer.WriteElementString("MaxSendRateTotal", this.MaxSendRateTotal.ToString());
+                writer.WriteElementString("LocalEndPoint", this.LocalEndPoint.ToString());
+
+                foreach (string module in this.Modules)
+                {
+                    writer.WriteElementString("Module", module);
+                }
+                writer.WriteEndDocument();
+
+                writer.Flush();
+                writer.Close();
+            }
+        }
         #endregion
         #region Properties
         /// <summary>
@@ -152,6 +241,17 @@ namespace Serenity.Net
             set
             {
                 this.modules = value;
+            }
+        }
+        public string Path
+        {
+            get
+            {
+                return this.path;
+            }
+            set
+            {
+                this.path = value;
             }
         }
         #endregion

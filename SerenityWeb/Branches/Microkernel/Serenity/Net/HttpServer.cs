@@ -22,7 +22,7 @@ namespace Serenity.Net
     /// Provides <see cref="Server"/> implementation that communicates requests
     /// and responses using the HTTP protocol version 1.1.
     /// </summary>
-    public class HttpServer : AsyncServer
+    public class HttpServer : Server
     {
         #region Methods
         protected override void ReceiveCallback(IAsyncResult result)

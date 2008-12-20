@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Net;
+using System.Net.Sockets;
 
 namespace Serenity.Net
 {
@@ -30,7 +31,7 @@ namespace Serenity.Net
         /// </summary>
         protected Server()
         {
-            
+
         }
         #endregion
         #region Events
@@ -52,8 +53,45 @@ namespace Serenity.Net
         private bool isRunning;
         private bool isDisposed;
         private bool isInitialized;
+        private Socket listener;
         #endregion
         #region Methods
+        /// <summary>
+        /// Provides a callback method for asynchronous accept operations.
+        /// </summary>
+        /// <param name="result"></param>
+        protected virtual void AcceptCallback(IAsyncResult result)
+        {
+            if (result == null)
+            {
+                throw new ArgumentNullException("result");
+            }
+            var state = (ServerAsyncState)result.AsyncState;
+
+            state.Client = this.Listener.EndAccept(result);
+            state.Client.BeginReceive(state.ReceiveBuffer, 0, state.ReceiveBuffer.Length, SocketFlags.None, new AsyncCallback(this.ReceiveCallback), state);
+
+            this.Listener.BeginAccept(new AsyncCallback(this.AcceptCallback),
+                new ServerAsyncState()
+                {
+                    Listener = state.Listener
+                });
+        }
+        protected virtual ServerAsyncState CreateStateObject()
+        {
+            return new ServerAsyncState();
+        }
+        /// <summary>
+        /// Provides a callback method for asynchronous socket receive calls.
+        /// </summary>
+        /// <param name="result"></param>
+        protected virtual void ReceiveCallback(IAsyncResult result)
+        {
+            if (result == null)
+            {
+                throw new ArgumentNullException("result");
+            }
+        }
         /// <summary>
         /// Disposes the current <see cref="Server"/>.
         /// </summary>
@@ -95,6 +133,9 @@ namespace Serenity.Net
             {
                 this.Initializing(this, e);
             }
+
+            this.listener = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
+            this.listener.Bind(this.Profile.LocalEndPoint);
         }
         /// <summary>
         /// Raises the <see cref="Starting"/> event.
@@ -106,6 +147,13 @@ namespace Serenity.Net
             {
                 this.Starting(this, e);
             }
+            this.Listener.Listen(this.Profile.ConnectionBacklog);
+
+            this.Listener.BeginAccept(new AsyncCallback(this.AcceptCallback),
+                new ServerAsyncState()
+                {
+                    Listener = this.Listener,
+                });
         }
         /// <summary>
         /// Raises the <see cref="Stopping"/> event.
@@ -117,6 +165,7 @@ namespace Serenity.Net
             {
                 this.Stopping(this, e);
             }
+            this.Listener.Close();
         }
         /// <summary>
         /// Starts the current <see cref="Server"/>.
@@ -196,6 +245,21 @@ namespace Serenity.Net
                     throw new InvalidOperationException("Cannot alter the server profile while the server is running.");
                 }
                 this.profile = value;
+            }
+        }       
+        /// <summary>
+        /// Gets the <see cref="Socket"/> that is used to listen for incoming
+        /// connections from clients.
+        /// </summary>
+        protected Socket Listener
+        {
+            get
+            {
+                return this.listener;
+            }
+            set
+            {
+                this.listener = value;
             }
         }
         #endregion
