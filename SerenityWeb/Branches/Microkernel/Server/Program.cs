@@ -36,6 +36,8 @@ namespace Server
                 profile.LoadXmlProfile(profilePath);
             }
 
+            profile.LocalEndPoint = new IPEndPoint(IPAddress.IPv6Any, 80);
+
             HttpServer server = new HttpServer()
             {
                 Profile = profile

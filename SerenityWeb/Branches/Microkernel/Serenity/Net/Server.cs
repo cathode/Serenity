@@ -54,6 +54,8 @@ namespace Serenity.Net
         private bool isDisposed;
         private bool isInitialized;
         private Socket listener;
+        private readonly ModuleCollection modules = new ModuleCollection();
+        private readonly EventLog log = new EventLog();
         #endregion
         #region Methods
         /// <summary>
@@ -69,28 +71,26 @@ namespace Serenity.Net
             var state = (ServerAsyncState)result.AsyncState;
 
             state.Client = this.Listener.EndAccept(result);
+            state.Reset();
             state.Client.BeginReceive(state.ReceiveBuffer, 0, state.ReceiveBuffer.Length, SocketFlags.None, new AsyncCallback(this.ReceiveCallback), state);
 
-            this.Listener.BeginAccept(new AsyncCallback(this.AcceptCallback),
-                new ServerAsyncState()
-                {
-                    Listener = state.Listener
-                });
+            var newState = this.CreateStateObject();
+            newState.Listener = state.Listener;
+
+            this.Listener.BeginAccept(new AsyncCallback(this.AcceptCallback), newState);
         }
+        /// <summary>
+        /// Creates a new <see cref="ServerAsyncState"/>.
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// To utilize a more complex async state object, make your async state
+        /// object inherit from <see cref="ServerAsyncState"/> and then
+        /// override this method to return a new instance of your derived type.
+        /// </remarks>
         protected virtual ServerAsyncState CreateStateObject()
         {
             return new ServerAsyncState();
-        }
-        /// <summary>
-        /// Provides a callback method for asynchronous socket receive calls.
-        /// </summary>
-        /// <param name="result"></param>
-        protected virtual void ReceiveCallback(IAsyncResult result)
-        {
-            if (result == null)
-            {
-                throw new ArgumentNullException("result");
-            }
         }
         /// <summary>
         /// Disposes the current <see cref="Server"/>.
@@ -134,8 +134,10 @@ namespace Serenity.Net
                 this.Initializing(this, e);
             }
 
-            this.listener = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
-            this.listener.Bind(this.Profile.LocalEndPoint);
+            foreach (string modulePath in this.Profile.Modules)
+            {
+                this.modules.Add(Module.LoadModule(modulePath));
+            }
         }
         /// <summary>
         /// Raises the <see cref="Starting"/> event.
@@ -147,13 +149,14 @@ namespace Serenity.Net
             {
                 this.Starting(this, e);
             }
+            this.Listener = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
+            this.listener.Bind(this.Profile.LocalEndPoint);
             this.Listener.Listen(this.Profile.ConnectionBacklog);
 
-            this.Listener.BeginAccept(new AsyncCallback(this.AcceptCallback),
-                new ServerAsyncState()
-                {
-                    Listener = this.Listener,
-                });
+            var newState = this.CreateStateObject();
+            newState.Listener = this.Listener;
+
+            this.Listener.BeginAccept(new AsyncCallback(this.AcceptCallback), newState);
         }
         /// <summary>
         /// Raises the <see cref="Stopping"/> event.
@@ -166,6 +169,35 @@ namespace Serenity.Net
                 this.Stopping(this, e);
             }
             this.Listener.Close();
+        }
+        /// <summary>
+        /// Provides a callback method for asynchronous socket receive calls.
+        /// </summary>
+        /// <param name="result"></param>
+        protected virtual void ReceiveCallback(IAsyncResult result)
+        {
+            if (result == null)
+            {
+                throw new ArgumentNullException("result");
+            }
+            var state = (ServerAsyncState)result.AsyncState;
+            if (state.Client.Connected)
+            {
+                try
+                {
+                    state.Client.EndReceive(result);
+                }
+                catch (SocketException ex)
+                {
+                    Logging.Log.RecordEvent("Socket exeption: " + ex.ToString(), Serenity.Logging.Severity.Notice);
+                }
+
+                state.SwapBuffers();
+
+                state.Client.BeginReceive(state.ReceiveBuffer, 0,
+                    state.ReceiveBuffer.Length, SocketFlags.None,
+                    new AsyncCallback(this.ReceiveCallback), state);
+            }
         }
         /// <summary>
         /// Starts the current <see cref="Server"/>.
@@ -188,17 +220,6 @@ namespace Serenity.Net
         #endregion
         #region Properties
         /// <summary>
-        /// Gets a value that indicates if the current <see cref="Server"/> 
-        /// has been initialized.
-        /// </summary>
-        public bool IsInitialized
-        {
-            get
-            {
-                return this.isInitialized;
-            }
-        }
-        /// <summary>
         /// Gets a value that indicates if the current <see cref="Server"/>
         /// has been disposed.
         /// </summary>
@@ -210,6 +231,17 @@ namespace Serenity.Net
             }
         }
         /// <summary>
+        /// Gets a value that indicates if the current <see cref="Server"/> 
+        /// has been initialized.
+        /// </summary>
+        public bool IsInitialized
+        {
+            get
+            {
+                return this.isInitialized;
+            }
+        }
+        /// <summary>
         /// Gets a value that indicates if the current <see cref="Server"/> is running.
         /// </summary>
         public bool IsRunning
@@ -217,6 +249,21 @@ namespace Serenity.Net
             get
             {
                 return this.isRunning;
+            }
+        }
+        /// <summary>
+        /// Gets the <see cref="Socket"/> that is used to listen for incoming
+        /// connections from clients.
+        /// </summary>
+        protected Socket Listener
+        {
+            get
+            {
+                return this.listener;
+            }
+            set
+            {
+                this.listener = value;
             }
         }
         /// <summary>
@@ -246,20 +293,12 @@ namespace Serenity.Net
                 }
                 this.profile = value;
             }
-        }       
-        /// <summary>
-        /// Gets the <see cref="Socket"/> that is used to listen for incoming
-        /// connections from clients.
-        /// </summary>
-        protected Socket Listener
+        }
+        public EventLog Log
         {
             get
             {
-                return this.listener;
-            }
-            set
-            {
-                this.listener = value;
+                return this.log;
             }
         }
         #endregion

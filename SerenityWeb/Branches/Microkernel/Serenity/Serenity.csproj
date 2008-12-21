@@ -92,6 +92,10 @@
     <Compile Include="Data\Database.cs" />
     <Compile Include="Data\DataScope.cs" />
     <Compile Include="Data\DataExtensions.cs" />
+    <Compile Include="EventDetails.cs" />
+    <Compile Include="EventKind.cs" />
+    <Compile Include="EventLog.cs" />
+    <Compile Include="EventRecordedEventArgs.cs" />
     <Compile Include="IO\SerenityPath.cs" />
     <Compile Include="Logging\Severity.cs" />
     <Compile Include="ModuleCollection.cs" />
@@ -104,7 +108,6 @@
     <Content Include="Data\global\schemas\serenity_global.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Compile Include="ModuleDefaultPageAttribute.cs" />
     <Compile Include="ModuleResourceNamespaceAttribute.cs" />
     <Compile Include="ModuleTitleAttribute.cs" />
     <Compile Include="Net\HttpDriver2.cs" />

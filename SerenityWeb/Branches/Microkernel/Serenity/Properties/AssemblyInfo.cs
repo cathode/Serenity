@@ -20,6 +20,5 @@ using Serenity;
 [assembly: AssemblyDescription("Core Class Library")]
 [assembly: ComVisible(false)]
 
-[assembly: ModuleDefaultPage("default")]
 [assembly: ModuleTitle("Serenity")]
 [assembly: ModuleResourceNamespace("Serenity.Resources.")]

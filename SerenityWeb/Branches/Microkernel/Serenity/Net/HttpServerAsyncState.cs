@@ -5,7 +5,7 @@ using System.Text;
 using Serenity.Web;
 namespace Serenity.Net
 {
-    public class HttpServerState : ServerAsyncState
+    public class HttpServerAsyncState : ServerAsyncState
     {
         #region Fields
 

@@ -51,9 +51,10 @@ namespace Serenity.Net
         private Queue<byte> dataBuffer = new Queue<byte>();
         private Socket client;
         private Socket listener;
-        private Request request;
-        private Response response;
+        private Request request = new Request();
+        private Response response = new Response();
         private bool isDisposed;
+        private Server owner;
         /// <summary>
         /// Holds the maximum buffer size.
         /// </summary>
@@ -99,6 +100,19 @@ namespace Serenity.Net
             }
             this.ReceiveBuffer = new byte[this.ReceiveBuffer.Length];
         }
+        public virtual void Reset()
+        {
+            this.request = new Request()
+            {
+                Connection = this.Client,
+                Owner = this.Owner
+            };
+            this.response = new Response()
+            {
+                Connection = this.Client,
+                Owner = this.Owner
+            };
+        }
         #endregion
         #region Properties
         /// <summary>
@@ -138,6 +152,16 @@ namespace Serenity.Net
             set
             {
                 this.client = value;
+            }
+        }
+        /// <summary>
+        /// Gets a queue of bytes that represents data that has not been processed.
+        /// </summary>
+        public Queue<byte> DataBuffer
+        {
+            get
+            {
+                return this.dataBuffer;
             }
         }
         /// <summary>
@@ -182,6 +206,17 @@ namespace Serenity.Net
             get
             {
                 return this.isDisposed;
+            }
+        }
+        public Server Owner
+        {
+            get
+            {
+                return this.owner;
+            }
+            set
+            {
+                this.owner = value;
             }
         }
         #endregion

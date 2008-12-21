@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Net.Sockets;
+using Serenity.Net;
 
 namespace Serenity.Web
 {
@@ -37,6 +38,7 @@ namespace Serenity.Web
         private bool headersSent;
         private readonly CookieCollection cookies;
         private List<byte> outputBuffer;
+        private Server owner;
         private int sent;
         private StatusCode status;
         private bool useChunkedTransferEncoding;
@@ -185,6 +187,17 @@ namespace Serenity.Web
             get
             {
                 return this.outputBuffer;
+            }
+        }
+        public Server Owner
+        {
+            get
+            {
+                return this.owner;
+            }
+            set
+            {
+                this.owner = value;
             }
         }
         /// <summary>

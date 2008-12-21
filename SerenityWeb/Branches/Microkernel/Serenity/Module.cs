@@ -33,40 +33,26 @@ namespace Serenity
         private string resourceNamespace;
         #endregion
         #region Methods - Public
-        public static Module LoadModule(string name)
+        public static Module LoadModule(string assemblyPath)
         {
-            if (name == null)
+            if (assemblyPath == null)
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException("path");
             }
-            else if (name.Length == 0)
+            else if (assemblyPath.Length == 0)
             {
                 throw new ArgumentException(__Strings.ArgumentCannotBeEmpty);
             }
-            return Module.LoadModuleFile(name, SerenityPath.ModulesDirectory + name + ".dll");
-        }
-        public static Module LoadModuleFile(string name, string assemblyPath)
-        {
-            if (name == null)
-            {
-                throw new ArgumentNullException("name");
-            }
-            else if (assemblyPath == null)
-            {
-                throw new ArgumentNullException("assemblyPath");
-            }
-            else if (!File.Exists(assemblyPath))
+            if (!File.Exists(assemblyPath))
             {
                 Log.RecordEvent("Failed to find module assembly file at " + assemblyPath, Serenity.Logging.Severity.Error);
                 throw new FileNotFoundException("The module was not found at the supplied assemblyPath", assemblyPath);
             }
-            string title = name;
-            DynamicResource defaultPage = null;
 
             Assembly moduleAsm = Assembly.LoadFile(Path.GetFullPath(assemblyPath));
 
             string resourceNamespace = moduleAsm.GetName().Name + ".Resources.";
-
+            string title = null;
             object[] moduleAttributes = moduleAsm.GetCustomAttributes(true);
             foreach (object attrib in moduleAttributes)
             {
@@ -74,17 +60,6 @@ namespace Serenity
                 if (a != null)
                 {
                     title = a.Title;
-                    break;
-                }
-            }
-            foreach (object attrib in moduleAttributes)
-            {
-                var a = attrib as ModuleDefaultPageAttribute;
-
-                if (a != null)
-                {
-                    ModuleDefaultPageAttribute defaultPageAttribute = a;
-                    defaultPage = (DynamicResource)moduleAsm.CreateInstance(defaultPageAttribute.Name);
                     break;
                 }
             }
@@ -108,27 +83,13 @@ namespace Serenity
                     pages.Add(page);
                 }
             }
-            if (pages.Count == 0)
-            {
-                Module module = new Module(name);
-                module.assembly = moduleAsm;
-                return module;
-            }
-            else
-            {
-                if (defaultPage == null)
-                {
-                    defaultPage = pages[0];
-                }
+            Module module = new Module(assemblyPath);
+            module.assembly = moduleAsm;
+            module.title = title;
+            module.resourceNamespace = resourceNamespace;
+            module.AddPages(pages);
 
-                Module module = new Module(name);
-                module.assembly = moduleAsm;
-                module.title = title;
-                module.resourceNamespace = resourceNamespace;
-                module.AddPages(pages);
-
-                return module;
-            }
+            return module;
         }
         public void AddPage(DynamicResource page)
         {
