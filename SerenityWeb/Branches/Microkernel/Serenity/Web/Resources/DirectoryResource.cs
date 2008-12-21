@@ -23,7 +23,7 @@ namespace Serenity.Web.Resources
     /// provide indexing services for virtual directories.
     /// </summary>
     [SuppressLoadCreation(true)]
-    public sealed class DirectoryResource : Resource
+    public sealed class DirectoryResource : TreeResource
     {
         #region Constructors - internal
         /// <summary>
@@ -65,10 +65,11 @@ namespace Serenity.Web.Resources
         /// <param name="response"></param>
         public override void OnRequest(Request request, Response response)
         {
+            //
             // collect data
             SortedDictionary<string, List<Resource>> groupedResources = new SortedDictionary<string, List<Resource>>();
-
-            foreach (Resource resource in SerenityServer.Resources.GetChildren(this.Path, true))
+            
+            foreach (Resource resource in this.Children)
             {
                 if (!groupedResources.ContainsKey(resource.Grouping.PluralForm))
                 {
@@ -76,7 +77,7 @@ namespace Serenity.Web.Resources
                 }
                 groupedResources[resource.Grouping.PluralForm].Add(resource);
             }
-
+            
             // output data
             using (MemoryStream ms = new MemoryStream())
             {
@@ -123,8 +124,9 @@ namespace Serenity.Web.Resources
 
                         foreach (Resource res in pair.Value)
                         {
-                            writer.WriteStartElement("item");
-                            writer.WriteAttributeString("icon", FileTypeRegistry.GetIcon(System.IO.Path.GetExtension(res.Name)));
+                            writer.WriteStartElement("item");  
+                            //writer.WriteAttributeString("icon", FileTypeRegistry.GetIcon(System.IO.Path.GetExtension(res.Name)));
+                            writer.WriteAttributeString("icon", "FIXME");
                             writer.WriteStartElement("value");
                             writer.WriteAttributeString("link", res.Path.ToString());
                             writer.WriteString(res.Name);
@@ -137,7 +139,8 @@ namespace Serenity.Web.Resources
                             {
                                 writer.WriteElementString("value", "---");
                             }
-                            writer.WriteElementString("value", FileTypeRegistry.GetDescription(System.IO.Path.GetExtension(res.Name)));
+                            //writer.WriteElementString("value", FileTypeRegistry.GetDescription(System.IO.Path.GetExtension(res.Name)));
+                            writer.WriteElementString("value", "FIXME");
                             writer.WriteElementString("value", "---");
                             writer.WriteEndElement();
                         }

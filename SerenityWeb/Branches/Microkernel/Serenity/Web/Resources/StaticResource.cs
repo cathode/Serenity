@@ -33,7 +33,7 @@ namespace Serenity.Web.Resources
             }
             else
             {
-                ErrorHandler.Handle(StatusCode.Http404NotFound);
+                //ErrorHandler.Handle(StatusCode.Http404NotFound);
             }
         }
         #endregion

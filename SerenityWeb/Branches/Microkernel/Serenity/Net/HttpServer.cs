@@ -230,7 +230,7 @@ namespace Serenity.Net
                 }
                 if (completed)
                 {
-                    SerenityServer.ContextHandler.HandleRequest(request, response);
+                    this.RootResource.OnRequest(request, response);
 
                     if (this.IsDisposed)
                     {

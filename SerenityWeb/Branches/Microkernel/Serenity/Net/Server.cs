@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
+using Serenity.Web.Resources;
 
 namespace Serenity.Net
 {
@@ -31,7 +32,7 @@ namespace Serenity.Net
         /// </summary>
         protected Server()
         {
-
+            this.rootResource = new RootResource(this);
         }
         #endregion
         #region Events
@@ -56,6 +57,7 @@ namespace Serenity.Net
         private Socket listener;
         private readonly ModuleCollection modules = new ModuleCollection();
         private readonly EventLog log = new EventLog();
+        private readonly RootResource rootResource;
         #endregion
         #region Methods
         /// <summary>
@@ -70,7 +72,15 @@ namespace Serenity.Net
             }
             var state = (ServerAsyncState)result.AsyncState;
 
-            state.Client = this.Listener.EndAccept(result);
+            try
+            {
+                state.Client = this.Listener.EndAccept(result);
+            }
+            catch (SocketException ex)
+            {
+                this.Log.RecordEvent(ex.Message, EventKind.Notice, ex.StackTrace);
+                return;
+            }
             state.Reset();
             state.Client.BeginReceive(state.ReceiveBuffer, 0, state.ReceiveBuffer.Length, SocketFlags.None, new AsyncCallback(this.ReceiveCallback), state);
 
@@ -136,7 +146,10 @@ namespace Serenity.Net
 
             foreach (string modulePath in this.Profile.Modules)
             {
-                this.modules.Add(Module.LoadModule(modulePath));
+                var mod = Module.LoadModule(modulePath);
+
+                
+                this.modules.Add(mod);
             }
         }
         /// <summary>
@@ -149,7 +162,15 @@ namespace Serenity.Net
             {
                 this.Starting(this, e);
             }
-            this.Listener = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
+            if (this.Profile.UseIPv6)
+            {
+                this.Listener = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
+                this.Listener.SetSocketOption(SocketOptionLevel.IPv6, (SocketOptionName)27, 0); //Set IPV6_V6ONLY to false
+            }
+            else
+            {
+                this.Listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            }
             this.listener.Bind(this.Profile.LocalEndPoint);
             this.Listener.Listen(this.Profile.ConnectionBacklog);
 
@@ -299,6 +320,13 @@ namespace Serenity.Net
             get
             {
                 return this.log;
+            }
+        }
+        public RootResource RootResource
+        {
+            get
+            {
+                return this.rootResource;
             }
         }
         #endregion

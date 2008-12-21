@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Serenity.Web;
+using Serenity.Net;
 
 namespace Serenity.Web.Resources
 {
@@ -23,6 +24,7 @@ namespace Serenity.Web.Resources
         private MimeType mimeType = MimeType.Default;
         private string name = string.Empty;
         private ResourcePath uri;
+        private Server owner;
         #endregion
         #region Methods - Public
         /// <summary>
@@ -32,7 +34,6 @@ namespace Serenity.Web.Resources
         /// <param name="response"></param>
         public virtual void OnRequest(Request request, Response response)
         {
-            
         }
         /// <summary>
         /// Invoked after OnRequest.
@@ -133,6 +134,17 @@ namespace Serenity.Web.Resources
             get
             {
                 return -1;
+            }
+        }
+        public Server Owner
+        {
+            get
+            {
+                return this.owner;
+            }
+            set
+            {
+                this.owner = value;
             }
         }
         #endregion

@@ -36,15 +36,25 @@ namespace Server
                 profile.LoadXmlProfile(profilePath);
             }
 
-            profile.LocalEndPoint = new IPEndPoint(IPAddress.IPv6Any, 80);
+            profile.LocalEndPoint = new IPEndPoint(IPAddress.Any, 80);
 
             HttpServer server = new HttpServer()
             {
                 Profile = profile
             };
+            HttpServer alt = new HttpServer()
+            {
+                Profile = new ServerProfile("alternate")
+                {
+                    LocalEndPoint = new IPEndPoint(IPAddress.Any, 8080)
+                }
+            };
 
             server.Initialize();
             server.Start();
+
+            alt.Initialize();
+            alt.Start();
             Console.WriteLine("Server running, press ESC to shut down.");
 
             while (true)
@@ -53,6 +63,7 @@ namespace Server
                 {
                     Console.WriteLine("Shutting down server now...");
                     server.Stop();
+                    alt.Stop();
                     break;
                 }
             }

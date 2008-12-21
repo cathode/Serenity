@@ -126,15 +126,20 @@ namespace Serenity.Data
             }
             else if (scope == DataScope.Domain)
             {
+                return null;
+                /*
                 if (Domain.Current == null)
                 {
                     return null;
                 }
                 return SerenityPath.Combine(SerenityPath.DataDirectory, "domain",
                     Path.GetFileNameWithoutExtension(Domain.Current.HostName), "database.s3db");
+                */
             }
             else if (scope == DataScope.ModuleAndDomain)
             {
+                return null;
+                /*
                 if (Domain.Current == null || Module.Current == null)
                 {
                     return null;
@@ -142,6 +147,7 @@ namespace Serenity.Data
                 return SerenityPath.Combine(SerenityPath.DataDirectory, "module",
                     Path.GetFileNameWithoutExtension(Module.Current.Name),
                     Path.GetFileNameWithoutExtension(Domain.Current.HostName), "database.s3db");
+                */
             }
             else
             {
@@ -181,8 +187,10 @@ namespace Serenity.Data
             }
             else if (scope == DataScope.Domain)
             {
+                /*
                 if (Domain.Current != null)
                 {
+                   
                     string dir = SerenityPath.Combine(SerenityPath.DataDirectory, "domain", "schemas");
                     if (Directory.Exists(dir))
                     {
@@ -191,6 +199,7 @@ namespace Serenity.Data
                                select p;
                     }
                 }
+                */
             }
             else
             {

@@ -99,40 +99,29 @@
     <Compile Include="IO\SerenityPath.cs" />
     <Compile Include="Logging\Severity.cs" />
     <Compile Include="ModuleCollection.cs" />
-    <Compile Include="DomainCollection.cs" />
-    <Compile Include="Domain.cs" />
-    <Compile Include="FileTypeEntry.cs" />
     <Content Include="Data\domain\schemas\error_documents.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\global\schemas\serenity_global.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Compile Include="ModuleProfile.cs" />
     <Compile Include="ModuleResourceNamespaceAttribute.cs" />
     <Compile Include="ModuleTitleAttribute.cs" />
-    <Compile Include="Net\HttpDriver2.cs" />
     <Compile Include="Net\HttpServer.cs" />
     <Compile Include="Net\HttpServerAsyncState.cs" />
-    <Compile Include="Net\ProtocolDriver2.cs" />
-    <Compile Include="Net\RequestAvailableEventArgs.cs" />
     <Compile Include="Net\RequestProcessingStage.cs" />
     <Compile Include="Net\ServerAsyncState.cs" />
-    <Compile Include="Net\StartMode.cs" />
-    <Compile Include="SerenityServer.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Pages\DefaultPage.cs" />
     <Compile Include="Net\Server.cs" />
     <Compile Include="Net\ServerProfile.cs" />
     <Compile Include="SuppressLoadCreationAttribute.cs" />
-    <Compile Include="Web\ContextHandler.cs" />
     <Compile Include="SerenityInfo.cs" />
-    <Compile Include="FileTypeRegistry.cs" />
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="OperationStatus.cs" />
     <Compile Include="Web\Cookie.cs" />
     <Compile Include="Web\CookieCollection.cs" />
-    <Compile Include="Web\ErrorHandler.cs" />
     <Compile Include="Web\Forms\Anchor.cs" />
     <Compile Include="Web\Forms\Body.cs" />
     <Compile Include="Web\Forms\Button.cs" />
@@ -173,6 +162,7 @@
     <Compile Include="Web\RequestContent.cs" />
     <Compile Include="Web\RequestMethod.cs" />
     <Compile Include="Web\Resources\DirectoryResource.cs" />
+    <Compile Include="Web\Resources\DomainResource.cs" />
     <Compile Include="Web\Resources\DynamicResource.cs" />
     <Compile Include="Web\Resources\ErrorResource.cs" />
     <Compile Include="Web\Resources\Resource.cs" />
@@ -181,7 +171,9 @@
     <Compile Include="Web\Resources\ResourcePath.cs" />
     <Compile Include="Web\Resources\ResourceResource.cs" />
     <Compile Include="Web\Resources\RewriteResource.cs" />
+    <Compile Include="Web\Resources\RootResource.cs" />
     <Compile Include="Web\Resources\StaticResource.cs" />
+    <Compile Include="Web\Resources\TreeResource.cs" />
     <Compile Include="Web\Response.cs" />
     <Compile Include="Web\Session.cs" />
     <Compile Include="Web\StatusCode.cs" />

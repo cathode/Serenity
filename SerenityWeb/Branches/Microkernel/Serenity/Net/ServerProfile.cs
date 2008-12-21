@@ -58,6 +58,7 @@ namespace Serenity.Net
         private int maxSendRateTotal = 0;
         private string[] modules = new string[0];
         private string path = null;
+        private bool useIPv6;
         #endregion
         #region Methods
         /// <summary>
@@ -243,6 +244,35 @@ namespace Serenity.Net
                 this.modules = value;
             }
         }
+        /// <summary>
+        /// Gets or sets a value that controls whether the <see cref="Server"/>
+        /// attempts to listen for incoming Internet Protocol v6 connections.
+        /// </summary>
+        /// <remarks>
+        /// If this option is enabled, the server's listening socket will try
+        /// to use dual-mode operation, so IPv4 clients will be accepted as
+        /// well. Dual-mode socket operation is only supported on Windows
+        /// Vista and Windows Server 2008.
+        /// </remarks>
+        public bool UseIPv6
+        {
+            get
+            {
+                return this.useIPv6;
+            }
+            set
+            {
+                this.useIPv6 = value;
+            }
+        }
+        /// <summary>
+        /// Gets or sets the filename which the current
+        /// <see cref="ServerProfile"/> was last loaded from or saved to, if
+        /// applicable. 
+        /// </summary>
+        /// <remarks>If the profile has not been persisted to disk, there
+        /// will be no path set (null).
+        /// </remarks>
         public string Path
         {
             get
