@@ -17,6 +17,12 @@ namespace Serenity
         private readonly Dictionary<string, object> data = new Dictionary<string, object>();
         private string stackTrace;
         #endregion
+        #region Methods
+        public override string ToString()
+        {
+            return string.Format("{0}: {1}", this.Kind, this.Message);
+        }
+        #endregion
         #region Properties
         public Dictionary<string, object> Data
         {

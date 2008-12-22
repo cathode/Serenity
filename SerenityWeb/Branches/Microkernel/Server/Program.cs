@@ -43,6 +43,7 @@ namespace Server
             {
                 Profile = profile
             };
+            server.Log.EventRecorded += new EventHandler<EventRecordedEventArgs>(Log_EventRecorded);
             server.Profile.Modules = new string[] { "Serenity.dll" };
 
             server.Initialize();
@@ -59,6 +60,11 @@ namespace Server
                     break;
                 }
             }
+        }
+
+        static void Log_EventRecorded(object sender, EventRecordedEventArgs e)
+        {
+            Console.WriteLine(e.Details.ToString());
         }
     }
 }

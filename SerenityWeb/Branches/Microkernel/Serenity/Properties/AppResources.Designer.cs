@@ -61,11 +61,20 @@ namespace Serenity.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Client connected from {0}..
+        /// </summary>
+        internal static string ClientConnectedMessage {
+            get {
+                return ResourceManager.GetString("ClientConnectedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The current Resource does not support children..
         /// </summary>
-        internal static string ResourceDoesNotSupportChildren {
+        internal static string ResourceDoesNotSupportChildrenException {
             get {
-                return ResourceManager.GetString("ResourceDoesNotSupportChildren", resourceCulture);
+                return ResourceManager.GetString("ResourceDoesNotSupportChildrenException", resourceCulture);
             }
         }
         

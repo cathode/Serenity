@@ -17,6 +17,7 @@ using System.Net;
 using System.Net.Sockets;
 using Serenity.Web.Resources;
 using System.IO;
+using Serenity.Properties;
 
 namespace Serenity.Net
 {
@@ -76,6 +77,7 @@ namespace Serenity.Net
             try
             {
                 state.Client = this.Listener.EndAccept(result);
+                this.Log.RecordEvent(string.Format(AppResources.ClientConnectedMessage, state.Client.RemoteEndPoint), EventKind.Info);
             }
             catch (SocketException ex)
             {
@@ -149,30 +151,33 @@ namespace Serenity.Net
             {
                 var module = Module.LoadModule(modulePath);
 
-                DirectoryResource tree = new DirectoryResource()
+                DirectoryResource modTree = new DirectoryResource()
                 {
                     Name = module.Name,
                     Owner = this
                 };
 
+                DirectoryResource pages = new DirectoryResource()
+                {
+                    Name = "dynamic",
+                    Owner = this
+                };
+
                 foreach (DynamicResource page in module.Pages)
                 {
-                    page.Path = ResourcePath.Create(page.Name);
-                    tree.Add(page);
+                    pages.Add(page);
                 }
+                modTree.Add(pages);
+
+                DirectoryResource embedded = new DirectoryResource()
+                {
+                    Name = "resource",
+                    Owner = this
+                };
+
                 foreach (string embedPath in module.Assembly.GetManifestResourceNames())
                 {
-                    string newpath = embedPath.Remove(0, module.ResourceNamespace.Length);
-                    string[] parts = newpath.Split('.');
-                    string path;
-                    if (parts.Length > 2)
-                    {
-                        path = "/resource/" + string.Join("/", parts, 0, parts.Length - 2) + "/";
-                    }
-                    else
-                    {
-                        path = "/resource/";
-                    }
+                    string[] parts = embedPath.Remove(0, module.ResourceNamespace.Length).Split('.');
 
                     string name = "";
                     if (parts.Length > 1)
@@ -192,14 +197,15 @@ namespace Serenity.Net
                             ResourceResource res = new ResourceResource(name, data);
                             //res.ContentType = FileTypeRegistry.GetMimeType(parts[parts.Length - 1]);
 
-                            res.Path = ResourcePath.Create(name);
-                            tree.Add(res);
+                            embedded.Add(res);
                         }
                     }
                 }
+                modTree.Add(embedded);
+
                 if (this.RootResource is DirectoryResource)
                 {
-                    ((DirectoryResource)this.RootResource).Add(tree);
+                    ((DirectoryResource)this.RootResource).Add(modTree);
                 }
                 this.modules.Add(module);
             }

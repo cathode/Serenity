@@ -117,7 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ResourceDoesNotSupportChildren" xml:space="preserve">
+  <data name="ClientConnectedMessage" xml:space="preserve">
+    <value>Client connected from {0}.</value>
+  </data>
+  <data name="ResourceDoesNotSupportChildrenException" xml:space="preserve">
     <value>The current Resource does not support children.</value>
   </data>
   <data name="ResourceHasParentException" xml:space="preserve">

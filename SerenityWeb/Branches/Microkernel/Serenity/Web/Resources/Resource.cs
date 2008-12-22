@@ -8,12 +8,9 @@
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
-using Serenity.Properties;
-
-using Serenity.Web;
 using Serenity.Net;
+using Serenity.Properties;
 
 namespace Serenity.Web.Resources
 {
@@ -22,13 +19,13 @@ namespace Serenity.Web.Resources
     /// </summary>
     public abstract class Resource
     {
-        #region Fields - Private
+        #region Fields
+        private readonly List<Resource> children = new List<Resource>();
         private MimeType mimeType = MimeType.Default;
         private string name;
-        private ResourcePath uri;
         private Server owner;
         private Resource parent;
-        private readonly List<Resource> children = new List<Resource>();
+        private ResourcePath uri;
         #endregion
         #region Methods
         public Resource GetChild(string name)
@@ -45,7 +42,7 @@ namespace Serenity.Web.Resources
         {
             if (!this.CanHaveChildren)
             {
-                throw new InvalidOperationException(AppResources.ResourceDoesNotSupportChildren);
+                throw new InvalidOperationException(AppResources.ResourceDoesNotSupportChildrenException);
             }
             else if (resource == null)
             {
@@ -72,7 +69,7 @@ namespace Serenity.Web.Resources
                 throw new ArgumentNullException("resource");
             }
             //Checking the parent should be faster than searching children
-            else if (resource.Parent != this) 
+            else if (resource.Parent != this)
             {
                 //If the resource is not a child, ignore.
                 return;
@@ -82,7 +79,7 @@ namespace Serenity.Web.Resources
                 //TODO: Evaluate the appropriateness of throwing an exception
                 //      when an attempt is made to remove a resource from a
                 //      resource that does not support children.
-                throw new InvalidOperationException(AppResources.ResourceDoesNotSupportChildren);
+                throw new InvalidOperationException(AppResources.ResourceDoesNotSupportChildrenException);
             }
 
             this.children.Remove(resource);
@@ -143,6 +140,42 @@ namespace Serenity.Web.Resources
         #endregion
         #region Properties - Public
         /// <summary>
+        /// Gets a value that indicates if the current <see cref="Resource"/>
+        /// supports child resource associations.
+        /// </summary>
+        public virtual bool CanHaveChildren
+        {
+            get
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// Gets the child resources of the current <see cref="Resource"/>.
+        /// </summary>
+        public Resource[] Children
+        {
+            get
+            {
+                return this.children.ToArray();
+            }
+        }
+        /// <summary>
+        /// Gets the <see cref="MimeType"/> used to describe the content of
+        /// the current <see cref="Resource"/>.
+        /// </summary>
+        public MimeType ContentType
+        {
+            get
+            {
+                return this.mimeType;
+            }
+            set
+            {
+                this.mimeType = value;
+            }
+        }
+        /// <summary>
         /// Gets the grouping of the current Resource.
         /// </summary>
         public virtual ResourceGrouping Grouping
@@ -153,8 +186,30 @@ namespace Serenity.Web.Resources
             }
         }
         /// <summary>
+        /// Gets a value that indicates if the current <see cref="Resource"/>
+        /// contains any children.
+        /// </summary>
+        public bool HasChildren
+        {
+            get
+            {
+                return this.CanHaveChildren && this.children.Count > 0;
+            }
+        }
+        /// <summary>
+        /// Gets a value that indicates if a parent is defined for the current
+        /// <see cref="Resource"/>.
+        /// </summary>
+        public bool HasParent
+        {
+            get
+            {
+                return (this.Parent != null);
+            }
+        }
+        /// <summary>
         /// Gets a value that indicates if the size in bytes of the current
-        /// Resource is known or can be determined.
+        /// <see cref="Resource"/> is known or can be determined.
         /// </summary>
         public virtual bool IsSizeKnown
         {
@@ -164,42 +219,7 @@ namespace Serenity.Web.Resources
             }
         }
         /// <summary>
-        /// Gets the MimeType that should be used to describe the content of the current Resource.
-        /// </summary>
-        public MimeType ContentType
-        {
-            get
-            {
-                return this.mimeType;
-            }
-            protected internal set
-            {
-                this.mimeType = value;
-            }
-        }
-        public bool HasParent
-        {
-            get
-            {
-                return (this.Parent != null);
-            }
-        }
-        public bool HasChildren
-        {
-            get
-            {
-                return this.CanHaveChildren && this.children.Count > 0;
-            }
-        }
-        public virtual bool CanHaveChildren
-        {
-            get
-            {
-                return false;
-            }
-        }
-        /// <summary>
-        /// Gets or sets the name of the current Resource.
+        /// Gets or sets the name of the current <see cref="Resource"/>.
         /// </summary>
         public string Name
         {
@@ -212,38 +232,10 @@ namespace Serenity.Web.Resources
                 this.name = value;
             }
         }
-        public string SegmentName
-        {
-            get
-            {
-                return (this.HasChildren) ? ((!this.Name.EndsWith("/")) ? this.Name + "/" : this.Name) : this.Name;
-            }
-        }
         /// <summary>
-        /// Gets the ResourcePath of the current Resource.
+        /// Gets or sets the <see cref="Server"/> that is the owner of the
+        /// current <see cref="Resource"/>.
         /// </summary>
-        public ResourcePath Path
-        {
-            get
-            {
-                return this.uri ?? ResourcePath.Create(this.Name);
-            }
-            set
-            {
-                this.uri = value;
-            }
-        }
-        /// <summary>
-        /// When overridden in a derived class, gets the size in bytes of the
-        /// content of the current Resource.
-        /// </summary>
-        public virtual int Size
-        {
-            get
-            {
-                return -1;
-            }
-        }
         public Server Owner
         {
             get
@@ -255,6 +247,10 @@ namespace Serenity.Web.Resources
                 this.owner = value;
             }
         }
+        /// <summary>
+        /// Gets the <see cref="Resource"/> that is the parent of the current
+        /// <see cref="Resource"/>.
+        /// </summary>
         public Resource Parent
         {
             get
@@ -267,13 +263,40 @@ namespace Serenity.Web.Resources
             }
         }
         /// <summary>
-        /// Gets the child resources of the current <see cref="TreeResource"/>.
+        /// Gets the ResourcePath of the current Resource.
         /// </summary>
-        public Resource[] Children
+        [Obsolete]
+        public ResourcePath Path
         {
             get
             {
-                return this.children.ToArray();
+                return this.uri ?? ResourcePath.Create(this.Name);
+            }
+            set
+            {
+                this.uri = value;
+            }
+        }
+        /// <summary>
+        /// Gets the name of the current <see cref="Resource"/> for use in
+        /// the construction of a URI.
+        /// </summary>
+        public string SegmentName
+        {
+            get
+            {
+                return (this.HasChildren) ? ((!this.Name.EndsWith("/")) ? this.Name + "/" : this.Name) : this.Name;
+            }
+        }
+        /// <summary>
+        /// When overridden in a derived class, gets the size in bytes of the
+        /// content of the current Resource.
+        /// </summary>
+        public virtual int Size
+        {
+            get
+            {
+                return -1;
             }
         }
         #endregion

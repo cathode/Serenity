@@ -200,6 +200,7 @@
     <EmbeddedResource Include="Properties\AppResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\icons\arrow_down.png" />
     <EmbeddedResource Include="Resources\icons\arrow_up.png" />
