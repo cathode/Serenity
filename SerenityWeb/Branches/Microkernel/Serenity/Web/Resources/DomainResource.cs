@@ -5,12 +5,23 @@ using System.Text;
 
 namespace Serenity.Web.Resources
 {
-    public sealed class DomainResource : DynamicResource
+    public sealed class DomainResource : DirectoryResource
     {
+        private string hostName;
         public override void OnRequest(Request request, Response response)
         {
-            base.OnRequest(request, response);
 
+        }
+        public string HostName
+        {
+            get
+            {
+                return this.hostName;
+            }
+            set
+            {
+                this.hostName = value;
+            }
         }
     }
 }

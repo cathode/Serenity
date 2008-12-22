@@ -16,6 +16,7 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using Serenity.Web.Resources;
+using System.IO;
 
 namespace Serenity.Net
 {
@@ -57,7 +58,7 @@ namespace Serenity.Net
         private Socket listener;
         private readonly ModuleCollection modules = new ModuleCollection();
         private readonly EventLog log = new EventLog();
-        private readonly RootResource rootResource;
+        private Resource rootResource;
         #endregion
         #region Methods
         /// <summary>
@@ -146,10 +147,61 @@ namespace Serenity.Net
 
             foreach (string modulePath in this.Profile.Modules)
             {
-                var mod = Module.LoadModule(modulePath);
+                var module = Module.LoadModule(modulePath);
 
-                
-                this.modules.Add(mod);
+                DirectoryResource tree = new DirectoryResource()
+                {
+                    Name = module.Name,
+                    Owner = this
+                };
+
+                foreach (DynamicResource page in module.Pages)
+                {
+                    page.Path = ResourcePath.Create(page.Name);
+                    tree.Add(page);
+                }
+                foreach (string embedPath in module.Assembly.GetManifestResourceNames())
+                {
+                    string newpath = embedPath.Remove(0, module.ResourceNamespace.Length);
+                    string[] parts = newpath.Split('.');
+                    string path;
+                    if (parts.Length > 2)
+                    {
+                        path = "/resource/" + string.Join("/", parts, 0, parts.Length - 2) + "/";
+                    }
+                    else
+                    {
+                        path = "/resource/";
+                    }
+
+                    string name = "";
+                    if (parts.Length > 1)
+                    {
+                        name = parts[parts.Length - 2] + "." + parts[parts.Length - 1];
+                    }
+                    else
+                    {
+                        name = parts[0];
+                    }
+
+                    using (Stream stream = module.Assembly.GetManifestResourceStream(embedPath))
+                    {
+                        byte[] data = new byte[stream.Length];
+                        if (stream.Read(data, 0, data.Length) == data.Length)
+                        {
+                            ResourceResource res = new ResourceResource(name, data);
+                            //res.ContentType = FileTypeRegistry.GetMimeType(parts[parts.Length - 1]);
+
+                            res.Path = ResourcePath.Create(name);
+                            tree.Add(res);
+                        }
+                    }
+                }
+                if (this.RootResource is DirectoryResource)
+                {
+                    ((DirectoryResource)this.RootResource).Add(tree);
+                }
+                this.modules.Add(module);
             }
         }
         /// <summary>
@@ -215,9 +267,12 @@ namespace Serenity.Net
 
                 state.SwapBuffers();
 
-                state.Client.BeginReceive(state.ReceiveBuffer, 0,
-                    state.ReceiveBuffer.Length, SocketFlags.None,
-                    new AsyncCallback(this.ReceiveCallback), state);
+                if (state.Client.Connected)
+                {
+                    state.Client.BeginReceive(state.ReceiveBuffer, 0,
+                        state.ReceiveBuffer.Length, SocketFlags.None,
+                        new AsyncCallback(this.ReceiveCallback), state);
+                }
             }
         }
         /// <summary>
@@ -322,11 +377,15 @@ namespace Serenity.Net
                 return this.log;
             }
         }
-        public RootResource RootResource
+        public Resource RootResource
         {
             get
             {
                 return this.rootResource;
+            }
+            set
+            {
+                this.rootResource = value;
             }
         }
         #endregion

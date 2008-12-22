@@ -116,6 +116,11 @@
     <Compile Include="Pages\DefaultPage.cs" />
     <Compile Include="Net\Server.cs" />
     <Compile Include="Net\ServerProfile.cs" />
+    <Compile Include="Properties\AppResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SuppressLoadCreationAttribute.cs" />
     <Compile Include="SerenityInfo.cs" />
     <Compile Include="Logging\Log.cs" />
@@ -166,14 +171,13 @@
     <Compile Include="Web\Resources\DynamicResource.cs" />
     <Compile Include="Web\Resources\ErrorResource.cs" />
     <Compile Include="Web\Resources\Resource.cs" />
-    <Compile Include="Web\Resources\ResourceCollection.cs" />
+    <None Include="Web\Resources\ResourceCollection.cs" />
     <Compile Include="Web\Resources\ResourceGrouping.cs" />
     <Compile Include="Web\Resources\ResourcePath.cs" />
     <Compile Include="Web\Resources\ResourceResource.cs" />
     <Compile Include="Web\Resources\RewriteResource.cs" />
     <Compile Include="Web\Resources\RootResource.cs" />
     <Compile Include="Web\Resources\StaticResource.cs" />
-    <Compile Include="Web\Resources\TreeResource.cs" />
     <Compile Include="Web\Response.cs" />
     <Compile Include="Web\Session.cs" />
     <Compile Include="Web\StatusCode.cs" />
@@ -193,6 +197,10 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\AppResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\icons\arrow_down.png" />
     <EmbeddedResource Include="Resources\icons\arrow_up.png" />
     <EmbeddedResource Include="Resources\icons\folder.png" />

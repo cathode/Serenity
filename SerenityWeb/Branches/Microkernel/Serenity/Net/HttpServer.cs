@@ -230,7 +230,9 @@ namespace Serenity.Net
                 }
                 if (completed)
                 {
+                    this.RootResource.PreRequest(request, response);
                     this.RootResource.OnRequest(request, response);
+                    this.RootResource.PostRequest(request, response);
 
                     if (this.IsDisposed)
                     {

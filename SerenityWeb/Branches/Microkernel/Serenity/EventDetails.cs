@@ -9,6 +9,7 @@ namespace Serenity
     {
         public EventDetails(string message)
         {
+            this.message = message;
         }
         #region Fields
         private EventKind kind;
@@ -40,6 +41,21 @@ namespace Serenity
             get
             {
                 return this.message;
+            }
+            set
+            {
+                this.message = value;
+            }
+        }
+        public string StackTrace
+        {
+            get
+            {
+                return this.stackTrace;
+            }
+            set
+            {
+                this.stackTrace = value;
             }
         }
         #endregion

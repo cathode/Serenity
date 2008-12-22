@@ -83,7 +83,7 @@ namespace Serenity
                     pages.Add(page);
                 }
             }
-            Module module = new Module(assemblyPath);
+            Module module = new Module(Path.GetFileNameWithoutExtension(assemblyPath));
             module.assembly = moduleAsm;
             module.title = title;
             module.resourceNamespace = resourceNamespace;

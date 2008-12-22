@@ -17,6 +17,8 @@ using System.Net;
 using System.Xml;
 using System.IO;
 
+using Serenity.Web.Resources;
+
 namespace Serenity.Net
 {
     /// <summary>
@@ -59,6 +61,7 @@ namespace Serenity.Net
         private string[] modules = new string[0];
         private string path = null;
         private bool useIPv6;
+        private bool useCaseSensitiveUris;
         #endregion
         #region Methods
         /// <summary>
@@ -282,6 +285,17 @@ namespace Serenity.Net
             set
             {
                 this.path = value;
+            }
+        }
+        public bool UseCaseSensitiveUris
+        {
+            get
+            {
+                return this.useCaseSensitiveUris;
+            }
+            set
+            {
+                this.useCaseSensitiveUris = value;
             }
         }
         #endregion

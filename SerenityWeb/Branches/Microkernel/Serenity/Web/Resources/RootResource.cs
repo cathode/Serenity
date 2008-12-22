@@ -6,7 +6,7 @@ using Serenity.Net;
 
 namespace Serenity.Web.Resources
 {
-    public sealed class RootResource : TreeResource
+    public sealed class RootResource : DirectoryResource
     {
         internal RootResource(Server owner)
         {
@@ -18,7 +18,7 @@ namespace Serenity.Web.Resources
         }
         public override void OnRequest(Request request, Response response)
         {
-            response.WriteLine("Nothing implemented yet.");
+            base.OnRequest(request, response);
         }
     }
 }

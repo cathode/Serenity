@@ -13,6 +13,7 @@ using Serenity.Data;
 using Serenity.Net;
 using System.Collections.Generic;
 using NDesk.Options;
+using Serenity.Web.Resources;
 
 namespace Server
 {
@@ -42,19 +43,11 @@ namespace Server
             {
                 Profile = profile
             };
-            HttpServer alt = new HttpServer()
-            {
-                Profile = new ServerProfile("alternate")
-                {
-                    LocalEndPoint = new IPEndPoint(IPAddress.Any, 8080)
-                }
-            };
+            server.Profile.Modules = new string[] { "Serenity.dll" };
 
             server.Initialize();
             server.Start();
 
-            alt.Initialize();
-            alt.Start();
             Console.WriteLine("Server running, press ESC to shut down.");
 
             while (true)
@@ -63,7 +56,6 @@ namespace Server
                 {
                     Console.WriteLine("Shutting down server now...");
                     server.Stop();
-                    alt.Stop();
                     break;
                 }
             }

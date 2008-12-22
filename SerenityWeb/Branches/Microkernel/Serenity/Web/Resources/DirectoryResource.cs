@@ -23,31 +23,15 @@ namespace Serenity.Web.Resources
     /// provide indexing services for virtual directories.
     /// </summary>
     [SuppressLoadCreation(true)]
-    public sealed class DirectoryResource : TreeResource
+    public class DirectoryResource : Resource
     {
         #region Constructors - internal
         /// <summary>
         /// Initializes a new instance of the <see cref="DirectoryResource"/>
         /// class.
         /// </summary>
-        /// <param name="path"></param>
-        public DirectoryResource(ResourcePath path)
+        public DirectoryResource()
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException("uri");
-            }
-            this.Path = path;
-
-            string temp = path.Path.TrimEnd('/');
-            if (temp.Length > 0)
-            {
-                this.Name = temp.Substring(temp.LastIndexOf('/') + 1);
-            }
-            else
-            {
-                this.Name = "";
-            }
             this.ContentType = MimeType.ApplicationXml;
         }
         #endregion
@@ -65,7 +49,6 @@ namespace Serenity.Web.Resources
         /// <param name="response"></param>
         public override void OnRequest(Request request, Response response)
         {
-            //
             // collect data
             SortedDictionary<string, List<Resource>> groupedResources = new SortedDictionary<string, List<Resource>>();
             
@@ -94,7 +77,7 @@ namespace Serenity.Web.Resources
                     writer.WriteStartElement("index");
                     //   <location>Node Path</location>
                     writer.WriteStartElement("location");
-                    writer.WriteString(this.Path.ToString());
+                    writer.WriteString(this.GetRelativeUri().ToString());
                     writer.WriteEndElement();
                     foreach (KeyValuePair<string, List<Resource>> pair in groupedResources)
                     {
@@ -128,7 +111,7 @@ namespace Serenity.Web.Resources
                             //writer.WriteAttributeString("icon", FileTypeRegistry.GetIcon(System.IO.Path.GetExtension(res.Name)));
                             writer.WriteAttributeString("icon", "FIXME");
                             writer.WriteStartElement("value");
-                            writer.WriteAttributeString("link", res.Path.ToString());
+                            writer.WriteAttributeString("link", res.GetRelativeUri().ToString());
                             writer.WriteString(res.Name);
                             writer.WriteEndElement();
                             if (res.IsSizeKnown)
@@ -164,6 +147,13 @@ namespace Serenity.Web.Resources
             get
             {
                 return ResourceGrouping.Directories;
+            }
+        }
+        public override bool CanHaveChildren
+        {
+            get
+            {
+                return true;
             }
         }
         #endregion
