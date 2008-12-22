@@ -314,6 +314,8 @@ namespace Serenity.Net
                         }
                         response.ClearOutputBuffer();
                     }
+                    state.Reset();
+                    return;
                 }
             }
         }

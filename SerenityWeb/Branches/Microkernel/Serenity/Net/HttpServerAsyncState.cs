@@ -8,11 +8,16 @@ namespace Serenity.Net
     public class HttpServerAsyncState : ServerAsyncState
     {
         #region Fields
-
         private RequestProcessingStage stage;
         #endregion
+        #region Methods
+        public override void Reset()
+        {
+            this.Stage = RequestProcessingStage.None;
+            base.Reset();
+        }
+        #endregion
         #region Properties
-        
         public RequestProcessingStage Stage
         {
             get

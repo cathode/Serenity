@@ -7,7 +7,7 @@
         <title>
           Index of <xsl:value-of select='index/location' />
         </title>
-        <link rel='stylesheet' type='text/css' href='/resource/serenity/index.css' />
+        <link rel='stylesheet' type='text/css' href='/serenity/resource/index.css' />
         <xsl:for-each select='index/presentation/stylesheet'>
           <xsl:element name='link'>
             <xsl:attribute name='rel'>stylesheet</xsl:attribute>

@@ -38,6 +38,14 @@ namespace Serenity.Web.Resources
                     where res.Name.Equals(name, StringComparison.OrdinalIgnoreCase)
                     select res).FirstOrDefault();
         }
+        public virtual Resource GetChild(Uri uri)
+        {
+            if (uri.Segments.Length <= this.Position + 1)
+            {
+                return null;
+            }
+            return this.GetChild(uri.Segments[this.Position + 1].TrimEnd('/'));
+        }
         public void Add(Resource resource)
         {
             if (!this.CanHaveChildren)
@@ -297,6 +305,20 @@ namespace Serenity.Web.Resources
             get
             {
                 return -1;
+            }
+        }
+        public int Position
+        {
+            get
+            {
+                if (!this.HasParent)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return this.Parent.Position + 1;
+                }
             }
         }
         #endregion

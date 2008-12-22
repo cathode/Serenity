@@ -85,7 +85,9 @@ namespace Serenity.Net
                 return;
             }
             state.Reset();
-            state.Client.BeginReceive(state.ReceiveBuffer, 0, state.ReceiveBuffer.Length, SocketFlags.None, new AsyncCallback(this.ReceiveCallback), state);
+            state.Client.BeginReceive(state.ReceiveBuffer, 0,
+                          Math.Min(state.Client.Available, state.ReceiveBuffer.Length),
+                          SocketFlags.None, new AsyncCallback(this.ReceiveCallback), state);
 
             var newState = this.CreateStateObject();
             newState.Listener = state.Listener;
@@ -276,8 +278,8 @@ namespace Serenity.Net
                 if (state.Client.Connected)
                 {
                     state.Client.BeginReceive(state.ReceiveBuffer, 0,
-                        state.ReceiveBuffer.Length, SocketFlags.None,
-                        new AsyncCallback(this.ReceiveCallback), state);
+                        Math.Min(state.Client.Available, state.ReceiveBuffer.Length),
+                        SocketFlags.None, new AsyncCallback(this.ReceiveCallback), state);
                 }
             }
         }

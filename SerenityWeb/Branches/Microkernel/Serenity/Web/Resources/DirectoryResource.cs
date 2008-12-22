@@ -39,7 +39,7 @@ namespace Serenity.Web.Resources
         /// <summary>
         /// Holds the path of the XSLT stylesheet used to render the XML index output.
         /// </summary>
-        public const string XsltStylesheetUrl = "/resource/serenity/index.xslt";
+        public const string XsltStylesheetUrl = "/serenity/resource/index.xslt";
         #endregion
         #region Methods - Public
         /// <summary>
@@ -49,6 +49,26 @@ namespace Serenity.Web.Resources
         /// <param name="response"></param>
         public override void OnRequest(Request request, Response response)
         {
+            if (request == null)
+            {
+                throw new ArgumentNullException("request");
+            }
+            else if (response == null)
+            {
+                throw new ArgumentNullException("response");
+            }
+            else if (response.IsComplete)
+            {
+                return;
+            }
+            Resource child = this.GetChild(request.Url);
+
+            if (child != null)
+            {
+                child.OnRequest(request, response);
+                return;
+            }
+
             // collect data
             SortedDictionary<string, List<Resource>> groupedResources = new SortedDictionary<string, List<Resource>>();
             
@@ -135,6 +155,7 @@ namespace Serenity.Web.Resources
                     writer.Close();
                 }
                 response.Write(ms.ToArray());
+                response.IsComplete = true;
             }
         }
         #endregion

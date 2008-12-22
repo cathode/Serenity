@@ -43,6 +43,7 @@ namespace Serenity.Web
         private StatusCode status;
         private bool useChunkedTransferEncoding;
         private bool useCompression;
+        private bool isComplete;
         #endregion
         #region Methods - Public
         /// <summary>
@@ -177,6 +178,17 @@ namespace Serenity.Web
             set
             {
                 this.headersSent = value;
+            }
+        }
+        public bool IsComplete
+        {
+            get
+            {
+                return this.isComplete;
+            }
+            set
+            {
+                this.isComplete = value;
             }
         }
         /// <summary>

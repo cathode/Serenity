@@ -112,6 +112,8 @@ namespace Serenity.Net
                 Connection = this.Client,
                 Owner = this.Owner
             };
+
+            this.SwapBuffers();
         }
         #endregion
         #region Properties
