@@ -108,7 +108,6 @@ namespace Serenity.Web
             {
                 if (reader.Read())
                 {
-                    object o = reader["created"];
                     Session s = new Session(sessionId);
 
                     lock (Session.pool)

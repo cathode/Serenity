@@ -48,10 +48,6 @@ namespace Serenity.Web.Forms
         private string id;
         private string name;
         private string style;
-        [ThreadStatic]
-        private ControlAttributeCollection volatileAttributes;
-        [ThreadStatic]
-        private ControlCollection volatileControls;
         #endregion
         #region Fields - Public
         /// <summary>
@@ -60,7 +56,6 @@ namespace Serenity.Web.Forms
         public const string DefaultControlName = "control";
         #endregion
         #region Methods - Protected
-
         /// <summary>
         /// When overridden in a derived class, performs control rendering.
         /// </summary>
@@ -71,29 +66,28 @@ namespace Serenity.Web.Forms
         /// <param name="context"></param>
         protected virtual void RenderBegin(RenderingContext context)
         {
-            StreamWriter writer = new StreamWriter(context.OutputStream, context.OutputEncoding);
-
-            writer.Write("<" + this.Name);
-
-            if (this.CanContainAttributes && this.Attributes.Count > 0)
+            using (StreamWriter writer = new StreamWriter(context.OutputStream, context.OutputEncoding))
             {
-                writer.Write(" " + string.Join(" ", (from a in this.Attributes.Concat(this.VolatileAttributes)
-                                                     where a.Include == true
-                                                     select a.Name + "=\"" + a.Value + "\"").ToArray()));
+                writer.Write("<" + this.Name);
 
+                if (this.CanContainAttributes && this.Attributes.Count > 0)
+                {
+                    writer.Write(" " + string.Join(" ", (from a in this.Attributes
+                                                         where a.Include == true
+                                                         select a.Name + "=\"" + a.Value + "\"").ToArray()));
+                }
 
+                if (!this.CanContainControls || this.Controls.Count == 0)
+                {
+                    writer.Write(" />");
+                }
+                else
+                {
+                    writer.Write(">");
+                }
+
+                writer.Flush();
             }
-
-            if (!this.CanContainControls || this.Controls.Count == 0)
-            {
-                writer.Write(" />");
-            }
-            else
-            {
-                writer.Write(">");
-            }
-
-            writer.Flush();
         }
         /// <summary>
         /// When overridden in a derived class, performs control rendering.
@@ -153,7 +147,7 @@ namespace Serenity.Web.Forms
             this.RenderBegin(context);
             if (this.CanContainControls)
             {
-                foreach (Control c in this.Controls.Concat(this.VolatileControls))
+                foreach (Control c in this.Controls)
                 {
                     c.Render(context);
                 }
@@ -270,28 +264,6 @@ namespace Serenity.Web.Forms
             set
             {
                 this.style = value;
-            }
-        }
-        public ControlAttributeCollection VolatileAttributes
-        {
-            get
-            {
-                if (this.volatileAttributes == null)
-                {
-                    this.volatileAttributes = new ControlAttributeCollection();
-                }
-                return this.volatileAttributes;
-            }
-        }
-        public ControlCollection VolatileControls
-        {
-            get
-            {
-                if (this.volatileControls == null)
-                {
-                    this.volatileControls = new ControlCollection();
-                }
-                return this.volatileControls;
             }
         }
         #endregion

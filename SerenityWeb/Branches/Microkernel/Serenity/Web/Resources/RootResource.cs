@@ -1,4 +1,15 @@
-﻿using System;
+﻿/******************************************************************************
+ * Serenity - The next evolution of web server technology.                    *
+ * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
+ *----------------------------------------------------------------------------*
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Public License (Ms-PL), a copy of which should have been included with     *
+ * this distribution as License.txt.                                          *
+ *----------------------------------------------------------------------------*
+ * Authors:                                                                   *
+ * - Will 'AnarkiNet' Shelley (AnarkiNet@gmail.com): Original Author          *
+ *****************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +19,7 @@ namespace Serenity.Web.Resources
 {
     public sealed class RootResource : DirectoryResource
     {
+        #region Constructors
         internal RootResource(Server owner)
         {
             if (owner == null)
@@ -16,35 +28,12 @@ namespace Serenity.Web.Resources
             }
             this.Owner = owner;
         }
+        #endregion
+        #region Methods
         public override Resource GetChild(Uri uri)
         {
             return this.GetChild(uri.Host) ?? base.GetChild(uri);
         }
-        public override void OnRequest(Request request, Response response)
-        {
-            if (request == null)
-            {
-                throw new ArgumentNullException("request");
-            }
-            else if (response == null)
-            {
-                throw new ArgumentNullException("response");
-            }
-            else if (response.IsComplete)
-            {
-                return;
-            }
-            Resource res = this.GetChild(request.Url);
-
-            if (res != null)
-            {
-                res.OnRequest(request, response);
-            }
-            else
-            {
-                //TODO: Serve up a 404 or other error page.
-                base.OnRequest(request, response);
-            }
-        }
+        #endregion
     }
 }

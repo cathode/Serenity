@@ -86,5 +86,14 @@ namespace Serenity.Properties {
                 return ResourceManager.GetString("ResourceHasParentException", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The string passed to argument &apos;{0}&apos; was empty..
+        /// </summary>
+        internal static string StringArgumentEmptyException {
+            get {
+                return ResourceManager.GetString("StringArgumentEmptyException", resourceCulture);
+            }
+        }
     }
 }

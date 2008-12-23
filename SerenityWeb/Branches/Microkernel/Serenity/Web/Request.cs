@@ -13,7 +13,6 @@ namespace Serenity.Web
         #region Constructors - Public
         public Request()
         {
-            this.contentEncoding = null;
             this.contentLength = 0;
             this.contentType = MimeType.Default;
             this.cookies = new CookieCollection();

@@ -127,4 +127,7 @@
     <value>The specified resource cannot be added because it already has a parent resource defined. The existing relationship must be cleared before it can be added.</value>
     <comment>Used when an attempt is made to add a resource to another one when the resource to be added already belongs to a third resource.</comment>
   </data>
+  <data name="StringArgumentEmptyException" xml:space="preserve">
+    <value>The string passed to argument '{0}' was empty.</value>
+  </data>
 </root>

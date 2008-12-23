@@ -5,6 +5,9 @@
  * This software is released under the terms and conditions of the Microsoft  *
  * Public License (Ms-PL), a copy of which should have been included with     *
  * this distribution as License.txt.                                          *
+ *----------------------------------------------------------------------------*
+ * Authors:                                                                   *
+ * - Will 'AnarkiNet' Shelley (AnarkiNet@gmail.com): Original Author          *
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -35,7 +38,7 @@ namespace Serenity.Web.Resources
             this.ContentType = MimeType.ApplicationXml;
         }
         #endregion
-        #region Fields - Public
+        #region Fields
         /// <summary>
         /// Holds the path of the XSLT stylesheet used to render the XML index output.
         /// </summary>
@@ -68,8 +71,15 @@ namespace Serenity.Web.Resources
                 child.OnRequest(request, response);
                 return;
             }
+            else if (!request.Url.AbsolutePath.Equals(this.Uri.AbsolutePath, StringComparison.OrdinalIgnoreCase))
+            {
+                response.Status = StatusCode.Http404NotFound;
+                response.Write("HTTP 404 Not Found");
+                response.ContentType = MimeType.TextPlain;
+                return;
+            }
 
-            // collect data
+            // collect data for index generation
             SortedDictionary<string, List<Resource>> groupedResources = new SortedDictionary<string, List<Resource>>();
             
             foreach (Resource resource in this.Children)
@@ -97,7 +107,7 @@ namespace Serenity.Web.Resources
                     writer.WriteStartElement("index");
                     //   <location>Node Path</location>
                     writer.WriteStartElement("location");
-                    writer.WriteString(this.GetRelativeUri().ToString());
+                    writer.WriteString(this.Uri.ToString());
                     writer.WriteEndElement();
                     foreach (KeyValuePair<string, List<Resource>> pair in groupedResources)
                     {
@@ -131,7 +141,7 @@ namespace Serenity.Web.Resources
                             //writer.WriteAttributeString("icon", FileTypeRegistry.GetIcon(System.IO.Path.GetExtension(res.Name)));
                             writer.WriteAttributeString("icon", "FIXME");
                             writer.WriteStartElement("value");
-                            writer.WriteAttributeString("link", res.GetRelativeUri().ToString());
+                            writer.WriteAttributeString("link", res.Uri.ToString());
                             writer.WriteString(res.Name);
                             writer.WriteEndElement();
                             if (res.IsSizeKnown)

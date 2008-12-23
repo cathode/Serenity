@@ -44,7 +44,7 @@
                   <xsl:element name='img'>
                     <xsl:attribute name='alt'>x</xsl:attribute>
                     <xsl:attribute name='src'>
-                      /resource/serenity/icons/<xsl:value-of select='@icon' />.png
+                      /serenity/resource/<xsl:value-of select='@icon' />.png
                     </xsl:attribute>
                   </xsl:element>
                 </td>

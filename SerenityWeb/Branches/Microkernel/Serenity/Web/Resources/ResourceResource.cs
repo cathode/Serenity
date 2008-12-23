@@ -46,6 +46,13 @@ namespace Serenity.Web.Resources
         public override void OnRequest(Request request, Response response)
         {
             response.Write(this.data);
+            string ext = System.IO.Path.GetExtension(this.Name);
+            switch (ext)
+            {
+                case ".png":
+                    response.ContentType = MimeType.ImagePng;
+                    break;
+            }
         }
         #endregion
         #region Properties - Public

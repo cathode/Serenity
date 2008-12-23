@@ -10,6 +10,9 @@ namespace Serenity
         #region Events
         public event EventHandler<EventRecordedEventArgs> EventRecorded;
         #endregion
+        #region Fields
+        private bool enabled = true;
+        #endregion
         #region Methods
         public void RecordEvent(string message)
         {
@@ -32,9 +35,27 @@ namespace Serenity
         }
         public void RecordEvent(EventDetails details)
         {
+            if (!this.Enabled)
+            {
+                return;
+            }
+
             if (this.EventRecorded != null)
             {
                 this.EventRecorded(this, new EventRecordedEventArgs(details));
+            }
+        }
+        #endregion
+        #region Properties
+        public bool Enabled
+        {
+            get
+            {
+                return this.enabled;
+            }
+            set
+            {
+                this.enabled = value;
             }
         }
         #endregion

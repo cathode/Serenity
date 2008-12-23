@@ -25,7 +25,7 @@ namespace Serenity.Net
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="AsyncServerState"/>
+        /// Initializes a new instance of the <see cref="ServerAsyncState"/>
         /// class using the default buffer size.
         /// </summary>
         public ServerAsyncState()
@@ -33,7 +33,7 @@ namespace Serenity.Net
         {
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="AsyncServerState"/>
+        /// Initializes a new instance of the <see cref="ServerAsyncState"/>
         /// class using the specified buffer size.
         /// </summary>
         /// <param name="bufferSize"></param>
@@ -89,6 +89,7 @@ namespace Serenity.Net
             if (!this.IsDisposed)
             {
                 this.Dispose(true);
+                GC.SuppressFinalize(this);
                 this.isDisposed = true;
             }
         }

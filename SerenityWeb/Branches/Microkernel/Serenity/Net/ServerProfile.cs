@@ -56,10 +56,10 @@ namespace Serenity.Net
         private string name = null;
         private IPEndPoint localEndPoint = new IPEndPoint(IPAddress.IPv6Any, 0);
         private int connectionBacklog = 20;
-        private int maxReceiveRateTotal = 0;
-        private int maxSendRateTotal = 0;
+        private int maxReceiveRateTotal;
+        private int maxSendRateTotal;
         private string[] modules = new string[0];
-        private string path = null;
+        private string path;
         private bool useIPv6;
         private bool useCaseSensitiveUris;
         #endregion

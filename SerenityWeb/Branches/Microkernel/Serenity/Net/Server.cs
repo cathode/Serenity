@@ -115,6 +115,8 @@ namespace Serenity.Net
             if (!this.IsDisposed)
             {
                 this.Dispose(true);
+                GC.SuppressFinalize(this);
+                this.isDisposed = true;
             }
         }
         /// <summary>
@@ -123,7 +125,7 @@ namespace Serenity.Net
         /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
-            this.isDisposed = true;
+            //TODO: Implement dispose for Server
         }
         /// <summary>
         /// Initializes the current <see cref="Server"/>. Commonly, tasks such
@@ -184,6 +186,7 @@ namespace Serenity.Net
                     string name = "";
                     if (parts.Length > 1)
                     {
+                        //Adds the file extension back onto the resource name.
                         name = parts[parts.Length - 2] + "." + parts[parts.Length - 1];
                     }
                     else
@@ -270,7 +273,7 @@ namespace Serenity.Net
                 }
                 catch (SocketException ex)
                 {
-                    Logging.Log.RecordEvent("Socket exeption: " + ex.ToString(), Serenity.Logging.Severity.Notice);
+                    this.Log.RecordEvent(ex.Message, EventKind.Info, ex.StackTrace);
                 }
 
                 state.SwapBuffers();

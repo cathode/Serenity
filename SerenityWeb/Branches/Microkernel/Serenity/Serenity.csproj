@@ -166,14 +166,13 @@
     <Compile Include="Web\Request.cs" />
     <Compile Include="Web\RequestContent.cs" />
     <Compile Include="Web\RequestMethod.cs" />
+    <Compile Include="Web\Resources\DirectoryControl.cs" />
     <Compile Include="Web\Resources\DirectoryResource.cs" />
     <Compile Include="Web\Resources\DomainResource.cs" />
     <Compile Include="Web\Resources\DynamicResource.cs" />
     <Compile Include="Web\Resources\ErrorResource.cs" />
     <Compile Include="Web\Resources\Resource.cs" />
-    <None Include="Web\Resources\ResourceCollection.cs" />
     <Compile Include="Web\Resources\ResourceGrouping.cs" />
-    <Compile Include="Web\Resources\ResourcePath.cs" />
     <Compile Include="Web\Resources\ResourceResource.cs" />
     <Compile Include="Web\Resources\RewriteResource.cs" />
     <Compile Include="Web\Resources\RootResource.cs" />
@@ -267,6 +266,9 @@
       <HintPath>..\References\System.Data.SQLite.DLL</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">

@@ -5,6 +5,9 @@
  * This software is released under the terms and conditions of the Microsoft  *
  * Public License (Ms-PL), a copy of which should have been included with     *
  * this distribution as License.txt.                                          *
+ *----------------------------------------------------------------------------*
+ * Authors:                                                                   *
+ * - Will 'AnarkiNet' Shelley (AnarkiNet@gmail.com): Original Author          *
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -25,7 +28,6 @@ namespace Serenity.Web.Resources
         private string name;
         private Server owner;
         private Resource parent;
-        private ResourcePath uri;
         #endregion
         #region Methods
         public Resource GetChild(string name)
@@ -100,22 +102,7 @@ namespace Serenity.Web.Resources
                 this.Remove(resource);
             }
         }
-        /// <summary>
-        /// Traverses the resource tree in reverse to determine the relative
-        /// <see cref="Uri"/> of the current <see cref="Resource"/>.
-        /// </summary>
-        /// <returns></returns>
-        public Uri GetRelativeUri()
-        {
-            if (this.Parent == null)
-            {
-                return new Uri(this.SegmentName, UriKind.Relative);
-            }
-            else
-            {
-                return new Uri(this.Parent.GetRelativeUri().ToString() + this.SegmentName, UriKind.Relative);
-            }
-        }
+
         /// <summary>
         /// When overridden in a derived class, uses the supplied CommonContext to dynamically generate response content.
         /// </summary>
@@ -271,18 +258,26 @@ namespace Serenity.Web.Resources
             }
         }
         /// <summary>
-        /// Gets the ResourcePath of the current Resource.
+        /// Gets the relative <see cref="Uri"/> of the current
+        /// <see cref="REsource"/> by traversing the resource tree in reverse.
         /// </summary>
-        [Obsolete]
-        public ResourcePath Path
+        public Uri Uri
         {
             get
             {
-                return this.uri ?? ResourcePath.Create(this.Name);
-            }
-            set
-            {
-                this.uri = value;
+                if (this.Parent == null)
+                {
+                    UriBuilder builder = new UriBuilder()
+                    {
+                        Path = this.SegmentName
+                    };
+
+                    return builder.Uri;
+                }
+                else
+                {
+                    return new Uri(this.Parent.Uri.ToString() + this.SegmentName);
+                }
             }
         }
         /// <summary>
