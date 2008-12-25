@@ -113,7 +113,6 @@
     <Compile Include="Net\RequestProcessingStage.cs" />
     <Compile Include="Net\ServerAsyncState.cs" />
     <Compile Include="Module.cs" />
-    <Compile Include="Pages\DefaultPage.cs" />
     <Compile Include="Net\Server.cs" />
     <Compile Include="Net\ServerProfile.cs" />
     <Compile Include="Properties\AppResources.Designer.cs">
@@ -127,46 +126,45 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Web\Cookie.cs" />
     <Compile Include="Web\CookieCollection.cs" />
-    <Compile Include="Web\Forms\Anchor.cs" />
-    <Compile Include="Web\Forms\Body.cs" />
-    <Compile Include="Web\Forms\Button.cs" />
-    <Compile Include="Web\Forms\Control.cs" />
-    <Compile Include="Web\Forms\ControlAttribute.cs" />
-    <Compile Include="Web\Forms\ControlAttributeCollection.cs" />
-    <Compile Include="Web\Forms\ControlCollection.cs" />
-    <Compile Include="Web\Forms\Division.cs" />
-    <Compile Include="Web\Forms\Document.cs" />
-    <Compile Include="Web\Forms\DocumentResource.cs" />
-    <Compile Include="Web\Forms\Form.cs" />
-    <Compile Include="Web\Forms\Head.cs" />
-    <Compile Include="Web\Forms\Heading.cs" />
+    <None Include="Web\Forms\Anchor.cs" />
+    <None Include="Web\Forms\Body.cs" />
+    <None Include="Web\Forms\Button.cs" />
+    <None Include="Web\Forms\Control.cs" />
+    <None Include="Web\Forms\ControlAttribute.cs" />
+    <None Include="Web\Forms\ControlAttributeCollection.cs" />
+    <None Include="Web\Forms\ControlCollection.cs" />
+    <None Include="Web\Forms\Division.cs" />
+    <None Include="Web\Forms\Document.cs" />
+    <None Include="Web\Forms\DocumentResource.cs" />
+    <None Include="Web\Forms\Form.cs" />
+    <None Include="Web\Forms\Head.cs" />
+    <None Include="Web\Forms\Heading.cs" />
     <None Include="Web\Forms\Label.cs" />
-    <Compile Include="Web\Forms\HeadingLevel.cs" />
-    <Compile Include="Web\Forms\Html\HtmlDocument.cs" />
-    <Compile Include="Web\Forms\Image.cs" />
-    <Compile Include="Web\Forms\LineBreak.cs" />
-    <Compile Include="Web\Forms\OrderedList.cs" />
-    <Compile Include="Web\Forms\Paragraph.cs" />
-    <Compile Include="Web\Forms\PathLink.cs" />
-    <Compile Include="Web\Forms\RenderEventArgs.cs" />
-    <Compile Include="Web\Forms\RenderingContext.cs" />
-    <Compile Include="Web\Forms\Script.cs" />
-    <Compile Include="Web\Forms\Span.cs" />
+    <None Include="Web\Forms\HeadingLevel.cs" />
+    <None Include="Web\Forms\Html\HtmlDocument.cs" />
+    <None Include="Web\Forms\Image.cs" />
+    <None Include="Web\Forms\LineBreak.cs" />
+    <None Include="Web\Forms\OrderedList.cs" />
+    <None Include="Web\Forms\Paragraph.cs" />
+    <None Include="Web\Forms\PathLink.cs" />
+    <None Include="Web\Forms\RenderEventArgs.cs" />
+    <None Include="Web\Forms\RenderingContext.cs" />
+    <None Include="Web\Forms\Script.cs" />
+    <None Include="Web\Forms\Span.cs" />
     <None Include="Web\Forms\Svg\SvgDocument.cs" />
     <None Include="Web\Forms\Svg\SvgRectangle.cs" />
     <None Include="Web\Forms\Svg\SvgShape.cs" />
-    <Compile Include="Web\Forms\Table.cs" />
-    <Compile Include="Web\Forms\TableCell.cs" />
-    <Compile Include="Web\Forms\TableFooter.cs" />
-    <Compile Include="Web\Forms\TableHeader.cs" />
-    <Compile Include="Web\Forms\TableRow.cs" />
-    <Compile Include="Web\Forms\TextControl.cs" />
-    <Compile Include="Web\Forms\WebFormsEventAttribute.cs" />
+    <None Include="Web\Forms\Table.cs" />
+    <None Include="Web\Forms\TableCell.cs" />
+    <None Include="Web\Forms\TableFooter.cs" />
+    <None Include="Web\Forms\TableHeader.cs" />
+    <None Include="Web\Forms\TableRow.cs" />
+    <None Include="Web\Forms\TextControl.cs" />
+    <None Include="Web\Forms\WebFormsEventAttribute.cs" />
     <Compile Include="Web\MimeType.cs" />
     <Compile Include="Web\Request.cs" />
     <Compile Include="Web\RequestContent.cs" />
     <Compile Include="Web\RequestMethod.cs" />
-    <Compile Include="Web\Resources\DirectoryControl.cs" />
     <Compile Include="Web\Resources\DirectoryResource.cs" />
     <Compile Include="Web\Resources\DomainResource.cs" />
     <Compile Include="Web\Resources\DynamicResource.cs" />
@@ -188,7 +186,7 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="Web\Doctype.cs" />
-    <Compile Include="Web\Forms\UnorderedList.cs" />
+    <None Include="Web\Forms\UnorderedList.cs" />
     <Compile Include="__Strings.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -246,8 +244,6 @@
     <EmbeddedResource Include="Resources\icons\page_white_wrench.png" />
     <EmbeddedResource Include="Resources\icons\page_white_zip.png" />
     <EmbeddedResource Include="Resources\index.css" />
-    <EmbeddedResource Include="Resources\index.xslt" />
-    <EmbeddedResource Include="Resources\webforms\webforms.js" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -20,7 +20,6 @@ using System.Linq;
 
 using Serenity.Web.Resources;
 using Serenity.Web;
-using Serenity.Web.Forms;
 
 namespace Serenity.Web.Resources
 {
@@ -42,10 +41,6 @@ namespace Serenity.Web.Resources
         }
         #endregion
         #region Fields
-        /// <summary>
-        /// Holds the path of the XSLT stylesheet used to render the XML index output.
-        /// </summary>
-        public const string XsltStylesheetUrl = "/serenity/resource/index.xslt";
         public const string StylesheetUrl = "/serenity/resource/index.css";
         #endregion
         #region Methods - Public
@@ -113,11 +108,10 @@ namespace Serenity.Web.Resources
                             new XAttribute("href", baseUri), baseUri),
                             "/",
                             from i in Enumerable.Range(1, uri.Segments.Length - 1)
-                            let seg = uri.Segments[i]
                             select new XElement("span", new XElement("a",
                                 new XAttribute("href", baseUri
                                     + string.Concat((from s in Enumerable.Range(0, i + 1)
-                                                     select uri.Segments[s]).ToArray())), seg.TrimEnd('/')), "/"),
+                                                     select uri.Segments[s]).ToArray())), uri.Segments[i].TrimEnd('/')), "/"),
                         from g in groupedResources
                         select new XElement("div",
                             new XElement("div",
@@ -152,94 +146,30 @@ namespace Serenity.Web.Resources
                                                 (r.Size < 0) ? "N/A" :
                                                 (r.Size < 1024) ? r.Size.ToString("G") + "B" :
                                                 (r.Size < 1048576) ? (r.Size / 1024F).ToString("G2") + "KB" :
-                                                (r.Size < 1073741824) ? (r.Size / 1048576F).ToString("G2") + "MB":
+                                                (r.Size < 1073741824) ? (r.Size / 1048576F).ToString("G2") + "MB" :
                                                 (r.Size / 1073741824F).ToString("G2") + "GB"),
                                     new XElement("td",
                                         g.Key.SingularForm),
                                     new XElement("td",
                                         DateTime.Now.ToString("o")))))))));
 
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.ConformanceLevel = ConformanceLevel.Document;
+            settings.Encoding = Encoding.UTF8;
+            settings.Indent = false;
+
             // output data
             using (MemoryStream ms = new MemoryStream())
             {
-                XmlWriterSettings settings = new XmlWriterSettings();
-                settings.ConformanceLevel = ConformanceLevel.Document;
-                settings.Encoding = Encoding.UTF8;
-                settings.Indent = false;
-                
                 using (XmlWriter writer = XmlWriter.Create(ms, settings))
                 {
                     doc.Save(writer);
-
-                    /*
-                    // <?xml version="1.0" encoding="utf-8" ?>
-                    writer.WriteStartDocument();
-                    // <?xsl
-                    writer.WriteProcessingInstruction("xml-stylesheet", "type='text/xsl' href='" + DirectoryResource.XsltStylesheetUrl + "'");
-                    // <index>
-                    writer.WriteStartElement("index");
-                    //   <location>Node Path</location>
-                    writer.WriteStartElement("location");
-                    writer.WriteString(this.Uri.ToString());
-                    writer.WriteEndElement();
-                    foreach (KeyValuePair<ResourceGrouping, List<Resource>> pair in groupedResources)
-                    {
-                        // <group name="name">
-                        writer.WriteStartElement("group");
-                        writer.WriteAttributeString("name", pair.Key.PluralForm);
-                        writer.WriteStartElement("field");
-                        writer.WriteAttributeString("id", "name");
-                        writer.WriteAttributeString("name", AppResources.DirectoryNameColumn);
-                        writer.WriteEndElement();
-
-                        writer.WriteStartElement("field");
-                        writer.WriteAttributeString("id", "size");
-                        writer.WriteAttributeString("name", AppResources.DirectorySizeColumn);
-                        writer.WriteEndElement();
-
-                        writer.WriteStartElement("field");
-                        writer.WriteAttributeString("id", "description");
-                        writer.WriteAttributeString("name", AppResources.DirectoryDescriptionColumn);
-                        writer.WriteEndElement();
-
-                        writer.WriteStartElement("field");
-                        writer.WriteAttributeString("id", "timestamp");
-                        writer.WriteAttributeString("name", AppResources.DirectoryModifiedColumn);
-                        writer.WriteEndElement();
-
-                        foreach (Resource res in pair.Value)
-                        {
-                            writer.WriteStartElement("item");
-                            //writer.WriteAttributeString("icon", FileTypeRegistry.GetIcon(System.IO.Path.GetExtension(res.Name)));
-                            writer.WriteAttributeString("icon", "page_white");
-                            writer.WriteStartElement("value");
-                            writer.WriteAttributeString("link", res.Uri.ToString());
-                            writer.WriteString((res.Name.Length > 0) ? res.Name : AppResources.DirectoryItemDefaultName);
-                            writer.WriteEndElement();
-                            if (res.IsSizeKnown)
-                            {
-                                writer.WriteElementString("value", res.Size.ToString());
-                            }
-                            else
-                            {
-                                writer.WriteElementString("value", "---");
-                            }
-                            //writer.WriteElementString("value", FileTypeRegistry.GetDescription(System.IO.Path.GetExtension(res.Name)));
-                            writer.WriteElementString("value", res.Grouping.SingularForm);
-                            writer.WriteElementString("value", "---");
-                            writer.WriteEndElement();
-                        }
-                        // </group>
-                        writer.WriteEndElement();
-                    }
-                    writer.WriteEndDocument();
-                    */
                     writer.Flush();
                     writer.Close();
                 }
                 response.Write(ms.ToArray());
-                response.IsComplete = true;
             }
+            response.IsComplete = true;
         }
         #endregion
         #region Properties - Public
