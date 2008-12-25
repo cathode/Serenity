@@ -120,12 +120,29 @@
   <data name="ClientConnectedMessage" xml:space="preserve">
     <value>Client connected from {0}.</value>
   </data>
+  <data name="DirectoryDescriptionColumn" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="DirectoryItemDefaultName" xml:space="preserve">
+    <value>(unnamed)</value>
+  </data>
+  <data name="DirectoryModifiedColumn" xml:space="preserve">
+    <value>Modified</value>
+  </data>
+  <data name="DirectoryNameColumn" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="DirectorySizeColumn" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="DirectoryTitle" xml:space="preserve">
+    <value>Index of {0}</value>
+  </data>
   <data name="ResourceDoesNotSupportChildrenException" xml:space="preserve">
     <value>The current Resource does not support children.</value>
   </data>
   <data name="ResourceHasParentException" xml:space="preserve">
-    <value>The specified resource cannot be added because it already has a parent resource defined. The existing relationship must be cleared before it can be added.</value>
-    <comment>Used when an attempt is made to add a resource to another one when the resource to be added already belongs to a third resource.</comment>
+    <value>The specified resource cannot be added because it already has a parent resource defined.</value>
   </data>
   <data name="StringArgumentEmptyException" xml:space="preserve">
     <value>The string passed to argument '{0}' was empty.</value>

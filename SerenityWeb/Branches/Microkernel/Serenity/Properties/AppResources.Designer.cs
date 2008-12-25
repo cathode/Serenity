@@ -70,6 +70,60 @@ namespace Serenity.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        internal static string DirectoryDescriptionColumn {
+            get {
+                return ResourceManager.GetString("DirectoryDescriptionColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (unnamed).
+        /// </summary>
+        internal static string DirectoryItemDefaultName {
+            get {
+                return ResourceManager.GetString("DirectoryItemDefaultName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modified.
+        /// </summary>
+        internal static string DirectoryModifiedColumn {
+            get {
+                return ResourceManager.GetString("DirectoryModifiedColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        internal static string DirectoryNameColumn {
+            get {
+                return ResourceManager.GetString("DirectoryNameColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size.
+        /// </summary>
+        internal static string DirectorySizeColumn {
+            get {
+                return ResourceManager.GetString("DirectorySizeColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Index of {0}.
+        /// </summary>
+        internal static string DirectoryTitle {
+            get {
+                return ResourceManager.GetString("DirectoryTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The current Resource does not support children..
         /// </summary>
         internal static string ResourceDoesNotSupportChildrenException {
@@ -79,7 +133,7 @@ namespace Serenity.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The specified resource cannot be added because it already has a parent resource defined. The existing relationship must be cleared before it can be added..
+        ///   Looks up a localized string similar to The specified resource cannot be added because it already has a parent resource defined..
         /// </summary>
         internal static string ResourceHasParentException {
             get {
