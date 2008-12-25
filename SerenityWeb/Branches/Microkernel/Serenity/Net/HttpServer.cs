@@ -16,7 +16,6 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using Serenity.Web;
-using Serenity.Logging;
 
 namespace Serenity.Net
 {

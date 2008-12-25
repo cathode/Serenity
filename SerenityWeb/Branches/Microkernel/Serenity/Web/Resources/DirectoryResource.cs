@@ -27,7 +27,6 @@ namespace Serenity.Web.Resources
     /// Provides a dynamic resource that represents a virtual directory and can
     /// provide indexing services for virtual directories.
     /// </summary>
-    [SuppressLoadCreation(true)]
     public class DirectoryResource : Resource
     {
         #region Constructors - internal
@@ -38,6 +37,16 @@ namespace Serenity.Web.Resources
         public DirectoryResource()
         {
             this.ContentType = MimeType.TextHtml;
+        }
+        public DirectoryResource(string name)
+            : this()
+        {
+            this.Name = name;
+        }
+        public DirectoryResource(string name, params Resource[] children)
+            : this(name)
+        {
+            this.Add(children);
         }
         #endregion
         #region Fields
@@ -89,6 +98,7 @@ namespace Serenity.Web.Resources
                 }
                 groupedResources[resource.Grouping].Add(resource);
             }
+
             Uri uri = this.Uri;
 
             string baseUri = uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped);
@@ -113,6 +123,7 @@ namespace Serenity.Web.Resources
                                     + string.Concat((from s in Enumerable.Range(0, i + 1)
                                                      select uri.Segments[s]).ToArray())), uri.Segments[i].TrimEnd('/')), "/"),
                         from g in groupedResources
+                        orderby g.Key
                         select new XElement("div",
                             new XElement("div",
                                 new XAttribute("class", "group_heading"),
@@ -134,6 +145,7 @@ namespace Serenity.Web.Resources
                                                 new XAttribute("class", "modified"),
                                                 AppResources.DirectoryModifiedColumn)),
                                 from r in g.Value
+                                orderby r.Name
                                 select new XElement("tr",
                                     new XElement("td",
                                         new XElement("a",

@@ -86,9 +86,6 @@
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AlternateResourcePathAttribute.cs" />
-    <Compile Include="ConfigurationOptionAttribute.cs" />
-    <Compile Include="ConfigurationOptionKind.cs" />
     <Compile Include="Data\Database.cs" />
     <Compile Include="Data\DataScope.cs" />
     <Compile Include="Data\DataExtensions.cs" />
@@ -97,7 +94,6 @@
     <Compile Include="EventLog.cs" />
     <Compile Include="EventRecordedEventArgs.cs" />
     <Compile Include="IO\SerenityPath.cs" />
-    <Compile Include="Logging\Severity.cs" />
     <Compile Include="ModuleCollection.cs" />
     <Content Include="Data\domain\schemas\error_documents.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -106,8 +102,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Compile Include="ModuleProfile.cs" />
-    <Compile Include="ModuleResourceNamespaceAttribute.cs" />
-    <Compile Include="ModuleTitleAttribute.cs" />
+    <Compile Include="IModuleFactory.cs" />
     <Compile Include="Net\HttpServer.cs" />
     <Compile Include="Net\HttpServerAsyncState.cs" />
     <Compile Include="Net\RequestProcessingStage.cs" />
@@ -120,9 +115,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SuppressLoadCreationAttribute.cs" />
     <Compile Include="SerenityInfo.cs" />
-    <Compile Include="Logging\Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Web\Cookie.cs" />
     <Compile Include="Web\CookieCollection.cs" />
@@ -187,6 +180,7 @@
     </Compile>
     <Compile Include="Web\Doctype.cs" />
     <None Include="Web\Forms\UnorderedList.cs" />
+    <Compile Include="__SerenityModuleFactory.cs" />
     <Compile Include="__Strings.cs" />
   </ItemGroup>
   <ItemGroup>

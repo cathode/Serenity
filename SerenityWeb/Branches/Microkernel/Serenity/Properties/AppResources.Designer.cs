@@ -61,6 +61,15 @@ namespace Serenity.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Parameter &apos;{0}&apos; cannot be empty..
+        /// </summary>
+        internal static string ArgumentEmptyException {
+            get {
+                return ResourceManager.GetString("ArgumentEmptyException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Client connected from {0}..
         /// </summary>
         internal static string ClientConnectedMessage {
@@ -138,15 +147,6 @@ namespace Serenity.Properties {
         internal static string ResourceHasParentException {
             get {
                 return ResourceManager.GetString("ResourceHasParentException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The string passed to argument &apos;{0}&apos; was empty..
-        /// </summary>
-        internal static string StringArgumentEmptyException {
-            get {
-                return ResourceManager.GetString("StringArgumentEmptyException", resourceCulture);
             }
         }
     }

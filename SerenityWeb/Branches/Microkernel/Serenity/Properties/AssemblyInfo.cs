@@ -20,7 +20,4 @@ using Serenity;
 [assembly: AssemblyTitle("Serenity")]
 [assembly: AssemblyDescription("Core Class Library")]
 [assembly: ComVisible(false)]
-
-[assembly: ModuleTitle("Serenity")]
-[assembly: ModuleResourceNamespace("Serenity.Resources.")]
 [assembly: NeutralResourcesLanguage("en-US")]

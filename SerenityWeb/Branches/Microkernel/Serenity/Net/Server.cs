@@ -153,66 +153,22 @@ namespace Serenity.Net
 
             foreach (string modulePath in this.Profile.Modules)
             {
-                var module = Module.LoadModule(modulePath);
-
-                DirectoryResource modTree = new DirectoryResource()
+                foreach (var module in Module.LoadModules(modulePath))
                 {
-                    Name = module.Name,
-                    Owner = this
-                };
-
-                DirectoryResource pages = new DirectoryResource()
-                {
-                    Name = "dynamic",
-                    Owner = this
-                };
-
-                foreach (DynamicResource page in module.Pages)
-                {
-                    pages.Add(page);
-                }
-                modTree.Add(pages);
-
-                DirectoryResource embedded = new DirectoryResource()
-                {
-                    Name = "resource",
-                    Owner = this
-                };
-
-                foreach (string embedPath in module.Assembly.GetManifestResourceNames())
-                {
-                    string[] parts = embedPath.Remove(0, module.ResourceNamespace.Length).Split('.');
-
-                    string name = "";
-                    if (parts.Length > 1)
+                    DirectoryResource modTree = new DirectoryResource()
                     {
-                        //Adds the file extension back onto the resource name.
-                        name = parts[parts.Length - 2] + "." + parts[parts.Length - 1];
-                    }
-                    else
+                        Name = module.Name,
+                        Owner = this
+                    };
+
+                    modTree.Add(module.Resources);
+
+                    if (this.RootResource is DirectoryResource)
                     {
-                        name = parts[0];
+                        ((DirectoryResource)this.RootResource).Add(modTree);
                     }
-
-                    using (Stream stream = module.Assembly.GetManifestResourceStream(embedPath))
-                    {
-                        byte[] data = new byte[stream.Length];
-                        if (stream.Read(data, 0, data.Length) == data.Length)
-                        {
-                            ResourceResource res = new ResourceResource(name, data);
-                            //res.ContentType = FileTypeRegistry.GetMimeType(parts[parts.Length - 1]);
-
-                            embedded.Add(res);
-                        }
-                    }
+                    this.modules.Add(module);
                 }
-                modTree.Add(embedded);
-
-                if (this.RootResource is DirectoryResource)
-                {
-                    ((DirectoryResource)this.RootResource).Add(modTree);
-                }
-                this.modules.Add(module);
             }
         }
         /// <summary>
