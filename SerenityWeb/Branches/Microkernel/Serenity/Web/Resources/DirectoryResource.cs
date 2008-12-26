@@ -50,7 +50,7 @@ namespace Serenity.Web.Resources
         }
         #endregion
         #region Fields
-        public const string StylesheetUrl = "/serenity/resource/index.css";
+        public const string StylesheetUrl = "/serenity/index.css";
         #endregion
         #region Methods - Public
         /// <summary>
@@ -149,7 +149,7 @@ namespace Serenity.Web.Resources
                                 select new XElement("tr",
                                     new XElement("td",
                                         new XElement("img",
-                                            new XAttribute("src", "/serenity/resource/icons.page_white.png"))),
+                                            new XAttribute("src", "/serenity/icons/page_white.png"))),
                                     new XElement("td",
                                         new XElement("a",
                                             new XAttribute("href", r.GetAbsoluteUri(request.Url)),
@@ -163,7 +163,7 @@ namespace Serenity.Web.Resources
                                     new XElement("td",
                                         g.Key.SingularForm),
                                     new XElement("td",
-                                        DateTime.Now.ToString("o")))))))));
+                                        DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")))))))));
 
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.ConformanceLevel = ConformanceLevel.Document;

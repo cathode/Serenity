@@ -58,8 +58,16 @@ namespace Serenity.Web.Resources
             {
                 throw new ArgumentNullException("resource");
             }
+            else if (resource == this)
+            {
+                throw new InvalidOperationException("Cannot add a resource to itself, this would create a circular relationship.");
+            }
             else if (resource.Parent != null)
             {
+                if (resource.Parent == this)
+                {
+                    return;
+                }
                 throw new InvalidOperationException(AppResources.ResourceHasParentException);
             }
             this.children.Add(resource);
@@ -293,7 +301,7 @@ namespace Serenity.Web.Resources
         /// When overridden in a derived class, gets the size in bytes of the
         /// content of the current Resource.
         /// </summary>
-        public virtual int Size
+        public virtual long Size
         {
             get
             {

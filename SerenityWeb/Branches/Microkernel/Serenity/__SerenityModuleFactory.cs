@@ -10,7 +10,7 @@ namespace Serenity
     /// <summary>
     /// Provides a factory for building the Serenity module.
     /// </summary>
-    public sealed class __SerenityModuleFactory : ModuleFactory
+    internal sealed class __SerenityModuleFactory : ModuleFactory
     {
         private const string ResourceNamespace = "Serenity.Resources.";
         #region Methods
@@ -24,15 +24,11 @@ namespace Serenity
 
             Assembly asm = Assembly.GetExecutingAssembly();
 
-            m.Resources.Add(new DirectoryResource("resource",
-                (from p in asm.GetManifestResourceNames()
-                where p.StartsWith(ResourceNamespace)
-                let s = asm.GetManifestResourceStream(p)
-                let a = new byte[s.Length]
-                let i = s.Read(a, 0, a.Length)
-                select new ResourceResource(p.Remove(0, ResourceNamespace.Length), a)).ToArray()));
+            m.Resources.AddRange(this.BuildResourceTree(ResourceNamespace));
             return m;
         }
+
+        
         #endregion
         protected override Assembly ModuleAssembly
         {
