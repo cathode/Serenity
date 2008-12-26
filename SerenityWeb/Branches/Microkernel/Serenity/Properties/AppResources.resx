@@ -141,6 +141,9 @@
   <data name="DirectoryTitle" xml:space="preserve">
     <value>Index of {0}</value>
   </data>
+  <data name="ResourceAddCreatesCircularRelationException" xml:space="preserve">
+    <value>The resource add request failed because it would create a circular relationship.</value>
+  </data>
   <data name="ResourceDoesNotSupportChildrenException" xml:space="preserve">
     <value>The current Resource does not support children.</value>
   </data>

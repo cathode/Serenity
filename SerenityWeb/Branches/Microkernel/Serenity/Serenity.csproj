@@ -102,7 +102,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Compile Include="ModuleFactory.cs" />
-    <Compile Include="ModuleProfile.cs" />
     <Compile Include="Net\HttpServer.cs" />
     <Compile Include="Net\HttpServerAsyncState.cs" />
     <Compile Include="Net\RequestProcessingStage.cs" />

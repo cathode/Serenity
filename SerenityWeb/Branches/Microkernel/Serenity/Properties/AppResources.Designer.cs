@@ -133,6 +133,15 @@ namespace Serenity.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The resource add request failed because it would create a circular relationship..
+        /// </summary>
+        internal static string ResourceAddCreatesCircularRelationException {
+            get {
+                return ResourceManager.GetString("ResourceAddCreatesCircularRelationException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The current Resource does not support children..
         /// </summary>
         internal static string ResourceDoesNotSupportChildrenException {

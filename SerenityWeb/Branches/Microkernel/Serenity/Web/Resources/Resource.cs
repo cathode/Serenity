@@ -30,24 +30,26 @@ namespace Serenity.Web.Resources
         private Resource parent;
         #endregion
         #region Methods
-        public Resource GetChild(string name)
-        {
-            if (!this.CanHaveChildren)
-            {
-                return null;
-            }
-            return (from res in this.Children
-                    where res.Name.Equals(name, StringComparison.OrdinalIgnoreCase)
-                    select res).FirstOrDefault();
-        }
-        public virtual Resource GetChild(Uri uri)
-        {
-            if (uri.Segments.Length <= this.Position + 1)
-            {
-                return null;
-            }
-            return this.GetChild(uri.Segments[this.Position + 1].TrimEnd('/'));
-        }
+        /// <summary>
+        /// Adds a <see cref="Resource"/> as a child of the current
+        /// <see cref="Resource"/>.
+        /// </summary>
+        /// <param name="resource">The child <see cref="Resource"/> to add.
+        /// </param>
+        /// <exception cref="System.ArgumentNullException">Thrown when
+        /// <paramref name="resource"/> is passed as null.</exception>
+        /// <exception cref="System.InvalidOperationException">Thrown when the
+        /// current <see cref="Resource"/> does not support children.
+        /// </exception>
+        /// <exception cref="System.InvalidOperationException">Thrown when
+        /// <paramref name="resource"/> has a parent defined that is not the
+        /// current <see cref="Resource"/>.
+        /// </exception>
+        /// <remarks>
+        /// Adding a resource creates a strong bond between the parent and
+        /// child; a resource cannot be added if that resource already has an
+        /// existing parent defined, unless the parent is 
+        /// </remarks>
         public void Add(Resource resource)
         {
             if (!this.CanHaveChildren)
@@ -60,7 +62,7 @@ namespace Serenity.Web.Resources
             }
             else if (resource == this)
             {
-                throw new InvalidOperationException("Cannot add a resource to itself, this would create a circular relationship.");
+                throw new InvalidOperationException(AppResources.ResourceAddCreatesCircularRelationException);
             }
             else if (resource.Parent != null)
             {
@@ -73,44 +75,105 @@ namespace Serenity.Web.Resources
             this.children.Add(resource);
             resource.Parent = this;
         }
+        /// <summary>
+        /// Adds a collection of <see cref="Resource"/>s to the current
+        /// <see cref="Resource"/>.
+        /// </summary>
+        /// <param name="resources"></param>
         public void Add(IEnumerable<Resource> resources)
         {
-            foreach (Resource resource in resources)
+            if (!this.CanHaveChildren)
             {
-                this.Add(resource);
-            }
-        }
-        public void Remove(Resource resource)
-        {
-            if (resource == null)
-            {
-                throw new ArgumentNullException("resource");
-            }
-            //Checking the parent should be faster than searching children
-            else if (resource.Parent != this)
-            {
-                //If the resource is not a child, ignore.
-                return;
-            }
-            else if (!this.CanHaveChildren)
-            {
-                //TODO: Evaluate the appropriateness of throwing an exception
-                //      when an attempt is made to remove a resource from a
-                //      resource that does not support children.
                 throw new InvalidOperationException(AppResources.ResourceDoesNotSupportChildrenException);
             }
-
-            this.children.Remove(resource);
-            resource.Parent = null;
-        }
-        public void Remove(IEnumerable<Resource> resources)
-        {
-            foreach (Resource resource in resources)
+            List<Resource> filteredResources = new List<Resource>();
+            foreach (var res in resources)
             {
-                this.Remove(resource);
+                if (res == null)
+                {
+                    continue;
+                }
+                else if (res == this)
+                {
+                    throw new InvalidOperationException(AppResources.ResourceAddCreatesCircularRelationException);
+                }
+                else if (res.Parent != null)
+                {
+                    if (res.Parent == this)
+                    {
+                        //res is already a child of the current resource, skip.
+                        continue;
+                    }
+                    throw new InvalidOperationException(AppResources.ResourceHasParentException);
+                }
+                filteredResources.Add(res);
+            }
+            foreach (Resource resource in filteredResources)
+            {
+                this.children.Add(resource);
+                resource.Parent = this;
             }
         }
-
+        /// <summary>
+        /// Creates an absolute <see cref="Uri"/> using the scheme, host and
+        /// port information in the base <see cref="Uri"/>, and the relative
+        /// path information in the current <see cref="Resource"/>'s relative
+        /// <see cref="Uri"/>.
+        /// </summary>
+        /// <param name="baseUri"></param>
+        /// <returns></returns>
+        public Uri GetAbsoluteUri(Uri baseUri)
+        {
+            return new Uri(new Uri(baseUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)), this.RelativeUri);
+        }
+        /// <summary>
+        /// Gets the child <see cref="Resource"/> with the specified name.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Resource GetChild(string name)
+        {
+            if (!this.CanHaveChildren)
+            {
+                return null;
+            }
+            return (from res in this.Children
+                    where res.Name.Equals(name, StringComparison.OrdinalIgnoreCase)
+                    select res).FirstOrDefault();
+        }
+        /// <summary>
+        /// Gets the child <see cref="Resource"/> which matches the
+        /// specified <see cref="Uri"/>.
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <returns></returns>
+        public virtual Resource GetChild(Uri uri)
+        {
+            if (uri.Segments.Length <= this.Depth + 1)
+            {
+                return null;
+            }
+            return this.GetChild(uri.Segments[this.Depth + 1].TrimEnd('/'));
+        }
+        /// <summary>
+        /// Follows the resource graph in reverse until the root resource is
+        /// reached, in other words, the first resource encountered that has no
+        /// parent.
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// If the current <see cref="Resource"/> has no parent, then it is the
+        /// root, and is returned.
+        /// </remarks>
+        public Resource GetRoot()
+        {
+            Resource res = this;
+            while (res.HasParent)
+            {
+                res = res.Parent;
+            }
+            return res;
+        }
         /// <summary>
         /// When overridden in a derived class, uses the supplied CommonContext to dynamically generate response content.
         /// </summary>
@@ -139,12 +202,48 @@ namespace Serenity.Web.Resources
         public virtual void PreRequest(Request request, Response response)
         {
         }
-        public Uri GetAbsoluteUri(Uri baseUri)
+        /// <summary>
+        /// Removes the specified <see cref="Resource"/> from the current
+        /// <see cref="Resource"/>.
+        /// </summary>
+        /// <param name="resource"></param>
+        public void Remove(Resource resource)
         {
-            return new Uri(new Uri(baseUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)), this.RelativeUri);
+            if (resource == null)
+            {
+                throw new ArgumentNullException("resource");
+            }
+            //Checking the parent should be faster than searching children
+            else if (resource.Parent != this)
+            {
+                //If the resource is not a child, ignore.
+                return;
+            }
+            else if (!this.CanHaveChildren)
+            {
+                //TODO: Evaluate the appropriateness of throwing an exception
+                //      when an attempt is made to remove a resource from a
+                //      resource that does not support children.
+                throw new InvalidOperationException(AppResources.ResourceDoesNotSupportChildrenException);
+            }
+
+            this.children.Remove(resource);
+            resource.Parent = null;
+        }
+        /// <summary>
+        /// Removes the specified collection of<see cref="Resource"/>s from the
+        /// current <see cref="Resource"/>.
+        /// </summary>
+        /// <param name="resources"></param>
+        public void Remove(IEnumerable<Resource> resources)
+        {
+            foreach (Resource resource in resources)
+            {
+                this.Remove(resource);
+            }
         }
         #endregion
-        #region Properties - Public
+        #region Properties
         /// <summary>
         /// Gets a value that indicates if the current <see cref="Resource"/>
         /// supports child resource associations.
@@ -276,13 +375,13 @@ namespace Serenity.Web.Resources
         {
             get
             {
-                if (this.Parent == null)
+                if (this.HasParent)
                 {
-                    return new Uri(this.Name, UriKind.Relative);
+                    return new Uri(this.Parent.RelativeUri.ToString() + this.SegmentName, UriKind.Relative);
                 }
                 else
                 {
-                    return new Uri(this.Parent.RelativeUri.ToString() + this.SegmentName, UriKind.Relative);
+                    return new Uri(this.SegmentName, UriKind.Relative);
                 }
             }
         }
@@ -308,17 +407,28 @@ namespace Serenity.Web.Resources
                 return -1;
             }
         }
-        public int Position
+        /// <summary>
+        /// Gets the depth of the current <see cref="Resource"/> in relation to
+        /// its ancestry. The depth is the length of the path to the root node.
+        /// </summary>
+        /// <remarks>
+        /// If the current <see cref="Resource"/> has no parent, it's depth is
+        /// 0.
+        /// <note>This property is computed on the fly based on the state of
+        /// the resource graph at the time the property value is requested.
+        /// </note>
+        /// </remarks>
+        public int Depth
         {
             get
             {
-                if (!this.HasParent)
+                if (this.HasParent)
                 {
-                    return 0;
+                    return this.Parent.Depth + 1;
                 }
                 else
                 {
-                    return this.Parent.Position + 1;
+                    return 0;
                 }
             }
         }

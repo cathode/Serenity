@@ -1,4 +1,15 @@
-﻿using System;
+﻿/******************************************************************************
+ * Serenity - The next evolution of web server technology.                    *
+ * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
+ *----------------------------------------------------------------------------*
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Public License (Ms-PL), a copy of which should have been included with     *
+ * this distribution as License.txt.                                          *
+ *----------------------------------------------------------------------------*
+ * Authors:                                                                   *
+ * - Will 'AnarkiNet' Shelley (AnarkiNet@gmail.com): Original Author          *
+ *****************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,13 +19,31 @@ using System.IO;
 
 namespace Serenity
 {
+    /// <summary>
+    /// Represents an abstract base class for classes that create 
+    /// <see cref="Module"/> instances.
+    /// </summary>
+    /// <remarks>
+    /// A class that derives from <see cref="ModuleFactory"/> is expected to
+    /// create a <see cref="Module"/> instance, populated with resources and
+    /// other data that the module requires.
+    /// </remarks>
     public abstract class ModuleFactory
     {
         #region Methods
+        /// <summary>
+        /// Overloaded. Builds a resource tree.
+        /// </summary>
+        /// <returns></returns>
         protected virtual IEnumerable<Resource> BuildResourceTree()
         {
             return this.BuildResourceTree(this.ModuleAssembly.GetName().Name);
         }
+        /// <summary>
+        /// Overloaded. Builds a resource tree.
+        /// </summary>
+        /// <param name="resourceNamespace"></param>
+        /// <returns></returns>
         protected virtual IEnumerable<Resource> BuildResourceTree(string resourceNamespace)
         {
             if (resourceNamespace == null)
@@ -75,9 +104,18 @@ namespace Serenity
             }
             return resources;
         }
+        /// <summary>
+        /// When overridden in a derived class, creates an instance of the
+        /// <see cref="Module"/> class.
+        /// </summary>
+        /// <returns></returns>
         public abstract Module CreateModule();
         #endregion
         #region Properties
+        /// <summary>
+        /// When overridden in a derived class, gets the <see cref="Assembly"/>
+        /// that the built <see cref="Module"/> is created from.
+        /// </summary>
         protected abstract Assembly ModuleAssembly
         {
             get;
