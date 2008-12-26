@@ -61,15 +61,6 @@ namespace Serenity.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter &apos;{0}&apos; cannot be empty..
-        /// </summary>
-        internal static string ArgumentEmptyException {
-            get {
-                return ResourceManager.GetString("ArgumentEmptyException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Client connected from {0}..
         /// </summary>
         internal static string ClientConnectedMessage {
@@ -129,6 +120,24 @@ namespace Serenity.Properties {
         internal static string DirectoryTitle {
             get {
                 return ResourceManager.GetString("DirectoryTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter &apos;{0}&apos; cannot be empty..
+        /// </summary>
+        internal static string ParamEmptyException {
+            get {
+                return ResourceManager.GetString("ParamEmptyException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter &apos;{0}&apos; has an invalid format..
+        /// </summary>
+        internal static string ParamHasInvalidFormatException {
+            get {
+                return ResourceManager.GetString("ParamHasInvalidFormatException", resourceCulture);
             }
         }
         

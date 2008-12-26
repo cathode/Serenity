@@ -19,6 +19,11 @@ namespace Serenity.Web
     /// </summary>
     public sealed class CookieCollection : KeyedCollection<string, Cookie>
     {
+        /// <summary>
+        /// Overridden. Gets the key for the specified element.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         protected override string GetKeyForItem(Cookie item)
         {
             return item.Name;

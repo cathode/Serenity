@@ -7,6 +7,7 @@
  * this distribution as License.txt.                                          *
  *****************************************************************************/
 using System;
+using Serenity.Properties;
 
 namespace Serenity.Web
 {
@@ -29,7 +30,7 @@ namespace Serenity.Web
             }
             else if (type.Length == 0)
             {
-                throw new ArgumentException("Argument 'type' cannot be empty.", "type");
+                throw new ArgumentException(string.Format(AppResources.ParamEmptyException, "type"), "type");
             }
             else if (subtype == null)
             {
@@ -37,7 +38,7 @@ namespace Serenity.Web
             }
             else if (subtype.Length == 0)
             {
-                throw new ArgumentException("Argument 'subtype' cannot be empty.", "subtype");
+                throw new ArgumentException(string.Format(AppResources.ParamEmptyException, "subtype"), "subtype");
             }
 
 			this.type = type;
@@ -49,6 +50,10 @@ namespace Serenity.Web
 		private readonly string type;
 		#endregion
         #region Fields - Public
+        /// <summary>
+        /// Holds the default <see cref="StringComparison"/> used to compare
+        /// the values of <see cref="MimeType"/>s for equality tests.
+        /// </summary>
         public const StringComparison DefaultComparison = StringComparison.OrdinalIgnoreCase;
         #endregion
         #region Methods - Public
@@ -71,30 +76,7 @@ namespace Serenity.Web
         /// <returns></returns>
         public static bool Equals(MimeType a, MimeType b, StringComparison comparison)
         {
-            if (a.type == null)
-            {
-                throw new ArgumentException("Field 'type' of argument 'a' cannot be null.", "a");
-            }
-            else if (a.subtype == null)
-            {
-                throw new ArgumentException("Field 'subtype' of argument 'a' cannot be null.", "a");
-            }
-            else if (b.type == null)
-            {
-                throw new ArgumentException("Field 'type' of argument 'b' cannot be null.", "b");
-            }
-            else if (b.subtype == null)
-            {
-                throw new ArgumentException("Field 'subtype' of argument 'b' cannot be null.", "b");
-            }
-            else if (a.type.Equals(b.type, comparison))
-            {
-                if (a.subtype.Equals(b.subtype, comparison))
-                {
-                    return true;
-                }
-            }
-            return false;
+            return (a.Type.Equals(b.Type, comparison) && a.Subtype.Equals(b.Subtype, comparison));
         }
         /// <summary>
         /// Determines if the current MimeType is equal to another MimeType.
@@ -156,17 +138,13 @@ namespace Serenity.Web
             }
             else if (mimeType.Length == 0)
             {
-                throw new ArgumentException("Argument 'mimeType' cannot be empty.");
-            }
-            else if (!mimeType.Contains("/"))
-            {
-                throw new ArgumentException("Argument 'mimeType' has invalid format.");
+                throw new ArgumentException(string.Format(AppResources.ParamEmptyException, "mimeType"), "mimeType");
             }
 
             string[] parts = mimeType.Split('/');
             if (parts.Length != 2)
             {
-                throw new ArgumentException("Argument 'mimeType' has invalid format.");
+                throw new ArgumentException(string.Format(AppResources.ParamEmptyException, "mimeType"));
             }
 
             return new MimeType(parts[0], parts[1]);
@@ -361,6 +339,9 @@ namespace Serenity.Web
 				return new MimeType("audio", "x-wav");
 			}
 		}
+        /// <summary>
+        /// Gets the default <see cref="MimeType"/>.
+        /// </summary>
 		public static MimeType Default
 		{
 			get

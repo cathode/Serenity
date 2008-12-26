@@ -27,7 +27,7 @@ namespace Serenity
             }
             else if (name.Length == 0)
             {
-                throw new ArgumentException(string.Format(AppResources.ArgumentEmptyException, "name"), "name");
+                throw new ArgumentException(string.Format(AppResources.ParamEmptyException, "name"), "name");
             }
             this.name = name;
         }

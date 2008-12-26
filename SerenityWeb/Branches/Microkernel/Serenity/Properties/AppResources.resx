@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ArgumentEmptyException" xml:space="preserve">
-    <value>Parameter '{0}' cannot be empty.</value>
-  </data>
   <data name="ClientConnectedMessage" xml:space="preserve">
     <value>Client connected from {0}.</value>
   </data>
@@ -140,6 +137,12 @@
   </data>
   <data name="DirectoryTitle" xml:space="preserve">
     <value>Index of {0}</value>
+  </data>
+  <data name="ParamEmptyException" xml:space="preserve">
+    <value>Parameter '{0}' cannot be empty.</value>
+  </data>
+  <data name="ParamHasInvalidFormatException" xml:space="preserve">
+    <value>Parameter '{0}' has an invalid format.</value>
   </data>
   <data name="ResourceAddCreatesCircularRelationException" xml:space="preserve">
     <value>The resource add request failed because it would create a circular relationship.</value>
