@@ -74,12 +74,14 @@ namespace Serenity.Web.Resources
             }
             Resource child = this.GetChild(request.Url);
 
+            Uri uri = this.GetAbsoluteUri(request.Url);
+
             if (child != null)
             {
                 child.OnRequest(request, response);
                 return;
             }
-            else if (!request.Url.AbsolutePath.Equals(this.Uri.AbsolutePath, StringComparison.OrdinalIgnoreCase))
+            else if (!request.Url.AbsolutePath.Equals(uri.AbsolutePath, StringComparison.OrdinalIgnoreCase))
             {
                 response.Status = StatusCode.Http404NotFound;
                 response.Write("HTTP 404 Not Found");
@@ -99,9 +101,7 @@ namespace Serenity.Web.Resources
                 groupedResources[resource.Grouping].Add(resource);
             }
 
-            Uri uri = this.Uri;
-
-            string baseUri = uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped);
+            string host = uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped);
 
             var doc = new XDocument(new XElement("html",
                 new XElement("head",
@@ -115,11 +115,11 @@ namespace Serenity.Web.Resources
                         new XAttribute("class", "main_heading"),
                         string.Format(AppResources.DirectoryTitle, string.Empty),
                         new XElement("a",
-                            new XAttribute("href", baseUri), baseUri),
+                            new XAttribute("href", host), host),
                             "/",
                             from i in Enumerable.Range(1, uri.Segments.Length - 1)
                             select new XElement("span", new XElement("a",
-                                new XAttribute("href", baseUri
+                                new XAttribute("href", host
                                     + string.Concat((from s in Enumerable.Range(0, i + 1)
                                                      select uri.Segments[s]).ToArray())), uri.Segments[i].TrimEnd('/')), "/"),
                         from g in groupedResources
@@ -148,11 +148,11 @@ namespace Serenity.Web.Resources
                                 orderby r.Name
                                 select new XElement("tr",
                                     new XElement("td",
-                                        new XElement("a",
-                                            new XAttribute("href", "/serenity/resource/page_white.png"))),
+                                        new XElement("img",
+                                            new XAttribute("src", "/serenity/resource/icons.page_white.png"))),
                                     new XElement("td",
                                         new XElement("a",
-                                            new XAttribute("href", r.Uri),
+                                            new XAttribute("href", r.GetAbsoluteUri(request.Url)),
                                             (r.Name.Length > 0) ? r.Name : AppResources.DirectoryItemDefaultName)),
                                             new XElement("td",
                                                 (r.Size < 0) ? "N/A" :

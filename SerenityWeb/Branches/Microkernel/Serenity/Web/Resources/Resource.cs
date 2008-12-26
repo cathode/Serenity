@@ -122,7 +122,6 @@ namespace Serenity.Web.Resources
             {
                 response.ContentType = this.ContentType;
             }
-            response.Status = StatusCode.Http200Ok;
         }
         /// <summary>
         /// Invoked before OnRequest.
@@ -131,6 +130,10 @@ namespace Serenity.Web.Resources
         /// <param name="response"></param>
         public virtual void PreRequest(Request request, Response response)
         {
+        }
+        public Uri GetAbsoluteUri(Uri baseUri)
+        {
+            return new Uri(new Uri(baseUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)), this.RelativeUri);
         }
         #endregion
         #region Properties - Public
@@ -259,24 +262,19 @@ namespace Serenity.Web.Resources
         }
         /// <summary>
         /// Gets the relative <see cref="Uri"/> of the current
-        /// <see cref="REsource"/> by traversing the resource tree in reverse.
+        /// <see cref="Resource"/> by traversing the resource tree in reverse.
         /// </summary>
-        public Uri Uri
+        public Uri RelativeUri
         {
             get
             {
                 if (this.Parent == null)
                 {
-                    UriBuilder builder = new UriBuilder()
-                    {
-                        Path = this.SegmentName
-                    };
-
-                    return builder.Uri;
+                    return new Uri(this.Name, UriKind.Relative);
                 }
                 else
                 {
-                    return new Uri(this.Parent.Uri.ToString() + this.SegmentName);
+                    return new Uri(this.Parent.RelativeUri.ToString() + this.SegmentName, UriKind.Relative);
                 }
             }
         }

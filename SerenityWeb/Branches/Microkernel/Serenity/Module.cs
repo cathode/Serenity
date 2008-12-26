@@ -42,8 +42,8 @@ namespace Serenity
             Assembly moduleAsm = Assembly.LoadFrom(assemblyPath);
 
             return from t in moduleAsm.GetTypes()
-                   where t.GetInterface(typeof(IModuleFactory).Name) != null
-                   select ((IModuleFactory)Activator.CreateInstance(t)).CreateModule();
+                   where t.IsSubclassOf(typeof(ModuleFactory)) && !t.IsAbstract
+                   select ((ModuleFactory)Activator.CreateInstance(t)).CreateModule();
         }
         #endregion
         #region Properties - Public

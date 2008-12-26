@@ -10,7 +10,7 @@ namespace Serenity
     /// <summary>
     /// Provides a factory for building the Serenity module.
     /// </summary>
-    public sealed class __SerenityModuleFactory : IModuleFactory
+    public sealed class __SerenityModuleFactory : ModuleFactory
     {
         private const string ResourceNamespace = "Serenity.Resources.";
         #region Methods
@@ -18,7 +18,7 @@ namespace Serenity
         /// Builds the module for Serenity.
         /// </summary>
         /// <returns></returns>
-        public Module CreateModule()
+        public override Module CreateModule()
         {
             Module m = new Module("serenity");
 
@@ -34,5 +34,12 @@ namespace Serenity
             return m;
         }
         #endregion
+        protected override Assembly ModuleAssembly
+        {
+            get
+            {
+                return Assembly.GetExecutingAssembly();
+            }
+        }
     }
 }

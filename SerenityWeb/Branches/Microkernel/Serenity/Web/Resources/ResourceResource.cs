@@ -37,22 +37,30 @@ namespace Serenity.Web.Resources
             }
             this.Name = name;
             this.data = data;
+            this.ContentType = ResourceResource.GetMimeType(name);
         }
         #endregion
         #region Fields - Private
         private readonly byte[] data;
         #endregion
         #region Methods - Public
-        public override void OnRequest(Request request, Response response)
+        private static MimeType GetMimeType(string name)
         {
-            response.Write(this.data);
-            string ext = System.IO.Path.GetExtension(this.Name);
+            string ext = System.IO.Path.GetExtension(name);
             switch (ext)
             {
                 case ".png":
-                    response.ContentType = MimeType.ImagePng;
-                    break;
+                    return MimeType.ImagePng;
+
+                default:
+                    return MimeType.Default;
             }
+        }
+        public override void OnRequest(Request request, Response response)
+        {
+            response.Write(this.data);
+            response.Status = StatusCode.Http200Ok;
+            response.ContentType = this.ContentType;
         }
         #endregion
         #region Properties - Public
