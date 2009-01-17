@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<NSynthScript root="output">
-  <Action id="output" cref="NullVideoSource">
-    
-  </Action>
-</NSynthScript>
