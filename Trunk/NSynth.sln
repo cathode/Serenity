@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSynth", "NSynth\NSynth.csproj", "{7A03472E-02AF-4A19-9251-6E0F1C385E0A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSynth.WinForms", "NSynth.WinForms\NSynth.WinForms.csproj", "{AEFFA757-83A6-4081-816C-FED21F90FAD9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7A03472E-02AF-4A19-9251-6E0F1C385E0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A03472E-02AF-4A19-9251-6E0F1C385E0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A03472E-02AF-4A19-9251-6E0F1C385E0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A03472E-02AF-4A19-9251-6E0F1C385E0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEFFA757-83A6-4081-816C-FED21F90FAD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEFFA757-83A6-4081-816C-FED21F90FAD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEFFA757-83A6-4081-816C-FED21F90FAD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEFFA757-83A6-4081-816C-FED21F90FAD9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
