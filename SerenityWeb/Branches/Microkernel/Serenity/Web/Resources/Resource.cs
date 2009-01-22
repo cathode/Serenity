@@ -22,8 +22,20 @@ namespace Serenity.Web.Resources
     /// </summary>
     public abstract class Resource
     {
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Resource"/>.
+        /// </summary>
+        protected Resource()
+        {
+            this.Created = DateTime.Now;
+            this.Modified = this.Created;
+        }
+        #endregion
         #region Fields
         private readonly List<Resource> children = new List<Resource>();
+        private DateTime created;
+        private DateTime modified;
         private MimeType mimeType = MimeType.Default;
         private string name;
         private Server owner;
@@ -430,6 +442,45 @@ namespace Serenity.Web.Resources
                 {
                     return 0;
                 }
+            }
+        }
+        /// <summary>
+        /// Gets or sets the <see cref="DateTime"/> representing the last time
+        /// the current <see cref="Resource"/> was modified.
+        /// </summary>
+        /// <remarks>
+        /// The last modified timestamp is not automatically updated by the
+        /// <see cref="Resource"/> class, it must be maintained by the deriving
+        /// class.
+        /// <note>The last modified time is set to <see cref="DateTime.Now"/>
+        /// when the current <see cref="Resource"/> is created.</note>
+        /// </remarks>
+        public virtual DateTime Modified
+        {
+            get
+            {
+                return this.modified;
+            }
+            set
+            {
+                this.modified = value;
+            }
+        }
+        /// <summary>
+        /// Gets or sets the <see cref="DateTime"/> representing when the
+        /// current <see cref="Resource"/> was created.
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        public virtual DateTime Created
+        {
+            get
+            {
+                return this.created;
+            }
+            set
+            {
+                this.created = value;
             }
         }
         #endregion

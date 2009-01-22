@@ -86,6 +86,7 @@
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DataBuffer.cs" />
     <Compile Include="Data\Database.cs" />
     <Compile Include="Data\DataScope.cs" />
     <Compile Include="Data\DataExtensions.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="ModuleFactory.cs" />
     <Compile Include="Net\HttpServer.cs" />
     <Compile Include="Net\HttpServerAsyncState.cs" />
+    <Compile Include="Net\NetworkBuffer.cs" />
     <Compile Include="Net\RequestProcessingStage.cs" />
     <Compile Include="Net\ServerAsyncState.cs" />
     <Compile Include="Module.cs" />
@@ -155,7 +157,7 @@
     <None Include="Web\Forms\WebFormsEventAttribute.cs" />
     <Compile Include="Web\MimeType.cs" />
     <Compile Include="Web\Request.cs" />
-    <Compile Include="Web\RequestContent.cs" />
+    <None Include="Web\RequestContent.cs" />
     <Compile Include="Web\RequestMethod.cs" />
     <Compile Include="Web\Resources\DirectoryResource.cs" />
     <Compile Include="Web\Resources\DomainResource.cs" />

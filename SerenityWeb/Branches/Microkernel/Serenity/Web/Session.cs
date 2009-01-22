@@ -10,11 +10,7 @@
  * - Will 'AnarkiNet' Shelley (AnarkiNet@gmail.com): Original Author          *
  *****************************************************************************/
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Data;
 using System.Data.SQLite;
 using Serenity.Data;
 
@@ -47,7 +43,6 @@ namespace Serenity.Web
         private DateTime modified;
         private static readonly SessionCollection pool = new SessionCollection();
         private readonly Guid sessionID;
-
         private static readonly SQLiteCommand clearAllSessions = new SQLiteCommand("DELETE FROM [Sessions]; DELETE FROM [SessionData]");
         #endregion
         #region Fields - Public

@@ -23,7 +23,7 @@ namespace Serenity.Web
         private Uri commentUri;
         private bool httpOnly;
         private Uri path;
-        private string port;
+        private string port; //TODO: Refactor to numeric type.
         private bool isSecure;
         private string name;
         private Uri domain;
@@ -35,9 +35,14 @@ namespace Serenity.Web
         private Version version;
         #endregion
         #region Methods - Public
+        /// <summary>
+        /// Converts the current <see cref="Cookie"/> to it's string
+        /// representation.
+        /// </summary>
+        /// <returns>A string containing a representation of the current
+        /// <see cref="Cookie"/>.</returns>
         public override string ToString()
         {
-            //if (string.IsNullOrEmpty(this.Name)
             string result = this.Name + "=\"" + this.Value + "\"";
             if (!string.IsNullOrEmpty(this.Comment))
             {

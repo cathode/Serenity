@@ -18,6 +18,8 @@ using System.Net.Sockets;
 using Serenity.Web.Resources;
 using System.IO;
 using Serenity.Properties;
+using Serenity.Web;
+using System.Threading;
 
 namespace Serenity.Net
 {
@@ -78,21 +80,22 @@ namespace Serenity.Net
             {
                 state.Client = this.Listener.EndAccept(result);
                 this.Log.RecordEvent(string.Format(AppResources.ClientConnectedMessage, state.Client.RemoteEndPoint), EventKind.Info);
+                
+                var newState = this.CreateStateObject();
+                newState.Listener = state.Listener;
+                this.Listener.BeginAccept(new AsyncCallback(this.AcceptCallback), newState);
+
+                state.Client.BeginReceive(state.Buffer.Receive, 0,
+                          Math.Min(state.Client.Available, state.Buffer.Receive.Length),
+                          SocketFlags.None, new AsyncCallback(this.ReceiveCallback), state);
+                state.ReceiveTimer = new Timer(new TimerCallback(this.ReceiveTimeoutCallback), state,
+                    this.Profile.ReceiveTimeout, Timeout.Infinite);
             }
             catch (SocketException ex)
             {
                 this.Log.RecordEvent(ex.Message, EventKind.Notice, ex.StackTrace);
                 return;
             }
-            state.Reset();
-            state.Client.BeginReceive(state.ReceiveBuffer, 0,
-                          Math.Min(state.Client.Available, state.ReceiveBuffer.Length),
-                          SocketFlags.None, new AsyncCallback(this.ReceiveCallback), state);
-
-            var newState = this.CreateStateObject();
-            newState.Listener = state.Listener;
-
-            this.Listener.BeginAccept(new AsyncCallback(this.AcceptCallback), newState);
         }
         /// <summary>
         /// Creates a new <see cref="ServerAsyncState"/>.
@@ -103,10 +106,7 @@ namespace Serenity.Net
         /// object inherit from <see cref="ServerAsyncState"/> and then
         /// override this method to return a new instance of your derived type.
         /// </remarks>
-        protected virtual ServerAsyncState CreateStateObject()
-        {
-            return new ServerAsyncState();
-        }
+        protected abstract ServerAsyncState CreateStateObject();
         /// <summary>
         /// Disposes the current <see cref="Server"/>.
         /// </summary>
@@ -210,6 +210,8 @@ namespace Serenity.Net
             }
             this.Listener.Close();
         }
+        protected abstract int ParseRequest(byte[] buffer, int start, Request request);
+        protected abstract void ProcessRequest(Request request, Response response);
         /// <summary>
         /// Provides a callback method for asynchronous socket receive calls.
         /// </summary>
@@ -221,26 +223,57 @@ namespace Serenity.Net
                 throw new ArgumentNullException("result");
             }
             var state = (ServerAsyncState)result.AsyncState;
+
             if (state.Client.Connected)
             {
+                // Only try and receive if the client is still connected.
+
                 try
                 {
-                    state.Client.EndReceive(result);
+                    int received = state.Client.EndReceive(result);
+                    state.ReceiveTimer.Change(Timeout.Infinite, Timeout.Infinite);
+
+                    state.Client.BeginReceive(state.Buffer.Receive, 0,
+                            Math.Min(state.Client.Available, state.Buffer.Receive.Length),
+                            SocketFlags.None, new AsyncCallback(this.ReceiveCallback), state);
+                    state.ReceiveTimer.Change(this.Profile.ReceiveTimeout, Timeout.Infinite);
+
+                    state.Buffer.SwapBuffers(received);
+
+                    Request request = new Request()
+                    {
+                        Connection = state.Client
+                    };
+
+                    int n = this.ParseRequest(state.Buffer.Data, 0, request);
+                    if (n > -1)
+                    {
+                        Response response = new Response()
+                        {
+                            Connection = request.Connection
+                        };
+                        this.ProcessRequest(request, response);
+                    }
+
+                    return;
                 }
                 catch (SocketException ex)
                 {
                     this.Log.RecordEvent(ex.Message, EventKind.Info, ex.StackTrace);
                 }
-
-                state.SwapBuffers();
-
-                if (state.Client.Connected)
-                {
-                    state.Client.BeginReceive(state.ReceiveBuffer, 0,
-                        Math.Min(state.Client.Available, state.ReceiveBuffer.Length),
-                        SocketFlags.None, new AsyncCallback(this.ReceiveCallback), state);
-                }
             }
+            // If control reaches this line, then we need to clean up.
+            state.Dispose();
+        }
+        /// <summary>
+        /// Callback used when a client fails to send data
+        /// </summary>
+        /// <param name="state"></param>
+        protected virtual void ReceiveTimeoutCallback(object state)
+        {
+            var serverState = (ServerAsyncState)state;
+
+            serverState.Client.Close();
         }
         /// <summary>
         /// Starts the current <see cref="Server"/>.
@@ -260,6 +293,7 @@ namespace Serenity.Net
 
             this.isRunning = false;
         }
+        protected abstract bool ValidateRequest(Request request, Response response);
         #endregion
         #region Properties
         /// <summary>

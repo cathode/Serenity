@@ -33,8 +33,6 @@ namespace Serenity
         {
             Module m = new Module("serenity");
 
-            Assembly asm = Assembly.GetExecutingAssembly();
-
             m.Resources.AddRange(this.BuildResourceTree(ResourceNamespace));
             return m;
         }

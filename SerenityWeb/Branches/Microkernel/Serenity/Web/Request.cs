@@ -23,7 +23,7 @@ namespace Serenity.Web
             this.isSecureConnection = false;
             this.keepAlive = false;
             this.localEndPoint = null;
-            this.method = RequestMethod.GET;
+            this.method = RequestMethod.Unknown;
             this.protocolType = null;
             this.protocolVersion = null;
             this.rawMethod = null;
@@ -51,9 +51,9 @@ namespace Serenity.Web
         private bool keepAlive;
         private IPEndPoint localEndPoint;
         private RequestMethod method;
-        private Serenity.Net.Server owner;
-        private RequestDataCollection requestData;
         private string rawMethod;
+        private Server owner;
+        private RequestDataCollection requestData;
         private string rawRequest;
         private string rawUrl;
         private IPEndPoint remoteEndPoint;

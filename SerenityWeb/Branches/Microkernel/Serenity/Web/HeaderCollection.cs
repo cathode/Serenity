@@ -8,6 +8,7 @@
  *****************************************************************************/
 using System;
 using System.Collections.ObjectModel;
+using Serenity.Properties;
 
 namespace Serenity.Web
 {
@@ -37,7 +38,7 @@ namespace Serenity.Web
             }
             else if (name.Length == 0)
             {
-                throw new ArgumentException("Argument 'name' cannot be empty.", "name");
+                throw new ArgumentException(string.Format(AppResources.ParamEmptyException, "name"), "name");
             }
 
 			Header header = new Header(name, value);

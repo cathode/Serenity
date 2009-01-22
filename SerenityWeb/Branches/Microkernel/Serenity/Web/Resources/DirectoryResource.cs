@@ -163,7 +163,7 @@ namespace Serenity.Web.Resources
                                     new XElement("td",
                                         g.Key.SingularForm),
                                     new XElement("td",
-                                        DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")))))))));
+                                        r.Modified.ToString("yyyy-MM-dd HH:mm:ss")))))))));
 
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.ConformanceLevel = ConformanceLevel.Document;

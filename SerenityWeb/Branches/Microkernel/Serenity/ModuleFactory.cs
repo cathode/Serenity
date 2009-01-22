@@ -9,13 +9,10 @@
  * Authors:                                                                   *
  * - Will 'AnarkiNet' Shelley (AnarkiNet@gmail.com): Original Author          *
  *****************************************************************************/
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Reflection;
 using Serenity.Web.Resources;
-using System.IO;
 
 namespace Serenity
 {
@@ -98,6 +95,8 @@ namespace Serenity
                         }
                         prev.Add(res);
                     }
+                    //TODO: Figure out if theres some way to determine the
+                    //      created and modified date of an embedded resource.
                     res.Add(new ResourceResource(name, asm.GetManifestResourceStream(fullPath)));
                 }
 

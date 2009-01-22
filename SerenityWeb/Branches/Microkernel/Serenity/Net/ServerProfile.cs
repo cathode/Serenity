@@ -62,6 +62,7 @@ namespace Serenity.Net
         private string path;
         private bool useIPv6;
         private bool useCaseSensitiveUris;
+        private int receiveTimeout = 30000; //30 second default timeout.
         #endregion
         #region Methods
         /// <summary>
@@ -285,6 +286,17 @@ namespace Serenity.Net
             set
             {
                 this.path = value;
+            }
+        }
+        public int ReceiveTimeout
+        {
+            get
+            {
+                return this.receiveTimeout;
+            }
+            set
+            {
+                this.receiveTimeout = value;
             }
         }
         public bool UseCaseSensitiveUris
