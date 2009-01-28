@@ -236,10 +236,6 @@ namespace Serenity.Net
                     int received = state.Client.EndReceive(result);
                     state.ReceiveTimer.Change(Timeout.Infinite, Timeout.Infinite);
                     state.Buffer.SwapBuffers(received);
-                    state.Client.BeginReceive(state.Buffer.Receive, 0,
-                            Math.Min(state.Client.Available, state.Buffer.Receive.Length),
-                            SocketFlags.None, new AsyncCallback(this.ReceiveCallback), state);
-                    state.ReceiveTimer.Change(this.Profile.ReceiveTimeout, Timeout.Infinite);
 
                     var request = state.Request;
                     var response = state.Response;
@@ -316,6 +312,7 @@ namespace Serenity.Net
                                         if (last2 == "\r\n")
                                         {
                                             string headerValue = state.CurrentToken.ToString().TrimEnd('\r', '\n');
+                                            state.CurrentToken = new StringBuilder();
                                             //TODO: Use the header value and attach it to a Header object.
                                             if (last4 == "\r\n\r\n")
                                             {
@@ -350,6 +347,11 @@ namespace Serenity.Net
                             }
                         }
                     }
+                    state.ReceiveTimer.Change(this.Profile.ReceiveTimeout, Timeout.Infinite);
+                    state.Client.BeginReceive(state.Buffer.Receive, 0,
+                            Math.Min(state.Client.Available, state.Buffer.Receive.Length),
+                            SocketFlags.None, new AsyncCallback(this.ReceiveCallback), state);
+                    
                     return;
                 }
                 catch (SocketException ex)
