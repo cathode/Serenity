@@ -1,12 +1,8 @@
 ﻿/* Serenity - The next evolution of web server technology.
  * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/
  * 
- * This software is released under the terms and conditions of the Microsoft
- * Public License (Ms-PL), a copy of which should have been included with
- * this distribution as License.txt.
- *
- * Contributors:
- * Will 'AnarkiNet' Shelley (AnarkiNet@gmail.com)
+ * This software is released under the terms and conditions of the Microsoft Public License (Ms-PL), a copy of which
+ * should have been included with this distribution as License.txt.
  */
 using System;
 using System.Collections.Generic;
@@ -19,33 +15,26 @@ namespace Serenity.Net
     {
         public NetworkBuffer()
         {
-            this.dataBuffer = new byte[DefaultBufferSize];
+            this.dataBuffer = new Queue<byte>();
             this.receiveBuffer = new byte[DefaultBufferSize];
         }
         #region Fields
-        private byte[] dataBuffer;
-        private int dataPosition = 0;
+        private readonly Queue<byte> dataBuffer;
         private byte[] receiveBuffer;
         private const int DefaultBufferSize = 1024;
         #endregion
         /// <summary>
-        /// Swaps the <see cref="Receive"/> into the data buffer and
-        /// resets the receive buffer.
+        /// Swaps the <see cref="Receive"/> into the data buffer and resets the receive buffer.
         /// </summary>
+        /// <param name="received">The amount of the receive buffer that was actually used.</param>
         public void SwapBuffers(int received)
         {
             if (received > 0)
             {
-                if (dataPosition + received > this.dataBuffer.Length)
+                for (int i = 0; i < received; i++)
                 {
-                    //Need to resize the data buffer to accomodate new data
-                    byte[] buffer = new byte[(this.dataBuffer.Length - dataPosition) + received];
-                    this.dataBuffer.CopyTo(buffer, 0);
-                    this.dataBuffer = buffer;
+                    dataBuffer.Enqueue(receiveBuffer[i]);
                 }
-
-                Array.Copy(this.receiveBuffer, 0, this.dataBuffer, this.dataPosition, received);
-                this.dataPosition += received;
             }
         }
         /// <summary>
@@ -56,7 +45,7 @@ namespace Serenity.Net
         {
             this.receiveBuffer = new byte[Math.Max(1, size)];
         }
-        public byte[] Data
+        public Queue<byte> Data
         {
             get
             {

@@ -39,7 +39,7 @@ namespace Server
 
             profile.LocalEndPoint = new IPEndPoint(IPAddress.Any, 80);
 
-            HttpServer server = new HttpServer()
+            Serenity.Net.Server server = new Serenity.Net.Server()
             {
                 Profile = profile
             };

@@ -11,25 +11,27 @@
  *****************************************************************************/
 using System;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 using Serenity.Web;
-using System.Collections.Generic;
+
 namespace Serenity.Net
 {
     /// <summary>
     /// Provides a simple data structure used to pass objects to and from async
     /// callback methods.
     /// </summary>
-    public abstract class ServerAsyncState : IDisposable
+    public class ServerAsyncState : IDisposable
     {
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ServerAsyncState"/>
         /// class.
         /// </summary>
-        protected ServerAsyncState()
+        public ServerAsyncState()
         {
             this.buffer = new NetworkBuffer();
+            this.Reset();
         }
         #endregion
         #region Fields
@@ -39,6 +41,11 @@ namespace Serenity.Net
         private bool isDisposed;
         private Server owner;
         private Timer receiveTimer;
+        private RequestStep stage;
+        private StringBuilder rawRequest;
+        private StringBuilder currentToken;
+        private Request request;
+        private Response response;
         #endregion
         #region Methods
         /// <summary>
@@ -66,6 +73,22 @@ namespace Serenity.Net
         {
             this.Dispose(true);
             GC.SuppressFinalize(this);
+        }
+        /// <summary>
+        /// Resets the current <see cref="ServerAsyncState"/>, preparing it for a new request from a client.
+        /// </summary>
+        public void Reset()
+        {
+            this.rawRequest = new StringBuilder();
+            this.currentToken = new StringBuilder();
+            this.request = new Request()
+            {
+                Connection = this.Client
+            };
+            this.response = new Response()
+            {
+                Connection = this.Client
+            };
         }
         #endregion
         #region Properties
@@ -136,6 +159,53 @@ namespace Serenity.Net
             set
             {
                 this.owner = value;
+            }
+        }
+        public Request Request
+        {
+            get
+            {
+                return this.request;
+            }
+        }
+        public Response Response
+        {
+            get
+            {
+                return this.response;
+            }
+        }
+        public RequestStep Stage
+        {
+            get
+            {
+                return this.stage;
+            }
+            set
+            {
+                this.stage = value;
+            }
+        }
+        public StringBuilder RawRequest
+        {
+            get
+            {
+                return this.rawRequest;
+            }
+            set
+            {
+                this.rawRequest = value ?? new StringBuilder();
+            }
+        }
+        public StringBuilder CurrentToken
+        {
+            get
+            {
+                return this.currentToken;
+            }
+            set
+            {
+                this.currentToken = value ?? new StringBuilder();
             }
         }
         #endregion

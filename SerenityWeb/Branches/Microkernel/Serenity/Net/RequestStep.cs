@@ -9,22 +9,20 @@
  * Authors:                                                                   *
  * - Will 'AnarkiNet' Shelley (AnarkiNet@gmail.com): Original Author          *
  *****************************************************************************/
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Serenity.Net
 {
-    public enum RequestProcessingStage
+    /// <summary>
+    /// Represents steps in the process of parsing HTTP request data.
+    /// </summary>
+    public enum RequestStep
     {
-        None = 0x0,
-        MethodProcessed = 0x1,
-        UriProcessed = 0x2,
-        VersionProcessed = 0x3,
-        RequestLineProcessed = 0x4,
-        HeaderProcessed = 0x5,
-        AllHeadersProcessed = 0x6,
-        ProcessingComplete = 0x7,
+        Method = 0x0,
+        Uri = 0x1,
+        Version = 0x2,
+        HeaderName = 0x3,
+        HeaderValue = 0x4,
+        Content = 0x5,
+        CreateResponse = 0x6,
     }
 }

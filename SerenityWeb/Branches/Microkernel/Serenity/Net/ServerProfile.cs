@@ -10,14 +10,11 @@
  * - Will 'AnarkiNet' Shelley (AnarkiNet@gmail.com): Original Author          *
  *****************************************************************************/
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Net;
-using System.Xml;
 using System.IO;
+using System.Net;
+using System.Text;
+using System.Xml;
 
-using Serenity.Web.Resources;
 
 namespace Serenity.Net
 {
@@ -86,14 +83,20 @@ namespace Serenity.Net
             {
                 throw new FileNotFoundException("The specified file was not found.", path);
             }
+            var settings = new XmlReaderSettings();
+            settings.CheckCharacters = true;
+            settings.ConformanceLevel = ConformanceLevel.Document;
+            settings.IgnoreComments = true;
 
-            XmlReader reader = XmlReader.Create(path, new XmlReaderSettings(){ CheckCharacters = true,
-                ConformanceLevel = ConformanceLevel.Document,
-                IgnoreComments = true,
-            });
+            using (XmlReader reader = XmlReader.Create(path, settings))
+            {
+                //TODO: Implement XML profile reading
+            }
 
-            reader.Read();
+            //reader.Read();
             //reader.ReadStartElement("
+
+
         }
         /// <summary>
         /// Saves profile values defined in the current
