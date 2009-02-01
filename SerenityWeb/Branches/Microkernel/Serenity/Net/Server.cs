@@ -1,14 +1,9 @@
-﻿/******************************************************************************
- * Serenity - The next evolution of web server technology.                    *
- * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
- *----------------------------------------------------------------------------*
- * This software is released under the terms and conditions of the Microsoft  *
- * Public License (Ms-PL), a copy of which should have been included with     *
- * this distribution as License.txt.                                          *
- *----------------------------------------------------------------------------*
- * Authors:                                                                   *
- * - Will 'AnarkiNet' Shelley (AnarkiNet@gmail.com): Original Author          *
- *****************************************************************************/
+﻿/* Serenity - The next evolution of web server technology.
+ * Copyright © 2006-2009 Serenity Project - http://SerenityProject.net/
+ * 
+ * This software is released under the terms and conditions of the Microsoft Public License (MS-PL),
+ * a copy of which should have been included with this distribution as License.txt.
+ */
 using System;
 using System.Net.Sockets;
 using System.Threading;
@@ -72,22 +67,19 @@ namespace Serenity.Net
             {
                 throw new ArgumentNullException("result");
             }
-            var state = (ServerAsyncState)result.AsyncState;
 
             try
             {
-                state.Client = this.Listener.EndAccept(result);
-                this.Log.RecordEvent(string.Format(AppResources.ClientConnectedMessage, state.Client.RemoteEndPoint), EventKind.Info);
+                var state = this.CreateStateObject(this.Listener.EndAccept(result));
+                this.Listener.BeginAccept(new AsyncCallback(this.AcceptCallback), null);
 
-                var newState = this.CreateStateObject();
-                newState.Listener = state.Listener;
-                this.Listener.BeginAccept(new AsyncCallback(this.AcceptCallback), newState);
-
-                state.Client.BeginReceive(state.Buffer.Receive, 0,
-                          Math.Min(state.Client.Available, state.Buffer.Receive.Length),
-                          SocketFlags.None, new AsyncCallback(this.ReceiveCallback), state);
+                state.Reset();
                 state.ReceiveTimer = new Timer(new TimerCallback(this.ReceiveTimeoutCallback), state,
-                    this.Profile.ReceiveTimeout, Timeout.Infinite);
+                   this.Profile.ReceiveTimeout, Timeout.Infinite);
+                state.Connection.BeginReceive(state.Buffer.Receive, 0,
+                          Math.Min(state.Connection.Available, state.Buffer.Receive.Length),
+                          SocketFlags.None, new AsyncCallback(this.ReceiveCallback), state);
+
             }
             catch (SocketException ex)
             {
@@ -104,9 +96,9 @@ namespace Serenity.Net
         /// object inherit from <see cref="ServerAsyncState"/> and then
         /// override this method to return a new instance of your derived type.
         /// </remarks>
-        protected virtual ServerAsyncState CreateStateObject()
+        protected virtual ServerAsyncState CreateStateObject(Socket connection)
         {
-            return new ServerAsyncState();
+            return new ServerAsyncState(connection);
         }
         /// <summary>
         /// Disposes the current <see cref="Server"/>.
@@ -193,11 +185,7 @@ namespace Serenity.Net
             }
             this.listener.Bind(this.Profile.LocalEndPoint);
             this.Listener.Listen(this.Profile.ConnectionBacklog);
-
-            var newState = this.CreateStateObject();
-            newState.Listener = this.Listener;
-
-            this.Listener.BeginAccept(new AsyncCallback(this.AcceptCallback), newState);
+            this.Listener.BeginAccept(new AsyncCallback(this.AcceptCallback), null);
         }
         /// <summary>
         /// Raises the <see cref="Stopping"/> event.
@@ -227,15 +215,21 @@ namespace Serenity.Net
             }
             var state = (ServerAsyncState)result.AsyncState;
 
-            if (state.Client.Connected)
+            if (state.Connection.Connected)
             {
                 // Only try and receive if the client is still connected.
 
                 try
                 {
-                    int received = state.Client.EndReceive(result);
-                    state.ReceiveTimer.Change(Timeout.Infinite, Timeout.Infinite);
+                    int received = state.Connection.EndReceive(result);
+                    if (received == 0)
+                    {
+                        state.Connection.Close();
+                        state.Dispose();
+                        return;
+                    }
                     state.Buffer.SwapBuffers(received);
+
 
                     var request = state.Request;
                     var response = state.Response;
@@ -254,104 +248,117 @@ namespace Serenity.Net
 
                             state.RawRequest.Append(c);
                             bool appendToken = true;
-                            switch (state.Stage)
+                            bool repeat = false;
+                            do
                             {
-                                case RequestStep.Method:
-                                    // Nothing processed, first we need to build the HTTP Method.
-                                    if (c == ' ')
-                                    {
-                                        // Method has been terminated by a space.
-                                        request.RawMethod = state.CurrentToken.ToString();
-                                        state.CurrentToken = new StringBuilder();
-                                        state.Stage = RequestStep.Uri;
-                                        appendToken = false;
-                                    }
-                                    break;
-
-                                case RequestStep.Uri:
-                                    // Now we need to get the URI
-                                    if (c == ' ')
-                                    {
-                                        // End of URI token
-                                        request.RawUrl = state.CurrentToken.ToString();
-                                        state.CurrentToken = new StringBuilder();
-                                        state.Stage = RequestStep.Version;
-                                        appendToken = false;
-                                    }
-                                    break;
-                                case RequestStep.Version:
-                                    // Next is the HTTP version token
-                                    if (c == '\n' && state.CurrentToken[state.CurrentToken.Length - 1] == '\r')
-                                    {
-                                        // HTTP version is terminated by end of line
-                                        string rawVersion = state.CurrentToken.ToString();
-                                        rawVersion = rawVersion.Substring(0, rawVersion.Length - 1);
-
-                                        state.CurrentToken = new StringBuilder();
-                                        state.Stage = RequestStep.HeaderName;
-                                        appendToken = false;
-                                    }
-                                    break;
-                                case RequestStep.HeaderName:
-                                    // Parse the next header name
-                                    if (c == ':')
-                                    {
-                                        // Header name token terminated with ':'
-                                        string headerName = state.CurrentToken.ToString();
-                                        //TODO: Use the header name to build a Header object.
-                                        state.CurrentToken = new StringBuilder();
-                                        state.Stage = RequestStep.HeaderValue;
-                                        appendToken = false;
-                                    }
-                                    break;
-                                case RequestStep.HeaderValue:
-                                    if (state.CurrentToken.Length >= 3)
-                                    {
-                                        string last4 = state.CurrentToken.ToString().Substring(state.CurrentToken.Length - 3) + c;
-                                        string last2 = last4.Substring(2);
-                                        if (last2 == "\r\n")
+                                switch (state.Stage)
+                                {
+                                    case RequestStep.Method:
+                                        // Nothing processed, first we need to build the HTTP Method.
+                                        if (c == ' ')
                                         {
-                                            string headerValue = state.CurrentToken.ToString().TrimEnd('\r', '\n');
+                                            // Method has been terminated by a space.
+                                            request.RawMethod = state.CurrentToken.ToString();
                                             state.CurrentToken = new StringBuilder();
-                                            //TODO: Use the header value and attach it to a Header object.
-                                            if (last4 == "\r\n\r\n")
-                                            {
-                                                state.Stage = RequestStep.Content;
-                                            }
-                                            else
-                                            {
-                                                state.Stage = RequestStep.HeaderName;
-                                            }
+                                            state.Stage = RequestStep.Uri;
                                             appendToken = false;
                                         }
-                                    }
-                                    break;
+                                        break;
 
-                                case RequestStep.Content:
-                                //TODO: Implement content parsing.
-                                // For now, skip it and fall down to creating a response.
-                                case RequestStep.CreateResponse:
-                                    if (this.ValidateRequest(request, response))
-                                    {
-                                        this.ProcessRequest(request, response);
-                                    }
-                                    break;
+                                    case RequestStep.Uri:
+                                        // Now we need to get the URI
+                                        if (c == ' ')
+                                        {
+                                            // End of URI token
+                                            request.RawUrl = state.CurrentToken.ToString();
+                                            state.CurrentToken = new StringBuilder();
+                                            state.Stage = RequestStep.Version;
+                                            appendToken = false;
+                                        }
+                                        break;
+                                    case RequestStep.Version:
+                                        // Next is the HTTP version token
+                                        if (c == '\n' && state.CurrentToken[state.CurrentToken.Length - 1] == '\r')
+                                        {
+                                            // HTTP version is terminated by end of line
+                                            string rawVersion = state.CurrentToken.ToString();
+                                            rawVersion = rawVersion.Substring(0, rawVersion.Length - 1);
 
-                                default:
-                                    throw new NotImplementedException();
+                                            state.CurrentToken = new StringBuilder();
+                                            state.Stage = RequestStep.HeaderName;
+                                            appendToken = false;
+                                        }
+                                        break;
+                                    case RequestStep.HeaderName:
+                                        // Parse the next header name
+                                        if (c == ':')
+                                        {
+                                            // Header name token terminated with ':'
+                                            string headerName = state.CurrentToken.ToString();
+                                            //TODO: Use the header name to build a Header object.
+                                            state.CurrentToken = new StringBuilder();
+                                            state.Stage = RequestStep.HeaderValue;
+                                            appendToken = false;
+                                        }
+                                        else if (c == '\n' && prev == '\r')
+                                        {
+                                            state.CurrentToken = new StringBuilder();
+                                            state.Stage = RequestStep.Content;
+                                            repeat = true;
+                                        }
+                                        break;
+                                    case RequestStep.HeaderValue:
+                                        if (state.CurrentToken.Length >= 3)
+                                        {
+                                            string last4 = state.CurrentToken.ToString().Substring(state.CurrentToken.Length - 3) + c;
+                                            string last2 = last4.Substring(2);
+                                            if (last2 == "\r\n")
+                                            {
+                                                string headerValue = state.CurrentToken.ToString().TrimEnd('\r', '\n');
+                                                state.CurrentToken = new StringBuilder();
+                                                //TODO: Use the header value and attach it to a Header object.
+                                                if (last4 == "\r\n\r\n")
+                                                {
+                                                    state.Stage = RequestStep.Content;
+                                                }
+                                                else
+                                                {
+                                                    state.Stage = RequestStep.HeaderName;
+                                                }
+                                                appendToken = false;
+                                            }
+                                        }
+                                        break;
+
+                                    case RequestStep.Content:
+                                    //TODO: Implement content parsing.
+                                    // For now, skip it and fall down to creating a response.
+                                    case RequestStep.CreateResponse:
+                                        if (this.ValidateRequest(request, response))
+                                        {
+                                            this.ProcessRequest(request, response);
+                                        }
+                                        this.SendResponse(request, response);
+                                        repeat = false;
+                                        break;
+
+                                    default:
+                                        throw new NotImplementedException();
+                                }
+
+                                if (appendToken)
+                                {
+                                    state.CurrentToken.Append(c);
+                                }
+
                             }
-
-                            if (appendToken)
-                            {
-                                state.CurrentToken.Append(c);
-                            }
+                            while (repeat);
                         }
                     }
                     state.ReceiveTimer.Change(this.Profile.ReceiveTimeout, Timeout.Infinite);
-                    state.Client.BeginReceive(state.Buffer.Receive, 0,
-                            Math.Min(state.Client.Available, state.Buffer.Receive.Length),
+                    state.Connection.BeginReceive(state.Buffer.Receive, 0,
+                            Math.Min(state.Connection.Available, state.Buffer.Receive.Length),
                             SocketFlags.None, new AsyncCallback(this.ReceiveCallback), state);
-                    
                     return;
                 }
                 catch (SocketException ex)
@@ -370,11 +377,22 @@ namespace Serenity.Net
         {
             var serverState = (ServerAsyncState)state;
             byte[] data = Encoding.ASCII.GetBytes(@"HTTP/1.1 408 Request Timeout");
-            serverState.Client.Send(data);
+            serverState.Connection.Send(data);
             //TODO: Implement async sending.
             //serverState.Client.BeginSend(data, SocketFlags.None, new AsyncCallback(this.SendCallback), state);
 
-            serverState.Client.Close();
+            serverState.Connection.Close();
+        }
+        protected virtual void SendResponse(Request request, Response response)
+        {
+            StringBuilder content = new StringBuilder();
+
+            content.AppendFormat("HTTP/1.1 {0}\r\n", response.Status.ToString());
+
+            byte[] data = Encoding.ASCII.GetBytes(content.ToString());
+
+            response.Connection.Send(data);
+
         }
         /// <summary>
         /// Starts the current <see cref="Server"/>.

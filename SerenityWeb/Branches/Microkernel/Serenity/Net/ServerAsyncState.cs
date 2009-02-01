@@ -1,14 +1,9 @@
-﻿/******************************************************************************
- * Serenity - The next evolution of web server technology.                    *
- * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
- *----------------------------------------------------------------------------*
- * This software is released under the terms and conditions of the Microsoft  *
- * Public License (Ms-PL), a copy of which should have been included with     *
- * this distribution as License.txt.                                          *
- *----------------------------------------------------------------------------*
- * Authors:                                                                   *
- * - Will 'AnarkiNet' Shelley (AnarkiNet@gmail.com): Original Author          *
- *****************************************************************************/
+﻿/* Serenity - The next evolution of web server technology.
+ * Copyright © 2006-2009 Serenity Project - http://SerenityProject.net/
+ * 
+ * This software is released under the terms and conditions of the Microsoft Public License (MS-PL),
+ * a copy of which should have been included with this distribution as License.txt.
+ */
 using System;
 using System.Net.Sockets;
 using System.Text;
@@ -28,16 +23,20 @@ namespace Serenity.Net
         /// Initializes a new instance of the <see cref="ServerAsyncState"/>
         /// class.
         /// </summary>
-        public ServerAsyncState()
+        /// <param name="connection">The <see cref="Socket"/> representing the connection with the remote client.</param>
+        public ServerAsyncState(Socket connection)
         {
-            this.buffer = new NetworkBuffer();
-            this.Reset();
+            if (connection == null)
+            {
+                throw new ArgumentNullException("connection");
+            }
+            this.connection = connection;
+            this.buffer = new NetworkBuffer(); 
         }
         #endregion
         #region Fields
         private readonly NetworkBuffer buffer;
-        private Socket client;
-        private Socket listener;
+        private readonly Socket connection;
         private bool isDisposed;
         private Server owner;
         private Timer receiveTimer;
@@ -46,6 +45,7 @@ namespace Serenity.Net
         private StringBuilder currentToken;
         private Request request;
         private Response response;
+        private readonly object syncLock = new object();
         #endregion
         #region Methods
         /// <summary>
@@ -58,8 +58,7 @@ namespace Serenity.Net
             {
                 if (disposing)
                 {
-                    this.client = null;
-                    this.listener = null;
+                    this.connection.Close();
                     this.receiveTimer.Dispose();
                     this.owner = null;
                 }
@@ -81,13 +80,14 @@ namespace Serenity.Net
         {
             this.rawRequest = new StringBuilder();
             this.currentToken = new StringBuilder();
+            this.stage = RequestStep.Method;
             this.request = new Request()
             {
-                Connection = this.Client
+                Connection = this.Connection
             };
             this.response = new Response()
             {
-                Connection = this.Client
+                Connection = this.Connection
             };
         }
         #endregion
@@ -106,30 +106,11 @@ namespace Serenity.Net
         /// Gets or sets the <see cref="Socket"/> that represents the
         /// connection to the client.
         /// </summary>
-        public Socket Client
+        public Socket Connection
         {
             get
             {
-                return this.client;
-            }
-            set
-            {
-                this.client = value;
-            }
-        }
-        /// <summary>
-        /// Gets or sets the <see cref="Socket"/> that accepted the client
-        /// connection.
-        /// </summary>
-        public Socket Listener
-        {
-            get
-            {
-                return this.listener;
-            }
-            set
-            {
-                this.listener = value;
+                return this.connection;
             }
         }
         public Timer ReceiveTimer
@@ -206,6 +187,13 @@ namespace Serenity.Net
             set
             {
                 this.currentToken = value ?? new StringBuilder();
+            }
+        }
+        public object SyncLock
+        {
+            get
+            {
+                return this.syncLock;
             }
         }
         #endregion

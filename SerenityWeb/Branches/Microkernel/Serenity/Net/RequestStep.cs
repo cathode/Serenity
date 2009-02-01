@@ -1,14 +1,9 @@
-﻿/******************************************************************************
- * Serenity - The next evolution of web server technology.                    *
- * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
- *----------------------------------------------------------------------------*
- * This software is released under the terms and conditions of the Microsoft  *
- * Public License (Ms-PL), a copy of which should have been included with     *
- * this distribution as License.txt.                                          *
- *----------------------------------------------------------------------------*
- * Authors:                                                                   *
- * - Will 'AnarkiNet' Shelley (AnarkiNet@gmail.com): Original Author          *
- *****************************************************************************/
+﻿/* Serenity - The next evolution of web server technology.
+ * Copyright © 2006-2009 Serenity Project - http://SerenityProject.net/
+ * 
+ * This software is released under the terms and conditions of the Microsoft Public License (MS-PL),
+ * a copy of which should have been included with this distribution as License.txt.
+ */
 
 namespace Serenity.Net
 {

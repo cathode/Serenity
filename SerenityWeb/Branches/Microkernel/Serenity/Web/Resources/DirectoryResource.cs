@@ -1,25 +1,17 @@
-/******************************************************************************
- * Serenity - The next evolution of web server technology.                    *
- * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
- *----------------------------------------------------------------------------*
- * This software is released under the terms and conditions of the Microsoft  *
- * Public License (Ms-PL), a copy of which should have been included with     *
- * this distribution as License.txt.                                          *
- *----------------------------------------------------------------------------*
- * Authors:                                                                   *
- * - Will 'AnarkiNet' Shelley (AnarkiNet@gmail.com): Original Author          *
- *****************************************************************************/
+/* Serenity - The next evolution of web server technology.
+ * Copyright © 2006-2009 Serenity Project - http://SerenityProject.net/
+ * 
+ * This software is released under the terms and conditions of the Microsoft Public License (MS-PL),
+ * a copy of which should have been included with this distribution as License.txt.
+ */
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
-using Serenity.Properties;
 using System.Xml.Linq;
-using System.Linq;
-
-using Serenity.Web.Resources;
-using Serenity.Web;
+using Serenity.Properties;
 
 namespace Serenity.Web.Resources
 {
@@ -29,20 +21,28 @@ namespace Serenity.Web.Resources
     /// </summary>
     public class DirectoryResource : Resource
     {
-        #region Constructors - internal
+        #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="DirectoryResource"/>
-        /// class.
+        /// Initializes a new instance of the <see cref="DirectoryResource"/> class.
         /// </summary>
         public DirectoryResource()
         {
             this.ContentType = MimeType.TextHtml;
         }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DirectoryResource"/> class.
+        /// </summary>
+        /// <param name="name"></param>
         public DirectoryResource(string name)
             : this()
         {
             this.Name = name;
         }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DirectoryResource"/> class.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="children"></param>
         public DirectoryResource(string name, params Resource[] children)
             : this(name)
         {
@@ -50,9 +50,12 @@ namespace Serenity.Web.Resources
         }
         #endregion
         #region Fields
+        /// <summary>
+        /// Holds the relative URI to the stylesheet used to style the directory index.
+        /// </summary>
         public const string StylesheetUrl = "/serenity/index.css";
         #endregion
-        #region Methods - Public
+        #region Methods
         /// <summary>
         /// Overridden. Renders the dynamic content of the current DirectoryResource.
         /// </summary>
@@ -184,7 +187,7 @@ namespace Serenity.Web.Resources
             response.IsComplete = true;
         }
         #endregion
-        #region Properties - Public
+        #region Properties
         /// <summary>
         /// Gets the resource grouping of the current DirectoryResource.
         /// </summary>
