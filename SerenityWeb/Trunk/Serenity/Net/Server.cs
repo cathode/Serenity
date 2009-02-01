@@ -355,19 +355,24 @@ namespace Serenity.Net
                             while (repeat);
                         }
                     }
-                    state.ReceiveTimer.Change(this.Profile.ReceiveTimeout, Timeout.Infinite);
-                    state.Connection.BeginReceive(state.Buffer.Receive, 0,
-                            Math.Min(state.Connection.Available, state.Buffer.Receive.Length),
-                            SocketFlags.None, new AsyncCallback(this.ReceiveCallback), state);
-                    return;
+                    if (state.Connection.Connected)
+                    {
+                        state.ReceiveTimer.Change(this.Profile.ReceiveTimeout, Timeout.Infinite);
+                        state.Connection.BeginReceive(state.Buffer.Receive, 0,
+                                Math.Min(state.Connection.Available, state.Buffer.Receive.Length),
+                                SocketFlags.None, new AsyncCallback(this.ReceiveCallback), state);
+                    }
                 }
                 catch (SocketException ex)
                 {
                     this.Log.RecordEvent(ex.Message, EventKind.Info, ex.StackTrace);
                 }
             }
-            // If control reaches this line, then we need to clean up.
-            state.Dispose();
+            if (!state.Connection.Connected)
+            {
+                // If control reaches this line, then we need to clean up.
+                state.Dispose();
+            }
         }
         /// <summary>
         /// Callback used when a client fails to send data
@@ -389,10 +394,13 @@ namespace Serenity.Net
 
             content.AppendFormat("HTTP/1.1 {0}\r\n", response.Status.ToString());
 
+            //TODO: Implement the response text creation.
+
+            content.Append("\r\n");
             byte[] data = Encoding.ASCII.GetBytes(content.ToString());
 
             response.Connection.Send(data);
-
+            response.Connection.Close(180);
         }
         /// <summary>
         /// Starts the current <see cref="Server"/>.
