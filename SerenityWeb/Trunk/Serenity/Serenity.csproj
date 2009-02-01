@@ -86,117 +86,85 @@
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AlternateResourcePathAttribute.cs" />
-    <None Include="Cache\CacheManager.cs" />
-    <Compile Include="ConfigurationOptionAttribute.cs" />
-    <Compile Include="ConfigurationOptionKind.cs" />
     <Compile Include="Data\Database.cs" />
     <Compile Include="Data\DataScope.cs" />
     <Compile Include="Data\DataExtensions.cs" />
+    <Compile Include="EventDetails.cs" />
+    <Compile Include="EventKind.cs" />
+    <Compile Include="EventLog.cs" />
+    <Compile Include="EventRecordedEventArgs.cs" />
     <Compile Include="IO\SerenityPath.cs" />
-    <Compile Include="Logging\Severity.cs" />
     <Compile Include="ModuleCollection.cs" />
-    <Compile Include="DomainCollection.cs" />
-    <Compile Include="Domain.cs" />
-    <Compile Include="FileTypeEntry.cs" />
     <Content Include="Data\domain\schemas\error_documents.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\global\schemas\serenity_global.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Compile Include="ModuleDefaultPageAttribute.cs" />
-    <Compile Include="ModuleResourceNamespaceAttribute.cs" />
-    <Compile Include="ModuleTitleAttribute.cs" />
-    <Compile Include="Net\HttpDriver2.cs" />
-    <Compile Include="Net\ProtocolDriver2.cs" />
-    <None Include="Net\ProtocolDriverInitializationResult.cs" />
-    <Compile Include="Net\ProtocolDriverState.cs" />
-    <Compile Include="Net\RequestAvailableEventArgs.cs" />
-    <Compile Include="Net\RequestProcessingStage.cs" />
-    <None Include="Net\StartedEventArgs.cs" />
-    <Compile Include="Net\StartMode.cs" />
-    <Compile Include="Pages\EventViewer.cs" />
-    <Compile Include="Pages\SessionExamplePage.cs" />
-    <Compile Include="Pages\SessionViewer.cs" />
-    <Compile Include="SerenityServer.cs" />
-    <None Include="Themes\Border.cs" />
-    <None Include="Themes\BorderSide.cs" />
-    <None Include="Themes\BorderType.cs" />
-    <None Include="Themes\Box.cs" />
-    <None Include="Themes\Color.cs" />
-    <None Include="Themes\Margin.cs" />
-    <Compile Include="Themes\Measurement.cs" />
-    <Compile Include="Themes\MeasurementUnit.cs" />
-    <None Include="Themes\Padding.cs" />
-    <None Include="Themes\Size.cs" />
-    <None Include="Themes\Style.cs" />
-    <None Include="Themes\StyleType.cs" />
-    <None Include="Themes\TextDirection.cs" />
+    <Compile Include="ModuleFactory.cs" />
+    <Compile Include="Net\NetworkBuffer.cs" />
+    <Compile Include="Net\RequestStep.cs" />
+    <Compile Include="Net\ServerAsyncState.cs" />
     <Compile Include="Module.cs" />
-    <Compile Include="Pages\DefaultPage.cs" />
-    <None Include="Themes\Theme.cs" />
-    <Compile Include="SuppressLoadCreationAttribute.cs" />
-    <Compile Include="Web\ContextHandler.cs" />
+    <Compile Include="Net\Server.cs" />
+    <Compile Include="Net\ServerProfile.cs" />
+    <Compile Include="Properties\AppResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SerenityInfo.cs" />
-    <Compile Include="FileTypeRegistry.cs" />
-    <Compile Include="Logging\Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="OperationStatus.cs" />
     <Compile Include="Web\Cookie.cs" />
     <Compile Include="Web\CookieCollection.cs" />
-    <Compile Include="Web\ErrorHandler.cs" />
-    <Compile Include="Web\Forms\Anchor.cs" />
-    <Compile Include="Web\Forms\Body.cs" />
-    <Compile Include="Web\Forms\Button.cs" />
-    <Compile Include="Web\Forms\Control.cs" />
-    <Compile Include="Web\Forms\ControlAttribute.cs" />
-    <Compile Include="Web\Forms\ControlAttributeCollection.cs" />
-    <Compile Include="Web\Forms\ControlCollection.cs" />
-    <Compile Include="Web\Forms\Division.cs" />
-    <Compile Include="Web\Forms\Document.cs" />
-    <Compile Include="Web\Forms\DocumentResource.cs" />
-    <Compile Include="Web\Forms\Form.cs" />
-    <Compile Include="Web\Forms\Head.cs" />
-    <Compile Include="Web\Forms\Heading.cs" />
+    <None Include="Web\Forms\Anchor.cs" />
+    <None Include="Web\Forms\Body.cs" />
+    <None Include="Web\Forms\Button.cs" />
+    <None Include="Web\Forms\Control.cs" />
+    <None Include="Web\Forms\ControlAttribute.cs" />
+    <None Include="Web\Forms\ControlAttributeCollection.cs" />
+    <None Include="Web\Forms\ControlCollection.cs" />
+    <None Include="Web\Forms\Division.cs" />
+    <None Include="Web\Forms\Document.cs" />
+    <None Include="Web\Forms\DocumentResource.cs" />
+    <None Include="Web\Forms\Form.cs" />
+    <None Include="Web\Forms\Head.cs" />
+    <None Include="Web\Forms\Heading.cs" />
     <None Include="Web\Forms\Label.cs" />
-    <Compile Include="Web\Forms\HeadingLevel.cs" />
-    <Compile Include="Web\Forms\Html\HtmlDocument.cs" />
-    <Compile Include="Web\Forms\Image.cs" />
-    <Compile Include="Web\Forms\LineBreak.cs" />
-    <Compile Include="Web\Forms\OrderedList.cs" />
-    <Compile Include="Web\Forms\Paragraph.cs" />
-    <Compile Include="Web\Forms\PathLink.cs" />
-    <Compile Include="Web\Forms\RenderEventArgs.cs" />
-    <Compile Include="Web\Forms\RenderingContext.cs" />
-    <Compile Include="Web\Forms\Script.cs" />
-    <Compile Include="Web\Forms\Span.cs" />
+    <None Include="Web\Forms\HeadingLevel.cs" />
+    <None Include="Web\Forms\Html\HtmlDocument.cs" />
+    <None Include="Web\Forms\Image.cs" />
+    <None Include="Web\Forms\LineBreak.cs" />
+    <None Include="Web\Forms\OrderedList.cs" />
+    <None Include="Web\Forms\Paragraph.cs" />
+    <None Include="Web\Forms\PathLink.cs" />
+    <None Include="Web\Forms\RenderEventArgs.cs" />
+    <None Include="Web\Forms\RenderingContext.cs" />
+    <None Include="Web\Forms\Script.cs" />
+    <None Include="Web\Forms\Span.cs" />
     <None Include="Web\Forms\Svg\SvgDocument.cs" />
     <None Include="Web\Forms\Svg\SvgRectangle.cs" />
     <None Include="Web\Forms\Svg\SvgShape.cs" />
-    <Compile Include="Web\Forms\Table.cs" />
-    <Compile Include="Web\Forms\TableCell.cs" />
-    <Compile Include="Web\Forms\TableFooter.cs" />
-    <Compile Include="Web\Forms\TableHeader.cs" />
-    <Compile Include="Web\Forms\TableRow.cs" />
-    <Compile Include="Web\Forms\TextControl.cs" />
-    <Compile Include="Web\Forms\WebFormsEventAttribute.cs" />
+    <None Include="Web\Forms\Table.cs" />
+    <None Include="Web\Forms\TableCell.cs" />
+    <None Include="Web\Forms\TableFooter.cs" />
+    <None Include="Web\Forms\TableHeader.cs" />
+    <None Include="Web\Forms\TableRow.cs" />
+    <None Include="Web\Forms\TextControl.cs" />
+    <None Include="Web\Forms\WebFormsEventAttribute.cs" />
     <Compile Include="Web\MimeType.cs" />
     <Compile Include="Web\Request.cs" />
-    <Compile Include="Web\RequestContent.cs" />
+    <None Include="Web\RequestContent.cs" />
     <Compile Include="Web\RequestMethod.cs" />
-    <None Include="Web\Services\WebMethodAttribute.cs" />
-    <None Include="Web\Services\WebService.cs" />
-    <None Include="Web\Resources\DirectoryDocument.cs" />
     <Compile Include="Web\Resources\DirectoryResource.cs" />
+    <Compile Include="Web\Resources\DomainResource.cs" />
     <Compile Include="Web\Resources\DynamicResource.cs" />
     <Compile Include="Web\Resources\ErrorResource.cs" />
     <Compile Include="Web\Resources\Resource.cs" />
-    <Compile Include="Web\Resources\ResourceCollection.cs" />
     <Compile Include="Web\Resources\ResourceGrouping.cs" />
-    <Compile Include="Web\Resources\ResourcePath.cs" />
     <Compile Include="Web\Resources\ResourceResource.cs" />
     <Compile Include="Web\Resources\RewriteResource.cs" />
+    <Compile Include="Web\Resources\RootResource.cs" />
     <Compile Include="Web\Resources\StaticResource.cs" />
     <Compile Include="Web\Response.cs" />
     <Compile Include="Web\Session.cs" />
@@ -209,7 +177,8 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="Web\Doctype.cs" />
-    <Compile Include="Web\Forms\UnorderedList.cs" />
+    <None Include="Web\Forms\UnorderedList.cs" />
+    <Compile Include="__SerenityModuleFactory.cs" />
     <Compile Include="__Strings.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -217,6 +186,11 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\AppResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\icons\arrow_down.png" />
     <EmbeddedResource Include="Resources\icons\arrow_up.png" />
     <EmbeddedResource Include="Resources\icons\folder.png" />
@@ -262,23 +236,8 @@
     <EmbeddedResource Include="Resources\icons\page_white_wrench.png" />
     <EmbeddedResource Include="Resources\icons\page_white_zip.png" />
     <EmbeddedResource Include="Resources\index.css" />
-    <EmbeddedResource Include="Resources\index.xslt" />
-    <EmbeddedResource Include="Resources\webforms\webforms.js" />
-    <Content Include="Themes\template\stylesheet.css" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="LibINI, Version=1.5.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\LibINI.dll</HintPath>
-    </Reference>
-    <Reference Include="SerenityProject.Common, Version=1.2.0.0, Culture=neutral, PublicKeyToken=aafe07b9ddf0a2a4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Common\SerenityProject.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="SPCore, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\SPCore.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -294,8 +253,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\System.Data.SQLite.DLL</HintPath>
     </Reference>
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">

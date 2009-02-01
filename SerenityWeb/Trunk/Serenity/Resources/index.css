@@ -45,15 +45,15 @@ td, th
 }
 .size
 {
-	width: 96px;
+	width: 100px;
 }
 .description
 {
-	width: 192px;
+	width: 180px;
 }
-.timestamp
+.modified
 {
-	width: 128px;
+	width: 140px;
 }
 .group
 {

@@ -33,7 +33,7 @@ namespace Serenity.Web.Resources
             }
             else
             {
-                ErrorHandler.Handle(StatusCode.Http404NotFound);
+                //ErrorHandler.Handle(StatusCode.Http404NotFound);
             }
         }
         #endregion
@@ -75,7 +75,7 @@ namespace Serenity.Web.Resources
         /// <summary>
         /// Overridden. Gets the size of the file represented by the current StaticResource.
         /// </summary>
-        public override int Size
+        public override long Size
         {
             get
             {

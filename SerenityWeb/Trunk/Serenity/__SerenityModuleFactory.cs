@@ -13,36 +13,38 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Serenity.Web.Resources;
+using System.Reflection;
 
-namespace Serenity.Web.Forms
+namespace Serenity
 {
     /// <summary>
-    /// Event data for the <see cref="Control.PreRender"/> event.
+    /// Provides a factory for building the Serenity module.
     /// </summary>
-    public sealed class RenderEventArgs : EventArgs
+    internal sealed class __SerenityModuleFactory : ModuleFactory
     {
-        #region Constructors - Public
+        private const string ResourceNamespace = "Serenity.Resources.";
+        #region Methods
         /// <summary>
-        /// Initializes a new instance of the <see cref="RenderEventArgs"/>
-        /// class.
+        /// Builds the module for Serenity.
         /// </summary>
-        /// <param name="context"></param>
-        public RenderEventArgs(RenderingContext context)
+        /// <returns></returns>
+        public override Module CreateModule()
         {
-            this.context = context;
+            Module m = new Module("serenity");
+
+            m.Resources.AddRange(this.BuildResourceTree(ResourceNamespace));
+            return m;
         }
+
+        
         #endregion
-        #region Fields - Private
-        private readonly RenderingContext context;
-        #endregion
-        #region Properties - Public
-        public RenderingContext Context
+        protected override Assembly ModuleAssembly
         {
             get
             {
-                return this.context;
+                return Assembly.GetExecutingAssembly();
             }
         }
-        #endregion
     }
 }

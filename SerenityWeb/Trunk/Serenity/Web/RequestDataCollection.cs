@@ -52,6 +52,11 @@ namespace Serenity.Web
         }
         #endregion
         #region Methods - Protected
+        /// <summary>
+        /// Overridden. Extracts the key from the specified element.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         protected override string GetKeyForItem(RequestDataStream item)
         {
             return item.Name;

@@ -63,35 +63,29 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="ServerConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Server.exe.manifest" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="LibINI, Version=1.5.0.0, Culture=neutral, PublicKeyToken=aafe07b9ddf0a2a4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\LibINI.dll</HintPath>
-    </Reference>
     <Reference Include="NDesk.Options, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\NDesk.Options.dll</HintPath>
     </Reference>
-    <Reference Include="SerenityProject.Common, Version=1.2.0.0, Culture=neutral, PublicKeyToken=aafe07b9ddf0a2a4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Common\SerenityProject.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="SPCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=aafe07b9ddf0a2a4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\SPCore.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Serenity\Serenity.csproj">
       <Project>{2013CDED-1043-4FF6-A080-9B3C9BD7B140}</Project>
       <Name>Serenity</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="default.profile.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

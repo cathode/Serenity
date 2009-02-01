@@ -5,7 +5,7 @@ using System.Text;
 using System.Reflection;
 using System.IO;
 
-namespace Serenity.IO
+namespace Serenity
 {
     /// <summary>
     /// Provides Serenity-specific methods for working with path strings.

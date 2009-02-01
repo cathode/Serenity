@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
+using Serenity.Net;
 
 namespace Serenity.Web
 {
@@ -12,7 +13,6 @@ namespace Serenity.Web
         #region Constructors - Public
         public Request()
         {
-            this.contentEncoding = null;
             this.contentLength = 0;
             this.contentType = MimeType.Default;
             this.cookies = new CookieCollection();
@@ -23,7 +23,7 @@ namespace Serenity.Web
             this.isSecureConnection = false;
             this.keepAlive = false;
             this.localEndPoint = null;
-            this.method = RequestMethod.GET;
+            this.method = RequestMethod.Unknown;
             this.protocolType = null;
             this.protocolVersion = null;
             this.rawMethod = null;
@@ -43,8 +43,6 @@ namespace Serenity.Web
         private int contentLength;
         private MimeType contentType;
         private CookieCollection cookies;
-        [ThreadStatic]
-        private static Request current;
         private bool hasEntityBody;
         private HeaderCollection headers;
         private bool isAuthenticated;
@@ -53,8 +51,9 @@ namespace Serenity.Web
         private bool keepAlive;
         private IPEndPoint localEndPoint;
         private RequestMethod method;
-        private RequestDataCollection requestData;
         private string rawMethod;
+        private Server owner;
+        private RequestDataCollection requestData;
         private string rawRequest;
         private string rawUrl;
         private IPEndPoint remoteEndPoint;
@@ -132,17 +131,6 @@ namespace Serenity.Web
             get
             {
                 return this.cookies;
-            }
-        }
-        public static Request Current
-        {
-            get
-            {
-                return Request.current;
-            }
-            internal set
-            {
-                Request.current = value;
             }
         }
         /// <summary>
@@ -289,7 +277,7 @@ namespace Serenity.Web
             {
                 return this.remoteEndPoint;
             }
-            internal set
+            set
             {
                 this.remoteEndPoint = value;
             }
@@ -329,9 +317,20 @@ namespace Serenity.Web
             {
                 return this.userHostName;
             }
-            internal set
+            set
             {
                 this.userHostName = value;
+            }
+        }
+        public Server Owner
+        {
+            get
+            {
+                return this.owner;
+            }
+            set
+            {
+                this.owner = value;
             }
         }
         /// <summary>

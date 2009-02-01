@@ -1,9 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/******************************************************************************
+ * Serenity - The next evolution of web server technology.                    *
+ * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
+ *----------------------------------------------------------------------------*
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Public License (Ms-PL), a copy of which should have been included with     *
+ * this distribution as License.txt.                                          *
+ *----------------------------------------------------------------------------*
+ * Authors:                                                                   *
+ * - Will 'AnarkiNet' Shelley (AnarkiNet@gmail.com): Original Author          *
+ *****************************************************************************/
+using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Data;
 using System.Data.SQLite;
 using Serenity.Data;
 
@@ -36,7 +43,6 @@ namespace Serenity.Web
         private DateTime modified;
         private static readonly SessionCollection pool = new SessionCollection();
         private readonly Guid sessionID;
-
         private static readonly SQLiteCommand clearAllSessions = new SQLiteCommand("DELETE FROM [Sessions]; DELETE FROM [SessionData]");
         #endregion
         #region Fields - Public
@@ -75,7 +81,7 @@ namespace Serenity.Web
         /// <summary>
         /// Gets a stored <see cref="Session"/>.
         /// </summary>
-        /// <param name="sessionID"></param>
+        /// <param name="sessionId"></param>
         /// <returns></returns>
         public static Session GetSession(Guid sessionId)
         {
@@ -97,7 +103,6 @@ namespace Serenity.Web
             {
                 if (reader.Read())
                 {
-                    object o = reader["created"];
                     Session s = new Session(sessionId);
 
                     lock (Session.pool)

@@ -14,35 +14,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Serenity.Web.Forms
+namespace Serenity
 {
-    /// <summary>
-    /// Event data for the <see cref="Control.PreRender"/> event.
-    /// </summary>
-    public sealed class RenderEventArgs : EventArgs
+    public enum EventKind
     {
-        #region Constructors - Public
         /// <summary>
-        /// Initializes a new instance of the <see cref="RenderEventArgs"/>
-        /// class.
+        /// Indicates that the message is only useful for debugging purposes,
+        /// the message is only useful to developers.
         /// </summary>
-        /// <param name="context"></param>
-        public RenderEventArgs(RenderingContext context)
-        {
-            this.context = context;
-        }
-        #endregion
-        #region Fields - Private
-        private readonly RenderingContext context;
-        #endregion
-        #region Properties - Public
-        public RenderingContext Context
-        {
-            get
-            {
-                return this.context;
-            }
-        }
-        #endregion
+        Debug = 0,
+        /// <summary>
+        /// Indicates that the message contains informational content about
+        /// something that has taken place.
+        /// </summary>
+        Info = 1,
+        /// <summary>
+        /// Indicates that the message might be related to an issue with the
+        /// current behaviour of the server.
+        /// </summary>
+        Notice = 2,
+        /// <summary>
+        /// Indicates that the message is informing the reader about unstable
+        /// or unsafe behaviour or configuration of the server.
+        /// </summary>
+        Warning = 3,
+        /// <summary>
+        /// Indicates that the message describes a critical problem that has taken place.
+        /// </summary>
+        Error = 4,
     }
 }

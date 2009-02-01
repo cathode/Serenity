@@ -1,22 +1,17 @@
-﻿/******************************************************************************
- * Serenity - The next evolution of web server technology.                    *
- * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
- *----------------------------------------------------------------------------*
- * This software is released under the terms and conditions of the Microsoft  *
- * Public License (Ms-PL), a copy of which should have been included with     *
- * this distribution as License.txt.                                          *
- *****************************************************************************/
+﻿/* Serenity - The next evolution of web server technology.
+ * Copyright © 2006-2009 Serenity Project - http://SerenityProject.net/
+ * 
+ * This software is released under the terms and conditions of the Microsoft Public License (MS-PL),
+ * a copy of which should have been included with this distribution as License.txt.
+ */
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading;
-
+using System.Net;
 using Serenity;
-using Serenity.Logging;
-using Serenity.Net;
-using Serenity.IO;
-using NDesk.Options;
 using Serenity.Data;
+using Serenity.Net;
+using System.Collections.Generic;
+using NDesk.Options;
+using Serenity.Web.Resources;
 
 namespace Server
 {
@@ -28,59 +23,46 @@ namespace Server
             Console.WriteLine("{0}, v{1}\r\n{2} ({3})\r\n",
                 SerenityInfo.Name, SerenityInfo.Version, SerenityInfo.Copyright, "http://serenityproject.net/");
 
-            var ops = new OptionSet()
-            {
-                { "a|appdata",
-                    d => SerenityPath.WorkingDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                        "Serenity Project\\Serenity") }
-            };
+            string profilePath = "default.profile.xml";
+
+            OptionSet ops = new OptionSet() { { "p|profile=", "Path to the XML profile definition", v => profilePath = v }, };
             ops.Parse(args);
 
-            Database.Create(DataScope.Global);
-
-            //Perform loading of the server configuration file.
-            ServerConfig config = new ServerConfig();
-            if (!config.Read(Path.Combine(Serenity.IO.SerenityPath.ConfigurationDirectory, "Serenity.ini")))
+            ServerProfile profile = new ServerProfile();
+            if (profilePath != null)
             {
-                Console.WriteLine("Failure when reading server configuration.");
-                return;
+                Console.WriteLine("Loading server profile from {0}.", profilePath);
+                profile.LoadXmlProfile(profilePath);
             }
 
-            foreach (KeyValuePair<string, string> pair in config.Modules)
+            profile.LocalEndPoint = new IPEndPoint(IPAddress.Any, 80);
+
+            Serenity.Net.Server server = new Serenity.Net.Server()
             {
-                string name = pair.Key;
-                string path = (pair.Value.StartsWith("@")) ? Path.GetFullPath("./Modules/" + pair.Value.TrimStart('@')) : pair.Value;
-                SerenityServer.AddModule(Module.LoadModuleFile(name, path));
-            }
+                Profile = profile
+            };
+            server.Log.EventRecorded += new EventHandler<EventRecordedEventArgs>(Log_EventRecorded);
+            server.Profile.Modules = new string[] { "Serenity.dll" };
 
-            Log.RecordEvent(string.Format("Loaded: {0} domains, {1} modules, {2} themes.",
-                SerenityServer.Domains.Count,
-                SerenityServer.Modules.Count,
-                0));
+            server.Initialize();
+            server.Start();
 
-            ProtocolDriver2 driver = new HttpDriver2();
-            driver.ListeningPort = 80;
+            Console.WriteLine("Server running, press ESC to shut down.");
 
-            driver.Start();
-
-            //WS: Temporary loop to keep the main thread from exiting when in async mode.
-            while (driver.IsRunning)
+            while (true)
             {
-                Thread.Sleep(1000);
+                if (Console.ReadKey().Key == ConsoleKey.Escape)
+                {
+                    Console.WriteLine("Shutting down server now...");
+                    server.Stop();
+                    break;
+                }
             }
-
-
-            Log.RecordEvent("Server shutting down");
-            Console.WriteLine("Press any key...");
-            Console.Read();
         }
-        private static IEnumerable<T> RecurseEnum<T>()
+
+        static void Log_EventRecorded(object sender, EventRecordedEventArgs e)
         {
-            Array values = Enum.GetValues(typeof(T));
-            foreach (T item in values)
-            {
-                yield return item;
-            }
+            Console.WriteLine(e.Details.ToString());
         }
     }
 }

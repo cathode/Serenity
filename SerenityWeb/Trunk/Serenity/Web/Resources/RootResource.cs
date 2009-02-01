@@ -1,6 +1,6 @@
-/******************************************************************************
+﻿/******************************************************************************
  * Serenity - The next evolution of web server technology.                    *
- * Copyright � 2006-2008 Serenity Project - http://SerenityProject.net/       *
+ * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
  *----------------------------------------------------------------------------*
  * This software is released under the terms and conditions of the Microsoft  *
  * Public License (Ms-PL), a copy of which should have been included with     *
@@ -11,27 +11,29 @@
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-
-using Serenity.Data;
+using Serenity.Net;
 
 namespace Serenity.Web.Resources
 {
-    /// <summary>
-    /// Represents an error page/response that is returned to the client.
-    /// </summary>
-    public sealed class ErrorResource : DynamicResource
+    public sealed class RootResource : DirectoryResource
     {
-        //TODO: Implement ErrorResource class.
-
-        //public override void OnRequest(Request request, Response response)
-        //{
-        //    var conn = Database.Connect(DataScope.Domain);
-
-        //    var cmd = conn.CreateCommand();
-        //    cmd.CommandText = "SELECT * FROM `error_documents` WHERE 'code' == '" + response.Status.Code + "'";
-
-
-        //}
+        #region Constructors
+        internal RootResource(Server owner)
+        {
+            if (owner == null)
+            {
+                throw new ArgumentNullException("owner");
+            }
+            this.Owner = owner;
+        }
+        #endregion
+        #region Methods
+        public override Resource GetChild(Uri uri)
+        {
+            return this.GetChild(uri.Host) ?? base.GetChild(uri);
+        }
+        #endregion
     }
 }

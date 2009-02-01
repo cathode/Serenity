@@ -17,8 +17,8 @@ namespace Serenity.Web.Forms
 {
     public abstract class DocumentResource : DynamicResource
     {
-        #region Constructors - Public
-        public DocumentResource()
+        #region Constructors
+        protected DocumentResource()
         {
             this.ContentType = MimeType.TextHtml;
         }

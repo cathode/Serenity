@@ -13,13 +13,11 @@ http://www.microsoft.com/resources/sharedsource/licensingbasics/communitylicense
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Resources;
 
 using Serenity;
 
 [assembly: AssemblyTitle("Serenity")]
 [assembly: AssemblyDescription("Core Class Library")]
 [assembly: ComVisible(false)]
-
-[assembly: ModuleDefaultPage("default")]
-[assembly: ModuleTitle("Serenity")]
-[assembly: ModuleResourceNamespace("Serenity.Resources.")]
+[assembly: NeutralResourcesLanguage("en-US")]
