@@ -113,11 +113,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\ExceptionMessages.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ExceptionMessages.resx</DependentUpon>
-    </Compile>
     <Compile Include="SerenityInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Web\Cookie.cs" />
@@ -157,7 +152,6 @@
     <None Include="Web\Forms\TableRow.cs" />
     <None Include="Web\Forms\TextControl.cs" />
     <None Include="Web\Forms\WebFormsEventAttribute.cs" />
-    <Compile Include="Web\HeaderValueValidator.cs" />
     <Compile Include="Web\MimeType.cs" />
     <Compile Include="Web\Request.cs" />
     <None Include="Web\RequestContent.cs" />
@@ -166,7 +160,6 @@
     <Compile Include="Web\Resources\DomainResource.cs" />
     <Compile Include="Web\Resources\DynamicResource.cs" />
     <Compile Include="Web\Resources\ErrorResource.cs" />
-    <Compile Include="Web\Resources\ErrorResourceIndex.cs" />
     <Compile Include="Web\Resources\Resource.cs" />
     <Compile Include="Web\Resources\ResourceGrouping.cs" />
     <Compile Include="Web\Resources\ResourceResource.cs" />
@@ -175,7 +168,6 @@
     <Compile Include="Web\Resources\StaticResource.cs" />
     <Compile Include="Web\Response.cs" />
     <Compile Include="Web\Session.cs" />
-    <Compile Include="Web\StandardHeaders.cs" />
     <Compile Include="Web\StatusCode.cs" />
     <Compile Include="Web\Header.cs" />
     <Compile Include="Web\HeaderCollection.cs" />
@@ -197,11 +189,6 @@
     <EmbeddedResource Include="Properties\AppResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ExceptionMessages.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\icons\arrow_down.png" />

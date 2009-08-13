@@ -28,7 +28,7 @@ namespace Serenity.Web
             if (name == null)
                 throw new ArgumentNullException("name");
             else if (name.Length == 0)
-                throw new ArgumentException(string.Format(Serenity.Resources.ExceptionMessages.ArgumentCannotBeEmpty, "name"), "name");
+                throw new ArgumentException(string.Format("Argument '{0}' cannot be empty", "name"), "name");
 
             this.name = name;
             this.validator = validator;
@@ -43,7 +43,7 @@ namespace Serenity.Web
             if (name == null)
                 throw new ArgumentNullException("name");
             else if (name.Length == 0)
-                throw new ArgumentException(string.Format(Serenity.Resources.ExceptionMessages.ArgumentCannotBeEmpty, "name"), "name");
+                throw new ArgumentException(string.Format("Argument '{0}' cannot be empty", "name"), "name");
             
             this.name = name;
             this.value = value;
