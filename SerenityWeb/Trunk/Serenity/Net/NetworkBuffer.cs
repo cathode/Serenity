@@ -1,9 +1,14 @@
-﻿/* Serenity - The next evolution of web server technology.
- * Copyright © 2006-2009 Serenity Project - http://SerenityProject.net/
- * 
- * This software is released under the terms and conditions of the Microsoft Public License (MS-PL),
- * a copy of which should have been included with this distribution as License.txt.
- */
+﻿/******************************************************************************
+ * Serenity - The next evolution of web server technology.                    *
+ * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
+ *----------------------------------------------------------------------------*
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Public License (Ms-PL), a copy of which should have been included with     *
+ * this distribution as License.txt.                                          *
+ *----------------------------------------------------------------------------*
+ * Authors:                                                                   *
+ * - Will 'AnarkiNet' Shelley (AnarkiNet@gmail.com): Original Author          *
+ *****************************************************************************/
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +34,10 @@ namespace Serenity.Net
         #region Fields
         private readonly Queue<byte> dataBuffer;
         private byte[] receiveBuffer;
-        private const int DefaultBufferSize = 1024;
+        /// <summary>
+        /// Holds the default receive buffer size if none is specified.
+        /// </summary>
+        public const int DefaultBufferSize = 1024;
         #endregion
         #region Methods
         /// <summary>
@@ -39,12 +47,8 @@ namespace Serenity.Net
         public void SwapBuffers(int received)
         {
             if (received > 0)
-            {
                 for (int i = 0; i < received; i++)
-                {
                     dataBuffer.Enqueue(receiveBuffer[i]);
-                }
-            }
         }
         /// <summary>
         /// Resizes the <see cref="Receive"/> to the specified size, clearing all data from it.
@@ -52,6 +56,7 @@ namespace Serenity.Net
         /// <param name="size">The new size.</param>
         public void ResizeReceiveBuffer(int size)
         {
+            //TODO: Determine if zero-size receive buffer should be allowed/makes sense.
             this.receiveBuffer = new byte[Math.Max(1, size)];
         }
         #endregion

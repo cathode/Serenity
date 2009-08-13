@@ -1,9 +1,14 @@
-﻿/* Serenity - The next evolution of web server technology.
- * Copyright © 2006-2009 Serenity Project - http://SerenityProject.net/
- * 
- * This software is released under the terms and conditions of the Microsoft Public License (MS-PL),
- * a copy of which should have been included with this distribution as License.txt.
- */
+﻿/******************************************************************************
+ * Serenity - The next evolution of web server technology.                    *
+ * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
+ *----------------------------------------------------------------------------*
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Public License (Ms-PL), a copy of which should have been included with     *
+ * this distribution as License.txt.                                          *
+ *----------------------------------------------------------------------------*
+ * Authors:                                                                   *
+ * - Will 'AnarkiNet' Shelley (AnarkiNet@gmail.com): Original Author          *
+ *****************************************************************************/
 using System;
 using System.Net.Sockets;
 using System.Text;
@@ -37,14 +42,18 @@ namespace Serenity.Net
         #region Fields
         private readonly NetworkBuffer buffer;
         private readonly Socket connection;
+        private StringBuilder currentToken;
         private bool isDisposed;
         private Server owner;
-        private Timer receiveTimer;
-        private RequestStep stage;
+        
+    
+        private string previousToken;
         private StringBuilder rawRequest;
-        private StringBuilder currentToken;
+        private Timer receiveTimer;
+        
         private Request request;
         private Response response;
+        private RequestStep stage;
         private readonly object syncLock = new object();
         #endregion
         #region Methods
@@ -113,17 +122,18 @@ namespace Serenity.Net
                 return this.connection;
             }
         }
-        public Timer ReceiveTimer
+        public StringBuilder CurrentToken
         {
             get
             {
-                return this.receiveTimer;
+                return this.currentToken;
             }
             set
             {
-                this.receiveTimer = value;
+                this.currentToken = value ?? new StringBuilder();
             }
         }
+        
         public bool IsDisposed
         {
             get
@@ -140,6 +150,39 @@ namespace Serenity.Net
             set
             {
                 this.owner = value;
+            }
+        }
+        public string PreviousToken
+        {
+            get
+            {
+                return this.previousToken ?? string.Empty;
+            }
+            set
+            {
+                this.previousToken = value;
+            }
+        }
+        public StringBuilder RawRequest
+        {
+            get
+            {
+                return this.rawRequest;
+            }
+            set
+            {
+                this.rawRequest = value ?? new StringBuilder();
+            }
+        }
+        public Timer ReceiveTimer
+        {
+            get
+            {
+                return this.receiveTimer;
+            }
+            set
+            {
+                this.receiveTimer = value;
             }
         }
         public Request Request
@@ -165,28 +208,6 @@ namespace Serenity.Net
             set
             {
                 this.stage = value;
-            }
-        }
-        public StringBuilder RawRequest
-        {
-            get
-            {
-                return this.rawRequest;
-            }
-            set
-            {
-                this.rawRequest = value ?? new StringBuilder();
-            }
-        }
-        public StringBuilder CurrentToken
-        {
-            get
-            {
-                return this.currentToken;
-            }
-            set
-            {
-                this.currentToken = value ?? new StringBuilder();
             }
         }
         public object SyncLock

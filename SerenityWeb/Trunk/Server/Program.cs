@@ -1,17 +1,16 @@
-﻿/* Serenity - The next evolution of web server technology.
- * Copyright © 2006-2009 Serenity Project - http://SerenityProject.net/
- * 
- * This software is released under the terms and conditions of the Microsoft Public License (MS-PL),
- * a copy of which should have been included with this distribution as License.txt.
- */
+﻿/******************************************************************************
+ * Serenity - The next evolution of web server technology.                    *
+ * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
+ *----------------------------------------------------------------------------*
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Public License (Ms-PL), a copy of which should have been included with     *
+ * this distribution as License.txt.                                          *
+ *****************************************************************************/
 using System;
 using System.Net;
-using Serenity;
-using Serenity.Data;
-using Serenity.Net;
-using System.Collections.Generic;
 using NDesk.Options;
-using Serenity.Web.Resources;
+using Serenity;
+using Serenity.Net;
 
 namespace Server
 {

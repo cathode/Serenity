@@ -1,9 +1,14 @@
-﻿/* Serenity - The next evolution of web server technology.
- * Copyright © 2006-2009 Serenity Project - http://SerenityProject.net/
- * 
- * This software is released under the terms and conditions of the Microsoft Public License (MS-PL),
- * a copy of which should have been included with this distribution as License.txt.
- */
+﻿/******************************************************************************
+ * Serenity - The next evolution of web server technology.                    *
+ * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
+ *----------------------------------------------------------------------------*
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Public License (Ms-PL), a copy of which should have been included with     *
+ * this distribution as License.txt.                                          *
+ *----------------------------------------------------------------------------*
+ * Authors:                                                                   *
+ * - Will 'AnarkiNet' Shelley (AnarkiNet@gmail.com): Original Author          *
+ *****************************************************************************/
 using System;
 using System.Net.Sockets;
 using System.Threading;
@@ -64,9 +69,7 @@ namespace Serenity.Net
         protected virtual void AcceptCallback(IAsyncResult result)
         {
             if (result == null)
-            {
                 throw new ArgumentNullException("result");
-            }
 
             try
             {
@@ -171,9 +174,8 @@ namespace Serenity.Net
         protected virtual void OnStarting(EventArgs e)
         {
             if (this.Starting != null)
-            {
                 this.Starting(this, e);
-            }
+
             if (this.Profile.UseIPv6)
             {
                 this.Listener = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
@@ -194,9 +196,8 @@ namespace Serenity.Net
         protected virtual void OnStopping(EventArgs e)
         {
             if (this.Stopping != null)
-            {
                 this.Stopping(this, e);
-            }
+
             this.Listener.Close();
         }
         protected virtual void ProcessRequest(Request request, Response response)
@@ -210,9 +211,8 @@ namespace Serenity.Net
         protected virtual void ReceiveCallback(IAsyncResult result)
         {
             if (result == null)
-            {
                 throw new ArgumentNullException("result");
-            }
+            
             var state = (ServerAsyncState)result.AsyncState;
 
             if (state.Connection.Connected)
@@ -294,8 +294,8 @@ namespace Serenity.Net
                                         if (c == ':')
                                         {
                                             // Header name token terminated with ':'
-                                            string headerName = state.CurrentToken.ToString();
-                                            //TODO: Use the header name to build a Header object.
+                                            string headerName = state.CurrentToken.ToString().Trim('\r', '\n', ' ', ':');
+                                            state.PreviousToken = headerName;
                                             state.CurrentToken = new StringBuilder();
                                             state.Stage = RequestStep.HeaderValue;
                                             appendToken = false;
@@ -314,9 +314,12 @@ namespace Serenity.Net
                                             string last2 = last4.Substring(2);
                                             if (last2 == "\r\n")
                                             {
-                                                string headerValue = state.CurrentToken.ToString().TrimEnd('\r', '\n');
+                                                string headerValue = state.CurrentToken.ToString().Trim('\r', '\n', ' ', '\t');
+                                                Header h = new Header(state.PreviousToken, headerValue);
+                                                state.Request.Headers.Add(h);
+                                                state.PreviousToken = headerValue;
                                                 state.CurrentToken = new StringBuilder();
-                                                //TODO: Use the header value and attach it to a Header object.
+
                                                 if (last4 == "\r\n\r\n")
                                                 {
                                                     state.Stage = RequestStep.Content;
@@ -396,10 +399,22 @@ namespace Serenity.Net
 
             //TODO: Implement the response text creation.
 
-            content.Append("\r\n");
-            byte[] data = Encoding.ASCII.GetBytes(content.ToString());
+            foreach (Header h in response.Headers)
+            {
+                content.Append(h.ToString());
+                content.Append("\r\n");
+            }
 
-            response.Connection.Send(data);
+            content.Append("\r\n");
+            byte[] headerData = Encoding.ASCII.GetBytes(content.ToString());
+            byte[] data = new byte[headerData.Length + response.OutputBuffer.Count];
+
+            headerData.CopyTo(data, 0);
+            response.OutputBuffer.CopyTo(data, headerData.Length);
+
+            if (response.Connection.Connected)
+                response.Connection.Send(data);
+
             response.Connection.Close(180);
         }
         /// <summary>
@@ -420,11 +435,17 @@ namespace Serenity.Net
 
             this.isRunning = false;
         }
+        /// <summary>
+        /// Determines if a syntactically-correct request is well-formed.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// <returns></returns>
         protected virtual bool ValidateRequest(Request request, Response response)
         {
             if (request.Headers.Contains("Host"))
             {
-                request.Url = new Uri(request.Headers["Host"].PrimaryValue + request.RawUrl);
+                request.Url = new Uri("http://" + request.Headers["Host"].Value + request.RawUrl);
                 return true;
             }
 
@@ -480,14 +501,11 @@ namespace Serenity.Net
             }
         }
         /// <summary>
-        /// Gets or sets the <see cref="ServerProfile"/> which controls the
-        /// operating behavior of the current <see cref="Server"/>.
+        /// Gets or sets the <see cref="ServerProfile"/> which controls the operating behavior of the current <see cref="Server"/>.
         /// </summary>
         /// <remarks>
-        /// This property can only be set when the <see cref="Server"/> is not
-        /// running. That is, when <see cref="IsRunning"/> returns false. If
-        /// an attempt is made to alter the server's profile while it is
-        /// running, a <see cref="InvalidOperationException"/> will be thrown.
+        /// <para>This property can only be set when the <see cref="Server"/> is not running.</para>
+        /// If an attempt is made to alter the server's profile while it is running, a <see cref="InvalidOperationException"/> will be thrown.
         /// </remarks>
         /// <exception cref="InvalidOperationException">Thrown when an attempt
         /// is made to alter the profile of the current <see cref="Server"/>
@@ -501,12 +519,14 @@ namespace Serenity.Net
             set
             {
                 if (this.IsRunning)
-                {
                     throw new InvalidOperationException("Cannot alter the server profile while the server is running.");
-                }
+
                 this.profile = value;
             }
         }
+        /// <summary>
+        /// Gets the <see cref="EventLog"/> which handles events generated by the current <see cref="Server"/>.
+        /// </summary>
         public EventLog Log
         {
             get
@@ -514,6 +534,9 @@ namespace Serenity.Net
                 return this.log;
             }
         }
+        /// <summary>
+        /// Gets or sets the root resource for the current <see cref="Server"/>.
+        /// </summary>
         public Resource RootResource
         {
             get

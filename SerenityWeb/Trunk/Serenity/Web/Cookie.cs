@@ -43,52 +43,32 @@ namespace Serenity.Web
         /// <see cref="Cookie"/>.</returns>
         public override string ToString()
         {
-            string result = this.Name + "=\"" + this.Value + "\"";
+            StringBuilder result = new StringBuilder(this.Name + "=\"" + this.Value + "\"");
+
             if (!string.IsNullOrEmpty(this.Comment))
-            {
-                result += ";Comment=\"" + this.Comment + "\"";
-            }
+                result.AppendFormat(";Comment=\"{0}", this.Comment);
             if (this.CommentUri != null)
-            {
-                result += ";CommentURL=\"" + this.CommentUri.ToString() + "\"";
-            }
+                result.AppendFormat(";CommentURL=\"{0}\"", this.CommentUri);
             if (this.IsTemporary)
-            {
-                result += ";Discard";
-            }
+                result.Append(";Discard");
             if (this.Domain != null)
-            {
-                result += ";Domain=\"" + this.Domain.ToString() + "\"";
-            }
+                result.AppendFormat(";Domain=\"{0}\"", this.Domain);
             if (this.IsExpired)
-            {
-                result += ";Max-Age=0";
-            }
+                result.Append(";Max-Age=0");
             else
-            {
-                result += ";Max-Age=" + (this.ExpiresOn - DateTime.Now).Seconds;
-            }
+                result.AppendFormat(";Max-Age={0}", (this.ExpiresOn - DateTime.Now).Seconds);
             if (this.Path != null)
-            {
-                result += ";Path=\"" + this.Path.ToString() + "\"";
-            }
+                result.AppendFormat(";Path=\"{0}\"", this.Path);
             if (this.Port != null)
-            {
                 if (this.Port.Length == 0)
-                {
-                    result += ";Port";
-                }
+                    result.Append(";Port");
                 else
-                {
-                    result += ";Port=\"" + this.Port + "\"";
-                }
-            }
+                    result.AppendFormat(";Port=\"{0}\"", this.Port);
             if (this.IsSecure)
-            {
-                result += ";Secure";
-            }
-            result += ";Version=1";
-            return result;
+                result.Append(";Secure");
+
+            result.Append(";Version=1");
+            return result.ToString();
         }
         #endregion
         #region Properties - Public

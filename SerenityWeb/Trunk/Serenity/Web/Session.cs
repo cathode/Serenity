@@ -43,9 +43,11 @@ namespace Serenity.Web
         private DateTime modified;
         private static readonly SessionCollection pool = new SessionCollection();
         private readonly Guid sessionID;
-        private static readonly SQLiteCommand clearAllSessions = new SQLiteCommand("DELETE FROM [Sessions]; DELETE FROM [SessionData]");
         #endregion
         #region Fields - Public
+        /// <summary>
+        /// Holds the default session lifetime (in milliseconds) for new sessions when no lifetime is specified.
+        /// </summary>
         public const int DefaultLifetime = 300000;
         #endregion
         #region Methods - Public
@@ -60,6 +62,7 @@ namespace Serenity.Web
             cmd.ExecuteNonQuery();
             cmd = new SQLiteCommand("DELETE FROM session_data", conn);
             cmd.ExecuteNonQuery();
+            cmd.Dispose();
         }
         /// <summary>
         /// Disposes the current <see cref="Session"/>, but does not remove the session information from the database.
@@ -169,6 +172,10 @@ namespace Serenity.Web
 
             return cmd.ExecuteScalar() as string;
         }
+        /// <summary>
+        /// Removes all session data for the session with the specified id from the database.
+        /// </summary>
+        /// <param name="sessionId"></param>
         public static void Remove(Guid sessionId)
         {
             var s = Session.GetSession(sessionId);

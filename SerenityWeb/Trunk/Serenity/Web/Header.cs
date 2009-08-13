@@ -8,6 +8,7 @@
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Serenity.Web
 {
@@ -18,6 +19,21 @@ namespace Serenity.Web
     {
         #region Constructors - Public
         /// <summary>
+        /// Initializes a new instance of the <see cref="Header"/> class.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="validator"></param>
+        public Header(string name, Regex validator)
+        {
+            if (name == null)
+                throw new ArgumentNullException("name");
+            else if (name.Length == 0)
+                throw new ArgumentException(string.Format(Serenity.Resources.ExceptionMessages.ArgumentCannotBeEmpty, "name"), "name");
+
+            this.name = name;
+            this.validator = validator;
+        }
+        /// <summary>
         /// Initializes a new instance of the Header class.
         /// </summary>
         /// <param name="name"></param>
@@ -25,94 +41,30 @@ namespace Serenity.Web
         public Header(string name, string value)
         {
             if (name == null)
-            {
                 throw new ArgumentNullException("name");
-            }
             else if (name.Length == 0)
-            {
-                throw new ArgumentException("Argument 'name' cannot be empty.", "name");
-            }
+                throw new ArgumentException(string.Format(Serenity.Resources.ExceptionMessages.ArgumentCannotBeEmpty, "name"), "name");
+            
             this.name = name;
-            this.primaryValue = value;
+            this.value = value;
         }
         #endregion
         #region Fields - Private
+        private Regex validator;
         private readonly string name;
-        private bool complex;
-        private List<string> secondaryValues = new List<string>();
-        private string primaryValue;
-        #endregion
-        #region Indexers - Public
-        /// <summary>
-        /// Gets the header value at the specified index.
-        /// </summary>
-        /// <param name="index">The zero-based index</param>
-        /// <returns>The header value at the specified index.</returns>
-        /// <remarks>
-        /// Any values less than 0 return the primary value for the header.
-        /// </remarks>
-        public string this[int index]
-        {
-            get
-            {
-                if (index > this.secondaryValues.Count || index < 0)
-                {
-                    throw new IndexOutOfRangeException("Index must be between 0 and "
-                        + this.secondaryValues.Count.ToString() + ".");
-                }
-                return this.secondaryValues[index];
-            }
-        }
+        private string value;
         #endregion
         #region Methods - Public
         /// <summary>
-        /// Adds a secondary value to the current Header.
+        /// Overridden. Converts the current <see cref="Header"/> to it's string representation.
         /// </summary>
-        /// <param name="value"></param>
-        public void Add(string value)
+        /// <returns>A string representation of the current <see cref="Header"/>.</returns>
+        public override string ToString()
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException("value");
-            }
-            this.secondaryValues.Add(value);
-        }
-        /// <summary>
-        /// Adds a range of secondary values to the current Header.
-        /// </summary>
-        /// <param name="values">The string array containing the secondary values to add.</param>
-        public void AddRange(string[] values)
-        {
-            if (values == null)
-            {
-                throw new ArgumentNullException("values");
-            }
-            this.complex = true;
-            this.secondaryValues.AddRange(values);
+            return this.Name + ": " + this.Value;
         }
         #endregion
         #region Properties - Public
-        /// <summary>
-        /// Gets a boolean value that indicates whether the current Header
-        /// has multiple values (secondary values).
-        /// </summary>
-        public bool Complex
-        {
-            get
-            {
-                return this.complex;
-            }
-        }
-        /// <summary>
-        /// Gets a string array containing all the values of the current Header.
-        /// </summary>
-        public string[] SecondaryValues
-        {
-            get
-            {
-                return this.secondaryValues.ToArray();
-            }
-        }
         /// <summary>
         /// Gets the name of the current Header.
         /// </summary>
@@ -124,25 +76,17 @@ namespace Serenity.Web
             }
         }
         /// <summary>
-        /// Gets or sets the primary value of the current Header.
+        /// Gets or sets the value of the current Header.
         /// </summary>
-        public string PrimaryValue
+        public string Value
         {
             get
             {
-                return this.primaryValue;
+                return this.value ?? string.Empty;
             }
             set
             {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-                else if (value.Length == 0)
-                {
-                    throw new ArgumentException("Argument 'value' cannot be empty.", "value");
-                }
-                this.primaryValue = value;
+                this.value = value;
             }
         }
         #endregion

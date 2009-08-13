@@ -215,44 +215,34 @@ namespace Serenity.Web.Resources
         {
         }
         /// <summary>
-        /// Removes the specified <see cref="Resource"/> from the current
-        /// <see cref="Resource"/>.
+        /// Removes the specified <see cref="Resource"/> from the current <see cref="Resource"/>.
         /// </summary>
-        /// <param name="resource"></param>
-        public void Remove(Resource resource)
+        /// <param name="resource">A <see cref="Resource"/> instance to remove from the current <see cref="Resource"/>.</param>
+        /// <returns>true if <paramref name="resource"/> was removed, otherwise false.</returns>
+        public bool Remove(Resource resource)
         {
             if (resource == null)
-            {
                 throw new ArgumentNullException("resource");
-            }
-            //Checking the parent should be faster than searching children
-            else if (resource.Parent != this)
+            if (resource.Parent != this || !this.CanHaveChildren)
+                return false;
+            if (this.children.Remove(resource))
             {
-                //If the resource is not a child, ignore.
-                return;
+                resource.Parent = null;
+                return true;
             }
-            else if (!this.CanHaveChildren)
-            {
-                //TODO: Evaluate the appropriateness of throwing an exception
-                //      when an attempt is made to remove a resource from a
-                //      resource that does not support children.
-                throw new InvalidOperationException(AppResources.ResourceDoesNotSupportChildrenException);
-            }
-
-            this.children.Remove(resource);
-            resource.Parent = null;
+            return false;
         }
         /// <summary>
-        /// Removes the specified collection of<see cref="Resource"/>s from the
-        /// current <see cref="Resource"/>.
+        /// Removes the specified collection of <see cref="Resource"/>s from the current <see cref="Resource"/>.
         /// </summary>
         /// <param name="resources"></param>
+        /// <remarks>
+        /// Does not stop if a resource fails to be removed, nor does this method return any indication of success.
+        /// </remarks>
         public void Remove(IEnumerable<Resource> resources)
         {
             foreach (Resource resource in resources)
-            {
                 this.Remove(resource);
-            }
         }
         #endregion
         #region Properties
@@ -435,13 +425,9 @@ namespace Serenity.Web.Resources
             get
             {
                 if (this.HasParent)
-                {
                     return this.Parent.Depth + 1;
-                }
                 else
-                {
                     return 0;
-                }
             }
         }
         /// <summary>
