@@ -95,10 +95,10 @@ namespace Serenity.Web.Resources
         public void Add(IEnumerable<Resource> resources)
         {
             if (!this.CanHaveChildren)
-            {
                 throw new InvalidOperationException(AppResources.ResourceDoesNotSupportChildrenException);
-            }
+            
             List<Resource> filteredResources = new List<Resource>();
+
             foreach (var res in resources)
             {
                 if (res == null)
@@ -145,10 +145,11 @@ namespace Serenity.Web.Resources
         /// <returns></returns>
         public Resource GetChild(string name)
         {
+            if (name == null)
+                throw new ArgumentNullException("name");
             if (!this.CanHaveChildren)
-            {
                 return null;
-            }
+            
             return (from res in this.Children
                     where res.Name.Equals(name, StringComparison.OrdinalIgnoreCase)
                     select res).FirstOrDefault();
@@ -162,9 +163,8 @@ namespace Serenity.Web.Resources
         public virtual Resource GetChild(Uri uri)
         {
             if (uri.Segments.Length <= this.Depth + 1)
-            {
                 return null;
-            }
+            
             return this.GetChild(uri.Segments[this.Depth + 1].TrimEnd('/'));
         }
         /// <summary>
@@ -180,10 +180,10 @@ namespace Serenity.Web.Resources
         public Resource GetRoot()
         {
             Resource res = this;
+
             while (res.HasParent)
-            {
                 res = res.Parent;
-            }
+
             return res;
         }
         /// <summary>
@@ -202,9 +202,7 @@ namespace Serenity.Web.Resources
         public virtual void PostRequest(Request request, Response response)
         {
             if (response.ContentType != this.ContentType)
-            {
                 response.ContentType = this.ContentType;
-            }
         }
         /// <summary>
         /// Invoked before OnRequest.

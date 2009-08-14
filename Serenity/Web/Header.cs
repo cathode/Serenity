@@ -21,9 +21,10 @@ namespace Serenity.Web
         /// <summary>
         /// Initializes a new instance of the <see cref="Header"/> class.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="validator"></param>
-        public Header(string name, Regex validator)
+        /// <param name="name">The name of the header.</param>
+        /// <exception cref="System.ArgumentNullException">Thrown when the name parameter is null.</exception>
+        /// <exception cref="System.ArgumentException">Thrown when the name parameter is invalid as a header name.</exception>
+        public Header(string name)
         {
             if (name == null)
                 throw new ArgumentNullException("name");
@@ -31,28 +32,36 @@ namespace Serenity.Web
                 throw new ArgumentException(string.Format("Argument '{0}' cannot be empty", "name"), "name");
 
             this.name = name;
+        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Header"/> class.
+        /// </summary>
+        /// <param name="name">The name of the header.</param>
+        /// <param name="validator">A <see cref="System.Text.Regex"/> instance that is used to validate header values.</param>
+        /// <exception cref="System.ArgumentNullException">Thrown when the name parameter is null.</exception>
+        /// <exception cref="System.ArgumentException">Thrown when the name parameter is invalid as a header name.</exception>
+        public Header(string name, Regex validator)
+            : this(name)
+        {
             this.validator = validator;
         }
         /// <summary>
-        /// Initializes a new instance of the Header class.
+        /// Initializes a new instance of the <see cref="Header"/> class.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
+        /// <param name="name">The name of the header.</param>
+        /// <param name="value">An initial value for the new header.</param>
+        /// <exception cref="System.ArgumentNullException">Thrown when the name parameter is null.</exception>
+        /// <exception cref="System.ArgumentException">Thrown when the name parameter is invalid as a header name.</exception>
         public Header(string name, string value)
+            : this(name)
         {
-            if (name == null)
-                throw new ArgumentNullException("name");
-            else if (name.Length == 0)
-                throw new ArgumentException(string.Format("Argument '{0}' cannot be empty", "name"), "name");
-            
-            this.name = name;
-            this.value = value;
+            this.Value = value;
         }
         #endregion
         #region Fields - Private
         private Regex validator;
         private readonly string name;
-        private string value;
+        private string value = string.Empty;
         #endregion
         #region Methods - Public
         /// <summary>
@@ -82,11 +91,11 @@ namespace Serenity.Web
         {
             get
             {
-                return this.value ?? string.Empty;
+                return this.value;
             }
             set
             {
-                this.value = value;
+                this.value = value ?? string.Empty;
             }
         }
         #endregion

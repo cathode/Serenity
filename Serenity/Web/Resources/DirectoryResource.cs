@@ -64,17 +64,12 @@ namespace Serenity.Web.Resources
         public override void OnRequest(Request request, Response response)
         {
             if (request == null)
-            {
                 throw new ArgumentNullException("request");
-            }
             else if (response == null)
-            {
                 throw new ArgumentNullException("response");
-            }
             else if (response.IsComplete)
-            {
                 return;
-            }
+            
             Resource child = this.GetChild(request.Url);
 
             Uri uri = this.GetAbsoluteUri(request.Url);
@@ -198,6 +193,9 @@ namespace Serenity.Web.Resources
                 return ResourceGrouping.Directories;
             }
         }
+        /// <summary>
+        /// Overridden. Returns true, indicating <see cref="DirectResource">DirectoryResources</see> support child resources.
+        /// </summary>
         public override bool CanHaveChildren
         {
             get
