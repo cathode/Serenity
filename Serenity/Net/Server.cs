@@ -212,7 +212,7 @@ namespace Serenity.Net
         {
             if (result == null)
                 throw new ArgumentNullException("result");
-            
+
             var state = (ServerAsyncState)result.AsyncState;
 
             if (state.Connection.Connected)
@@ -398,6 +398,10 @@ namespace Serenity.Net
             content.AppendFormat("HTTP/1.1 {0}\r\n", response.Status.ToString());
 
             //TODO: Implement the response text creation.
+
+            if (!response.Headers.Contains("Content-Type"))
+                response.Headers.Add(new Header("Content-Type", response.ContentType.ToString()));
+
 
             foreach (Header h in response.Headers)
             {

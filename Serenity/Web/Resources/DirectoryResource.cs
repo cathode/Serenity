@@ -179,8 +179,10 @@ namespace Serenity.Web.Resources
                 }
                 response.Write(ms.ToArray());
             }
+            response.ContentType = MimeType.TextHtml;
             response.IsComplete = true;
         }
+        
         #endregion
         #region Properties
         /// <summary>
