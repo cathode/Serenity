@@ -202,7 +202,9 @@ namespace Serenity.Net
         }
         protected virtual void ProcessRequest(Request request, Response response)
         {
+            this.RootResource.PreRequest(request, response);
             this.RootResource.OnRequest(request, response);
+            this.RootResource.PostRequest(request, response);
         }
         /// <summary>
         /// Provides a callback method for asynchronous socket receive calls.
@@ -385,11 +387,20 @@ namespace Serenity.Net
         {
             var serverState = (ServerAsyncState)state;
             byte[] data = Encoding.ASCII.GetBytes(@"HTTP/1.1 408 Request Timeout");
-            serverState.Connection.Send(data);
-            //TODO: Implement async sending.
-            //serverState.Client.BeginSend(data, SocketFlags.None, new AsyncCallback(this.SendCallback), state);
+            try
+            {
+                serverState.Connection.Send(data);
 
-            serverState.Connection.Close();
+
+                //TODO: Implement async sending.
+                //serverState.Client.BeginSend(data, SocketFlags.None, new AsyncCallback(this.SendCallback), state);
+
+                serverState.Connection.Close();
+            }
+            catch
+            {
+
+            }
         }
         protected virtual void SendResponse(Request request, Response response)
         {
@@ -401,7 +412,6 @@ namespace Serenity.Net
 
             if (!response.Headers.Contains("Content-Type"))
                 response.Headers.Add(new Header("Content-Type", response.ContentType.ToString()));
-
 
             foreach (Header h in response.Headers)
             {
@@ -419,7 +429,7 @@ namespace Serenity.Net
             if (response.Connection.Connected)
                 response.Connection.Send(data);
 
-            response.Connection.Close(180);
+            response.Connection.Close(600);
         }
         /// <summary>
         /// Starts the current <see cref="Server"/>.
