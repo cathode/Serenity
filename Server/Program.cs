@@ -22,26 +22,9 @@ namespace Server
             Console.WriteLine("{0}, v{1}\r\n{2} ({3})\r\n",
                 SerenityInfo.Name, SerenityInfo.Version, SerenityInfo.Copyright, "http://serenityproject.net/");
 
-            string profilePath = "default.profile.xml";
+            Serenity.Net.Server server = new Serenity.Net.Server();
 
-            OptionSet ops = new OptionSet() { { "p|profile=", "Path to the XML profile definition", v => profilePath = v }, };
-            ops.Parse(args);
-
-            ServerProfile profile = new ServerProfile();
-            if (profilePath != null)
-            {
-                Console.WriteLine("Loading server profile from {0}.", profilePath);
-                profile.LoadXmlProfile(profilePath);
-            }
-
-            profile.LocalEndPoint = new IPEndPoint(IPAddress.Any, 80);
-
-            Serenity.Net.Server server = new Serenity.Net.Server()
-            {
-                Profile = profile
-            };
             server.Log.EventRecorded += new EventHandler<EventRecordedEventArgs>(Log_EventRecorded);
-            server.Profile.Modules = new string[] { "Serenity.dll" };
 
             server.Initialize();
             server.Start();

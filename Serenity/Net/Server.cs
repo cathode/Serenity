@@ -77,7 +77,7 @@ namespace Serenity.Net
 
                 state.Reset();
                 state.ReceiveTimer = new Timer(new TimerCallback(this.ReceiveTimeoutCallback), state,
-                  Serenity.Properties.Settings.Default.NetworkReceiveTimeout, Timeout.Infinite);
+                  Serenity.Configuration.Settings.Default.NetworkReceiveTimeout, Timeout.Infinite);
                 state.Connection.BeginReceive(state.Buffer.Receive, 0,
                           Math.Min(state.Connection.Available, state.Buffer.Receive.Length),
                           SocketFlags.None, new AsyncCallback(this.ReceiveCallback), state);
@@ -177,6 +177,8 @@ namespace Serenity.Net
             if (this.Starting != null)
                 this.Starting(this, e);
 
+            throw new NotImplementedException();
+            /*
             if (this.Profile.UseIPv6)
             {
                 this.Listener = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
@@ -186,9 +188,14 @@ namespace Serenity.Net
             {
                 this.Listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             }
+            
+
+            this.Listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
             this.listener.Bind(this.Profile.LocalEndPoint);
             this.Listener.Listen(this.Profile.ConnectionBacklog);
             this.Listener.BeginAccept(new AsyncCallback(this.AcceptCallback), null);
+            */
         }
         /// <summary>
         /// Raises the <see cref="Stopping"/> event.
@@ -361,10 +368,13 @@ namespace Serenity.Net
                     }
                     if (state.Connection.Connected)
                     {
+                        throw new NotImplementedException();
+                        /*
                         state.ReceiveTimer.Change(this.Profile.ReceiveTimeout, Timeout.Infinite);
                         state.Connection.BeginReceive(state.Buffer.Receive, 0,
                                 Math.Min(state.Connection.Available, state.Buffer.Receive.Length),
                                 SocketFlags.None, new AsyncCallback(this.ReceiveCallback), state);
+                        */
                     }
                 }
                 catch (SocketException ex)
