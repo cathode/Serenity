@@ -52,7 +52,7 @@ namespace Serenity.Web
         private IPEndPoint localEndPoint;
         private RequestMethod method;
         private string rawMethod;
-        private Server owner;
+        private Serenity.Net.Server owner;
         private RequestDataCollection requestData;
         private string rawRequest;
         private string rawUrl;
@@ -322,7 +322,7 @@ namespace Serenity.Web
                 this.userHostName = value;
             }
         }
-        public Server Owner
+        public Serenity.Net.Server Owner
         {
             get
             {

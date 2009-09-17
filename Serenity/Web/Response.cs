@@ -38,7 +38,7 @@ namespace Serenity.Web
         private bool headersSent;
         private readonly CookieCollection cookies;
         private List<byte> outputBuffer;
-        private Server owner;
+        private Serenity.Net.Server owner;
         private int sent;
         private StatusCode status;
         private bool useChunkedTransferEncoding;
@@ -201,7 +201,7 @@ namespace Serenity.Web
                 return this.outputBuffer;
             }
         }
-        public Server Owner
+        public Serenity.Net.Server Owner
         {
             get
             {

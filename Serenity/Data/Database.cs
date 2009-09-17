@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.Linq;
-using System.Data.SQLite;
 using System.Text;
 using System.IO;
 using System.Linq;
@@ -31,6 +30,8 @@ namespace Serenity.Data
         /// <returns></returns>
         public static bool Create(DataScope scope)
         {
+            throw new NotImplementedException();
+            /*
             if (Database.IsCreated(scope))
             {
                 return true;
@@ -64,24 +65,16 @@ namespace Serenity.Data
                 }
                 return false;
             }
+            */
         }
         /// <summary>
         /// Creates and returns a connection to the database of the specified scope.
         /// </summary>
         /// <param name="scope"></param>
         /// <returns></returns>
-        public static SQLiteConnection Connect(DataScope scope)
+        public static DbConnection Connect(DataScope scope)
         {
-            if (!Database.IsCreated(scope))
-            {
-                Database.Create(scope);
-            }
-            var builder = new SQLiteConnectionStringBuilder();
-            builder.DataSource = Database.GetDatafilePath(scope);
-            builder.Pooling = true;
-            builder.DateTimeFormat = SQLiteDateFormats.ISO8601;
-
-            return new SQLiteConnection(builder.ConnectionString);
+            throw new NotImplementedException();
         }
         /// <summary>
         /// Determines if the database of the specified scope has been created.

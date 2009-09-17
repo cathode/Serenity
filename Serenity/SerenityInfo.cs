@@ -24,7 +24,7 @@ namespace Serenity
         /// <summary>
         /// Holds the copyright notice for Serenity.
         /// </summary>
-        public const string Copyright = "Copyright © 2006-2008 Serenity Project";
+        public const string Copyright = "Copyright © 2006-2009 Serenity Project";
         /// <summary>
         /// Holds the assembly name for Serenity.
         /// </summary>

@@ -51,7 +51,6 @@ namespace Serenity.Net
         public event EventHandler Stopping;
         #endregion
         #region Fields
-        private ServerProfile profile;
         private bool isRunning;
         private bool isDisposed;
         private bool isInitialized;
@@ -78,7 +77,7 @@ namespace Serenity.Net
 
                 state.Reset();
                 state.ReceiveTimer = new Timer(new TimerCallback(this.ReceiveTimeoutCallback), state,
-                   this.Profile.ReceiveTimeout, Timeout.Infinite);
+                  Serenity.Properties.Settings.Default.NetworkReceiveTimeout, Timeout.Infinite);
                 state.Connection.BeginReceive(state.Buffer.Receive, 0,
                           Math.Min(state.Connection.Available, state.Buffer.Receive.Length),
                           SocketFlags.None, new AsyncCallback(this.ReceiveCallback), state);
@@ -146,7 +145,8 @@ namespace Serenity.Net
             {
                 this.Initializing(this, e);
             }
-
+            throw new NotImplementedException();
+            /*
             foreach (string modulePath in this.Profile.Modules)
             {
                 foreach (var module in Module.LoadModules(modulePath))
@@ -166,6 +166,7 @@ namespace Serenity.Net
                     this.modules.Add(module);
                 }
             }
+            */
         }
         /// <summary>
         /// Raises the <see cref="Starting"/> event.
@@ -179,7 +180,7 @@ namespace Serenity.Net
             if (this.Profile.UseIPv6)
             {
                 this.Listener = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
-                this.Listener.SetSocketOption(SocketOptionLevel.IPv6, (SocketOptionName)27, 0); //Set IPV6_V6ONLY to false
+                this.Listener.SetSocketOption(SocketOptionLevel.IPv6, (SocketOptionName)27, 0); // Set IPV6_V6ONLY to false
             }
             else
             {
@@ -217,10 +218,8 @@ namespace Serenity.Net
 
             var state = (ServerAsyncState)result.AsyncState;
 
-            if (state.Connection.Connected)
+            if (state.Connection.Connected) // Only try and receive if the client is still connected.
             {
-                // Only try and receive if the client is still connected.
-
                 try
                 {
                     int received = state.Connection.EndReceive(result);
@@ -391,11 +390,10 @@ namespace Serenity.Net
             {
                 serverState.Connection.Send(data);
 
-
                 //TODO: Implement async sending.
                 //serverState.Client.BeginSend(data, SocketFlags.None, new AsyncCallback(this.SendCallback), state);
 
-                serverState.Connection.Close();
+                serverState.Connection.Close(600);
             }
             catch
             {
@@ -457,13 +455,12 @@ namespace Serenity.Net
         /// <returns></returns>
         protected virtual bool ValidateRequest(Request request, Response response)
         {
-            if (request.Headers.Contains("Host"))
-            {
-                request.Url = new Uri("http://" + request.Headers["Host"].Value + request.RawUrl);
-                return true;
-            }
+            if (!request.Headers.Contains("Host") // "Host" is required header in a well-formed request.
+                )
+                return false;
 
-            return false;
+            request.Url = new Uri("http://" + request.Headers["Host"].Value + request.RawUrl);
+            return true;
         }
         #endregion
         #region Properties
@@ -512,30 +509,6 @@ namespace Serenity.Net
             set
             {
                 this.listener = value;
-            }
-        }
-        /// <summary>
-        /// Gets or sets the <see cref="ServerProfile"/> which controls the operating behavior of the current <see cref="Server"/>.
-        /// </summary>
-        /// <remarks>
-        /// <para>This property can only be set when the <see cref="Server"/> is not running.</para>
-        /// If an attempt is made to alter the server's profile while it is running, a <see cref="InvalidOperationException"/> will be thrown.
-        /// </remarks>
-        /// <exception cref="InvalidOperationException">Thrown when an attempt
-        /// is made to alter the profile of the current <see cref="Server"/>
-        /// while it is running.</exception>
-        public ServerProfile Profile
-        {
-            get
-            {
-                return this.profile;
-            }
-            set
-            {
-                if (this.IsRunning)
-                    throw new InvalidOperationException("Cannot alter the server profile while the server is running.");
-
-                this.profile = value;
             }
         }
         /// <summary>
