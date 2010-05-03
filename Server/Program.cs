@@ -1,12 +1,4 @@
-﻿/******************************************************************************
- * Serenity - The next evolution of web server technology.                    *
- * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
- *----------------------------------------------------------------------------*
- * This software is released under the terms and conditions of the Microsoft  *
- * Public License (Ms-PL), a copy of which should have been included with     *
- * this distribution as License.txt.                                          *
- *****************************************************************************/
-using System;
+﻿using System;
 using System.Net;
 using NDesk.Options;
 using Serenity;
@@ -19,8 +11,7 @@ namespace Server
         internal static void Main(string[] args)
         {
             //Print out program name, version, copyright, and contact information.
-            Console.WriteLine("{0}, v{1}\r\n{2} ({3})\r\n",
-                SerenityInfo.Name, SerenityInfo.Version, SerenityInfo.Copyright, "http://serenityproject.net/");
+            //Console.WriteLine("Serenity HTTP Server v{0}\r\n", System.Reflection.Assembly.GetAssembly(typeof(Module)).GetCustomAttributes(typeof(System.Reflection.AssemblyVersionAttribute), true)[0]);
 
             Serenity.Net.Server server = new Serenity.Net.Server();
 

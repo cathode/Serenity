@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Serenity.Web.Resources;
+using Serenity.Web;
 using System.IO;
 
 namespace Serenity.Web.Forms

@@ -1,52 +1,40 @@
-/******************************************************************************
- * Serenity - The next evolution of web server technology.                    *
- * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
- *----------------------------------------------------------------------------*
- * This software is released under the terms and conditions of the Microsoft  *
- * Public License (Ms-PL), a copy of which should have been included with     *
- * this distribution as License.txt.                                          *
- *****************************************************************************/
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
 using Serenity.Properties;
-using Serenity.Web.Resources;
+using Serenity.Web;
 
 namespace Serenity
 {
+    /// <summary>
+    /// Represents a web application loaded into the server.
+    /// </summary>
     public sealed class Module
     {
-        #region Constructors
-        public Module(string name)
-        {
-            if (name == null)
-            {
-                throw new ArgumentNullException("name");
-            }
-            else if (name.Length == 0)
-            {
-                throw new ArgumentException(string.Format(AppResources.ParamEmptyException, "name"), "name");
-            }
-            this.name = name;
-        }
-        #endregion
-        #region Fields - Private
+        #region Fields
         private readonly string name;
         private readonly List<Resource> resources = new List<Resource>();
         #endregion
-        #region Methods - Public
-        public static IEnumerable<Module> LoadModules(string assemblyPath)
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Module"/> class.
+        /// </summary>
+        /// <param name="name">The name of the new <see cref="Module"/>.</param>
+        public Module(string name)
         {
-            Assembly moduleAsm = Assembly.LoadFrom(assemblyPath);
-
-            return from t in moduleAsm.GetTypes()
-                   where t.IsSubclassOf(typeof(ModuleFactory)) && !t.IsAbstract
-                   select ((ModuleFactory)Activator.CreateInstance(t)).CreateModule();
+            if (name == null)
+                throw new ArgumentNullException("name");
+            else if (name.Length == 0)
+                throw new ArgumentException(string.Format(AppResources.ParamEmptyException, "name"), "name");
+            
+            this.name = name;
         }
         #endregion
-        #region Properties - Public
+        #region Properties
+        /// <summary>
+        /// Gets the name of the current <see cref="Module"/>.
+        /// </summary>
         public string Name
         {
             get
@@ -54,12 +42,23 @@ namespace Serenity
                 return this.name;
             }
         }
+
         public List<Resource> Resources
         {
             get
             {
                 return this.resources;
             }
+        }
+        #endregion
+        #region Methods
+        public static IEnumerable<Module> LoadModules(string assemblyPath)
+        {
+            Assembly moduleAsm = Assembly.LoadFrom(assemblyPath);
+
+            return from t in moduleAsm.GetTypes()
+                   where t.IsSubclassOf(typeof(ModuleFactory)) && !t.IsAbstract
+                   select ((ModuleFactory)Activator.CreateInstance(t)).CreateModule();
         }
         #endregion
     }

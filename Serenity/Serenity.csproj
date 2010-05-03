@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{2013CDED-1043-4FF6-A080-9B3C9BD7B140}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -44,6 +44,8 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkSubset>
+    </TargetFrameworkSubset>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -86,8 +88,6 @@
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Configuration\Settings.cs" />
-    <Compile Include="DataBuffer.cs" />
     <Compile Include="Data\Database.cs" />
     <Compile Include="Data\DataScope.cs" />
     <Compile Include="EventDetails.cs" />
@@ -113,18 +113,18 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Configuration\Settings.Designer.cs">
-      <DependentUpon>Settings.settings</DependentUpon>
+    <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="SerenityInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Web\Cookie.cs" />
     <Compile Include="Web\CookieCollection.cs" />
     <None Include="app.config" />
-    <None Include="Configuration\Settings.settings">
-      <Generator>PublicSettingsSingleFileGenerator</Generator>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Web\Forms\Anchor.cs" />
@@ -162,22 +162,22 @@
     <None Include="Web\Forms\TableRow.cs" />
     <None Include="Web\Forms\TextControl.cs" />
     <None Include="Web\Forms\WebFormsEventAttribute.cs" />
+    <Compile Include="Web\DirectoryResource.cs" />
+    <Compile Include="Web\DomainResource.cs" />
+    <Compile Include="Web\DynamicResource.cs" />
+    <Compile Include="Web\ErrorResource.cs" />
     <Compile Include="Web\MimeType.cs" />
     <Compile Include="Web\Request.cs" />
     <None Include="Web\RequestContent.cs" />
     <Compile Include="Web\RequestMethod.cs" />
-    <Compile Include="Web\Resources\DirectoryResource.cs" />
-    <Compile Include="Web\Resources\DomainResource.cs" />
-    <Compile Include="Web\Resources\DynamicResource.cs" />
-    <Compile Include="Web\Resources\ErrorResource.cs" />
-    <Compile Include="Web\Resources\Resource.cs" />
-    <Compile Include="Web\Resources\ResourceGrouping.cs" />
-    <Compile Include="Web\Resources\ResourceResource.cs" />
-    <Compile Include="Web\Resources\RewriteResource.cs" />
-    <Compile Include="Web\Resources\RootResource.cs" />
-    <Compile Include="Web\Resources\StaticResource.cs" />
+    <Compile Include="Web\Resource.cs" />
+    <Compile Include="Web\ResourceGrouping.cs" />
+    <Compile Include="Web\ResourceResource.cs" />
     <Compile Include="Web\Response.cs" />
+    <Compile Include="Web\RewriteResource.cs" />
+    <Compile Include="Web\RootResource.cs" />
     <Compile Include="Web\Session.cs" />
+    <Compile Include="Web\StaticResource.cs" />
     <Compile Include="Web\StatusCode.cs" />
     <Compile Include="Web\Header.cs" />
     <Compile Include="Web\HeaderCollection.cs" />
@@ -199,7 +199,6 @@
     <EmbeddedResource Include="Properties\AppResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\icons\arrow_down.png" />
     <EmbeddedResource Include="Resources\icons\arrow_up.png" />

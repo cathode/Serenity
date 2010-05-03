@@ -15,7 +15,7 @@ using System.Text;
 
 using Serenity.Data;
 
-namespace Serenity.Web.Resources
+namespace Serenity.Web
 {
     /// <summary>
     /// Represents an error page/response that is returned to the client.

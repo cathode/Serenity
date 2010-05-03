@@ -1,22 +1,10 @@
-﻿/******************************************************************************
- * Serenity - The next evolution of web server technology.                    *
- * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
- *----------------------------------------------------------------------------*
- * This software is released under the terms and conditions of the Microsoft  *
- * Public License (Ms-PL), a copy of which should have been included with     *
- * this distribution as License.txt.                                          *
- *----------------------------------------------------------------------------*
- * Authors:                                                                   *
- * - Will 'AnarkiNet' Shelley (AnarkiNet@gmail.com): Original Author          *
- *****************************************************************************/
-using System;
+﻿using System;
+using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 using Serenity.Properties;
 using Serenity.Web;
-using Serenity.Web.Resources;
-using System.Text;
-using System.Collections.Generic;
 
 namespace Serenity.Net
 {
@@ -41,10 +29,12 @@ namespace Serenity.Net
         /// Raised when the current <see cref="Server"/> is being initialized.
         /// </summary>
         public event EventHandler Initializing;
+
         /// <summary>
         /// Raised when the current <see cref="Server"/> is being started.
         /// </summary>
         public event EventHandler Starting;
+
         /// <summary>
         /// Raised when the current <see cref="Server"/> is being stopped.
         /// </summary>
@@ -76,11 +66,8 @@ namespace Serenity.Net
                 this.Listener.BeginAccept(new AsyncCallback(this.AcceptCallback), null);
 
                 state.Reset();
-                state.ReceiveTimer = new Timer(new TimerCallback(this.ReceiveTimeoutCallback), state,
-                  Serenity.Configuration.Settings.Default.NetworkReceiveTimeout, Timeout.Infinite);
-                state.Connection.BeginReceive(state.Buffer.Receive, 0,
-                          Math.Min(state.Connection.Available, state.Buffer.Receive.Length),
-                          SocketFlags.None, new AsyncCallback(this.ReceiveCallback), state);
+                state.ReceiveTimer = new Timer(new TimerCallback(this.ReceiveTimeoutCallback), state, Settings.Default.NetworkReceiveTimeout, Timeout.Infinite);
+                state.Connection.BeginReceive(state.Buffer.Receive, 0, Math.Min(state.Connection.Available, state.Buffer.Receive.Length), SocketFlags.None, new AsyncCallback(this.ReceiveCallback), state);
 
             }
             catch (SocketException ex)
@@ -89,6 +76,7 @@ namespace Serenity.Net
                 return;
             }
         }
+
         /// <summary>
         /// Creates a new <see cref="ServerAsyncState"/>.
         /// </summary>
@@ -102,6 +90,7 @@ namespace Serenity.Net
         {
             return new ServerAsyncState(connection);
         }
+
         /// <summary>
         /// Disposes the current <see cref="Server"/>.
         /// </summary>
@@ -114,14 +103,16 @@ namespace Serenity.Net
                 this.isDisposed = true;
             }
         }
+
         /// <summary>
         /// Disposes the current <see cref="Server"/>.
         /// </summary>
         /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
-            //TODO: Implement dispose for Server
+            // TODO: Implement dispose for Server
         }
+
         /// <summary>
         /// Initializes the current <see cref="Server"/>. Commonly, tasks such
         /// as creating and binding sockets, loading modules, and other similar
@@ -135,6 +126,7 @@ namespace Serenity.Net
                 this.isInitialized = true;
             }
         }
+
         /// <summary>
         /// Raises the <see cref="Initializing"/> event.
         /// </summary>
@@ -145,9 +137,11 @@ namespace Serenity.Net
             {
                 this.Initializing(this, e);
             }
-            throw new NotImplementedException();
-            /*
-            foreach (string modulePath in this.Profile.Modules)
+
+
+            string[] temp = new string[] { "Serenity.dll" };
+
+            foreach (string modulePath in temp)
             {
                 foreach (var module in Module.LoadModules(modulePath))
                 {
@@ -166,8 +160,9 @@ namespace Serenity.Net
                     this.modules.Add(module);
                 }
             }
-            */
+
         }
+
         /// <summary>
         /// Raises the <see cref="Starting"/> event.
         /// </summary>
@@ -177,9 +172,9 @@ namespace Serenity.Net
             if (this.Starting != null)
                 this.Starting(this, e);
 
-            throw new NotImplementedException();
-            /*
-            if (this.Profile.UseIPv6)
+            var settings = Settings.Default;
+
+            if (settings.NetworkUseIPv6)
             {
                 this.Listener = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
                 this.Listener.SetSocketOption(SocketOptionLevel.IPv6, (SocketOptionName)27, 0); // Set IPV6_V6ONLY to false
@@ -188,15 +183,14 @@ namespace Serenity.Net
             {
                 this.Listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             }
-            
 
             this.Listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-            this.listener.Bind(this.Profile.LocalEndPoint);
-            this.Listener.Listen(this.Profile.ConnectionBacklog);
+            this.Listener.Bind(new IPEndPoint(IPAddress.Any, settings.NetworkPort));
+            this.Listener.Listen(settings.NetworkConnectionBacklog);
             this.Listener.BeginAccept(new AsyncCallback(this.AcceptCallback), null);
-            */
         }
+
         /// <summary>
         /// Raises the <see cref="Stopping"/> event.
         /// </summary>
@@ -208,12 +202,14 @@ namespace Serenity.Net
 
             this.Listener.Close();
         }
+
         protected virtual void ProcessRequest(Request request, Response response)
         {
             this.RootResource.PreRequest(request, response);
             this.RootResource.OnRequest(request, response);
             this.RootResource.PostRequest(request, response);
         }
+
         /// <summary>
         /// Provides a callback method for asynchronous socket receive calls.
         /// </summary>
@@ -342,7 +338,7 @@ namespace Serenity.Net
                                         break;
 
                                     case RequestStep.Content:
-                                    //TODO: Implement content parsing.
+                                    // TODO: Implement content parsing.
                                     // For now, skip it and fall down to creating a response.
                                     case RequestStep.CreateResponse:
                                         if (this.ValidateRequest(request, response))
@@ -388,6 +384,7 @@ namespace Serenity.Net
                 state.Dispose();
             }
         }
+
         /// <summary>
         /// Callback used when a client fails to send data
         /// </summary>
@@ -400,16 +397,16 @@ namespace Serenity.Net
             {
                 serverState.Connection.Send(data);
 
-                //TODO: Implement async sending.
-                //serverState.Client.BeginSend(data, SocketFlags.None, new AsyncCallback(this.SendCallback), state);
+                // TODO: Implement async sending.
+                // serverState.Client.BeginSend(data, SocketFlags.None, new AsyncCallback(this.SendCallback), state);
 
                 serverState.Connection.Close(600);
             }
             catch
             {
-
             }
         }
+
         protected virtual void SendResponse(Request request, Response response)
         {
             StringBuilder content = new StringBuilder();
@@ -439,6 +436,7 @@ namespace Serenity.Net
 
             response.Connection.Close(600);
         }
+
         /// <summary>
         /// Starts the current <see cref="Server"/>.
         /// </summary>
@@ -448,6 +446,7 @@ namespace Serenity.Net
 
             this.isRunning = true;
         }
+
         /// <summary>
         /// Stops the current <see cref="Server"/>.
         /// </summary>
@@ -457,6 +456,7 @@ namespace Serenity.Net
 
             this.isRunning = false;
         }
+
         /// <summary>
         /// Determines if a syntactically-correct request is well-formed.
         /// </summary>
@@ -485,6 +485,7 @@ namespace Serenity.Net
                 return this.isDisposed;
             }
         }
+
         /// <summary>
         /// Gets a value that indicates if the current <see cref="Server"/> 
         /// has been initialized.
@@ -496,6 +497,7 @@ namespace Serenity.Net
                 return this.isInitialized;
             }
         }
+
         /// <summary>
         /// Gets a value that indicates if the current <see cref="Server"/> is running.
         /// </summary>
@@ -506,6 +508,7 @@ namespace Serenity.Net
                 return this.isRunning;
             }
         }
+
         /// <summary>
         /// Gets the <see cref="Socket"/> that is used to listen for incoming
         /// connections from clients.
@@ -521,6 +524,7 @@ namespace Serenity.Net
                 this.listener = value;
             }
         }
+
         /// <summary>
         /// Gets the <see cref="EventLog"/> which handles events generated by the current <see cref="Server"/>.
         /// </summary>
@@ -531,6 +535,7 @@ namespace Serenity.Net
                 return this.log;
             }
         }
+
         /// <summary>
         /// Gets or sets the root resource for the current <see cref="Server"/>.
         /// </summary>

@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Serenity.Web.Resources
+namespace Serenity.Web
 {
     public sealed class DomainResource : DirectoryResource
     {

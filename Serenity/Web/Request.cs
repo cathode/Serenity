@@ -1,42 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Net;
 using System.Net.Sockets;
-using Serenity.Net;
+using System.Text;
 
 namespace Serenity.Web
 {
+    /// <summary>
+    /// Represents a web request for a resource on the server.
+    /// </summary>
     public sealed class Request
     {
-        #region Constructors - Public
-        public Request()
-        {
-            this.contentLength = 0;
-            this.contentType = MimeType.Default;
-            this.cookies = new CookieCollection();
-            this.hasEntityBody = false;
-            this.headers = new HeaderCollection();
-            this.isAuthenticated = false;
-            this.isLocal = false;
-            this.isSecureConnection = false;
-            this.keepAlive = false;
-            this.localEndPoint = null;
-            this.method = RequestMethod.Unknown;
-            this.protocolType = null;
-            this.protocolVersion = null;
-            this.rawMethod = null;
-            this.rawRequest = null;
-            this.rawUrl = null;
-            this.referrer = null;
-            this.remoteEndPoint = null;
-            this.requestData = new RequestDataCollection();
-            this.url = null;
-            this.userAgent = null;
-            this.userHostName = null;
-        }
-        #endregion
         #region Fields - Private
         private Socket connection;
         private Encoding contentEncoding;
@@ -64,7 +37,34 @@ namespace Serenity.Web
         private string protocolType;
         private Version protocolVersion;
         #endregion
-        #region Properties - Public
+        #region Constructors - Public
+        public Request()
+        {
+            this.contentLength = 0;
+            this.contentType = MimeType.Default;
+            this.cookies = new CookieCollection();
+            this.hasEntityBody = false;
+            this.headers = new HeaderCollection();
+            this.isAuthenticated = false;
+            this.isLocal = false;
+            this.isSecureConnection = false;
+            this.keepAlive = false;
+            this.localEndPoint = null;
+            this.method = RequestMethod.Unknown;
+            this.protocolType = null;
+            this.protocolVersion = null;
+            this.rawMethod = null;
+            this.rawRequest = null;
+            this.rawUrl = null;
+            this.referrer = null;
+            this.remoteEndPoint = null;
+            this.requestData = new RequestDataCollection();
+            this.url = null;
+            this.userAgent = null;
+            this.userHostName = null;
+        }
+        #endregion
+        #region Properties
         /// <summary>
         /// Gets or sets the <see cref="Socket"/> used to communicate the current <see cref="Request"/>.
         /// </summary>
@@ -79,6 +79,7 @@ namespace Serenity.Web
                 this.connection = value;
             }
         }
+
         /// <summary>
         /// Gets or sets the content encoding used for content sent with the
         /// current request.
@@ -94,6 +95,7 @@ namespace Serenity.Web
                 this.contentEncoding = value;
             }
         }
+
         /// <summary>
         /// Gets or sets the length of content sent with the current request.
         /// </summary>
@@ -108,6 +110,7 @@ namespace Serenity.Web
                 this.contentLength = value;
             }
         }
+
         /// <summary>
         /// Gets or sets the mime type of the content sent with the current
         /// request.
@@ -123,6 +126,7 @@ namespace Serenity.Web
                 this.contentType = value;
             }
         }
+
         /// <summary>
         /// Gets a collection of cookies sent with the current request.
         /// </summary>
@@ -133,6 +137,7 @@ namespace Serenity.Web
                 return this.cookies;
             }
         }
+
         /// <summary>
         /// Gets or sets an indication of whether or not the current request
         /// was sent containing any entity body.
@@ -148,6 +153,7 @@ namespace Serenity.Web
                 this.hasEntityBody = value;
             }
         }
+
         public HeaderCollection Headers
         {
             get
@@ -155,6 +161,7 @@ namespace Serenity.Web
                 return this.headers;
             }
         }
+
         public bool IsAuthenticated
         {
             get
@@ -166,6 +173,7 @@ namespace Serenity.Web
                 this.isAuthenticated = value;
             }
         }
+
         public bool IsLocal
         {
             get
@@ -177,6 +185,7 @@ namespace Serenity.Web
                 this.isLocal = value;
             }
         }
+
         public bool IsSecureConnection
         {
             get
@@ -188,6 +197,7 @@ namespace Serenity.Web
                 this.isSecureConnection = value;
             }
         }
+
         public bool KeepAlive
         {
             get
@@ -199,6 +209,7 @@ namespace Serenity.Web
                 this.keepAlive = value;
             }
         }
+
         public IPEndPoint LocalEndPoint
         {
             get
@@ -210,6 +221,7 @@ namespace Serenity.Web
                 this.localEndPoint = value;
             }
         }
+
         /// <summary>
         /// Gets or sets the supported method of the current <see cref="Request"/>.
         /// </summary>
@@ -224,6 +236,7 @@ namespace Serenity.Web
                 this.method = value;
             }
         }
+
         /// <summary>
         /// Gets or sets the actual string representing the method of the current <see cref="Request"/>.
         /// </summary>
@@ -238,6 +251,7 @@ namespace Serenity.Web
                 this.rawMethod = value;
             }
         }
+
         public string RawRequest
         {
             get
@@ -249,6 +263,7 @@ namespace Serenity.Web
                 this.rawRequest = value;
             }
         }
+
         public string RawUrl
         {
             get
@@ -260,6 +275,7 @@ namespace Serenity.Web
                 this.rawUrl = value;
             }
         }
+
         public Uri Referrer
         {
             get
@@ -271,6 +287,7 @@ namespace Serenity.Web
                 this.referrer = value;
             }
         }
+
         public IPEndPoint RemoteEndPoint
         {
             get
@@ -282,6 +299,7 @@ namespace Serenity.Web
                 this.remoteEndPoint = value;
             }
         }
+
         public RequestDataCollection RequestData
         {
             get
@@ -289,6 +307,7 @@ namespace Serenity.Web
                 return this.requestData;
             }
         }
+
         public Uri Url
         {
             get
@@ -300,6 +319,7 @@ namespace Serenity.Web
                 this.url = value;
             }
         }
+
         public string UserAgent
         {
             get
@@ -311,6 +331,7 @@ namespace Serenity.Web
                 this.userAgent = value;
             }
         }
+
         public string UserHostName
         {
             get
@@ -322,6 +343,7 @@ namespace Serenity.Web
                 this.userHostName = value;
             }
         }
+
         public Serenity.Net.Server Owner
         {
             get
@@ -333,8 +355,9 @@ namespace Serenity.Web
                 this.owner = value;
             }
         }
+
         /// <summary>
-        /// Gets a string describing the protocol type that handled the current CommonContext.
+        /// Gets or sets a string describing the protocol type that handled the current <see cref="Request"/>.
         /// </summary>
         public string ProtocolType
         {
@@ -347,8 +370,9 @@ namespace Serenity.Web
                 this.protocolType = value;
             }
         }
+
         /// <summary>
-        /// Gets the Version of the protocol type that handled the current CommonContext.
+        /// Gets or sets the <see cref="Version"/> of the protocol type that handled the current <see cref="Request"/>.
         /// </summary>
         public Version ProtocolVersion
         {

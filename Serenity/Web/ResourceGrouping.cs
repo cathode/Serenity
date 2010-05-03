@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Serenity.Web.Resources
+namespace Serenity.Web
 {
     public struct ResourceGrouping : IEquatable<ResourceGrouping>, IComparable<ResourceGrouping>
     {

@@ -15,7 +15,7 @@ using System.Linq;
 using Serenity.Net;
 using Serenity.Properties;
 
-namespace Serenity.Web.Resources
+namespace Serenity.Web
 {
     /// <summary>
     /// Provides a base class that all web-accessible resources must inherit from.
@@ -66,7 +66,7 @@ namespace Serenity.Web.Resources
         {
             if (!this.CanHaveChildren)
             {
-                throw new InvalidOperationException(AppResources.ResourceDoesNotSupportChildrenException);
+                throw new InvalidOperationException(Serenity.Properties.AppResources.ResourceDoesNotSupportChildrenException);
             }
             else if (resource == null)
             {
@@ -74,7 +74,7 @@ namespace Serenity.Web.Resources
             }
             else if (resource == this)
             {
-                throw new InvalidOperationException(AppResources.ResourceAddCreatesCircularRelationException);
+                throw new InvalidOperationException(Serenity.Properties.AppResources.ResourceAddCreatesCircularRelationException);
             }
             else if (resource.Parent != null)
             {
@@ -82,7 +82,7 @@ namespace Serenity.Web.Resources
                 {
                     return;
                 }
-                throw new InvalidOperationException(AppResources.ResourceHasParentException);
+                throw new InvalidOperationException(Serenity.Properties.AppResources.ResourceHasParentException);
             }
             this.children.Add(resource);
             resource.Parent = this;
@@ -95,7 +95,7 @@ namespace Serenity.Web.Resources
         public void Add(IEnumerable<Resource> resources)
         {
             if (!this.CanHaveChildren)
-                throw new InvalidOperationException(AppResources.ResourceDoesNotSupportChildrenException);
+                throw new InvalidOperationException(Serenity.Properties.AppResources.ResourceDoesNotSupportChildrenException);
             
             List<Resource> filteredResources = new List<Resource>();
 
@@ -107,7 +107,7 @@ namespace Serenity.Web.Resources
                 }
                 else if (res == this)
                 {
-                    throw new InvalidOperationException(AppResources.ResourceAddCreatesCircularRelationException);
+                    throw new InvalidOperationException(Serenity.Properties.AppResources.ResourceAddCreatesCircularRelationException);
                 }
                 else if (res.Parent != null)
                 {
@@ -116,7 +116,7 @@ namespace Serenity.Web.Resources
                         //res is already a child of the current resource, skip.
                         continue;
                     }
-                    throw new InvalidOperationException(AppResources.ResourceHasParentException);
+                    throw new InvalidOperationException(Serenity.Properties.AppResources.ResourceHasParentException);
                 }
                 filteredResources.Add(res);
             }

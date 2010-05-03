@@ -13,7 +13,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Serenity.Properties;
 
-namespace Serenity.Web.Resources
+namespace Serenity.Web
 {
     /// <summary>
     /// Provides a dynamic resource that represents a virtual directory and can
@@ -59,8 +59,8 @@ namespace Serenity.Web.Resources
         /// <summary>
         /// Overridden. Renders the dynamic content of the current DirectoryResource.
         /// </summary>
-        /// <param name="request"></param>
-        /// <param name="response"></param>
+        /// <param name="request">The incoming <see cref="Request"/>.</param>
+        /// <param name="response">The outgoing <see cref="Response"/>.</param>
         public override void OnRequest(Request request, Response response)
         {
             if (request == null)

@@ -15,7 +15,7 @@ using System.Linq;
 using System.Text;
 using Serenity.Net;
 
-namespace Serenity.Web.Resources
+namespace Serenity.Web
 {
     public sealed class RootResource : DirectoryResource
     {

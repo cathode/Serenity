@@ -15,7 +15,7 @@ using System.Text;
 
 using Serenity.Web;
 
-namespace Serenity.Web.Resources
+namespace Serenity.Web
 {
     /// <summary>
     /// Provides the base class for dynamic resources.
