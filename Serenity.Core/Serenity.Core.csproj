@@ -43,6 +43,7 @@
     <Compile Include="Cookie.cs" />
     <Compile Include="CookieCollection.cs" />
     <Compile Include="CookieVersion.cs" />
+    <Compile Include="WebServer.cs" />
     <None Include="Legacy\Data\Database.cs" />
     <None Include="Legacy\Data\DataScope.cs" />
     <None Include="Legacy\EventDetails.cs" />
