@@ -11,6 +11,22 @@ namespace Serenity.Core
     /// </summary>
     public abstract class WebApplication
     {
+        #region Properties
+        /// <summary>
+        /// Gets the name of the current <see cref="WebApplication"/>.
+        /// </summary>
+        public abstract string Name
+        {
+            get;
+        }
 
+        /// <summary>
+        /// Gets the <see cref="Version"/> of the current <see cref="WebApplication"/>.
+        /// </summary>
+        public abstract Version Version
+        {
+            get;
+        }
+        #endregion
     }
 }

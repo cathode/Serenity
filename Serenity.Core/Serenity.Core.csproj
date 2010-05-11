@@ -40,6 +40,9 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="Cookie.cs" />
+    <Compile Include="CookieCollection.cs" />
+    <Compile Include="CookieVersion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebApplication.cs" />
   </ItemGroup>
