@@ -1,317 +1,66 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{2013CDED-1043-4FF6-A080-9B3C9BD7B140}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{A8E8A34D-E1C8-420C-AC2A-25428D0A07C6}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Serenity</RootNamespace>
     <AssemblyName>Serenity</AssemblyName>
-    <SignAssembly>false</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\WShelley.public.snk</AssemblyOriginatorKeyFile>
-    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
-    <DelaySign>true</DelaySign>
-    <StartupObject>
-    </StartupObject>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>True</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>False</Optimize>
-    <OutputPath>../Output/</OutputPath>
-    <DefineConstants>DEBUG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
-    <BaseAddress>0</BaseAddress>
-    <DocumentationFile>
-    </DocumentationFile>
-    <LangVersion>default</LangVersion>
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
-    <OutputType>Library</OutputType>
-    <AssemblyName>Serenity</AssemblyName>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <Optimize>True</Optimize>
-    <OutputPath>../Output/</OutputPath>
-    <DefineConstants>
-    </DefineConstants>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <FileAlignment>512</FileAlignment>
-    <BaseAddress>0</BaseAddress>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <DocumentationFile>..\Output\Serenity.XML</DocumentationFile>
-    <LangVersion>default</LangVersion>
-    <DebugSymbols>False</DebugSymbols>
-    <OutputType>Library</OutputType>
-    <AssemblyName>Serenity</AssemblyName>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Data\Database.cs" />
-    <Compile Include="Data\DataScope.cs" />
-    <Compile Include="EventDetails.cs" />
-    <Compile Include="EventKind.cs" />
-    <Compile Include="EventLog.cs" />
-    <Compile Include="EventRecordedEventArgs.cs" />
-    <Compile Include="IO\SerenityPath.cs" />
-    <Compile Include="ModuleCollection.cs" />
-    <Content Include="Data\domain\schemas\error_documents.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\global\schemas\serenity_global.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Compile Include="ModuleFactory.cs" />
-    <Compile Include="Net\NetworkBuffer.cs" />
-    <Compile Include="Net\RequestStep.cs" />
-    <Compile Include="Net\ServerAsyncState.cs" />
-    <Compile Include="Module.cs" />
-    <Compile Include="Net\Server.cs" />
-    <Compile Include="Properties\AppResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AppResources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-    <Compile Include="SerenityInfo.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Web\Cookie.cs" />
-    <Compile Include="Web\CookieCollection.cs" />
-    <None Include="app.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="Web\Forms\Anchor.cs" />
-    <None Include="Web\Forms\Body.cs" />
-    <None Include="Web\Forms\Button.cs" />
-    <None Include="Web\Forms\Control.cs" />
-    <None Include="Web\Forms\ControlAttribute.cs" />
-    <None Include="Web\Forms\ControlAttributeCollection.cs" />
-    <None Include="Web\Forms\ControlCollection.cs" />
-    <None Include="Web\Forms\Division.cs" />
-    <None Include="Web\Forms\Document.cs" />
-    <None Include="Web\Forms\DocumentResource.cs" />
-    <None Include="Web\Forms\Form.cs" />
-    <None Include="Web\Forms\Head.cs" />
-    <None Include="Web\Forms\Heading.cs" />
-    <None Include="Web\Forms\Label.cs" />
-    <None Include="Web\Forms\HeadingLevel.cs" />
-    <None Include="Web\Forms\Html\HtmlDocument.cs" />
-    <None Include="Web\Forms\Image.cs" />
-    <None Include="Web\Forms\LineBreak.cs" />
-    <None Include="Web\Forms\OrderedList.cs" />
-    <None Include="Web\Forms\Paragraph.cs" />
-    <None Include="Web\Forms\PathLink.cs" />
-    <None Include="Web\Forms\RenderEventArgs.cs" />
-    <None Include="Web\Forms\RenderingContext.cs" />
-    <None Include="Web\Forms\Script.cs" />
-    <None Include="Web\Forms\Span.cs" />
-    <None Include="Web\Forms\Svg\SvgDocument.cs" />
-    <None Include="Web\Forms\Svg\SvgRectangle.cs" />
-    <None Include="Web\Forms\Svg\SvgShape.cs" />
-    <None Include="Web\Forms\Table.cs" />
-    <None Include="Web\Forms\TableCell.cs" />
-    <None Include="Web\Forms\TableFooter.cs" />
-    <None Include="Web\Forms\TableHeader.cs" />
-    <None Include="Web\Forms\TableRow.cs" />
-    <None Include="Web\Forms\TextControl.cs" />
-    <None Include="Web\Forms\WebFormsEventAttribute.cs" />
-    <Compile Include="Web\DirectoryResource.cs" />
-    <Compile Include="Web\DomainResource.cs" />
-    <Compile Include="Web\DynamicResource.cs" />
-    <Compile Include="Web\ErrorResource.cs" />
-    <Compile Include="Web\MimeType.cs" />
-    <Compile Include="Web\Request.cs" />
-    <None Include="Web\RequestContent.cs" />
-    <Compile Include="Web\RequestMethod.cs" />
-    <Compile Include="Web\Resource.cs" />
-    <Compile Include="Web\ResourceGrouping.cs" />
-    <Compile Include="Web\ResourceResource.cs" />
-    <Compile Include="Web\Response.cs" />
-    <Compile Include="Web\RewriteResource.cs" />
-    <Compile Include="Web\RootResource.cs" />
-    <Compile Include="Web\Session.cs" />
-    <Compile Include="Web\StaticResource.cs" />
-    <Compile Include="Web\StatusCode.cs" />
-    <Compile Include="Web\Header.cs" />
-    <Compile Include="Web\HeaderCollection.cs" />
-    <Compile Include="Web\RequestDataCollection.cs" />
-    <Compile Include="Web\RequestDataStream.cs" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="Web\Doctype.cs" />
-    <None Include="Web\Forms\UnorderedList.cs" />
-    <Compile Include="__SerenityModuleFactory.cs" />
-    <Compile Include="__Strings.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
-    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\AppResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\icons\arrow_down.png" />
-    <EmbeddedResource Include="Resources\icons\arrow_up.png" />
-    <EmbeddedResource Include="Resources\icons\folder.png" />
-    <EmbeddedResource Include="Resources\icons\page_white.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_acrobat.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_actionscript.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_c.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_cd.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_code.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_code_red.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_coldfusion.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_compressed.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_cplusplus.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_csharp.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_cup.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_database.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_delete.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_dvd.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_excel.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_flash.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_freehand.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_gear.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_h.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_key.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_lightning.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_link.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_office.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_paint.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_paintbrush.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_paste.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_php.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_picture.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_powerpoint.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_ruby.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_stack.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_star.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_swoosh.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_text.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_tux.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_vector.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_visualstudio.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_word.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_wrench.png" />
-    <EmbeddedResource Include="Resources\icons\page_white_zip.png" />
-    <EmbeddedResource Include="Resources\index.css" />
+    <ProjectReference Include="..\Serenity.Core\Serenity.Core.csproj">
+      <Project>{9329DA10-EAAF-4C2B-9C48-03EF58F7302E}</Project>
+      <Name>Serenity.Core</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Npgsql, Version=2.0.4.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Npgsql.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.SQL.Server.Compact.3.5">
-      <Visible>False</Visible>
-      <ProductName>SQL Server Compact 3.5 SP2</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Data\module\serenity\schemas\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-    <PreBuildEvent>
-    </PreBuildEvent>
-    <ProjectGuid>{2013CDED-1043-4FF6-A080-9B3C9BD7B140}</ProjectGuid>
-  </PropertyGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>
