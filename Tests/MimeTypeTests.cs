@@ -39,9 +39,36 @@ namespace Tests
                 }
                 catch (Exception ex)
                 {
-                    Assert.Fail(string.Format("Failed to parse mimetype input: \"{0}\". Exception: {1}", inputs[i], ex.ToString()));
+                    Assert.Fail(string.Format("Failed to parse known-valid mimetype input: \"{0}\". Exception: {1}", inputs[i], ex.ToString()));
                 }
             }
+            Assert.Pass();
+        }
+        [Test]
+        public void ParseShouldRejectInvalidInput()
+        {
+            string[] inputs = {
+                                  "text.plain",
+                                  "application/",
+                                  "/xml",
+                                  "..../xml",
+                                  "/",
+                                  "/ ",
+                                  " /",
+                              };
+            foreach (string input in inputs)
+            {
+                try
+                {
+                    var parsed = MimeType.Parse(input);
+                    Assert.Fail("MimeType.Parse failed to reject known-invalid mimetype input: \"{0}\"");
+                }
+                catch
+                {
+                    continue;
+                }
+            }
+            Assert.Pass();
         }
     }
 }
