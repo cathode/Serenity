@@ -1,4 +1,7 @@
-﻿namespace Serenity.Web
+﻿/* Serenity - The next evolution of web server technology.
+ * Copyright © 2006-2010 Will Shelley. All Rights Reserved. */
+
+namespace Serenity.Core
 {
     /// <summary>
     /// Represents a code returned to a client along with a web response,

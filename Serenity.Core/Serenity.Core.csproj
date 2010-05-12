@@ -43,6 +43,14 @@
     <Compile Include="Cookie.cs" />
     <Compile Include="CookieCollection.cs" />
     <Compile Include="CookieVersion.cs" />
+    <Compile Include="Doctype.cs" />
+    <Compile Include="ExceptionMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExceptionMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="MimeType.cs" />
+    <Compile Include="StatusCode.cs" />
     <Compile Include="WebServer.cs" />
     <None Include="Legacy\Data\Database.cs" />
     <None Include="Legacy\Data\DataScope.cs" />
@@ -65,7 +73,6 @@
     <None Include="Legacy\Web\Cookie.cs" />
     <None Include="Legacy\Web\CookieCollection.cs" />
     <None Include="Legacy\Web\DirectoryResource.cs" />
-    <None Include="Legacy\Web\Doctype.cs" />
     <None Include="Legacy\Web\DomainResource.cs" />
     <None Include="Legacy\Web\DynamicResource.cs" />
     <None Include="Legacy\Web\ErrorResource.cs" />
@@ -107,7 +114,6 @@
     <None Include="Legacy\Web\Forms\WebFormsEventAttribute.cs" />
     <None Include="Legacy\Web\Header.cs" />
     <None Include="Legacy\Web\HeaderCollection.cs" />
-    <None Include="Legacy\Web\MimeType.cs" />
     <None Include="Legacy\Web\Request.cs" />
     <None Include="Legacy\Web\RequestContent.cs" />
     <None Include="Legacy\Web\RequestDataCollection.cs" />
@@ -121,7 +127,6 @@
     <None Include="Legacy\Web\RootResource.cs" />
     <None Include="Legacy\Web\Session.cs" />
     <None Include="Legacy\Web\StaticResource.cs" />
-    <None Include="Legacy\Web\StatusCode.cs" />
     <None Include="Legacy\__SerenityModuleFactory.cs" />
     <None Include="Legacy\__Strings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -185,6 +190,12 @@
   <ItemGroup>
     <Folder Include="Legacy\Data\module\serenity\schemas\" />
     <Folder Include="Legacy\Web\Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ExceptionMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
