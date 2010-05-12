@@ -9,6 +9,7 @@ namespace Tests
     [TestFixture]
     public class MimeTypeTests
     {
+        [Test]
         public void ParseShouldSucceedWithValidInput()
         {
             string[] inputs = {
