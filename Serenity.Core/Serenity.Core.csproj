@@ -50,6 +50,7 @@
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="MimeType.cs" />
+    <Compile Include="Net\HttpListener.cs" />
     <Compile Include="StatusCode.cs" />
     <Compile Include="WebServer.cs" />
     <None Include="Legacy\Data\Database.cs" />

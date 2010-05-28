@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿/* Serenity - The next evolution of web server technology.
+ * Copyright © 2006-2010 Will Shelley. All Rights Reserved. */
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 

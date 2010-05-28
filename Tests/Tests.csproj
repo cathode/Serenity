@@ -46,6 +46,7 @@
     </Compile>
     <Compile Include="MimeTypeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebApplicationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Serenity.Core\Serenity.Core.csproj">
