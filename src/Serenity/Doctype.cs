@@ -13,7 +13,12 @@ namespace Serenity.Core
     /// </summary>
     public sealed class Doctype
     {
-        #region Constructors - Public
+        #region Fields
+        private string rootElement;
+        private string publicIdentifier;
+        private string systemIdentifier;
+        #endregion
+        #region Constructors
         /// <summary>
         /// Initializes a new instance of the Doctype class
         /// </summary>
@@ -27,28 +32,7 @@ namespace Serenity.Core
             this.systemIdentifier = systemIdentifier;
         }
         #endregion
-        #region Fields - Private
-        private string rootElement;
-        private string publicIdentifier;
-        private string systemIdentifier;
-        #endregion
-        #region Methods - Public
-        /// <summary>
-        /// Returns the string representation of the current Doctype.
-        /// </summary>
-        /// <returns>The string representation of the current Doctype.</returns>
-        public override string ToString()
-        {
-            return "<!DOCTYPE "
-                + this.rootElement
-                + " PUBLIC \""
-                + publicIdentifier
-                + "\" \""
-                + this.systemIdentifier
-                + "\">";
-        }
-        #endregion
-        #region Properties - Public
+        #region Properties
         /// <summary>
         /// Gets the HTML 4.01 Frameset Doctype.
         /// </summary>
@@ -56,11 +40,10 @@ namespace Serenity.Core
         {
             get
             {
-                return new Doctype("html",
-                    "-//W3C//DTD HTML 4.01 Frameset//EN",
-                    "http://www.w3.org/TR/html4/frameset.dtd");
+                return new Doctype("html", "-//W3C//DTD HTML 4.01 Frameset//EN", "http://www.w3.org/TR/html4/frameset.dtd");
             }
         }
+
         /// <summary>
         /// Gets the HTML 4.01 Strict Doctype.
         /// </summary>
@@ -68,11 +51,10 @@ namespace Serenity.Core
         {
             get
             {
-                return new Doctype("html",
-                    "-//W3C//DTD HTML 4.01//EN",
-                    "http://www.w3.org/TR/html4/strict.dtd");
+                return new Doctype("html", "-//W3C//DTD HTML 4.01//EN", "http://www.w3.org/TR/html4/strict.dtd");
             }
         }
+
         /// <summary>
         /// Gets the HTML 4.01 Transitional Doctype.
         /// </summary>
@@ -80,11 +62,10 @@ namespace Serenity.Core
         {
             get
             {
-                return new Doctype("html",
-                    "-//W3C//DTD HTML 4.01 Transitional//EN",
-                    "http://www.w3.org/TR/html4/loose.dtd");
+                return new Doctype("html", "-//W3C//DTD HTML 4.01 Transitional//EN", "http://www.w3.org/TR/html4/loose.dtd");
             }
         }
+
         /// <summary>
         /// Gets the MathML 2.0 Doctype.
         /// </summary>
@@ -92,11 +73,10 @@ namespace Serenity.Core
         {
             get
             {
-                return new Doctype("math",
-                    "-//W3C//DTD MathML 2.0//EN",
-                    "http://www.w3.org/TR/MathML2/dtd/mathml2.dtd");
+                return new Doctype("math", "-//W3C//DTD MathML 2.0//EN", "http://www.w3.org/TR/MathML2/dtd/mathml2.dtd");
             }
         }
+
         /// <summary>
         /// Gets or sets the Public Identifier portion of the current Doctype.
         /// </summary>
@@ -106,7 +86,12 @@ namespace Serenity.Core
             {
                 return this.publicIdentifier;
             }
+            set
+            {
+                this.publicIdentifier = value;
+            }
         }
+
         /// <summary>
         /// Gets or sets the Root Element portion of the current Doctype.
         /// </summary>
@@ -121,6 +106,7 @@ namespace Serenity.Core
                 this.rootElement = value;
             }
         }
+
         /// <summary>
         /// Gets the SVG (Scalable Vector Graphics) 1.0 Doctype.
         /// </summary>
@@ -128,11 +114,10 @@ namespace Serenity.Core
         {
             get
             {
-                return new Doctype("svg",
-                    "-//W3C//DTD SVG 1.0//EN",
-                    "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd");
+                return new Doctype("svg", "-//W3C//DTD SVG 1.0//EN", "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd");
             }
         }
+
         /// <summary>
         /// Gets the SVG (Scalable Vector Graphics) 1.1 Basic Doctype.
         /// </summary>
@@ -140,11 +125,10 @@ namespace Serenity.Core
         {
             get
             {
-                return new Doctype("svg",
-                    "-//W3C//DTD SVG 1.1 Basic//EN",
-                    "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11-basic.dtd");
+                return new Doctype("svg", "-//W3C//DTD SVG 1.1 Basic//EN", "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11-basic.dtd");
             }
         }
+
         /// <summary>
         /// Gets the SVG (Scalable Vector Graphics) 1.1 Full Doctype.
         /// </summary>
@@ -157,6 +141,7 @@ namespace Serenity.Core
                     "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd");
             }
         }
+
         /// <summary>
         /// Gets the SVG (Scalable Vector Graphics) 1.1 Tiny Doctype.
         /// </summary>
@@ -169,6 +154,7 @@ namespace Serenity.Core
                     "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11-tiny.dtd");
             }
         }
+
         /// <summary>
         /// Gets or sets the System Identifier portion of the current Doctype.
         /// </summary>
@@ -178,7 +164,12 @@ namespace Serenity.Core
             {
                 return this.systemIdentifier;
             }
+            set
+            {
+                this.systemIdentifier = value;
+            }
         }
+
         /// <summary>
         /// Gets the XHTML 1.0 Frameset Doctype.
         /// </summary>
@@ -191,6 +182,7 @@ namespace Serenity.Core
                     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd");
             }
         }
+
         /// <summary>
         /// Gets the XHTML 1.0 Strict Doctype.
         /// </summary>
@@ -203,6 +195,7 @@ namespace Serenity.Core
                     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd");
             }
         }
+
         /// <summary>
         /// Gets the XHTML 1.0 Transitional Doctype.
         /// </summary>
@@ -215,6 +208,7 @@ namespace Serenity.Core
                     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd");
             }
         }
+
         /// <summary>
         /// Gets the XHTML 1.1 Doctype. This is the reccomended doctype.
         /// </summary>
@@ -227,6 +221,7 @@ namespace Serenity.Core
                     "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd");
             }
         }
+
         /// <summary>
         /// Gets the XHTML + MathML + SVG Doctype.
         /// </summary>
@@ -238,6 +233,22 @@ namespace Serenity.Core
                     "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN",
                     "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg.dtd");
             }
+        }
+        #endregion
+        #region Methods
+        /// <summary>
+        /// Returns the string representation of the current Doctype.
+        /// </summary>
+        /// <returns>The string representation of the current Doctype.</returns>
+        public override string ToString()
+        {
+            return "<!DOCTYPE "
+                + this.rootElement
+                + " PUBLIC \""
+                + this.publicIdentifier
+                + "\" \""
+                + this.systemIdentifier
+                + "\">";
         }
         #endregion
     }

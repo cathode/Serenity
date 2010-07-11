@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Target Name="Build">
-    <MSBuild Projects="Serenity.sln" Properties="Configuration=Debug" />
-    <MSBuild Projects="Serenity.sln" Properties="Configuration=Release" />
+<Project DefaultTargets="GenerateBinaryArtifacts" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="BuildSource">
+    <Message Text="Building source..." />
+    <MSBuild Projects="src/src.sln" Properties="Configuration=Release" />
+  </Target>
+  <Target Name="BuildTests" DependsOnTargets="BuildSource">
+    <Message Text="Building tests..." />
+    <MSBuild Projects="test/test.sln" Properties="Configuration=Release" />
+  </Target>
+  <Target Name="GenerateBinaryArtifacts" DependsOnTargets="BuildSource">
+    <Message Text="Generating binary artifacts..." />
+  </Target>
+  <Target Name="GenerateSourceArtifacts" DependsOnTargets="BuildSource">
+    <Message Text="Generating source artifacts..." />
   </Target>
 </Project>

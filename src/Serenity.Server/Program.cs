@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Serenity
+namespace Serenity.Server
 {
     public static class Program
     {
