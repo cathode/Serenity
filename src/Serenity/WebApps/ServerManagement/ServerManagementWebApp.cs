@@ -30,5 +30,23 @@ namespace Serenity.WebApps.ServerManagement
                 return new Version(0, 1);
             }
         }
+
+        public override void InitializeResources()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string DefaultBinding
+        {
+            get
+            {
+                return "/ServerAdmin";
+            }
+        }
+
+        public override void ProcessRequest(Web.Request request, Web.Response response)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

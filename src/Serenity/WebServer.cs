@@ -10,6 +10,8 @@ using System.Diagnostics.Contracts;
 using System.Threading;
 using Serenity.Net;
 using Serenity.Web;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Serenity
 {
@@ -37,6 +39,7 @@ namespace Serenity
         private ManualResetEvent waitHandle;
         private bool isDisposed;
         private bool isRunning;
+        private List<WebApplicationBinding> applicationBindings = new List<WebApplicationBinding>();
         #endregion
         #region Methods
         /// <summary>
@@ -74,15 +77,45 @@ namespace Serenity
 
             Trace.WriteLine("Processing request");
 
+            var binding = this.applicationBindings.First(b => request.RawUrl.StartsWith(b.Binding, StringComparison.OrdinalIgnoreCase));
+
+            if (binding != null)
+                binding.Application.ProcessRequest(request, response);
+        }
+        public void LoadApplication(WebApplication webApp)
+        {
+            Contract.Requires(webApp != null);
+
+            this.LoadApplication(webApp, webApp.DefaultBinding);
         }
 
         /// <summary>
         /// Loads a <see cref="WebApplication"/> into the current web server instance.
         /// </summary>
         /// <param name="webApp">The <see cref="WebApplication"/> to load.</param>
-        public void LoadApplication(WebApplication webApp)
+        public void LoadApplication(WebApplication webApp, string binding)
         {
+            Contract.Requires(webApp != null);
+            Contract.Requires(binding != null);
 
+            if (this.applicationBindings.Any(b => b.Binding == binding))
+                return;
+
+            this.applicationBindings.Add(new WebApplicationBinding
+            {
+                Application = webApp,
+                Binding = binding
+            });
+
+        }
+
+        /// <summary>
+        /// Loads 'built-in' web applications which are included in the Serenity API library.
+        /// </summary>
+        public void LoadBuiltinApplications()
+        {
+            this.LoadApplication(new Serenity.WebApps.ServerInfo.ServerInfoWebApp(this));
+            this.LoadApplication(new Serenity.WebApps.ServerManagement.ServerManagementWebApp());
         }
 
         /// <summary>
@@ -122,6 +155,13 @@ namespace Serenity
         }
         #endregion
         #region Properties
+        public List<WebApplicationBinding> Bindings
+        {
+            get
+            {
+                return this.applicationBindings;
+            }
+        }
         /// <summary>
         /// Gets or sets a value indicating whether the current <see cref="WebServer"/> is disposed.
         /// </summary>
