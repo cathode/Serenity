@@ -1,4 +1,10 @@
-﻿using System;
+﻿/******************************************************************************
+ * Serenity - Managed Web Application Server. ( http://gearedstudios.com/ )   *
+ * Copyright © 2006-2011 William 'cathode' Shelley. All Rights Reserved.      *
+ * This software is released under the terms and conditions of the MIT/X11    *
+ * license; see the included 'license.txt' file for the full text.            *
+ *****************************************************************************/
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -25,7 +31,6 @@ namespace Serenity.Web
         private IPEndPoint localEndPoint;
         private RequestMethod method;
         private string rawMethod;
-        private Serenity.Net.Server owner;
         private RequestDataCollection requestData;
         private string rawRequest;
         private string rawUrl;
@@ -341,18 +346,6 @@ namespace Serenity.Web
             set
             {
                 this.userHostName = value;
-            }
-        }
-
-        public Serenity.Net.Server Owner
-        {
-            get
-            {
-                return this.owner;
-            }
-            set
-            {
-                this.owner = value;
             }
         }
 

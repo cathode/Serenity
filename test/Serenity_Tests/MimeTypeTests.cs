@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
-using Serenity.Core;
+using Serenity;
 
 namespace Tests
 {

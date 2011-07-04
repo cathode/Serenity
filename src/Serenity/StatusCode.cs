@@ -1,7 +1,7 @@
 ﻿/* Serenity - The next evolution of web server technology.
  * Copyright © 2006-2010 Will Shelley. All Rights Reserved. */
 
-namespace Serenity.Core
+namespace Serenity
 {
     /// <summary>
     /// Represents a code returned to a client along with a web response,
@@ -24,8 +24,8 @@ namespace Serenity.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="StatusCode"/> struct.
         /// </summary>
-        /// <param name="code"></param>
-        /// <param name="message"></param>
+        /// <param name="code">The code number of the new <see cref="StatusCode"/>.</param>
+        /// <param name="message">The status message of the new <see cref="StatusCode"/>.</param>
         private StatusCode(int code, string message)
         {
             this.code = code;

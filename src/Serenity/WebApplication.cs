@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Serenity.Core
+namespace Serenity
 {
     /// <summary>
     /// Represents a web application.
@@ -16,6 +16,14 @@ namespace Serenity.Core
         /// Gets the name of the current <see cref="WebApplication"/>.
         /// </summary>
         public abstract string Name
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Gets the unique identifier of the current <see cref="WebApplication"/>.
+        /// </summary>
+        public abstract Guid UniqueID
         {
             get;
         }

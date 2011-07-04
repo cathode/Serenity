@@ -15,7 +15,7 @@ namespace Serenity.Core
         private Uri commentUri;
         private bool httpOnly;
         private Uri path;
-        private string port; //TODO: Refactor to numeric type.
+        private string port; // TODO: Refactor to numeric type.
         private bool isSecure;
         private string name;
         private Uri domain;

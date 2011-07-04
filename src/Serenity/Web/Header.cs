@@ -1,14 +1,13 @@
 /******************************************************************************
- * Serenity - The next evolution of web server technology.                    *
- * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
- *----------------------------------------------------------------------------*
- * This software is released under the terms and conditions of the Microsoft  *
- * Public License (Ms-PL), a copy of which should have been included with     *
- * this distribution as License.txt.                                          *
+ * Serenity - Managed Web Application Server. ( http://gearedstudios.com/ )   *
+ * Copyright © 2006-2011 William 'cathode' Shelley. All Rights Reserved.      *
+ * This software is released under the terms and conditions of the MIT/X11    *
+ * license; see the included 'license.txt' file for the full text.            *
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Diagnostics.Contracts;
 
 namespace Serenity.Web
 {
@@ -22,15 +21,8 @@ namespace Serenity.Web
         /// Initializes a new instance of the <see cref="Header"/> class.
         /// </summary>
         /// <param name="name">The name of the header.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown when the name parameter is null.</exception>
-        /// <exception cref="System.ArgumentException">Thrown when the name parameter is invalid as a header name.</exception>
         public Header(string name)
         {
-            if (name == null)
-                throw new ArgumentNullException("name");
-            else if (name.Length == 0)
-                throw new ArgumentException(string.Format("Argument '{0}' cannot be empty", "name"), "name");
-
             this.name = name;
         }
         /// <summary>
@@ -71,6 +63,13 @@ namespace Serenity.Web
         public override string ToString()
         {
             return this.Name + ": " + this.Value;
+        }
+
+        [ContractInvariantMethod]
+        private void __InvariantMethod()
+        {
+            Contract.Invariant(!string.IsNullOrEmpty(this.name));
+            
         }
         #endregion
         #region Properties - Public

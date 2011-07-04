@@ -1,8 +1,13 @@
-﻿/* Serenity - The next evolution of web server technology.
- * Copyright © 2006-2010 Will Shelley. All Rights Reserved. */
+﻿/******************************************************************************
+ * Serenity - Managed Web Application Server. ( http://gearedstudios.com/ )   *
+ * Copyright © 2006-2011 William 'cathode' Shelley. All Rights Reserved.      *
+ * This software is released under the terms and conditions of the MIT/X11    *
+ * license; see the included 'license.txt' file for the full text.            *
+ *****************************************************************************/
 using System;
+using System.Diagnostics.Contracts;
 
-namespace Serenity.Core
+namespace Serenity
 {
     /// <summary>
     /// Represents a MIME type, usually used to identify the type of content in a message.
@@ -34,10 +39,8 @@ namespace Serenity.Core
         /// <param name="subtype">The secondary type.</param>
         public MimeType(string type, string subtype)
         {
-            if (string.IsNullOrEmpty(type))
-                throw new ArgumentException(string.Format(ExceptionMessages.ParameterCannotBeEmpty, "type"), "type");
-            else if (string.IsNullOrEmpty(subtype))
-                throw new ArgumentException(string.Format(ExceptionMessages.ParameterCannotBeEmpty, "subtype"), "subtype");
+            Contract.Requires(!string.IsNullOrEmpty(type));
+            Contract.Requires(!string.IsNullOrEmpty(subtype));
 
             this.type = type;
             this.subtype = subtype;
@@ -51,6 +54,7 @@ namespace Serenity.Core
         {
             get
             {
+                Contract.Ensures(Contract.Result<string>() != null);
                 return this.subtype;
             }
         }
@@ -62,6 +66,7 @@ namespace Serenity.Core
         {
             get
             {
+                Contract.Ensures(Contract.Result<string>() != null);
                 return this.type;
             }
         }
@@ -428,8 +433,7 @@ namespace Serenity.Core
         /// <returns>A new <see cref="MimeType"/> instance that is parsed from the specified string.</returns>
         public static MimeType Parse(string mimeType)
         {
-            if (string.IsNullOrEmpty(mimeType))
-                throw new ArgumentException(string.Format(ExceptionMessages.ParameterCannotBeEmpty, "mimeType"), "mimeType");
+            Contract.Requires(!string.IsNullOrEmpty(mimeType));
 
             string[] parts = mimeType.Split('/');
 
@@ -446,6 +450,18 @@ namespace Serenity.Core
         public override string ToString()
         {
             return this.type + "/" + this.subtype;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        [ContractInvariantMethod]
+        private void __InvariantMethod()
+        {
+            Contract.Invariant(this.type != null);
+            Contract.Invariant(this.subtype != null);
         }
         #endregion
         #region Operators - Public

@@ -1,9 +1,9 @@
-/* Serenity - The next evolution of web server technology.
- * Copyright © 2006-2009 Serenity Project - http://SerenityProject.net/
- * 
- * This software is released under the terms and conditions of the Microsoft Public License (MS-PL),
- * a copy of which should have been included with this distribution as License.txt.
- */
+/******************************************************************************
+ * Serenity - Managed Web Application Server. ( http://gearedstudios.com/ )   *
+ * Copyright © 2006-2011 William 'cathode' Shelley. All Rights Reserved.      *
+ * This software is released under the terms and conditions of the MIT/X11    *
+ * license; see the included 'license.txt' file for the full text.            *
+ *****************************************************************************/
 using System;
 using System.Collections.Generic;
 using System.IO;

@@ -1,9 +1,13 @@
-﻿using System;
+﻿/******************************************************************************
+ * Serenity - Managed Web Application Server. ( http://gearedstudios.com/ )   *
+ * Copyright © 2006-2011 William 'cathode' Shelley. All Rights Reserved.      *
+ * This software is released under the terms and conditions of the MIT/X11    *
+ * license; see the included 'license.txt' file for the full text.            *
+ *****************************************************************************/
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Net.Sockets;
-using Serenity.Net;
+using System.Text;
 
 namespace Serenity.Web
 {
@@ -12,7 +16,20 @@ namespace Serenity.Web
     /// </summary>
     public sealed class Response
     {
-        #region Constructors - Public
+        #region Fields
+        private Socket connection;
+        private MimeType contentType;
+        private HeaderCollection headers;
+        private bool headersSent;
+        private CookieCollection cookies;
+        private List<byte> outputBuffer;
+        private int sent;
+        private StatusCode status;
+        private bool useChunkedTransferEncoding;
+        private bool useCompression;
+        private bool isComplete;
+        #endregion
+        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Response"/> class.
         /// </summary>
@@ -29,80 +46,7 @@ namespace Serenity.Web
             this.useCompression = false;
         }
         #endregion
-        #region Fields - Private
-        private Socket connection;
-        private MimeType contentType;
-        [ThreadStatic]
-        private static Response current;
-        private HeaderCollection headers;
-        private bool headersSent;
-        private readonly CookieCollection cookies;
-        private List<byte> outputBuffer;
-        private Serenity.Net.Server owner;
-        private int sent;
-        private StatusCode status;
-        private bool useChunkedTransferEncoding;
-        private bool useCompression;
-        private bool isComplete;
-        #endregion
-        #region Methods - Public
-        /// <summary>
-        /// Clears the output buffer of the current <see cref="Response"/>.
-        /// </summary>
-        /// <remarks>
-        /// If data has already been sent, this cannot un-send already sent data.
-        /// </remarks>
-        public void ClearOutputBuffer()
-        {
-            this.outputBuffer.Clear();
-        }
-        /// <summary>
-        /// Causes the currently buffered data to be written to the underlying client socket, then clears the Buffer.
-        /// Note: The underlying Socket is unaffected if the current CommonResponse does not support chunked transmission.
-        /// </summary>
-        /// <returns>The number of bytes flushed, or -1 if an error occurred.</returns>
-        public int Flush()
-        {
-            //TODO: Implement Response.Flush method.
-            throw new NotImplementedException();
-        }
-        /// <summary>
-        /// Writes a series of bytes to the output buffer.
-        /// </summary>
-        /// <param name="value">The array of bytes to write.</param>
-        /// <returns>The number of bytes written, or -1 if an error occurred.</returns>
-        public int Write(byte[] value)
-        {
-            if (value != null)
-            {
-                this.outputBuffer.AddRange(value);
-                return value.Length;
-            }
-            else
-            {
-                return -1;
-            }
-        }
-        /// <summary>
-        /// Writes a string to the output buffer.
-        /// </summary>
-        /// <param name="value">The value to write.</param>
-        /// <returns></returns>
-        public int Write(string value)
-        {
-            return this.Write(Encoding.UTF8.GetBytes(value));
-        }
-        /// <summary>
-        /// Writes a string followed by a newline to the output buffer.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public int WriteLine(string value)
-        {
-            return this.Write(Encoding.UTF8.GetBytes(value + "\r\n"));
-        }
-        #endregion
-        #region Properties - Public
+        #region Properties
         /// <summary>
         /// Gets or sets the <see cref="Socket"/> used to communicate the current <see cref="Response"/>.
         /// </summary>
@@ -117,6 +61,7 @@ namespace Serenity.Web
                 this.connection = value;
             }
         }
+
         /// <summary>
         /// Gets or sets the mimetype associated with the content returned to the client.
         /// </summary>
@@ -131,20 +76,7 @@ namespace Serenity.Web
                 this.contentType = value;
             }
         }
-        /// <summary>
-        /// Gets the current <see cref="Response"/> for the active thread.
-        /// </summary>
-        public static Response Current
-        {
-            get
-            {
-                return Response.current;
-            }
-            internal set
-            {
-                Response.current = value;
-            }
-        }
+
         /// <summary>
         /// Gets a collection of cookies that will be sent with the request.
         /// </summary>
@@ -155,6 +87,7 @@ namespace Serenity.Web
                 return this.cookies;
             }
         }
+
         /// <summary>
         /// Gets the HeaderCollection containing the headers returned to the client.
         /// </summary>
@@ -165,9 +98,9 @@ namespace Serenity.Web
                 return this.headers;
             }
         }
+
         /// <summary>
-        /// Gets an indication of whether or not header data has already been
-        /// sent to the client.
+        /// Gets or sets a value indicating whether header data has been sent to the client.
         /// </summary>
         public bool HeadersSent
         {
@@ -180,6 +113,10 @@ namespace Serenity.Web
                 this.headersSent = value;
             }
         }
+
+        /// <summary>
+        /// Gets a value indicating whether the current <see cref="Response"/> is complete.
+        /// </summary>
         public bool IsComplete
         {
             get
@@ -191,6 +128,7 @@ namespace Serenity.Web
                 this.isComplete = value;
             }
         }
+
         /// <summary>
         /// Gets the buffer of data that has not yet been sent.
         /// </summary>
@@ -201,17 +139,7 @@ namespace Serenity.Web
                 return this.outputBuffer;
             }
         }
-        public Serenity.Net.Server Owner
-        {
-            get
-            {
-                return this.owner;
-            }
-            set
-            {
-                this.owner = value;
-            }
-        }
+
         /// <summary>
         /// Gets or sets a value which indicates how much data has actually
         /// been sent to the client.
@@ -227,6 +155,7 @@ namespace Serenity.Web
                 this.sent = value;
             }
         }
+
         /// <summary>
         /// Gets or sets the StatusCode associated with the current
         /// CommonResponse.
@@ -242,9 +171,9 @@ namespace Serenity.Web
                 this.status = value;
             }
         }
+
         /// <summary>
-        /// Gets or sets a value which determines if the current CommonResponse
-        /// should be sent using chunked transfer encoding.
+        /// Gets or sets a value indicating whether the current <see cref="Response"/> should be sent using chunked transfer encoding.
         /// </summary>
         public bool UseChunkedTransferEncoding
         {
@@ -257,9 +186,9 @@ namespace Serenity.Web
                 this.useChunkedTransferEncoding = value;
             }
         }
+
         /// <summary>
-        /// Gets or sets a value used to determine if the data sent back
-        /// to the client with the response should be compressed or not.
+        /// Gets or sets a value indicating whether the data sent back to the client with the response should be compressed or not.
         /// </summary>
         /// <remarks>
         /// Compression can decrease the amount of data to be sent by a large
@@ -278,6 +207,73 @@ namespace Serenity.Web
             }
         }
         
+        #endregion
+        #region Methods - Public
+        /// <summary>
+        /// Clears the output buffer of the current <see cref="Response"/>.
+        /// </summary>
+        /// <remarks>
+        /// If data has already been sent, this cannot un-send already sent data.
+        /// </remarks>
+        public void ClearOutputBuffer()
+        {
+            this.outputBuffer.Clear();
+        }
+
+        /// <summary>
+        /// Causes the currently buffered data to be written to the underlying client socket, then clears the Buffer.
+        /// Note: The underlying Socket is unaffected if the current CommonResponse does not support chunked transmission.
+        /// </summary>
+        /// <returns>The number of bytes flushed, or -1 if an error occurred.</returns>
+        public int Flush()
+        {
+            // TODO: Implement Response.Flush method.
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Writes a series of bytes to the output buffer.
+        /// </summary>
+        /// <param name="value">The array of bytes to write.</param>
+        /// <returns>The number of bytes written, or -1 if an error occurred.</returns>
+        public int Write(byte[] value)
+        {
+            if (value != null)
+            {
+                this.outputBuffer.AddRange(value);
+                return value.Length;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+
+        /// <summary>
+        /// Writes a string to the output buffer.
+        /// </summary>
+        /// <param name="value">The value to write.</param>
+        /// <returns>The number of bytes written.</returns>
+        public int Write(string value)
+        {
+            if (value == null)
+                return 0;
+
+            return this.Write(Encoding.UTF8.GetBytes(value));
+        }
+
+        /// <summary>
+        /// Writes a string followed by a newline to the output buffer.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns>The number of bytes written, including the newline characters.</returns>
+        public int WriteLine(string value)
+        {
+            if (value == null)
+                value = string.Empty;
+
+            return this.Write(Encoding.UTF8.GetBytes(value + "\r\n"));
+        }
         #endregion
     }
 }

@@ -1,10 +1,8 @@
 ﻿/******************************************************************************
- * Serenity - The next evolution of web server technology.                    *
- * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
- *----------------------------------------------------------------------------*
- * This software is released under the terms and conditions of the Microsoft  *
- * Public License (Ms-PL), a copy of which should have been included with     *
- * this distribution as License.txt.                                          *
+ * Serenity - Managed Web Application Server. ( http://gearedstudios.com/ )   *
+ * Copyright © 2006-2011 William 'cathode' Shelley. All Rights Reserved.      *
+ * This software is released under the terms and conditions of the MIT/X11    *
+ * license; see the included 'license.txt' file for the full text.            *
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -18,7 +16,7 @@ namespace Serenity.Web
     /// </summary>
     public sealed class Cookie
     {
-        #region Fields - Private
+        #region Fields
         private string comment;
         private Uri commentUri;
         private bool httpOnly;
@@ -34,7 +32,7 @@ namespace Serenity.Web
         private string value;
         private Version version;
         #endregion
-        #region Methods - Public
+        #region Methods
         /// <summary>
         /// Converts the current <see cref="Cookie"/> to it's string
         /// representation.
@@ -71,7 +69,10 @@ namespace Serenity.Web
             return result.ToString();
         }
         #endregion
-        #region Properties - Public
+        #region Properties
+        /// <summary>
+        /// Gets or sets the comment associated with the cookie.
+        /// </summary>
         public string Comment
         {
             get
@@ -83,6 +84,10 @@ namespace Serenity.Web
                 this.comment = value;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the comment <see cref="Uri"/> associated with the cookie.
+        /// </summary>
         public Uri CommentUri
         {
             get
@@ -94,6 +99,10 @@ namespace Serenity.Web
                 this.commentUri = value;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the domain of the cookie.
+        /// </summary>
         public Uri Domain
         {
             get
@@ -105,6 +114,10 @@ namespace Serenity.Web
                 this.domain = value;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the <see cref="DateTime"/> that determines the point when the browser should consider the cookie to be expired.
+        /// </summary>
         public DateTime ExpiresOn
         {
             get
@@ -116,6 +129,10 @@ namespace Serenity.Web
                 this.expiresOn = value;
             }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the cookie should only be used for HTTP communications.
+        /// </summary>
         public bool HttpOnly
         {
             get
@@ -128,6 +145,9 @@ namespace Serenity.Web
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the cookie is expired.
+        /// </summary>
         public bool IsExpired
         {
             get
@@ -139,6 +159,10 @@ namespace Serenity.Web
                 this.isExpired = value;
             }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the cookie is secure.
+        /// </summary>
         public bool IsSecure
         {
             get
@@ -150,6 +174,10 @@ namespace Serenity.Web
                 this.isSecure = value;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the <see cref="DateTime"/> when the cookie was issued.
+        /// </summary>
         public DateTime IssuedOn
         {
             get
@@ -161,8 +189,9 @@ namespace Serenity.Web
                 this.issuedOn = value;
             }
         }
+
         /// <summary>
-        /// Gets or sets a value that indicates if the client should discard the current <see cref="Cookie"/> when it exits.
+        /// Gets or sets a value that indicates if the client should discard the cookie when the session ends.
         /// </summary>
         public bool IsTemporary
         {
@@ -175,6 +204,10 @@ namespace Serenity.Web
                 this.isTemporary = value;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the name of the cookie.
+        /// </summary>
         public string Name
         {
             get
@@ -186,6 +219,10 @@ namespace Serenity.Web
                 this.name = value;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the path of the cookie.
+        /// </summary>
         public Uri Path
         {
             get
@@ -197,6 +234,7 @@ namespace Serenity.Web
                 this.path = value;
             }
         }
+
         public string Port
         {
             get

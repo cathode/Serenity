@@ -1,14 +1,13 @@
 ﻿/******************************************************************************
- * Serenity - The next evolution of web server technology.                    *
- * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
- *----------------------------------------------------------------------------*
- * This software is released under the terms and conditions of the Microsoft  *
- * Public License (Ms-PL), a copy of which should have been included with     *
- * this distribution as License.txt.                                          *
+ * Serenity - Managed Web Application Server. ( http://gearedstudios.com/ )   *
+ * Copyright © 2006-2011 William 'cathode' Shelley. All Rights Reserved.      *
+ * This software is released under the terms and conditions of the MIT/X11    *
+ * license; see the included 'license.txt' file for the full text.            *
  *****************************************************************************/
 using System;
 using System.IO;
 using System.Text;
+using System.Diagnostics.Contracts;
 
 namespace Serenity.Web
 {
@@ -18,25 +17,16 @@ namespace Serenity.Web
     public sealed class RequestDataStream : Stream
     {
         #region Constructors - Public
-        [Obsolete]
-        public RequestDataStream(string name)
-            : this(name, new byte[0])
-        {
-        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RequestDataStream"/> class.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="contents"></param>
         public RequestDataStream(string name, byte[] contents)
         {
-            if (name == null)
-            {
-                throw new ArgumentNullException("name");
-            }
-            else if (name.Length == 0)
-            {
-                throw new ArgumentException(__Strings.ArgumentCannotBeEmpty, "name");
-            }
-            else if (contents == null)
-            {
-                throw new ArgumentNullException("contents");
-            }
+            Contract.Requires(!string.IsNullOrEmpty(name));
+            Contract.Requires(contents != null);
+
             this.name = name;
             this.contents = contents;
         }
@@ -55,7 +45,7 @@ namespace Serenity.Web
         /// <exception cref="NotSupportedException">Cannot flush a RequestDataStream.</exception>
         public override void Flush()
         {
-            throw new NotSupportedException(__Strings.CannotFlushRequestDataStream);
+            //throw new NotSupportedException(__Strings.CannotFlushRequestDataStream);
         }
         /// <summary>
         /// Reads a number of bytes into Buffer
@@ -68,18 +58,6 @@ namespace Serenity.Web
         /// <returns></returns>
         public override int Read(byte[] buffer, int offset, int count)
         {
-            if (buffer == null)
-            {
-                throw new ArgumentNullException("buffer");
-            }
-            else if (offset < 0 || offset > this.Length)
-            {
-                throw new ArgumentOutOfRangeException("offset");
-            }
-            else if (count + offset > this.Length)
-            {
-                throw new ArgumentOutOfRangeException("count");
-            }
             int readCount = 0;
             int index = offset;
             while ((index < buffer.Length) || (readCount <= count))
@@ -89,6 +67,7 @@ namespace Serenity.Web
                 readCount++;
             }
             this.position += readCount;
+            Contract.Assume(readCount <= count);
             return readCount;
         }
         /// <summary>
@@ -97,10 +76,20 @@ namespace Serenity.Web
         /// <returns></returns>
         public byte[] ReadAll()
         {
-            this.position = this.contents.Length - 1;
-            byte[] result = new byte[this.contents.Length];
-            this.contents.CopyTo(result, 0);
-            return result;
+            Contract.Ensures(Contract.Result<byte[]>() != null);
+
+            if (this.contents.Length < 1)
+            {
+                this.position = 0;
+                return new byte[0];
+            }
+            else
+            {
+                this.position = this.contents.Length - 1;
+                byte[] result = new byte[this.contents.Length];
+                this.contents.CopyTo(result, 0);
+                return result;
+            }
         }
         /// <summary>
         /// Reads the entire stream into a string, starting at the beginning
@@ -109,8 +98,18 @@ namespace Serenity.Web
         /// <returns></returns>
         public string ReadAllText()
         {
-            this.position = this.contents.Length - 1;
-            return Encoding.Default.GetString(this.contents);
+            Contract.Ensures(Contract.Result<string>() != null);
+
+            if (this.contents.Length < 1)
+            {
+                this.position = 0;
+                return string.Empty;
+            }
+            else
+            {
+                this.position = this.contents.Length - 1;
+                return Encoding.Default.GetString(this.contents);
+            }
         }
         /// <summary>
         /// Reads the entire stream into a string, starting at the beginning
@@ -120,12 +119,17 @@ namespace Serenity.Web
         /// <returns></returns>
         public string ReadAllText(Encoding encoding)
         {
-            if (encoding == null)
+            Contract.Requires(encoding != null);
+            if (this.contents.Length < 1)
             {
-                throw new ArgumentNullException("encoding");
+                this.position = 0;
+                return string.Empty;
             }
-            this.position = this.contents.Length - 1;
-            return encoding.GetString(this.contents);
+            else
+            {
+                this.position = this.contents.Length - 1;
+                return encoding.GetString(this.contents);
+            }
         }
         /// <summary>
         /// Reads a number of bytes and returns them as a string, using the default text encoding.
@@ -134,6 +138,9 @@ namespace Serenity.Web
         /// <returns></returns>
         public string ReadText(int count)
         {
+            Contract.Requires(count >= 0);
+            Contract.Ensures(Contract.Result<string>() != null);
+
             return this.ReadText(count, Encoding.Default);
         }
         /// <summary>
@@ -144,14 +151,10 @@ namespace Serenity.Web
         /// <returns></returns>
         public string ReadText(int count, Encoding encoding)
         {
-            if (encoding == null)
-            {
-                throw new ArgumentNullException("encoding");
-            }
-            else if (count < 0)
-            {
-                throw new ArgumentOutOfRangeException("count");
-            }
+            Contract.Requires(count >= 0);
+            Contract.Requires(encoding != null);
+            Contract.Ensures(Contract.Result<string>() != null);
+
             byte[] result = new byte[count];
             this.Read(result, 0, count);
             return encoding.GetString(result);
@@ -162,6 +165,8 @@ namespace Serenity.Web
         /// <returns></returns>
         public byte[] ReadToEnd()
         {
+            Contract.Ensures(Contract.Result<byte[]>() != null);
+
             byte[] result = new byte[this.Length - this.Position];
             for (int I = (int)this.Position, N = 0; I < this.Length; I++, N++)
             {
@@ -217,6 +222,10 @@ namespace Serenity.Web
                     this.position = this.contents.Length - offset;
                     break;
             }
+
+            if (this.position < 0)
+                this.position = 0;
+
             return this.position;
         }
         /// <summary>
@@ -227,7 +236,7 @@ namespace Serenity.Web
         /// </exception>
         public override void SetLength(long value)
         {
-            throw new NotSupportedException(__Strings.CannotModifyRequestDataStream);
+            //throw new NotSupportedException(__Strings.CannotModifyRequestDataStream);
         }
         /// <summary>
         /// Not supported.
@@ -237,7 +246,13 @@ namespace Serenity.Web
         /// </exception>
         public override void Write(byte[] buffer, int offset, int count)
         {
-            throw new NotSupportedException(__Strings.CannotModifyRequestDataStream);
+            //throw new NotSupportedException(__Strings.CannotModifyRequestDataStream);
+        }
+
+        [ContractInvariantMethod]
+        private void __InvariantMethod()
+        {
+            Contract.Invariant(this.position >= 0);
         }
         #endregion
         #region Properties - Public

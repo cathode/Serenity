@@ -1,14 +1,12 @@
 ﻿/******************************************************************************
- * Serenity - The next evolution of web server technology.                    *
- * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
- *----------------------------------------------------------------------------*
- * This software is released under the terms and conditions of the Microsoft  *
- * Public License (Ms-PL), a copy of which should have been included with     *
- * this distribution as License.txt.                                          *
+ * Serenity - Managed Web Application Server. ( http://gearedstudios.com/ )   *
+ * Copyright © 2006-2011 William 'cathode' Shelley. All Rights Reserved.      *
+ * This software is released under the terms and conditions of the MIT/X11    *
+ * license; see the included 'license.txt' file for the full text.            *
  *****************************************************************************/
 using System;
 using System.Collections.ObjectModel;
-using Serenity.Properties;
+//using Serenity.Properties;
 
 namespace Serenity.Web
 {
@@ -38,7 +36,7 @@ namespace Serenity.Web
             }
             else if (name.Length == 0)
             {
-                throw new ArgumentException(string.Format(AppResources.ParamEmptyException, "name"), "name");
+                //throw new ArgumentException(string.Format(AppResources.ParamEmptyException, "name"), "name");
             }
 
 			Header header = new Header(name, value);

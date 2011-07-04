@@ -1,19 +1,15 @@
 ﻿/******************************************************************************
- * Serenity - The next evolution of web server technology.                    *
- * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
- *----------------------------------------------------------------------------*
- * This software is released under the terms and conditions of the Microsoft  *
- * Public License (Ms-PL), a copy of which should have been included with     *
- * this distribution as License.txt.                                          *
- *----------------------------------------------------------------------------*
- * Authors:                                                                   *
- * - Will 'AnarkiNet' Shelley (AnarkiNet@gmail.com): Original Author          *
+ * Serenity - Managed Web Application Server. ( http://gearedstudios.com/ )   *
+ * Copyright © 2006-2011 William 'cathode' Shelley. All Rights Reserved.      *
+ * This software is released under the terms and conditions of the MIT/X11    *
+ * license; see the included 'license.txt' file for the full text.            *
  *****************************************************************************/
 using System;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using Serenity.Web;
+using System.Diagnostics.Contracts;
 
 namespace Serenity.Net
 {
@@ -21,44 +17,49 @@ namespace Serenity.Net
     /// Provides a simple data structure used to pass objects to and from async
     /// callback methods.
     /// </summary>
-    public class ServerAsyncState : IDisposable
+    public class HttpServerAsyncState : IDisposable
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServerAsyncState"/>
+        /// Initializes a new instance of the <see cref="HttpServerAsyncState"/>
         /// class.
         /// </summary>
         /// <param name="connection">The <see cref="Socket"/> representing the connection with the remote client.</param>
-        public ServerAsyncState(Socket connection)
+        public HttpServerAsyncState(Socket connection)
         {
-            if (connection == null)
-            {
-                throw new ArgumentNullException("connection");
-            }
+            Contract.Requires(connection != null);
+
             this.connection = connection;
-            this.buffer = new NetworkBuffer(); 
+            this.buffer = new NetworkBuffer();
+            this.rawRequest = new StringBuilder();
+            this.currentToken = new StringBuilder();
+            this.stage = HttpRequestParseStep.Method;
+            this.request = new Request()
+            {
+                Connection = this.Connection
+            };
+            this.response = new Response()
+            {
+                Connection = this.Connection
+            };
         }
         #endregion
         #region Fields
-        private readonly NetworkBuffer buffer;
-        private readonly Socket connection;
+        private  NetworkBuffer buffer;
+        private Socket connection;
         private StringBuilder currentToken;
         private bool isDisposed;
-        private Server owner;
-        
-    
         private string previousToken;
         private StringBuilder rawRequest;
         private Timer receiveTimer;
-        
         private Request request;
         private Response response;
-        private RequestStep stage;
+        private HttpRequestParseStep stage;
         private readonly object syncLock = new object();
         #endregion
         #region Methods
         /// <summary>
-        /// Disposes the current <see cref="ServerAsyncState"/>.
+        /// Disposes the current <see cref="HttpServerAsyncState"/>.
         /// </summary>
         /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
@@ -69,35 +70,17 @@ namespace Serenity.Net
                 {
                     this.connection.Close();
                     this.receiveTimer.Dispose();
-                    this.owner = null;
                 }
                 this.isDisposed = true;
             }
         }
         /// <summary>
-        /// Disposes the current <see cref="ServerAsyncState"/>.
+        /// Disposes the current <see cref="HttpServerAsyncState"/>.
         /// </summary>
         public void Dispose()
         {
             this.Dispose(true);
             GC.SuppressFinalize(this);
-        }
-        /// <summary>
-        /// Resets the current <see cref="ServerAsyncState"/>, preparing it for a new request from a client.
-        /// </summary>
-        public void Reset()
-        {
-            this.rawRequest = new StringBuilder();
-            this.currentToken = new StringBuilder();
-            this.stage = RequestStep.Method;
-            this.request = new Request()
-            {
-                Connection = this.Connection
-            };
-            this.response = new Response()
-            {
-                Connection = this.Connection
-            };
         }
         #endregion
         #region Properties
@@ -139,17 +122,6 @@ namespace Serenity.Net
             get
             {
                 return this.isDisposed;
-            }
-        }
-        public Server Owner
-        {
-            get
-            {
-                return this.owner;
-            }
-            set
-            {
-                this.owner = value;
             }
         }
         public string PreviousToken
@@ -199,7 +171,7 @@ namespace Serenity.Net
                 return this.response;
             }
         }
-        public RequestStep Stage
+        public HttpRequestParseStep Stage
         {
             get
             {
