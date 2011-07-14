@@ -370,23 +370,23 @@ namespace Serenity
         #endregion
         #region Methods - Public
         /// <summary>
-        /// Determines if two MimeType objects are equal to each other.
+        /// Determines if two <see cref="MimeType"/> instances are equal.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
+        /// <param name="a">The first <see cref="MimeType"/> instance to compare.</param>
+        /// <param name="b">The second <see cref="MimeType"/> instance to compare.</param>
+        /// <returns>true if both instances represent the same value; otherwise, false.</returns>
         public static bool Equals(MimeType a, MimeType b)
         {
             return MimeType.Equals(a, b, MimeType.DefaultComparison);
         }
 
         /// <summary>
-        /// Determines if two MimeType objects are equal to each other.
+        /// Determines if two <see cref="MimeType"/> instances are equal.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <param name="comparison"></param>
-        /// <returns></returns>
+        /// <param name="a">The first <see cref="MimeType"/> instance to compare.</param>
+        /// <param name="b">The second <see cref="MimeType"/> instance to compare.</param>
+        /// <param name="comparison">The kind of string comparison to use.</param>
+        /// <returns>true if both instances represent the same value; otherwise, false.</returns>
         public static bool Equals(MimeType a, MimeType b, StringComparison comparison)
         {
             return a.Type.Equals(b.Type, comparison) && a.Subtype.Equals(b.Subtype, comparison);
@@ -395,8 +395,8 @@ namespace Serenity
         /// <summary>
         /// Determines if the current MimeType is equal to another MimeType.
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <param name="value">The other <see cref="MimeType"/> instance to compare to.</param>
+        /// <returns>true if the current instance represents the same value as the specified instance; otherwise, false.</returns>
         public bool Equals(MimeType value)
         {
             return MimeType.Equals(this, value, MimeType.DefaultComparison);
@@ -405,9 +405,9 @@ namespace Serenity
         /// <summary>
         /// Determines if the current MimeType is equal to another MimeType.
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="comparison"></param>
-        /// <returns></returns>
+        /// <param name="value">The other <see cref="MimeType"/> instance to compare to.</param>
+        /// <param name="comparison">The kind of string comparison to use.</param>
+        /// <returns>true if the current instance represents the same value as the specified instance; otherwise, false.</returns>
         public bool Equals(MimeType value, StringComparison comparison)
         {
             return MimeType.Equals(this, value, comparison);
@@ -417,7 +417,7 @@ namespace Serenity
         /// Determines if the current MimeType is equal to another object.
         /// </summary>
         /// <param name="obj">The object to compare.</param>
-        /// <returns></returns>
+        /// <returns>true if <paramref name="obj"/> is a <see cref="MimeType"/> and represents the same value as this instance.</returns>
         public override bool Equals(object obj)
         {
             if (obj != null && obj.GetType().TypeHandle.Equals(typeof(MimeType).TypeHandle))
@@ -444,19 +444,26 @@ namespace Serenity
         }
 
         /// <summary>
-        /// Overridden. Returns a string representation of the current MimeType.
+        /// Overridden. Returns a string representation of the current <see cref="MimeType"/>.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A string representation of the current instance.</returns>
         public override string ToString()
         {
             return this.type + "/" + this.subtype;
         }
 
+        /// <summary>
+        /// Returns the hash code for this instance.
+        /// </summary>
+        /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return (this.type.GetHashCode() + 0x2A4D) | (this.subtype.GetHashCode() + 0x922D);
         }
 
+        /// <summary>
+        /// Defines invariants for the <see cref="MimeType"/> struct.
+        /// </summary>
         [ContractInvariantMethod]
         private void __InvariantMethod()
         {
@@ -468,9 +475,9 @@ namespace Serenity
         /// <summary>
         /// Compares two MimeType objects and determines if they are inequal.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
+        /// <param name="a">The first <see cref="MimeType"/> instance to compare.</param>
+        /// <param name="b">The second <see cref="MimeType"/> instance to compare.</param>
+        /// <returns>true if both instances represent the different values; otherwise, false.</returns>
         public static bool operator !=(MimeType a, MimeType b)
         {
             return !MimeType.Equals(a, b, MimeType.DefaultComparison);
@@ -479,9 +486,9 @@ namespace Serenity
         /// <summary>
         /// Compares two MimeType objects and determines if they are equal.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
+        /// <param name="a">The first <see cref="MimeType"/> instance to compare.</param>
+        /// <param name="b">The second <see cref="MimeType"/> instance to compare.</param>
+        /// <returns>true if both instances represent the same value; otherwise, false.</returns>
         public static bool operator ==(MimeType a, MimeType b)
         {
             return MimeType.Equals(a, b, MimeType.DefaultComparison);

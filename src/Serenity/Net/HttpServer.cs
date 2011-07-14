@@ -24,6 +24,7 @@ namespace Serenity.Net
         public HttpServer()
         {
             this.port = HttpServer.DefaultPort;
+            this.RequestValidator = new DefaultRequestValidator();
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="HttpServer"/> class.
@@ -33,6 +34,7 @@ namespace Serenity.Net
         {
             Contract.Requires(port > 0);
             this.port = port;
+            this.RequestValidator = new DefaultRequestValidator();
         }
         #endregion
         #region Fields
@@ -46,6 +48,12 @@ namespace Serenity.Net
         private int backlog = 10;
         private Socket listenSocket;
         public Action<Request, Response> ProcessRequestCallback
+        {
+            get;
+            set;
+        }
+
+        public RequestValidator RequestValidator
         {
             get;
             set;
@@ -111,6 +119,7 @@ namespace Serenity.Net
                 throw ex;
             }
         }
+
         /// <summary>
         /// Provides a callback method for asynchronous socket receive calls.
         /// </summary>
@@ -242,10 +251,10 @@ namespace Serenity.Net
                                     // TODO: Implement content parsing.
                                     // For now, skip it and fall down to creating a response.
                                     case HttpRequestParseStep.CreateResponse:
-                                        //if (this.ValidateRequest(request, response))
-                                        //{
-                                        this.ProcessRequestCallback(request, response);
-                                        //}
+                                        if (this.RequestValidator.ValidateRequest(request, response))
+                                        {
+                                            this.ProcessRequestCallback(request, response);
+                                        }
                                         this.SendResponse(request, response);
                                         repeat = false;
                                         break;
@@ -358,6 +367,8 @@ namespace Serenity.Net
         {
             this.listenSocket.BeginAccept(this.AcceptCallback, null);
         }
+
+      
 
         [ContractInvariantMethod]
         private void __InvariantMethod()

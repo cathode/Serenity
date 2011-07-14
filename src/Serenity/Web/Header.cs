@@ -47,6 +47,8 @@ namespace Serenity.Web
         public Header(string name, string value)
             : this(name)
         {
+            Contract.Requires(!string.IsNullOrEmpty(name));
+
             this.Value = value;
         }
         #endregion
@@ -68,7 +70,7 @@ namespace Serenity.Web
         [ContractInvariantMethod]
         private void __InvariantMethod()
         {
-            Contract.Invariant(!string.IsNullOrEmpty(this.name));
+            //Contract.Invariant(!string.IsNullOrEmpty(this.name));
             
         }
         #endregion

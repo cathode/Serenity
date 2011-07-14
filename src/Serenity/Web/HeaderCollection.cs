@@ -6,7 +6,7 @@
  *****************************************************************************/
 using System;
 using System.Collections.ObjectModel;
-//using Serenity.Properties;
+using System.Diagnostics.Contracts;
 
 namespace Serenity.Web
 {
@@ -30,14 +30,7 @@ namespace Serenity.Web
 		/// <returns>The newly created Header.</returns>
 		public Header Add(string name, string value)
 		{
-            if (name == null)
-            {
-                throw new ArgumentNullException("name");
-            }
-            else if (name.Length == 0)
-            {
-                //throw new ArgumentException(string.Format(AppResources.ParamEmptyException, "name"), "name");
-            }
+            Contract.Requires(!string.IsNullOrEmpty(name));
 
 			Header header = new Header(name, value);
 			this.Add(header);

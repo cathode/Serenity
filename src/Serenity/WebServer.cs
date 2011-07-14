@@ -5,13 +5,14 @@
  * license; see the included 'license.txt' file for the full text.            *
  *****************************************************************************/
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Threading;
 using Serenity.Net;
 using Serenity.Web;
-using System.Linq;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Serenity
 {
@@ -20,6 +21,13 @@ namespace Serenity
     /// </summary>
     public class WebServer : IDisposable
     {
+        #region Fields
+        private HttpServer listener;
+        private ManualResetEvent waitHandle;
+        private bool isDisposed;
+        private bool isRunning;
+        private readonly List<WebApplication> apps = new List<WebApplication>();
+        #endregion
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="WebServer"/> class.
@@ -29,17 +37,48 @@ namespace Serenity
             this.waitHandle = new ManualResetEvent(false);
         }
 
+        /// <summary>
+        /// Finalizes an instance of the <see cref="WebServer"/> class.
+        /// </summary>
         ~WebServer()
         {
             this.Dispose(false);
         }
         #endregion
-        #region Fields
-        private HttpServer listener;
-        private ManualResetEvent waitHandle;
-        private bool isDisposed;
-        private bool isRunning;
-        private List<WebApplicationBinding> applicationBindings = new List<WebApplicationBinding>();
+        #region Properties
+        public ReadOnlyCollection<WebApplication> LoadedWebApps
+        {
+            get
+            {
+                return new ReadOnlyCollection<WebApplication>(this.apps);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the current <see cref="WebServer"/> is disposed.
+        /// </summary>
+        public bool IsDisposed
+        {
+            get
+            {
+                return this.isDisposed;
+            }
+            protected set
+            {
+                this.isDisposed = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the web server is running.
+        /// </summary>
+        public bool IsRunning
+        {
+            get
+            {
+                return this.isRunning;
+            }
+        }
         #endregion
         #region Methods
         /// <summary>
@@ -51,25 +90,6 @@ namespace Serenity
             GC.SuppressFinalize(this);
         }
 
-        /// <summary>
-        /// Releases unmanaged and managed resources used by the web server.
-        /// </summary>
-        /// <param name="disposing">Indicates whether to release managed resources (true), or unmanaged resources only (false).</param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.isDisposed)
-            {
-                if (disposing)
-                {
-                    // Release any managed resources.
-                }
-
-                // Release unmanaged resources.
-
-                this.isDisposed = true;
-            }
-        }
-
         public void ProcessRequestCallback(Request request, Response response)
         {
             Contract.Requires(request != null);
@@ -77,36 +97,24 @@ namespace Serenity
 
             Trace.WriteLine("Processing request");
 
-            var binding = this.applicationBindings.First(b => request.RawUrl.StartsWith(b.Binding, StringComparison.OrdinalIgnoreCase));
+            var app = this.apps.First(a => request.RawUrl.StartsWith(a.Name, StringComparison.OrdinalIgnoreCase));
 
-            if (binding != null)
-                binding.Application.ProcessRequest(request, response);
-        }
-        public void LoadApplication(WebApplication webApp)
-        {
-            Contract.Requires(webApp != null);
-
-            this.LoadApplication(webApp, webApp.DefaultBinding);
+            if (app != null)
+                app.ProcessRequest(request, response);
         }
 
         /// <summary>
         /// Loads a <see cref="WebApplication"/> into the current web server instance.
         /// </summary>
         /// <param name="webApp">The <see cref="WebApplication"/> to load.</param>
-        public void LoadApplication(WebApplication webApp, string binding)
+        public void LoadApplication(WebApplication webApp)
         {
             Contract.Requires(webApp != null);
-            Contract.Requires(binding != null);
 
-            if (this.applicationBindings.Any(b => b.Binding == binding))
+            if (this.apps.Any(a => a.Name.Equals(webApp.Name, StringComparison.OrdinalIgnoreCase)))
                 return;
 
-            this.applicationBindings.Add(new WebApplicationBinding
-            {
-                Application = webApp,
-                Binding = binding
-            });
-
+            this.apps.Add(webApp);
         }
 
         /// <summary>
@@ -135,12 +143,9 @@ namespace Serenity
             if (!this.isRunning)
             {
                 this.isRunning = true;
-
-
                 this.listener = new HttpServer(80);
                 this.listener.ProcessRequestCallback = this.ProcessRequestCallback;
                 this.listener.Start();
-
                 this.waitHandle.WaitOne();
             }
         }
@@ -153,39 +158,29 @@ namespace Serenity
             this.isRunning = false;
             this.waitHandle.Set();
         }
-        #endregion
-        #region Properties
-        public List<WebApplicationBinding> Bindings
-        {
-            get
-            {
-                return this.applicationBindings;
-            }
-        }
+
         /// <summary>
-        /// Gets or sets a value indicating whether the current <see cref="WebServer"/> is disposed.
+        /// Releases unmanaged and managed resources used by the web server.
         /// </summary>
-        public bool IsDisposed
+        /// <param name="disposing">Indicates whether to release managed resources (true), or unmanaged resources only (false).</param>
+        protected virtual void Dispose(bool disposing)
         {
-            get
+            if (!this.isDisposed)
             {
-                return this.isDisposed;
-            }
-            protected set
-            {
-                this.isDisposed = value;
+                if (disposing)
+                {
+                    // Release any managed resources.
+                }
+
+                // Release unmanaged resources.
+                this.isDisposed = true;
             }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether the web server is running.
-        /// </summary>
-        public bool IsRunning
+        [ContractInvariantMethod]
+        private void __ContractInvariant()
         {
-            get
-            {
-                return this.isRunning;
-            }
+            Contract.Invariant(this.apps != null);
         }
         #endregion
     }

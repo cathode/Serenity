@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics.Contracts;
 
 namespace Serenity.WebApps.ServerInfo
 {
@@ -20,6 +21,8 @@ namespace Serenity.WebApps.ServerInfo
         }
         public ServerInfoWebApp(WebServer server)
         {
+            Contract.Requires(server != null);
+
             this.server = server;
         }
         #endregion
@@ -59,15 +62,14 @@ namespace Serenity.WebApps.ServerInfo
         public override void InitializeResources()
         {
         }
-        #endregion
-
         public override void ProcessRequest(Web.Request request, Web.Response response)
         {
             if (this.server == null)
                 return;
 
-            foreach (var binding in this.server.Bindings)
-                response.WriteLine(string.Format("Binding: {0} ({1}) - {2}", binding.Application.Name, binding.Application.UniqueID, binding.Binding));
+            foreach (var app in this.server.LoadedWebApps)
+                response.WriteLine(string.Format("Web Application: {0} ({1})", app.Name, app.UniqueID));
         }
+        #endregion
     }
 }

@@ -78,6 +78,7 @@
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="MimeType.cs" />
+    <Compile Include="Net\DefaultRequestValidator.cs" />
     <Compile Include="Net\HttpServer.cs" />
     <Compile Include="StatusCode.cs" />
     <Compile Include="WebApplicationBinding.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="WebApps\ServerManagement\ServerManagementWebApp.cs" />
     <Compile Include="WebApps\ServerManagement\SMHomePage.cs" />
     <Compile Include="WebServer.cs" />
+    <Compile Include="Web\WebPath.cs" />
     <None Include="Legacy\Data\Database.cs" />
     <None Include="Legacy\Data\DataScope.cs" />
     <None Include="Legacy\EventRecordedEventArgs.cs" />
@@ -156,6 +158,7 @@
     <None Include="Legacy\Web\Resource.cs" />
     <None Include="Legacy\Web\ResourceGrouping.cs" />
     <None Include="Legacy\Web\ResourceResource.cs" />
+    <Compile Include="Web\RequestValidator.cs" />
     <Compile Include="Web\Response.cs" />
     <None Include="Legacy\Web\RewriteResource.cs" />
     <None Include="Legacy\Web\RootResource.cs" />
