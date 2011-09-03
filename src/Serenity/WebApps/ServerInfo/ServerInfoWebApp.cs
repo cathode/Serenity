@@ -12,51 +12,17 @@ namespace Serenity.WebApps.ServerInfo
     public class ServerInfoWebApp : WebApplication
     {
         #region Fields
-        private WebServer server;
         #endregion
         #region Constructors
-        public ServerInfoWebApp()
+        internal ServerInfoWebApp()
         {
-
-        }
-        public ServerInfoWebApp(WebServer server)
-        {
-            Contract.Requires(server != null);
-
-            this.server = server;
+            this.Name = "ServerInfo";
+            this.UniqueID = new Guid("{39DD1DF1-1F04-47F5-B759-E4A41B7D6651}");
+            this.Version = new Version(1, 0, 0, 0);
         }
         #endregion
         #region Properties
-        public override string Name
-        {
-            get
-            {
-                return "ServerInfo";
-            }
-        }
-
-        public override Guid UniqueID
-        {
-            get
-            {
-                return new Guid("{39DD1DF1-1F04-47F5-B759-E4A41B7D6651}");
-            }
-        }
-
-        public override Version Version
-        {
-            get
-            {
-                return new Version(0, 1, 0, 0);
-            }
-        }
-        public override string DefaultBinding
-        {
-            get
-            {
-                return "/ServerInfo";
-            }
-        }
+      
         #endregion
         #region Methods
         public override void InitializeResources()
@@ -64,11 +30,7 @@ namespace Serenity.WebApps.ServerInfo
         }
         public override void ProcessRequest(Web.Request request, Web.Response response)
         {
-            if (this.server == null)
-                return;
-
-            foreach (var app in this.server.LoadedWebApps)
-                response.WriteLine(string.Format("Web Application: {0} ({1})", app.Name, app.UniqueID));
+           
         }
         #endregion
     }

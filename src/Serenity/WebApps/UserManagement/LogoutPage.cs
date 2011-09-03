@@ -8,16 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Serenity.Web;
 
-namespace Serenity.Net
+namespace Serenity.WebApps.UserManagement
 {
-    public class DefaultRequestValidator : RequestValidator
+    class LogoutPage
     {
-        public override bool ValidateRequest(Request request, Response response)
-        {
-            // TODO: Implement basic request validation.
-            return true;
-        }
     }
 }

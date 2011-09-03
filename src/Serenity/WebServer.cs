@@ -27,6 +27,7 @@ namespace Serenity
         private bool isDisposed;
         private bool isRunning;
         private readonly List<WebApplication> apps = new List<WebApplication>();
+        private Dictionary<Guid, ResourceBinding> resources = new Dictionary<Guid, ResourceBinding>();
         #endregion
         #region Constructors
         /// <summary>
@@ -97,10 +98,43 @@ namespace Serenity
 
             Trace.WriteLine("Processing request");
 
-            var app = this.apps.First(a => request.RawUrl.StartsWith(a.Name, StringComparison.OrdinalIgnoreCase));
+            // Obtain or create session
+            if (request.Cookies.Contains("sws_session"))
+            {
 
-            if (app != null)
-                app.ProcessRequest(request, response);
+            }
+            else
+            {
+
+            }
+
+            Resource res = null;
+            if (request.Url.Segments.Length > 1)
+            {
+                var seg1 = Uri.UnescapeDataString(request.Url.Segments[1]);
+
+                if (seg1.StartsWith("{") && ((seg1.EndsWith("}") && seg1.Length == 38) || (seg1.EndsWith("}/") && seg1.Length == 39)))
+                {
+                    res = this.resources[Guid.Parse(seg1.TrimEnd('/'))].Resource;
+                }
+                else
+                {
+                    var bind = this.resources.FirstOrDefault(e => e.Value.Path == request.Url.AbsolutePath);
+                    if (bind.Value != null)
+                        res = bind.Value.Resource;
+                }
+            }
+
+            if (res == null)
+            {
+                response.Status = StatusCode.Http404NotFound;
+            }
+            else
+            {
+                response.Status = StatusCode.Http200Ok;
+                res.OnRequest(request, response);
+            }
+
         }
 
         /// <summary>
@@ -114,7 +148,14 @@ namespace Serenity
             if (this.apps.Any(a => a.Name.Equals(webApp.Name, StringComparison.OrdinalIgnoreCase)))
                 return;
 
+            webApp.InitializeResources();
+
             this.apps.Add(webApp);
+
+            foreach (var bind in webApp.Resources)
+            {
+                this.resources.Add(bind.Resource.UniqueID, bind);
+            }
         }
 
         /// <summary>
@@ -122,8 +163,9 @@ namespace Serenity
         /// </summary>
         public void LoadBuiltinApplications()
         {
-            this.LoadApplication(new Serenity.WebApps.ServerInfo.ServerInfoWebApp(this));
+            this.LoadApplication(new Serenity.WebApps.ServerInfo.ServerInfoWebApp());
             this.LoadApplication(new Serenity.WebApps.ServerManagement.ServerManagementWebApp());
+            this.LoadApplication(new Serenity.WebApps.UserManagement.UserManagement());
         }
 
         /// <summary>

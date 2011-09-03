@@ -62,28 +62,39 @@
     <DocumentationFile>bin\Release\Serenity.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Npgsql">
+      <HintPath>..\..\ref\Npgsql.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\SolutionInfo.cs">
-      <Link>SolutionInfo.cs</Link>
+      <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="Cookie.cs" />
-    <Compile Include="CookieCollection.cs" />
-    <Compile Include="CookieVersion.cs" />
     <Compile Include="Doctype.cs" />
     <Compile Include="ExceptionMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Internal\BuiltinWebApp.cs" />
     <Compile Include="MimeType.cs" />
     <Compile Include="Net\DefaultRequestValidator.cs" />
     <Compile Include="Net\HttpServer.cs" />
+    <Compile Include="Users\UserAccount.cs" />
+    <Compile Include="Users\UserActions.cs" />
+    <Compile Include="Users\UserRole.cs" />
+    <Compile Include="Users\UserScope.cs" />
+    <Compile Include="WebApps\UserManagement\LoginPage.cs" />
+    <Compile Include="WebApps\UserManagement\LogoutPage.cs" />
+    <Compile Include="WebApps\UserManagement\UserManagementWebApp.cs" />
+    <Compile Include="Web\Forms\WebFormResource.cs" />
+    <Compile Include="Web\ResourceBinding.cs" />
     <Compile Include="StatusCode.cs" />
-    <Compile Include="WebApplicationBinding.cs" />
     <Compile Include="WebApps\DynamicPage.cs" />
-    <Compile Include="WebApps\ImageViewer\ImageViewerApp.cs" />
     <Compile Include="WebApps\ServerInfo\BasicInfoPage.cs" />
     <Compile Include="WebApps\ServerInfo\ServerInfoWebApp.cs" />
     <Compile Include="WebApps\ServerInfo\WebAppListPage.cs" />
@@ -92,7 +103,7 @@
     <Compile Include="WebApps\ServerManagement\SMHomePage.cs" />
     <Compile Include="WebServer.cs" />
     <Compile Include="Web\WebPath.cs" />
-    <None Include="Legacy\Data\Database.cs" />
+    <Compile Include="Data\Database.cs" />
     <None Include="Legacy\Data\DataScope.cs" />
     <None Include="Legacy\EventRecordedEventArgs.cs" />
     <None Include="Legacy\IO\SerenityPath.cs" />
@@ -155,15 +166,15 @@
     <Compile Include="Web\RequestDataCollection.cs" />
     <Compile Include="Web\RequestDataStream.cs" />
     <Compile Include="Web\RequestMethod.cs" />
-    <None Include="Legacy\Web\Resource.cs" />
+    <Compile Include="Web\Resource.cs" />
     <None Include="Legacy\Web\ResourceGrouping.cs" />
     <None Include="Legacy\Web\ResourceResource.cs" />
     <Compile Include="Web\RequestValidator.cs" />
     <Compile Include="Web\Response.cs" />
     <None Include="Legacy\Web\RewriteResource.cs" />
     <None Include="Legacy\Web\RootResource.cs" />
-    <None Include="Legacy\Web\Session.cs" />
-    <None Include="Legacy\Web\StaticResource.cs" />
+    <Compile Include="Web\Sessions\Session.cs" />
+    <Compile Include="Web\StaticResource.cs" />
     <None Include="Legacy\__SerenityModuleFactory.cs" />
     <None Include="Legacy\__Strings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -217,6 +228,7 @@
     <Content Include="Legacy\Resources\icons\page_white_wrench.png" />
     <Content Include="Legacy\Resources\icons\page_white_zip.png" />
     <Content Include="Legacy\Resources\index.css" />
+    <Content Include="WebApps\UserManagement\LoginPage.html" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Legacy\Properties\AppResources.resx" />
@@ -224,7 +236,6 @@
   <ItemGroup>
     <Folder Include="Legacy\Data\module\serenity\schemas\" />
     <Folder Include="Legacy\Web\Resources\" />
-    <Folder Include="Web\Resources\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ExceptionMessages.resx">

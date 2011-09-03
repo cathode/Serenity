@@ -1,5 +1,9 @@
-/* Serenity - The next evolution of web server technology.
- * Copyright © 2006-2010 Will Shelley. All Rights Reserved. */
+/******************************************************************************
+ * Serenity - Managed Web Application Server. ( http://gearedstudios.com/ )   *
+ * Copyright © 2006-2011 William 'cathode' Shelley. All Rights Reserved.      *
+ * This software is released under the terms and conditions of the MIT/X11    *
+ * license; see the included 'license.txt' file for the full text.            *
+ *****************************************************************************/
 using System;
 using System.Collections.Generic;
 using System.Text;

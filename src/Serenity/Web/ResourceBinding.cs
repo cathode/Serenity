@@ -9,26 +9,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Serenity.WebApps.ServerManagement
+namespace Serenity.Web
 {
-    public sealed class ServerManagementWebApp : WebApplication
+    /// <summary>
+    /// Represents a binding of a resource to the server
+    /// </summary>
+    public class ResourceBinding
     {
-        #region Constructors
-        internal ServerManagementWebApp()
+        #region Properties
+        public Resource Resource
         {
-            this.Name = "ServerManagement";
-            this.UniqueID = new Guid("{9D67106C-6081-41EC-A6DA-93B7E3A2AD21}");
-            this.Version = new Version(1, 0, 0, 0);
-        }
-        #endregion
-        #region Methods
-        public override void InitializeResources()
-        {
+            get;
+            internal set;
         }
 
-        public override void ProcessRequest(Web.Request request, Web.Response response)
+        /// <summary>
+        /// Gets the path that the resource is bound to.
+        /// </summary>
+        public string Path
         {
-            throw new NotImplementedException();
+            get;
+            internal set;
+        }
+
+        public bool IsAbsolutePath
+        {
+            get;
+            internal set;
         }
         #endregion
     }

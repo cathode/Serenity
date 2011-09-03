@@ -185,6 +185,7 @@ namespace Serenity.Net
                                         {
                                             // End of URI token
                                             request.RawUrl = state.CurrentToken.ToString();
+                                            request.Url = new Uri(request.RawUrl, UriKind.RelativeOrAbsolute);
                                             state.CurrentToken = new StringBuilder();
                                             state.Stage = HttpRequestParseStep.Version;
                                             appendToken = false;
@@ -251,6 +252,7 @@ namespace Serenity.Net
                                     // TODO: Implement content parsing.
                                     // For now, skip it and fall down to creating a response.
                                     case HttpRequestParseStep.CreateResponse:
+                                        request.Url = new Uri(new Uri("http://" + request.Headers["Host"].Value), request.RawUrl);
                                         if (this.RequestValidator.ValidateRequest(request, response))
                                         {
                                             this.ProcessRequestCallback(request, response);

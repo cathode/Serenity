@@ -8,16 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Serenity.Web;
 
-namespace Serenity.Net
+namespace Serenity.Web.Forms
 {
-    public class DefaultRequestValidator : RequestValidator
+    public abstract class WebFormResource : Resource
     {
-        public override bool ValidateRequest(Request request, Response response)
-        {
-            // TODO: Implement basic request validation.
-            return true;
-        }
     }
 }

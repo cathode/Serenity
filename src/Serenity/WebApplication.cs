@@ -16,41 +16,86 @@ namespace Serenity
     /// </summary>
     public abstract class WebApplication
     {
+        #region Fields
+
+        #endregion
+        #region Constructors
+        protected WebApplication()
+        {
+            this.Resources = new List<ResourceBinding>();
+        }
+        #endregion
         #region Methods
+        /// <summary>
+        /// Binds a resource using the resource's default binding.
+        /// </summary>
+        /// <param name="resource">The resource to bind.</param>
+        protected internal void BindResource(Resource resource)
+        {
+
+        }
+
+        /// <summary>
+        /// Binds a resource using an explicit binding instead of the resource's own default binding.
+        /// </summary>
+        /// <param name="resource">The resource to bind.</param>
+        /// <param name="path">The path to bind the resource to.</param>
+        /// <param name="absolute">A bool indicating whether the specified path represents an absolute path (true), or a relative path (false).</param>
+        protected internal void BindResource(Resource resource, string path, bool absolute)
+        {
+            if (!absolute)
+                path = "/" + this.Name + "/" + path;
+
+            this.Resources.Add(new ResourceBinding()
+            {
+                Resource = resource,
+                IsAbsolutePath = absolute,
+                Path = path,
+            });
+        }
         public abstract void InitializeResources();
         public abstract void ProcessRequest(Request request, Response response);
         #endregion
         #region Properties
+        public List<ResourceBinding> Resources
+        {
+            get;
+            private set;
+        }
         /// <summary>
         /// Gets the name of the current <see cref="WebApplication"/>.
         /// </summary>
-        public abstract string Name
+        public string Name
         {
             get;
+            protected set;
         }
 
         /// <summary>
         /// Gets the unique identifier of the current <see cref="WebApplication"/>.
         /// </summary>
-        public abstract Guid UniqueID
+        public Guid UniqueID
         {
             get;
+            protected set;
         }
 
         /// <summary>
         /// Gets the <see cref="Version"/> of the current <see cref="WebApplication"/>.
         /// </summary>
-        public abstract Version Version
+        public Version Version
         {
             get;
+            protected set;
         }
 
-        public abstract string DefaultBinding
+        public string DefaultBinding
         {
             get;
+            protected set;
         }
         #endregion
 
-       
+
     }
 }
