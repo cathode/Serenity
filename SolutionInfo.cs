@@ -14,6 +14,6 @@ using System.Security.Permissions;
 [assembly: AssemblyCopyright("Copyright © 2006-2011 William 'cathode' Shelley. All Rights Reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("0.9.*")]
+[assembly: AssemblyVersion("0.1.*")]
 
 [assembly: CLSCompliant(false)]

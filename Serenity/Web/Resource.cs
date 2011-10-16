@@ -74,8 +74,6 @@ namespace Serenity.Web
         {
             get
             {
-                Contract.Assume(ResourceGraph.IsValidName(Contract.Result<string>()));
-
                 return this.name ?? this.UniqueID.ToString();
             }
             set
@@ -154,6 +152,17 @@ namespace Serenity.Web
             }
         }
 
+        public ResourceGrouping Grouping
+        {
+            get
+            {
+                return ResourceGrouping.Unspecified;
+            }
+            set
+            {
+            }
+        }
+
         public ReadOnlyCollection<ResourceGraphNode> MountPoints
         {
             get
@@ -184,6 +193,17 @@ namespace Serenity.Web
             throw new NotImplementedException();
         }
 
+        public Uri GetRelativeUri()
+        {
+            if (this.mountPoints.Count > 0)
+            {
+                var mp = this.mountPoints.First(n => n.PreferDefault) ?? this.mountPoints[0];
+                return new Uri(mp.Path, UriKind.Relative);
+            }
+            else
+                return new Uri("/" + this.Name, UriKind.Relative);
+        }
+
         /// <summary>
         /// When overridden in a derived class, uses the supplied CommonContext to dynamically generate response content.
         /// </summary>
@@ -191,7 +211,8 @@ namespace Serenity.Web
         /// <param name="response"></param>
         public virtual void OnRequest(Request request, Response response)
         {
-
+            Contract.Requires(request != null);
+            Contract.Requires(response != null);
         }
         #endregion
 

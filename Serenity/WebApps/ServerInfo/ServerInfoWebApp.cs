@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics.Contracts;
+using Serenity.Web;
 
 namespace Serenity.WebApps.ServerInfo
 {
@@ -27,6 +28,10 @@ namespace Serenity.WebApps.ServerInfo
         #region Methods
         public override void InitializeResources()
         {
+            this.ApplicationRoot.Name = this.Name;
+            this.ApplicationRoot.AttachResource(new DirectoryResource(this.Name));
+            this.ApplicationRoot.AddChild(new ResourceGraphNode(new ListApps()));
+            this.ApplicationRoot.AddChild(new ResourceGraphNode(new DetailInfo()));
         }
         public override void ProcessRequest(Web.Request request, Web.Response response)
         {

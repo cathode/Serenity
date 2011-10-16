@@ -1,21 +1,17 @@
 /******************************************************************************
- * Serenity - The next evolution of web server technology.                    *
- * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
- *----------------------------------------------------------------------------*
- * This software is released under the terms and conditions of the Microsoft  *
- * Public License (Ms-PL), a copy of which should have been included with     *
- * this distribution as License.txt.                                          *
- *----------------------------------------------------------------------------*
- * Authors:                                                                   *
- * - Will 'AnarkiNet' Shelley (AnarkiNet@gmail.com): Original Author          *
+ * Serenity - Managed Web Application Server. ( http://gearedstudios.com/ )   *
+ * Copyright © 2006-2011 William 'cathode' Shelley. All Rights Reserved.      *
+ * This software is released under the terms and conditions of the MIT/X11    *
+ * license; see the included 'license.txt' file for the full text.            *
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics.Contracts;
 
 namespace Serenity.Web
 {
-    public struct ResourceGrouping : IEquatable<ResourceGrouping>, IComparable<ResourceGrouping>
+    public sealed class ResourceGrouping : IEquatable<ResourceGrouping>, IComparable<ResourceGrouping>
     {
         /// <summary>
         /// Initializes a new instance of the ResourceGroup class, using a
@@ -26,14 +22,9 @@ namespace Serenity.Web
         /// <param name="pluralForm">The plural form of the grouping name.</param>
         public ResourceGrouping(string singularForm, string pluralForm)
         {
-            if (singularForm == null)
-            {
-                throw new ArgumentNullException("singularForm");
-            }
-            else if (pluralForm == null)
-            {
-                throw new ArgumentNullException("pluralForm");
-            }
+            Contract.Requires(singularForm != null);
+            Contract.Requires(pluralForm != null);
+
             this.singularForm = singularForm;
             this.pluralForm = pluralForm;
         }
@@ -64,13 +55,9 @@ namespace Serenity.Web
         public string ToString(bool useSingular)
         {
             if (useSingular)
-            {
-                return this.singularForm;
-            }
+                return this.singularForm ?? string.Empty;
             else
-            {
-                return this.pluralForm;
-            }
+                return this.pluralForm ?? string.Empty;
         }
         #endregion
         #region Properties - Public

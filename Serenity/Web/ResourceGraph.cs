@@ -27,7 +27,7 @@ namespace Serenity.Web
         /// </summary>
         public ResourceGraph()
         {
-            this.root = new ResourceGraphNode("/");
+            this.root = new ResourceGraphNode();
         }
         #endregion
         #region Properties

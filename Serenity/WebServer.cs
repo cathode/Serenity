@@ -6,13 +6,13 @@
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Threading;
 using Serenity.Net;
 using Serenity.Web;
-using System.Collections.ObjectModel;
 
 namespace Serenity
 {
@@ -22,13 +22,12 @@ namespace Serenity
     public class WebServer : IDisposable
     {
         #region Fields
+        private readonly List<WebApplication> apps;
         private readonly ResourceGraph resources;
-
         private HttpServer listener;
         private ManualResetEvent waitHandle;
         private bool isDisposed;
         private bool isRunning;
-        private readonly List<WebApplication> apps = new List<WebApplication>();
         #endregion
         #region Constructors
         /// <summary>
@@ -38,6 +37,7 @@ namespace Serenity
         {
             this.waitHandle = new ManualResetEvent(false);
             this.resources = new ResourceGraph();
+            this.apps = new List<WebApplication>();
         }
 
         /// <summary>
@@ -121,8 +121,17 @@ namespace Serenity
             Resource res = null;
 
             var segs = request.Url.Segments;
+            ResourceGraphNode node = this.resources.Root;
+            foreach (var seg in segs.Skip(1))
+            {
+                node = node.FirstOrDefault(n => n.SegmentName == seg);
 
+                if (node == null)
+                    break;
+            }
 
+            if (node != null)
+                res = node.Resource;
 
             if (res == null)
             {
@@ -133,7 +142,6 @@ namespace Serenity
                 response.Status = StatusCode.Http200Ok;
                 res.OnRequest(request, response);
             }
-
         }
 
         /// <summary>
@@ -148,7 +156,8 @@ namespace Serenity
                 return;
             webApp.InitializeResources();
             this.apps.Add(webApp);
-            this.resources.Root.Add(webApp.ApplicationRoot);
+
+            this.resources.Root.AddChild(webApp.ApplicationRoot);
         }
 
         /// <summary>
@@ -175,6 +184,8 @@ namespace Serenity
         /// </summary>
         public void Start()
         {
+            Contract.Requires<ObjectDisposedException>(!this.IsDisposed);
+
             if (!this.isRunning)
             {
                 this.isRunning = true;

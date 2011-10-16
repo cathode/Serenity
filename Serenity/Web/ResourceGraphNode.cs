@@ -16,9 +16,14 @@ namespace Serenity.Web
     /// <summary>
     /// Represents a node in a resource graph.
     /// </summary>
-    public class ResourceGraphNode : KeyedCollection<string, ResourceGraphNode>
+    public sealed class ResourceGraphNode : IEnumerable<ResourceGraphNode>
     {
         #region Fields
+        /// <summary>
+        /// Holds child nodes of the current node.
+        /// </summary>
+        private readonly ResourceGraphNodeCollection children = new ResourceGraphNodeCollection();
+
         /// <summary>
         /// Backing field for the <see cref="ResourceGraphNode.Resource"/> property.
         /// </summary>
@@ -30,11 +35,12 @@ namespace Serenity.Web
         private string name;
 
         /// <summary>
-        /// Backing field for the <see cref="ResourceGraphNode.IsReverseAttached"/> property.
+        /// Backing field for the <see cref="ResourceGraphNode.SilentAttach"/> property.
         /// </summary>
         private bool invisible;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceGraphNode"/> class.
         /// </summary>
@@ -55,6 +61,33 @@ namespace Serenity.Web
             Contract.Requires(resource != null);
 
             this.name = resource.Name;
+            this.AttachResource(resource);
+        }
+
+        public ResourceGraphNode(string name, params ResourceGraphNode[] children)
+        {
+            Contract.Requires(ResourceGraph.IsValidName(name));
+
+            this.name = name;
+
+            foreach (var child in children)
+                if (child != null)
+                    this.AddChild(child);
+        }
+        public ResourceGraphNode(Resource resource, params ResourceGraphNode[] children)
+        {
+            Contract.Requires(resource != null);
+
+            this.name = resource.Name;
+            this.AttachResource(resource);
+
+            foreach (var child in children)
+                if (child != null)
+                    this.AddChild(child);
+        }
+        internal ResourceGraphNode()
+        {
+            this.name = string.Empty;
         }
         #endregion
         #region Properties
@@ -99,7 +132,7 @@ namespace Serenity.Web
         {
             get
             {
-                return this.Items.Count > 0;
+                return this.children.Count > 0;
             }
         }
 
@@ -120,11 +153,19 @@ namespace Serenity.Web
             }
         }
 
+        public string SegmentName
+        {
+            get
+            {
+                return (this.HasChildren) ? this.Name + "/" : this.Name;
+            }
+        }
+
         /// <summary>
         /// Gets or sets a value indicating whether the <see cref="Resource"/>
         /// that is referenced by this graph node is made aware of the reference.
         /// </summary>
-        public bool IsReverseAttached
+        public bool SilentAttach
         {
             get
             {
@@ -135,6 +176,18 @@ namespace Serenity.Web
                 this.invisible = value;
                 // Detach, then re-attach the resource to refresh it's reverse association.
                 this.AttachResource(this.Resource);
+            }
+        }
+
+        public string Path
+        {
+            get
+            {
+                string path = this.SegmentName;
+                if (this.HasParent)
+                    path = this.Parent.Path + path;
+
+                return path;
             }
         }
 
@@ -154,6 +207,43 @@ namespace Serenity.Web
         }
         #endregion
         #region Methods
+        public void AddChild(ResourceGraphNode node)
+        {
+            Contract.Requires(node != null);
+
+            this.AddChild(node, false);
+        }
+
+        public void AddChild(ResourceGraphNode node, bool adopt)
+        {
+            Contract.Requires(node != null);
+
+            this.children.Add(node);
+
+            if (adopt || !node.HasParent)
+                node.Parent = this;
+        }
+
+        public void Remove(ResourceGraphNode node)
+        {
+            Contract.Requires(node != null);
+
+            if (this.children.Remove(node))
+                if (node.Parent == this)
+                    node.Parent = null;
+        }
+
+        public void Remove(string name)
+        {
+            if (this.children.Contains(name))
+            {
+                var node = this.children[name];
+                this.children.Remove(node);
+                if (node.Parent == this)
+                    node.Parent = null;
+            }
+        }
+
         /// <summary>
         /// Creates an association between the specified resource and the current graph node.
         /// </summary>
@@ -168,9 +258,7 @@ namespace Serenity.Web
             if (resource != null)
             {
                 this.resource = resource;
-
-                if (this.IsReverseAttached)
-                    this.resource.MountPointsMutable.Add(this);
+                this.resource.MountPointsMutable.Add(this);
             }
         }
 
@@ -188,10 +276,24 @@ namespace Serenity.Web
 
             this.resource = null;
         }
-        [Pure]
-        protected override string GetKeyForItem(ResourceGraphNode item)
+        public IEnumerator<ResourceGraphNode> GetEnumerator()
         {
-            return item.Name;
+            return this.children.GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return this.children.GetEnumerator();
+        }
+
+        #endregion
+        #region Types
+        public sealed class ResourceGraphNodeCollection : KeyedCollection<string, ResourceGraphNode>
+        {
+            protected override string GetKeyForItem(ResourceGraphNode item)
+            {
+                return item.Name;
+            }
         }
         #endregion
     }

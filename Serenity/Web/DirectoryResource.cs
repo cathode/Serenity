@@ -11,7 +11,8 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
-using Serenity.Properties;
+using Serenity.Web.Themes;
+using System.Diagnostics.Contracts;
 
 namespace Serenity.Web
 {
@@ -27,33 +28,22 @@ namespace Serenity.Web
         /// </summary>
         public DirectoryResource()
         {
-            this.ContentType = MimeType.TextHtml;
+            this.ContentType = MimeType.ApplicationXhtmlPlusXml;
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="DirectoryResource"/> class.
         /// </summary>
         /// <param name="name"></param>
         public DirectoryResource(string name)
-            : this()
         {
             this.Name = name;
-        }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DirectoryResource"/> class.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="children"></param>
-        public DirectoryResource(string name, params Resource[] children)
-            : this(name)
-        {
-            this.Add(children);
         }
         #endregion
         #region Fields
         /// <summary>
         /// Holds the relative URI to the stylesheet used to style the directory index.
         /// </summary>
-        public const string StylesheetUrl = "/serenity/index.css";
+        public const string StylesheetUrl = "/Content/DirectoryResource.css";
         #endregion
         #region Methods
         /// <summary>
@@ -63,47 +53,34 @@ namespace Serenity.Web
         /// <param name="response">The outgoing <see cref="Response"/>.</param>
         public override void OnRequest(Request request, Response response)
         {
-            if (request == null)
-                throw new ArgumentNullException("request");
-            else if (response == null)
-                throw new ArgumentNullException("response");
-            else if (response.IsComplete)
+            if (response.IsComplete)
                 return;
-            
-            Resource child = this.GetChild(request.Url);
 
-            Uri uri = this.GetAbsoluteUri(request.Url);
+            //Resource child = this.GetChild(request.Url);
 
-            if (child != null)
-            {
-                child.OnRequest(request, response);
-                return;
-            }
-            else if (!request.Url.AbsolutePath.Equals(uri.AbsolutePath, StringComparison.OrdinalIgnoreCase))
-            {
-                response.Status = StatusCode.Http404NotFound;
-                response.Write("HTTP 404 Not Found");
-                response.ContentType = MimeType.TextPlain;
-                return;
-            }
+            Uri uri = this.GetRelativeUri();
+
+
 
             // collect data for index generation
             SortedDictionary<ResourceGrouping, List<Resource>> groupedResources = new SortedDictionary<ResourceGrouping, List<Resource>>();
-
-            foreach (Resource resource in this.Children)
+            if (this.MountPoints.Count > 0)
+            foreach (var res in from n in this.MountPoints[0]
+                                     where n.Resource != null
+                                     select n.Resource)
             {
-                if (!groupedResources.ContainsKey(resource.Grouping))
+                if (!groupedResources.ContainsKey(res.Grouping))
                 {
-                    groupedResources.Add(resource.Grouping, new List<Resource>());
+                    groupedResources.Add(res.Grouping, new List<Resource>());
                 }
-                groupedResources[resource.Grouping].Add(resource);
+                groupedResources[res.Grouping].Add(res);
             }
 
             string host = uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped);
-
+            
             var doc = new XDocument(new XElement("html",
                 new XElement("head",
-                    new XElement("title", string.Format(AppResources.DirectoryTitle, uri.ToString())),
+                    new XElement("title", string.Format(Theme.DirectoryTitle, uri.ToString())),
                     new XElement("link",
                         new XAttribute("rel", "stylesheet"),
                         new XAttribute("type", "text/css"),
@@ -111,7 +88,7 @@ namespace Serenity.Web
                 new XElement("body",
                     new XElement("div",
                         new XAttribute("class", "main_heading"),
-                        string.Format(AppResources.DirectoryTitle, string.Empty),
+                        string.Format(Theme.DirectoryTitle, string.Empty),
                         new XElement("a",
                             new XAttribute("href", host), host),
                             "/",
@@ -132,16 +109,16 @@ namespace Serenity.Web
                                             new XAttribute("class", "icon")),
                                             new XElement("th",
                                                 new XAttribute("class", "name"),
-                                                AppResources.DirectoryNameColumn),
+                                                "Name"),
                                             new XElement("th",
                                                 new XAttribute("class", "size"),
-                                                AppResources.DirectorySizeColumn),
+                                                "Size"),
                                             new XElement("th",
                                                 new XAttribute("class", "description"),
-                                                AppResources.DirectoryDescriptionColumn),
+                                                "Description"),
                                             new XElement("th",
                                                 new XAttribute("class", "modified"),
-                                                AppResources.DirectoryModifiedColumn)),
+                                                "Modified")),
                                 from r in g.Value
                                 orderby r.Name
                                 select new XElement("tr",
@@ -151,7 +128,7 @@ namespace Serenity.Web
                                     new XElement("td",
                                         new XElement("a",
                                             new XAttribute("href", r.GetAbsoluteUri(request.Url)),
-                                            (r.Name.Length > 0) ? r.Name : AppResources.DirectoryItemDefaultName)),
+                                            (r.Name.Length > 0) ? r.Name : "default")),
                                             new XElement("td",
                                                 (r.Size < 0) ? "N/A" :
                                                 (r.Size < 1024) ? r.Size.ToString("G") + "B" :
@@ -167,7 +144,7 @@ namespace Serenity.Web
             settings.ConformanceLevel = ConformanceLevel.Document;
             settings.Encoding = Encoding.UTF8;
             settings.Indent = false;
-
+            
             // output data
             using (MemoryStream ms = new MemoryStream())
             {
@@ -181,29 +158,7 @@ namespace Serenity.Web
             }
             response.ContentType = MimeType.TextHtml;
             response.IsComplete = true;
-        }
-        
-        #endregion
-        #region Properties
-        /// <summary>
-        /// Gets the resource grouping of the current DirectoryResource.
-        /// </summary>
-        public override ResourceGrouping Grouping
-        {
-            get
-            {
-                return ResourceGrouping.Directories;
-            }
-        }
-        /// <summary>
-        /// Overridden. Returns true, indicating <see cref="DirectResource">DirectoryResources</see> support child resources.
-        /// </summary>
-        public override bool CanHaveChildren
-        {
-            get
-            {
-                return true;
-            }
+            
         }
         #endregion
     }

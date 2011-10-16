@@ -8,10 +8,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Serenity.Web;
 
 namespace Serenity.WebApps.ServerInfo
 {
-    public class WebAppListPage : DynamicPage
+    public class ListApps : Resource
     {
+        public ListApps()
+        {
+            this.Name = "ListApps";
+        }
+        public override void OnRequest(Request request, Response response)
+        {
+            base.OnRequest(request, response);
+
+
+        }
     }
 }

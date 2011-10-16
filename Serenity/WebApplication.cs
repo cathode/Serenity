@@ -22,7 +22,7 @@ namespace Serenity
         #region Constructors
         protected WebApplication()
         {
-            this.applicationRoot = new ResourceGraphNode("WebApplication");
+            this.applicationRoot = new ResourceGraphNode(this.GetType().Name);
         }
         #endregion
         #region Methods
