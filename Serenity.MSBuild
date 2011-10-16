@@ -2,7 +2,7 @@
 <Project DefaultTargets="GenerateBinaryArtifacts" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Target Name="BuildSource">
     <Message Text="Building source..." />
-    <MSBuild Projects="src/src.sln" Properties="Configuration=Release" />
+    <MSBuild Projects="Serenity.sln" Properties="Configuration=Release" />
   </Target>
   <Target Name="BuildTests" DependsOnTargets="BuildSource">
     <Message Text="Building tests..." />
@@ -15,15 +15,13 @@
     <MakeDir Directories="$(MSBuildProjectDirectory)/artifact" />
     <ItemGroup>
       <FilesToCopy Include="$(MSBuildProjectDirectory)/license.txt" />
-      <FilesToCopy Include="$(MSBuildProjectDirectory)/Managed3D/bin/Release/*" />
-      <FilesToCopy Include="$(MSBuildProjectDirectory)/Managed3D.Rendering.Direct3D/bin/Release/*" />
-      <FilesToCopy Include="$(MSBuildProjectDirectory)/Managed3D.Rendering.OpenGL/bin/Release/*" />
-      <FilesToCopy Include="$(MSBuildProjectDirectory)/ManagedStudio3D/bin/Release/*" />
+      <FilesToCopy Include="$(MSBuildProjectDirectory)/Serenity/bin/Release/*" />
+      <FilesToCopy Include="$(MSBuildProjectDirectory)/Serenity.Server/bin/Release/*" />
     </ItemGroup>
     <Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(MSBuildProjectDirectory)/artifact" />
     <ItemGroup>
       <FilesToZip Include="$(MSBuildProjectDirectory)/artifact/*" Exclude="*.zip" />
     </ItemGroup>
-    <Zip Files="@(FilesToZip)" WorkingDirectory="$(MSBuildProjectDirectory)/artifact" ZipFileName="$(MSBuildProjectDirectory)/artifact/Managed3D.zip" ZipLevel="9" />
+    <Zip Files="@(FilesToZip)" WorkingDirectory="$(MSBuildProjectDirectory)/artifact" ZipFileName="$(MSBuildProjectDirectory)/artifact/Serenity.zip" ZipLevel="9" />
   </Target>
 </Project>
