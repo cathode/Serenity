@@ -8,6 +8,12 @@
     <RemoveDir Directories="$(MSBuildProjectDirectory)/Serenity/bin" ContinueOnError="true" />
     <RemoveDir Directories="$(MSBuildProjectDirectory)/Serenity.Server/bin" ContinueOnError="true" />
   </Target>
+  <Target Name="FormatVersion" BeforeTargets="BuildSource" Condition="$(build_vcs_number_1)!=''">
+    <FileUpdate Files="$(MSBuildProjectDirectory)/SolutionInfo.cs"
+               
+               Regex="(\d+)\.(\d+)\.(\d+)\.(\d+)"
+               ReplacementText="$1.$2.$(build_vcs_number_1).$3" />
+  </Target>
   <Target Name="BuildSource" DependsOnTargets="PreBuildClean">
     <Message Text="Building source..." />
     <MSBuild Projects="Serenity.sln" Properties="Configuration=Release" />
