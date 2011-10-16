@@ -56,11 +56,7 @@ namespace Serenity.Web
             if (response.IsComplete)
                 return;
 
-            //Resource child = this.GetChild(request.Url);
-
             Uri uri = this.GetRelativeUri();
-
-
 
             // collect data for index generation
             SortedDictionary<ResourceGrouping, List<Resource>> groupedResources = new SortedDictionary<ResourceGrouping, List<Resource>>();
@@ -76,7 +72,9 @@ namespace Serenity.Web
                 groupedResources[res.Grouping].Add(res);
             }
 
-            string host = uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped);
+            string host = request.UserHostName ?? "localhost";
+
+            //string host = uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped);
             
             var doc = new XDocument(new XElement("html",
                 new XElement("head",
@@ -91,12 +89,7 @@ namespace Serenity.Web
                         string.Format(Theme.DirectoryTitle, string.Empty),
                         new XElement("a",
                             new XAttribute("href", host), host),
-                            "/",
-                            from i in Enumerable.Range(1, uri.Segments.Length - 1)
-                            select new XElement("span", new XElement("a",
-                                new XAttribute("href", host
-                                    + string.Concat((from s in Enumerable.Range(0, i + 1)
-                                                     select uri.Segments[s]).ToArray())), uri.Segments[i].TrimEnd('/')), "/"),
+                            "/"),
                         from g in groupedResources
                         orderby g.Key
                         select new XElement("div",
@@ -138,7 +131,7 @@ namespace Serenity.Web
                                     new XElement("td",
                                         g.Key.SingularForm),
                                     new XElement("td",
-                                        r.Modified.ToString("yyyy-MM-dd HH:mm:ss")))))))));
+                                        r.Modified.ToString("yyyy-MM-dd HH:mm:ss"))))))));
 
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.ConformanceLevel = ConformanceLevel.Document;

@@ -53,13 +53,39 @@
     <CodeContractsAnalysisWarningLevel>2</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\Serenity.xml</DocumentationFile>
+    <BaseAddress>0</BaseAddress>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
+    <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>False</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>False</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>True</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsBaseLineFile />
+    <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
+    <CodeContractsAnalysisWarningLevel>2</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -183,51 +209,141 @@
   <ItemGroup>
     <Content Include="Legacy\Data\domain\schemas\error_documents.sql" />
     <Content Include="Legacy\Data\global\schemas\serenity_global.sql" />
-    <Content Include="Legacy\Resources\icons\arrow_down.png" />
-    <Content Include="Legacy\Resources\icons\arrow_up.png" />
-    <Content Include="Legacy\Resources\icons\folder.png" />
-    <Content Include="Legacy\Resources\icons\page_white.png" />
-    <Content Include="Legacy\Resources\icons\page_white_acrobat.png" />
-    <Content Include="Legacy\Resources\icons\page_white_actionscript.png" />
-    <Content Include="Legacy\Resources\icons\page_white_c.png" />
-    <Content Include="Legacy\Resources\icons\page_white_cd.png" />
-    <Content Include="Legacy\Resources\icons\page_white_code.png" />
-    <Content Include="Legacy\Resources\icons\page_white_code_red.png" />
-    <Content Include="Legacy\Resources\icons\page_white_coldfusion.png" />
-    <Content Include="Legacy\Resources\icons\page_white_compressed.png" />
-    <Content Include="Legacy\Resources\icons\page_white_cplusplus.png" />
-    <Content Include="Legacy\Resources\icons\page_white_csharp.png" />
-    <Content Include="Legacy\Resources\icons\page_white_cup.png" />
-    <Content Include="Legacy\Resources\icons\page_white_database.png" />
-    <Content Include="Legacy\Resources\icons\page_white_delete.png" />
-    <Content Include="Legacy\Resources\icons\page_white_dvd.png" />
-    <Content Include="Legacy\Resources\icons\page_white_excel.png" />
-    <Content Include="Legacy\Resources\icons\page_white_flash.png" />
-    <Content Include="Legacy\Resources\icons\page_white_freehand.png" />
-    <Content Include="Legacy\Resources\icons\page_white_gear.png" />
-    <Content Include="Legacy\Resources\icons\page_white_h.png" />
-    <Content Include="Legacy\Resources\icons\page_white_key.png" />
-    <Content Include="Legacy\Resources\icons\page_white_lightning.png" />
-    <Content Include="Legacy\Resources\icons\page_white_link.png" />
-    <Content Include="Legacy\Resources\icons\page_white_office.png" />
-    <Content Include="Legacy\Resources\icons\page_white_paint.png" />
-    <Content Include="Legacy\Resources\icons\page_white_paintbrush.png" />
-    <Content Include="Legacy\Resources\icons\page_white_paste.png" />
-    <Content Include="Legacy\Resources\icons\page_white_php.png" />
-    <Content Include="Legacy\Resources\icons\page_white_picture.png" />
-    <Content Include="Legacy\Resources\icons\page_white_powerpoint.png" />
-    <Content Include="Legacy\Resources\icons\page_white_ruby.png" />
-    <Content Include="Legacy\Resources\icons\page_white_stack.png" />
-    <Content Include="Legacy\Resources\icons\page_white_star.png" />
-    <Content Include="Legacy\Resources\icons\page_white_swoosh.png" />
-    <Content Include="Legacy\Resources\icons\page_white_text.png" />
-    <Content Include="Legacy\Resources\icons\page_white_tux.png" />
-    <Content Include="Legacy\Resources\icons\page_white_vector.png" />
-    <Content Include="Legacy\Resources\icons\page_white_visualstudio.png" />
-    <Content Include="Legacy\Resources\icons\page_white_word.png" />
-    <Content Include="Legacy\Resources\icons\page_white_wrench.png" />
-    <Content Include="Legacy\Resources\icons\page_white_zip.png" />
-    <Content Include="Legacy\Resources\index.css" />
+    <Content Include="Resources\icons\arrow_down.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\arrow_up.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\folder.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_acrobat.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_actionscript.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_c.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_cd.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_code.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_code_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_coldfusion.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_compressed.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_cplusplus.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_csharp.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_cup.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_database.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_delete.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_dvd.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_excel.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_flash.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_freehand.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_gear.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_h.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_key.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_lightning.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_link.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_office.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_paint.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_paintbrush.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_paste.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_php.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_picture.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_powerpoint.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_ruby.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_stack.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_star.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_swoosh.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_text.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_tux.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_vector.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_visualstudio.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_word.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_wrench.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\icons\page_white_zip.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\index.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="WebApps\UserManagement\LoginPage.html" />
   </ItemGroup>
   <ItemGroup>

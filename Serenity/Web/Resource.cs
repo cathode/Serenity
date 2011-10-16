@@ -190,14 +190,14 @@ namespace Serenity.Web
         /// <returns></returns>
         public Uri GetAbsoluteUri(Uri baseUri)
         {
-            throw new NotImplementedException();
+            return new Uri(baseUri, this.GetRelativeUri());
         }
 
         public Uri GetRelativeUri()
         {
             if (this.mountPoints.Count > 0)
             {
-                var mp = this.mountPoints.First(n => n.PreferDefault) ?? this.mountPoints[0];
+                var mp = this.mountPoints.FirstOrDefault(n => n.PreferDefault) ?? this.mountPoints[0];
                 return new Uri(mp.Path, UriKind.Relative);
             }
             else
