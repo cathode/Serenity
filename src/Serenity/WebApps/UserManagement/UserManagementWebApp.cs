@@ -26,7 +26,7 @@ namespace Serenity.WebApps.UserManagement
         #endregion
         public override void InitializeResources()
         {
-            this.BindResource(new LoginPage(), "/User/Login", true);
+           
         }
 
         public override void ProcessRequest(Web.Request request, Web.Response response)

@@ -14,5 +14,14 @@ namespace Serenity.Internal
     internal sealed class BuiltinWebApp : WebApplication
     {
 
+        public override void InitializeResources()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ProcessRequest(Web.Request request, Web.Response response)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -9,33 +9,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Serenity.Web
+namespace Serenity
 {
-    /// <summary>
-    /// Represents a binding of a resource to the server
-    /// </summary>
-    public class ResourceBinding
+    public class VirtualHost
     {
+        #region Fields
+        private readonly List<string> aliases = new List<string>();
+        #endregion
         #region Properties
-        public Resource Resource
+        public string Hostname
         {
             get;
-            internal set;
+            set;
         }
-
-        /// <summary>
-        /// Gets the path that the resource is bound to.
-        /// </summary>
-        public string Path
+        public List<string> Aliases
         {
-            get;
-            internal set;
-        }
-
-        public bool IsAbsolutePath
-        {
-            get;
-            internal set;
+            get
+            {
+                return this.aliases;
+            }
         }
         #endregion
     }

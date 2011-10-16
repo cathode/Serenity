@@ -22,12 +22,13 @@ namespace Serenity
     public class WebServer : IDisposable
     {
         #region Fields
+        private readonly ResourceGraph resources;
+
         private HttpServer listener;
         private ManualResetEvent waitHandle;
         private bool isDisposed;
         private bool isRunning;
         private readonly List<WebApplication> apps = new List<WebApplication>();
-        private Dictionary<Guid, ResourceBinding> resources = new Dictionary<Guid, ResourceBinding>();
         #endregion
         #region Constructors
         /// <summary>
@@ -36,6 +37,7 @@ namespace Serenity
         public WebServer()
         {
             this.waitHandle = new ManualResetEvent(false);
+            this.resources = new ResourceGraph();
         }
 
         /// <summary>
@@ -80,6 +82,14 @@ namespace Serenity
                 return this.isRunning;
             }
         }
+
+        public ResourceGraph Resources
+        {
+            get
+            {
+                return this.resources;
+            }
+        }
         #endregion
         #region Methods
         /// <summary>
@@ -109,21 +119,10 @@ namespace Serenity
             }
 
             Resource res = null;
-            if (request.Url.Segments.Length > 1)
-            {
-                var seg1 = Uri.UnescapeDataString(request.Url.Segments[1]);
 
-                if (seg1.StartsWith("{") && ((seg1.EndsWith("}") && seg1.Length == 38) || (seg1.EndsWith("}/") && seg1.Length == 39)))
-                {
-                    res = this.resources[Guid.Parse(seg1.TrimEnd('/'))].Resource;
-                }
-                else
-                {
-                    var bind = this.resources.FirstOrDefault(e => e.Value.Path == request.Url.AbsolutePath);
-                    if (bind.Value != null)
-                        res = bind.Value.Resource;
-                }
-            }
+            var segs = request.Url.Segments;
+
+
 
             if (res == null)
             {
@@ -147,15 +146,9 @@ namespace Serenity
 
             if (this.apps.Any(a => a.Name.Equals(webApp.Name, StringComparison.OrdinalIgnoreCase)))
                 return;
-
             webApp.InitializeResources();
-
             this.apps.Add(webApp);
-
-            foreach (var bind in webApp.Resources)
-            {
-                this.resources.Add(bind.Resource.UniqueID, bind);
-            }
+            this.resources.Root.Add(webApp.ApplicationRoot);
         }
 
         /// <summary>

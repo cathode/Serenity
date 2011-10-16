@@ -27,7 +27,7 @@
     </DocumentationFile>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
-    <CodeContractsRuntimeOnlyPublicSurface>True</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
     <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
     <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
     <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
@@ -36,7 +36,7 @@
     <CodeContractsBoundsObligations>False</CodeContractsBoundsObligations>
     <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
     <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
-    <CodeContractsRedundantAssumptions>True</CodeContractsRedundantAssumptions>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
     <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
     <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
     <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
@@ -45,12 +45,12 @@
     <CodeContractsCustomRewriterClass />
     <CodeContractsLibPaths />
     <CodeContractsExtraRewriteOptions />
-    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsExtraAnalysisOptions>-show progress</CodeContractsExtraAnalysisOptions>
     <CodeContractsBaseLineFile />
-    <CodeContractsCacheAnalysisResults>False</CodeContractsCacheAnalysisResults>
+    <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
     <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
     <CodeContractsReferenceAssembly>%28none%29</CodeContractsReferenceAssembly>
-    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
+    <CodeContractsAnalysisWarningLevel>2</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -88,11 +88,13 @@
     <Compile Include="Users\UserActions.cs" />
     <Compile Include="Users\UserRole.cs" />
     <Compile Include="Users\UserScope.cs" />
+    <Compile Include="VirtualHost.cs" />
     <Compile Include="WebApps\UserManagement\LoginPage.cs" />
     <Compile Include="WebApps\UserManagement\LogoutPage.cs" />
     <Compile Include="WebApps\UserManagement\UserManagementWebApp.cs" />
     <Compile Include="Web\Forms\WebFormResource.cs" />
-    <Compile Include="Web\ResourceBinding.cs" />
+    <Compile Include="Web\ResourceGraph.cs" />
+    <Compile Include="Web\ResourceGraphNode.cs" />
     <Compile Include="StatusCode.cs" />
     <Compile Include="WebApps\DynamicPage.cs" />
     <Compile Include="WebApps\ServerInfo\BasicInfoPage.cs" />
@@ -102,7 +104,7 @@
     <Compile Include="WebApps\ServerManagement\ServerManagementWebApp.cs" />
     <Compile Include="WebApps\ServerManagement\SMHomePage.cs" />
     <Compile Include="WebServer.cs" />
-    <Compile Include="Web\WebPath.cs" />
+    <None Include="Web\WebPath.cs" />
     <Compile Include="Data\Database.cs" />
     <None Include="Legacy\Data\DataScope.cs" />
     <None Include="Legacy\EventRecordedEventArgs.cs" />
@@ -174,7 +176,7 @@
     <None Include="Legacy\Web\RewriteResource.cs" />
     <None Include="Legacy\Web\RootResource.cs" />
     <Compile Include="Web\Sessions\Session.cs" />
-    <Compile Include="Web\StaticResource.cs" />
+    <Compile Include="Web\FileResource.cs" />
     <None Include="Legacy\__SerenityModuleFactory.cs" />
     <None Include="Legacy\__Strings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

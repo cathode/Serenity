@@ -21,12 +21,6 @@ namespace Serenity.WebApps.UserManagement
         public LoginPage()
         {
             this.UniqueID = new Guid("{1134C6F2-09E4-47E3-AFF9-F698AFA22407}");
-            this.Binding = new ResourceBinding()
-            {
-                Path = "/User/Login",
-                IsAbsolutePath = true,
-                Resource = this
-            };
         }
         #endregion
         #region Methods
@@ -46,7 +40,7 @@ namespace Serenity.WebApps.UserManagement
                  new XElement("body",
                      new XElement("form",
                          new XAttribute("method", "get"),
-                         new XAttribute("action", this.Binding.Path),
+                         //new XAttribute("action", this.Binding.Path),
                          new XAttribute("enctype", "multipart/form-data"),
                          new XText("Username: "),
                          new XElement("input",

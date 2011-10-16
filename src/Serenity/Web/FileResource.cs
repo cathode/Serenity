@@ -1,29 +1,29 @@
 /******************************************************************************
- * Serenity - The next evolution of web server technology.                    *
- * Copyright © 2006-2008 Serenity Project - http://SerenityProject.net/       *
- *----------------------------------------------------------------------------*
- * This software is released under the terms and conditions of the Microsoft  *
- * Public License (Ms-PL), a copy of which should have been included with     *
- * this distribution as License.txt.                                          *
+ * Serenity - Managed Web Application Server. ( http://gearedstudios.com/ )   *
+ * Copyright © 2006-2011 William 'cathode' Shelley. All Rights Reserved.      *
+ * This software is released under the terms and conditions of the MIT/X11    *
+ * license; see the included 'license.txt' file for the full text.            *
  *****************************************************************************/
 using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Text;
 
-using Serenity.Web;
-
 namespace Serenity.Web
 {
     /// <summary>
-    /// Represents a file on the local filesystem that is exposed as a requestable resource.
+    /// Represents a file on the local filesystem that is exposed as a resource.
     /// </summary>
-    public sealed class StaticResource : Resource
+    public sealed class FileResource : Resource
     {
         #region Fields - Private
         private string location;
         #endregion
         #region Methods - Public
+        public static FileResource[] ScanDirectory(string path)
+        {
+            throw new NotImplementedException();
+        }
         public override void OnRequest(Request request, Response response)
         {
             if (File.Exists(this.location))
@@ -39,25 +39,15 @@ namespace Serenity.Web
         #endregion
         #region Properties - Public
         /// <summary>
-        /// Overridden. Returns ResourceGrouping.Files.
-        /// </summary>
-        public override ResourceGrouping Grouping
-        {
-            get
-            {
-                return ResourceGrouping.Files;
-            }
-        }
-        /// <summary>
         /// Gets the local filesystem location which the current StaticResource represents.
         /// </summary>
-        public string Location
+        internal string Location
         {
             get
             {
                 return this.location;
             }
-            internal set
+            set
             {
                 this.location = value;
             }

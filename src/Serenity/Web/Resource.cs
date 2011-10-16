@@ -6,82 +6,39 @@
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using Serenity.Net;
 
 namespace Serenity.Web
 {
     /// <summary>
-    /// Provides a base class that all web-accessible resources must inherit from.
+    /// Provides the basic functionality of a requestable resource.
     /// </summary>
     public abstract class Resource
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Resource"/>.
-        /// </summary>
-        protected Resource()
-        {
-            this.Created = DateTime.Now;
-            this.Modified = this.Created;
-            this.uniqueID = Guid.NewGuid();
-        }
-        #endregion
         #region Fields
+        private readonly List<ResourceGraphNode> mountPoints;
         private DateTime created;
         private DateTime modified;
         private MimeType mimeType = MimeType.Default;
         private string name;
         private Guid uniqueID;
         #endregion
-        #region Methods
+        #region Constructors
         /// <summary>
-        /// Creates an absolute <see cref="Uri"/> using the scheme, host and
-        /// port information in the base <see cref="Uri"/>, and the relative
-        /// path information in the current <see cref="Resource"/>'s relative
-        /// <see cref="Uri"/>.
+        /// Initializes a new instance of the <see cref="Resource"/>.
         /// </summary>
-        /// <param name="baseUri"></param>
-        /// <returns></returns>
-        public Uri GetAbsoluteUri(Uri baseUri)
+        protected Resource()
         {
-            throw new NotImplementedException();
+            this.mountPoints = new List<ResourceGraphNode>();
+            this.Created = DateTime.Now;
+            this.Modified = this.Created;
+            this.uniqueID = Guid.NewGuid();
         }
-
-        /// <summary>
-        /// When overridden in a derived class, uses the supplied CommonContext to dynamically generate response content.
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="response"></param>
-        public virtual void OnRequest(Request request, Response response)
-        {
-        }
-        /// <summary>
-        /// Invoked after OnRequest.
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="response"></param>
-        public virtual void PostRequest(Request request, Response response)
-        {
-            if (response.ContentType != this.ContentType)
-                response.ContentType = this.ContentType;
-        }
-        /// <summary>
-        /// Invoked before OnRequest.
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="response"></param>
-        public virtual void PreRequest(Request request, Response response)
-        {
-        }
-
         #endregion
         #region Properties
-        public ResourceBinding Binding
-        {
-            get;
-            internal set;
-        }
         /// <summary>
         /// Gets the <see cref="MimeType"/> used to describe the content of
         /// the current <see cref="Resource"/>.
@@ -117,10 +74,14 @@ namespace Serenity.Web
         {
             get
             {
-                return this.name ?? string.Empty;
+                Contract.Assume(ResourceGraph.IsValidName(Contract.Result<string>()));
+
+                return this.name ?? this.UniqueID.ToString();
             }
             set
             {
+                Contract.Requires(ResourceGraph.IsValidName(value));
+
                 this.name = value;
             }
         }
@@ -178,6 +139,9 @@ namespace Serenity.Web
             }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="Guid"/> of the current resource instance.
+        /// </summary>
         public Guid UniqueID
         {
             get
@@ -189,6 +153,47 @@ namespace Serenity.Web
                 this.uniqueID = value;
             }
         }
+
+        public ReadOnlyCollection<ResourceGraphNode> MountPoints
+        {
+            get
+            {
+                return new ReadOnlyCollection<ResourceGraphNode>(this.mountPoints);
+            }
+        }
+
+        internal List<ResourceGraphNode> MountPointsMutable
+        {
+            get
+            {
+                return this.mountPoints;
+            }
+        }
         #endregion
+        #region Methods
+        /// <summary>
+        /// Creates an absolute <see cref="Uri"/> using the scheme, host and
+        /// port information in the base <see cref="Uri"/>, and the relative
+        /// path information in the current <see cref="Resource"/>'s relative
+        /// <see cref="Uri"/>.
+        /// </summary>
+        /// <param name="baseUri"></param>
+        /// <returns></returns>
+        public Uri GetAbsoluteUri(Uri baseUri)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// When overridden in a derived class, uses the supplied CommonContext to dynamically generate response content.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        public virtual void OnRequest(Request request, Response response)
+        {
+
+        }
+        #endregion
+
     }
 }
