@@ -30,6 +30,6 @@
       <FilesToZip Include="$(MSBuildProjectDirectory)/artifact/*" Exclude="*.zip" />
     </ItemGroup>
     
-    <Zip Files="@(FilesToZip)" WorkingDirectory="$(MSBuildProjectDirectory)/artifact" ZipFileName="$(MSBuildProjectDirectory)/artifact/Serenity-%build.vcs.number%.zip" ZipLevel="9" />
+    <Zip Files="@(FilesToZip)" WorkingDirectory="$(MSBuildProjectDirectory)/artifact" ZipFileName="$(MSBuildProjectDirectory)/artifact/Serenity-$(build_vcs_number_1).zip" ZipLevel="9" />
   </Target>
 </Project>
