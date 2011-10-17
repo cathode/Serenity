@@ -107,8 +107,10 @@
     <Compile Include="Internal\Themes\ThemeApplication.cs" />
     <Compile Include="MimeType.cs" />
     <Compile Include="Net\DefaultRequestValidator.cs" />
-    <Compile Include="Net\HttpListener.cs" />
+    <Compile Include="Net\HttpConnection.cs" />
+    <Compile Include="Net\HttpListenerAsync.cs" />
     <Compile Include="Net\HttpServer.cs" />
+    <Compile Include="Net\IHttpListener.cs" />
     <Compile Include="Users\UserAccount.cs" />
     <Compile Include="Users\UserActions.cs" />
     <Compile Include="Users\UserRole.cs" />
