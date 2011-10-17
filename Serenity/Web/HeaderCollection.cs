@@ -15,13 +15,7 @@ namespace Serenity.Web
 	/// </summary>
 	public sealed class HeaderCollection : KeyedCollection<string, Header>
 	{
-		#region Methods - Protected
-		protected override string GetKeyForItem(Header item)
-		{
-			return item.Name;
-		}
-		#endregion
-		#region Methods - Public
+		#region Methods
 		/// <summary>
 		/// Creates and adds a new Header to the current HeaderCollection.
 		/// </summary>
@@ -36,6 +30,10 @@ namespace Serenity.Web
 			this.Add(header);
 			return header;
 		}
+        protected override string GetKeyForItem(Header item)
+        {
+            return item.Name;
+        }
 		#endregion
 	}
 }

@@ -60,22 +60,22 @@ namespace Serenity.Web
 
             // collect data for index generation
             SortedDictionary<ResourceGrouping, List<Resource>> groupedResources = new SortedDictionary<ResourceGrouping, List<Resource>>();
-            if (this.MountPoints.Count > 0)
-            foreach (var res in from n in this.MountPoints[0]
-                                     where n.Resource != null
-                                     select n.Resource)
-            {
-                if (!groupedResources.ContainsKey(res.Grouping))
+            if (this.Locations.Count > 0)
+                foreach (var res in from n in this.Locations[0]
+                                    where n.Resource != null
+                                    select n.Resource)
                 {
-                    groupedResources.Add(res.Grouping, new List<Resource>());
+                    if (!groupedResources.ContainsKey(res.Grouping))
+                    {
+                        groupedResources.Add(res.Grouping, new List<Resource>());
+                    }
+                    groupedResources[res.Grouping].Add(res);
                 }
-                groupedResources[res.Grouping].Add(res);
-            }
 
             string host = request.UserHostName ?? "localhost";
 
             //string host = uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped);
-            
+
             var doc = new XDocument(new XElement("html",
                 new XElement("head",
                     new XElement("title", string.Format(Theme.DirectoryTitle, uri.ToString())),
@@ -137,7 +137,7 @@ namespace Serenity.Web
             settings.ConformanceLevel = ConformanceLevel.Document;
             settings.Encoding = Encoding.UTF8;
             settings.Indent = false;
-            
+
             // output data
             using (MemoryStream ms = new MemoryStream())
             {
@@ -151,7 +151,12 @@ namespace Serenity.Web
             }
             response.ContentType = MimeType.TextHtml;
             response.IsComplete = true;
-            
+        }
+
+        [ContractInvariantMethod]
+        private void ObjectInvariants()
+        {
+            Contract.Invariant(this.Locations != null);
         }
         #endregion
     }

@@ -6,8 +6,8 @@
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.Diagnostics.Contracts;
+using System.Text.RegularExpressions;
 
 namespace Serenity.Web
 {
@@ -16,65 +16,63 @@ namespace Serenity.Web
     /// </summary>
     public sealed class Header
     {
-        #region Constructors - Public
+        #region Fields
+        /// <summary>
+        /// Backing field for the <see cref="Header.Name"/> property.
+        /// </summary>
+        private readonly string name;
+
+        /// <summary>
+        /// Backing field for the <see cref="Header.Validator"/> property.
+        /// </summary>
+        private Regex validator;
+
+        /// <summary>
+        /// Backing field for the <see cref="Header.Value"/> property.
+        /// </summary>
+        private string value = string.Empty;
+        #endregion
+        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Header"/> class.
         /// </summary>
         /// <param name="name">The name of the header.</param>
         public Header(string name)
         {
+            Contract.Requires(!string.IsNullOrWhiteSpace(name));
+
             this.name = name;
+            this.value = string.Empty;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Header"/> class.
         /// </summary>
         /// <param name="name">The name of the header.</param>
         /// <param name="validator">A <see cref="System.Text.Regex"/> instance that is used to validate header values.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown when the name parameter is null.</exception>
-        /// <exception cref="System.ArgumentException">Thrown when the name parameter is invalid as a header name.</exception>
         public Header(string name, Regex validator)
-            : this(name)
         {
+            Contract.Requires(!string.IsNullOrWhiteSpace(name));
+
+            this.name = name;
             this.validator = validator;
+            this.value = string.Empty;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Header"/> class.
         /// </summary>
         /// <param name="name">The name of the header.</param>
         /// <param name="value">An initial value for the new header.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown when the name parameter is null.</exception>
-        /// <exception cref="System.ArgumentException">Thrown when the name parameter is invalid as a header name.</exception>
         public Header(string name, string value)
-            : this(name)
         {
-            Contract.Requires(!string.IsNullOrEmpty(name));
+            Contract.Requires(!string.IsNullOrWhiteSpace(name));
 
-            this.Value = value;
+            this.name = name;
+            this.value = value;
         }
         #endregion
-        #region Fields - Private
-        private Regex validator;
-        private readonly string name;
-        private string value = string.Empty;
-        #endregion
-        #region Methods - Public
-        /// <summary>
-        /// Overridden. Converts the current <see cref="Header"/> to it's string representation.
-        /// </summary>
-        /// <returns>A string representation of the current <see cref="Header"/>.</returns>
-        public override string ToString()
-        {
-            return this.Name + ": " + this.Value;
-        }
-
-        [ContractInvariantMethod]
-        private void __InvariantMethod()
-        {
-            //Contract.Invariant(!string.IsNullOrEmpty(this.name));
-            
-        }
-        #endregion
-        #region Properties - Public
+        #region Properties
         /// <summary>
         /// Gets the name of the current Header.
         /// </summary>
@@ -85,6 +83,23 @@ namespace Serenity.Web
                 return this.name;
             }
         }
+
+        /// <summary>
+        /// Gets or sets a <see cref="Regex"/> that is used to determine
+        /// if the header value is valid.
+        /// </summary>
+        public Regex Validator
+        {
+            get
+            {
+                return this.validator;
+            }
+            set
+            {
+                this.validator = value;
+            }
+        }
+
         /// <summary>
         /// Gets or sets the value of the current Header.
         /// </summary>
@@ -98,6 +113,24 @@ namespace Serenity.Web
             {
                 this.value = value ?? string.Empty;
             }
+        }
+        #endregion
+        #region Methods
+        /// <summary>
+        /// Overridden. Converts the current <see cref="Header"/> to it's string representation.
+        /// </summary>
+        /// <returns>A string representation of the current <see cref="Header"/>.</returns>
+        public override string ToString()
+        {
+            return this.Name + ": " + this.Value;
+        }
+
+        /// <summary>
+        /// Contains invariant contracts for this type.
+        /// </summary>
+        [ContractInvariantMethod]
+        private void ObjectInvariant()
+        {
         }
         #endregion
     }

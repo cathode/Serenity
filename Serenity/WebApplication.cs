@@ -70,7 +70,5 @@ namespace Serenity
             protected set;
         }
         #endregion
-
-
     }
 }

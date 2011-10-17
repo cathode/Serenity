@@ -22,6 +22,7 @@ namespace Serenity
     public class WebServer : IDisposable
     {
         #region Fields
+        private static WebServer active;
         private readonly List<WebApplication> apps;
         private readonly ResourceGraph resources;
         private HttpServer listener;
@@ -141,6 +142,7 @@ namespace Serenity
             {
                 response.Status = StatusCode.Http200Ok;
                 res.OnRequest(request, response);
+                response.ContentType = res.ContentType;
             }
         }
 
@@ -221,6 +223,13 @@ namespace Serenity
                 // Release unmanaged resources.
                 this.isDisposed = true;
             }
+        }
+
+        public static void MakeActive(WebServer server)
+        {
+            Contract.Requires(server != null);
+
+            WebServer.active = server;
         }
 
         [ContractInvariantMethod]

@@ -258,7 +258,7 @@ namespace Serenity.Web
             if (resource != null)
             {
                 this.resource = resource;
-                this.resource.MountPointsMutable.Add(this);
+                this.resource.LocationsMutable.Add(this);
             }
         }
 
@@ -272,7 +272,7 @@ namespace Serenity.Web
             if (this.resource == null)
                 return;
             else
-                this.resource.MountPointsMutable.Remove(this);
+                this.resource.LocationsMutable.Remove(this);
 
             this.resource = null;
         }

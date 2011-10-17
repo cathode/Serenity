@@ -19,20 +19,47 @@ namespace Serenity.Web
     public abstract class Resource
     {
         #region Fields
-        private readonly List<ResourceGraphNode> mountPoints;
+        /// <summary>
+        /// Holds a list of the nodes in the resource graph to which the
+        /// current <see cref="Resource"/> is attached.
+        /// </summary>
+        private readonly List<ResourceGraphNode> locations;
+
+        private readonly ReadOnlyCollection<ResourceGraphNode> locationsRO;
+
+        /// <summary>
+        /// Backing field for the <see cref="Resource.Created"/> property.
+        /// </summary>
         private DateTime created;
+
+        /// <summary>
+        /// Backing field for the <see cref="Resource.Modified"/> property.
+        /// </summary>
         private DateTime modified;
+
+        /// <summary>
+        /// Backing field for the <see cref="Resource.MimeType"/> property.
+        /// </summary>
         private MimeType mimeType = MimeType.Default;
+
+        /// <summary>
+        /// Backing field for the <see cref="Resource.Name"/> property.
+        /// </summary>
         private string name;
+
+        /// <summary>
+        /// Backing field for the <see cref="Resource.UniqueID"/> property.
+        /// </summary>
         private Guid uniqueID;
         #endregion
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Resource"/>.
+        /// Initializes a new instance of the <see cref="Resource"/> class.
         /// </summary>
         protected Resource()
         {
-            this.mountPoints = new List<ResourceGraphNode>();
+            this.locations = new List<ResourceGraphNode>();
+            this.locationsRO = new ReadOnlyCollection<ResourceGraphNode>(this.locations);
             this.Created = DateTime.Now;
             this.Modified = this.Created;
             this.uniqueID = Guid.NewGuid();
@@ -40,8 +67,8 @@ namespace Serenity.Web
         #endregion
         #region Properties
         /// <summary>
-        /// Gets the <see cref="MimeType"/> used to describe the content of
-        /// the current <see cref="Resource"/>.
+        /// Gets or sets the <see cref="MimeType"/> of the content produced by
+        /// this resource.
         /// </summary>
         public MimeType ContentType
         {
@@ -152,6 +179,9 @@ namespace Serenity.Web
             }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="ResourceGrouping"/> of the current <see cref="Resource"/>.
+        /// </summary>
         public ResourceGrouping Grouping
         {
             get
@@ -163,19 +193,23 @@ namespace Serenity.Web
             }
         }
 
-        public ReadOnlyCollection<ResourceGraphNode> MountPoints
+        /// <summary>
+        /// Gets a read-only collection of the <see cref="ResourceGraphNode">resource graph nodes</see>
+        /// that this resource is attached to.
+        /// </summary>
+        public ReadOnlyCollection<ResourceGraphNode> Locations
         {
             get
             {
-                return new ReadOnlyCollection<ResourceGraphNode>(this.mountPoints);
+                return this.locationsRO;
             }
         }
 
-        internal List<ResourceGraphNode> MountPointsMutable
+        internal List<ResourceGraphNode> LocationsMutable
         {
             get
             {
-                return this.mountPoints;
+                return this.locations;
             }
         }
         #endregion
@@ -195,9 +229,9 @@ namespace Serenity.Web
 
         public Uri GetRelativeUri()
         {
-            if (this.mountPoints.Count > 0)
+            if (this.locations.Count > 0)
             {
-                var mp = this.mountPoints.FirstOrDefault(n => n.PreferDefault) ?? this.mountPoints[0];
+                var mp = this.locations.FirstOrDefault(n => n.PreferDefault) ?? this.locations[0];
                 return new Uri(mp.Path, UriKind.Relative);
             }
             else
@@ -215,6 +249,5 @@ namespace Serenity.Web
             Contract.Requires(response != null);
         }
         #endregion
-
     }
 }

@@ -55,6 +55,7 @@
     <Content Include="failsafe.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="HTMLPage1.htm" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Serenity\Serenity.csproj">

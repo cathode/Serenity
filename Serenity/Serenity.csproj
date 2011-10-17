@@ -104,8 +104,10 @@
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="Internal\BuiltinWebApp.cs" />
+    <Compile Include="Internal\Themes\ThemeApplication.cs" />
     <Compile Include="MimeType.cs" />
     <Compile Include="Net\DefaultRequestValidator.cs" />
+    <Compile Include="Net\HttpListener.cs" />
     <Compile Include="Net\HttpServer.cs" />
     <Compile Include="Users\UserAccount.cs" />
     <Compile Include="Users\UserActions.cs" />
@@ -115,7 +117,9 @@
     <Compile Include="WebApps\UserManagement\LoginPage.cs" />
     <Compile Include="WebApps\UserManagement\LogoutPage.cs" />
     <Compile Include="WebApps\UserManagement\UserManagementWebApp.cs" />
+    <Compile Include="Web\IFilter.cs" />
     <Compile Include="Web\Forms\WebFormResource.cs" />
+    <Compile Include="Web\RequestFilter.cs" />
     <Compile Include="Web\ResourceGraph.cs" />
     <Compile Include="Web\ResourceGraphNode.cs" />
     <Compile Include="StatusCode.cs" />
@@ -130,7 +134,7 @@
     <Compile Include="Web\Themes\Theme.cs" />
     <None Include="Web\WebPath.cs" />
     <Compile Include="Data\Database.cs" />
-    <None Include="Legacy\Data\DataScope.cs" />
+    <Compile Include="Data\DataScope.cs" />
     <None Include="Legacy\EventRecordedEventArgs.cs" />
     <None Include="Legacy\IO\SerenityPath.cs" />
     <None Include="Legacy\Module.cs" />

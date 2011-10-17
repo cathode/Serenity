@@ -25,15 +25,15 @@
     <MakeDir Directories="$(MSBuildProjectDirectory)/artifact" />
     <ItemGroup>
       <FilesToCopy Include="$(MSBuildProjectDirectory)/license.txt" />
-      <FilesToCopy Include="$(MSBuildProjectDirectory)/Serenity/bin/Release/*" />
-      <FilesToCopy Include="$(MSBuildProjectDirectory)/Serenity.Server/bin/Release/*" />
+      <FilesToCopy Include="$(MSBuildProjectDirectory)/Serenity/bin/Release/**/*" />
+      <FilesToCopy Include="$(MSBuildProjectDirectory)/Serenity.Server/bin/Release/**/*" />
       <FilesToCopy Include="$(MSBuildProjectDirectory)/ref/*.dll" />
       <FilesToCopy Include="$(MSBuildProjectDirectory)/ref/*.config" />
     </ItemGroup>
-    <Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(MSBuildProjectDirectory)/artifact" />
+    <Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(MSBuildProjectDirectory)/artifact/%(RecursiveDir)" />
     
     <ItemGroup>
-      <FilesToZip Include="$(MSBuildProjectDirectory)/artifact/*" Exclude="*.zip" />
+      <FilesToZip Include="$(MSBuildProjectDirectory)/artifact/**/*" Exclude="*.zip" />
     </ItemGroup>
     
     <Zip Files="@(FilesToZip)" WorkingDirectory="$(MSBuildProjectDirectory)/artifact" ZipFileName="$(MSBuildProjectDirectory)/artifact/Serenity-$(build_vcs_number_1).zip" ZipLevel="9" />

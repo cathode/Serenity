@@ -236,13 +236,10 @@ namespace Serenity.Net
                                                 state.CurrentToken = new StringBuilder();
 
                                                 if (last4 == "\r\n\r\n")
-                                                {
                                                     state.Stage = HttpRequestParseStep.Content;
-                                                }
                                                 else
-                                                {
                                                     state.Stage = HttpRequestParseStep.HeaderName;
-                                                }
+                                                
                                                 appendToken = false;
                                             }
                                         }
@@ -250,6 +247,14 @@ namespace Serenity.Net
 
                                     case HttpRequestParseStep.Content:
                                     // TODO: Implement content parsing.
+
+                                        if (request.Headers.Contains("Content-Type"))
+                                        {
+                                        }
+                                        // Done, move to next stage.
+                                        state.Stage = HttpRequestParseStep.CreateResponse;
+                                        break;
+
                                     // For now, skip it and fall down to creating a response.
                                     case HttpRequestParseStep.CreateResponse:
                                         request.Url = new Uri(new Uri("http://" + request.Headers["Host"].Value), request.RawUrl);
@@ -378,7 +383,5 @@ namespace Serenity.Net
             Contract.Invariant(this.port > 0);
         }
         #endregion
-
-
     }
 }
