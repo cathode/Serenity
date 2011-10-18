@@ -8,43 +8,33 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Diagnostics.Contracts;
 using System.Net.Sockets;
 using System.Net;
+using System.Diagnostics.Contracts;
 
 namespace Serenity.Net
 {
-    /// <summary>
-    /// Implements a client-server link that exchanges requests and responses using the HTTP protocol.
-    /// </summary>
-    public class HttpConnection : Connection
+    public abstract class Connection : IDisposable
     {
         #region Fields
+        private readonly Socket socket;
         #endregion
         #region Constructors
-        public HttpConnection(Socket socket)
-            : base(socket)
+        protected Connection(Socket socket)
         {
+            Contract.Requires(socket != null);
 
+            this.socket = socket;
         }
         #endregion
         #region Methods
-        public override void ProcessBuffer(byte[] buffer)
+        public void Dispose()
         {
-            unsafe
-            {
-                fixed (byte* b = &buffer[0])
-                {
-                    byte* n = b;
-                    // Decrement loop is (generally) faster than increment loop due to CPU optimizations.
-                    for (int i = buffer.Length - 1; i >= 0; --i)
-                    {
-                        var w32 = *((uint*)n);
-                        var w16 = *((ushort*)n);
-                    }
-                }
-            }
+            throw new NotImplementedException();
         }
+        public abstract void ProcessBuffer(byte[] buffer);
         #endregion
+
+       
     }
 }

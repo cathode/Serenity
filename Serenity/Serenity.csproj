@@ -51,6 +51,7 @@
     <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
     <CodeContractsReferenceAssembly>%28none%29</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>2</CodeContractsAnalysisWarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -86,6 +87,7 @@
     <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
     <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>2</CodeContractsAnalysisWarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -106,11 +108,13 @@
     <Compile Include="Internal\BuiltinWebApp.cs" />
     <Compile Include="Internal\Themes\ThemeApplication.cs" />
     <Compile Include="MimeType.cs" />
+    <Compile Include="Net\Connection.cs" />
     <Compile Include="Net\DefaultRequestValidator.cs" />
     <Compile Include="Net\HttpConnection.cs" />
     <Compile Include="Net\HttpListenerAsync.cs" />
     <Compile Include="Net\HttpServer.cs" />
-    <Compile Include="Net\IHttpListener.cs" />
+    <Compile Include="Net\IListener.cs" />
+    <Compile Include="Net\ListenerState.cs" />
     <Compile Include="Users\UserAccount.cs" />
     <Compile Include="Users\UserActions.cs" />
     <Compile Include="Users\UserRole.cs" />

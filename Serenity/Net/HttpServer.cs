@@ -250,6 +250,10 @@ namespace Serenity.Net
 
                                         if (request.Headers.Contains("Content-Type"))
                                         {
+                                            var ctype = request.Headers["Content-Type"];
+
+                                            var mime = ctype.Value.Substring(0, ctype.Value.IndexOf(';'));
+                                            var boundary = ctype.Value.Substring(ctype.Value.IndexOf("boundary=") + 9);
                                         }
                                         // Done, move to next stage.
                                         state.Stage = HttpRequestParseStep.CreateResponse;
