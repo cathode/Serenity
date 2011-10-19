@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Text;
 using Serenity.Web;
 using System.Xml.Linq;
-using Serenity;
+using Serenity.Net;
 
 namespace Serenity.Server
 {

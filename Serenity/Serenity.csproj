@@ -126,6 +126,7 @@
     <Compile Include="Web\IFilter.cs" />
     <Compile Include="Web\Forms\WebFormResource.cs" />
     <Compile Include="Web\RequestFilter.cs" />
+    <Compile Include="Web\ResourceExecutionContext.cs" />
     <Compile Include="Web\ResourceGraph.cs" />
     <Compile Include="Web\ResourceGraphNode.cs" />
     <Compile Include="StatusCode.cs" />
@@ -138,7 +139,6 @@
     <Compile Include="WebApps\ServerManagement\SMHomePage.cs" />
     <Compile Include="WebServer.cs" />
     <Compile Include="Web\Themes\Theme.cs" />
-    <None Include="Web\WebPath.cs" />
     <Compile Include="Data\Database.cs" />
     <Compile Include="Data\DataScope.cs" />
     <None Include="Legacy\EventRecordedEventArgs.cs" />

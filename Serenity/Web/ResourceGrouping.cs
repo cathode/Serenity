@@ -11,8 +11,21 @@ using System.Diagnostics.Contracts;
 
 namespace Serenity.Web
 {
+    /// <summary>
+    /// Represents a categorization of a resource.
+    /// </summary>
     public sealed class ResourceGrouping : IEquatable<ResourceGrouping>, IComparable<ResourceGrouping>
     {
+        #region Fields
+        public static readonly ResourceGrouping Resources = new ResourceGrouping("Resource", "Resources");
+        public static readonly ResourceGrouping Directories = new ResourceGrouping("Directory", "Directories");
+        public static readonly ResourceGrouping Files = new ResourceGrouping("File", "Files");
+        public static readonly ResourceGrouping Dynamic = new ResourceGrouping("Dynamic", "Dynamic");
+        public static readonly ResourceGrouping Unspecified = new ResourceGrouping("Unspecified", "Unspecified");
+        private readonly string singularForm;
+        private readonly string pluralForm;
+        #endregion
+        #region Constructors
         /// <summary>
         /// Initializes a new instance of the ResourceGroup class, using a
         /// provided singular and plural form of the grouping name represented
@@ -27,37 +40,6 @@ namespace Serenity.Web
 
             this.singularForm = singularForm;
             this.pluralForm = pluralForm;
-        }
-        private readonly string singularForm;
-        private readonly string pluralForm;
-        #region Fields - Public
-        public static readonly ResourceGrouping Resources = new ResourceGrouping("Resource", "Resources");
-        public static readonly ResourceGrouping Directories = new ResourceGrouping("Directory", "Directories");
-        public static readonly ResourceGrouping Files = new ResourceGrouping("File", "Files");
-        public static readonly ResourceGrouping Dynamic = new ResourceGrouping("Dynamic", "Dynamic");
-        public static readonly ResourceGrouping Unspecified = new ResourceGrouping("Unspecified", "Unspecified");
-        #endregion
-        #region Methods - Public
-        /// <summary>
-        /// Gets the singular form of the grouping name.
-        /// </summary>
-        /// <returns>A string containing the singular form of the grouping name.</returns>
-        public override string ToString()
-        {
-            return this.ToString(true);
-        }
-        /// <summary>
-        /// Gets the singular or the plural form of the grouping name.
-        /// </summary>
-        /// <param name="useSingular">If true, singular form is returned;
-        /// otherwise plural form is returned.</param>
-        /// <returns>A string containing the singular or plural form of the grouping name.</returns>
-        public string ToString(bool useSingular)
-        {
-            if (useSingular)
-                return this.singularForm ?? string.Empty;
-            else
-                return this.pluralForm ?? string.Empty;
         }
         #endregion
         #region Properties - Public
@@ -82,6 +64,31 @@ namespace Serenity.Web
             }
         }
         #endregion
+        
+        #region Methods - Public
+        /// <summary>
+        /// Gets the singular form of the grouping name.
+        /// </summary>
+        /// <returns>A string containing the singular form of the grouping name.</returns>
+        public override string ToString()
+        {
+            return this.ToString(true);
+        }
+        /// <summary>
+        /// Gets the singular or the plural form of the grouping name.
+        /// </summary>
+        /// <param name="useSingular">If true, singular form is returned;
+        /// otherwise plural form is returned.</param>
+        /// <returns>A string containing the singular or plural form of the grouping name.</returns>
+        public string ToString(bool useSingular)
+        {
+            if (useSingular)
+                return this.singularForm ?? string.Empty;
+            else
+                return this.pluralForm ?? string.Empty;
+        }
+        #endregion
+        
 
         #region IEquatable<ResourceGrouping> Members
 
