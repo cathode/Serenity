@@ -13,7 +13,11 @@ using System.Net.Sockets;
 
 namespace Serenity.Net
 {
-    public interface IListener
+    /// <summary>
+    /// Provides an interface for types that listen for incoming network
+    /// connections.
+    /// </summary>
+    public interface IConnectionListener
     {
         #region Properties
         int Port

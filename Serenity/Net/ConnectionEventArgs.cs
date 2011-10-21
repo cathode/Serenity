@@ -11,13 +11,12 @@ using System.Text;
 
 namespace Serenity.Net
 {
-    public enum ListenerState
+    public class ConnectionEventArgs<T> : EventArgs where T : Connection
     {
-        Ready = 0,
-        Starting,
-        Started,
-        Stopping,
-        Stopped,
-        Faulted,
+        public T Connection
+        {
+            get;
+            set;
+        }
     }
 }

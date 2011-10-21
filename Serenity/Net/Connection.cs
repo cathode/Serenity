@@ -32,6 +32,8 @@ namespace Serenity.Net
         /// Backing field for the <see cref="IsDisposed"/> property.
         /// </summary>
         private bool isDisposed;
+
+        private NetworkBuffer buffer;
         #endregion
         #region Constructors
         /// <summary>
@@ -44,6 +46,8 @@ namespace Serenity.Net
 
             this.socket = socket;
         }
+        #endregion
+        #region Events
         #endregion
         #region Properties
         /// <summary>
@@ -72,13 +76,26 @@ namespace Serenity.Net
             GC.SuppressFinalize(this);
         }
 
+        public void ProcessBufferFrame(NetworkBufferFrame frame)
+        {
+            Contract.Requires(frame != null);
+         
+            //Contract.Requires(frame.Owner == this.buffer);
+
+            if (frame.ContentSize > 0)
+                this.ProcessBuffer(frame.Content, 0, frame.ContentSize);
+
+            frame.Release();
+        }
+
         /// <summary>
         /// Performs protocol-specific processing of the entire buffer contents.
         /// </summary>
         /// <param name="buffer">The array of bytes to process. The entire array is processed.</param>
-        protected virtual void ProcessBuffer(byte[] buffer)
+        protected virtual void ProcessBufferContents(byte[] buffer)
         {
-            Contract.Requires(buffer != null);
+            Contract.Assume(buffer != null);
+            Contract.Assume(buffer.Length > 0);
 
             // Nothing to do with an empty buffer.
             if (buffer.Length > 0)
@@ -113,5 +130,13 @@ namespace Serenity.Net
         }
         #endregion
        
+    }
+    public class ResourceExecutionContextEventArgs : EventArgs
+    {
+        public ResourceExecutionContext Context
+        {
+            get;
+            set;
+        }
     }
 }

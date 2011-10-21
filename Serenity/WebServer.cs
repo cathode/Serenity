@@ -25,7 +25,7 @@ namespace Serenity
         private static WebServer active;
         private readonly List<WebApplication> apps;
         private readonly ResourceGraph resources;
-        private HttpServer listener;
+        private HttpConnectionListener listener;
         private ManualResetEvent waitHandle;
         private bool isDisposed;
         private bool isRunning;
@@ -191,8 +191,8 @@ namespace Serenity
             if (!this.isRunning)
             {
                 this.isRunning = true;
-                this.listener = new HttpServer(80);
-                this.listener.ProcessRequestCallback = this.ProcessRequestCallback;
+                this.listener = new HttpConnectionListener(80);
+                //this.listener.ProcessRequestCallback = this.ProcessRequestCallback;
                 this.listener.Start();
                 this.waitHandle.WaitOne();
             }

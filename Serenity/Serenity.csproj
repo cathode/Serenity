@@ -107,14 +107,20 @@
     </Compile>
     <Compile Include="Internal\BuiltinWebApp.cs" />
     <Compile Include="Internal\Themes\ThemeApplication.cs" />
+    <Compile Include="Logging\Log.cs" />
+    <Compile Include="Logging\LogEventID.cs" />
     <Compile Include="MimeType.cs" />
     <Compile Include="Net\Connection.cs" />
+    <Compile Include="Net\ConnectionEventArgs.cs" />
+    <Compile Include="Net\ConnectionListener.cs" />
     <Compile Include="Net\DefaultRequestValidator.cs" />
+    <Compile Include="Net\EndpointKind.cs" />
     <Compile Include="Net\HttpConnection.cs" />
-    <Compile Include="Net\HttpListenerAsync.cs" />
-    <Compile Include="Net\HttpServer.cs" />
-    <Compile Include="Net\IListener.cs" />
-    <Compile Include="Net\ListenerState.cs" />
+    <Compile Include="Net\HttpConnectionListener.cs" />
+    <None Include="Net\HttpServer.cs" />
+    <Compile Include="Net\IConnectionListener.cs" />
+    <Compile Include="Net\ConnectionListenerState.cs" />
+    <Compile Include="Net\NetworkBufferFrame.cs" />
     <Compile Include="Users\UserAccount.cs" />
     <Compile Include="Users\UserActions.cs" />
     <Compile Include="Users\UserRole.cs" />
@@ -127,6 +133,7 @@
     <Compile Include="Web\Forms\WebFormResource.cs" />
     <Compile Include="Web\RequestFilter.cs" />
     <Compile Include="Web\ResourceExecutionContext.cs" />
+    <Compile Include="Web\ResourceExecutionContextEventArgs.cs" />
     <Compile Include="Web\ResourceGraph.cs" />
     <Compile Include="Web\ResourceGraphNode.cs" />
     <Compile Include="StatusCode.cs" />
@@ -149,7 +156,7 @@
     <Compile Include="Net\NetworkBuffer.cs" />
     <Compile Include="Net\HttpRequestParseStep.cs" />
     <None Include="Legacy\Net\Server.cs" />
-    <Compile Include="Net\HttpServerAsyncState.cs" />
+    <None Include="Net\HttpServerAsyncState.cs" />
     <None Include="Legacy\Properties\AppResources.Designer.cs" />
     <None Include="Legacy\Properties\AssemblyInfo.cs" />
     <None Include="Legacy\Properties\Settings.Designer.cs" />
