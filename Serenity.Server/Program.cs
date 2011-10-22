@@ -10,6 +10,7 @@ using System.Text;
 using Serenity.Web;
 using System.Xml.Linq;
 using Serenity.Net;
+using System.Diagnostics;
 
 namespace Serenity.Server
 {
@@ -17,6 +18,11 @@ namespace Serenity.Server
     {
         public static void Main(string[] args)
         {
+            new HttpConnectionTester().RunTest();
+            Console.WriteLine("Done. Press any key...");
+            Console.ReadLine();
+
+            return;
             Console.WriteLine("Serenity Console Mode, starting up...");
             WebServer server = new WebServer();
             server.LoadBuiltinApplications();
@@ -24,6 +30,39 @@ namespace Serenity.Server
             server.Start();
             Console.WriteLine("Server shutting down. Press any key...");
             Console.ReadLine();
+        }
+    }
+    internal class HttpConnectionTester : HttpConnection
+    {
+        internal HttpConnectionTester()
+            : base(new System.Net.Sockets.Socket(System.Net.Sockets.AddressFamily.InterNetwork, System.Net.Sockets.SocketType.Stream, System.Net.Sockets.ProtocolType.Tcp))
+        {
+        }
+        public void RunTest()
+        {
+            var testInput = "GET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\nCache-Control: max-age=0\r\nUser-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.202 Safari/535.1\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Encoding: gzip,deflate,sdch\r\nAccept-Language: en-US,en;q=0.8\r\nAccept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3\r\n\r\n";
+            var buffer = Encoding.ASCII.GetBytes(testInput);
+            Stopwatch sw = new Stopwatch();
+
+            int count = 500000;
+            int samples = 5;
+            TimeSpan total = new TimeSpan(0);
+
+            Console.WriteLine("{0} samples of {1} iterations each.", samples, count);
+            for (int k = 0; k < samples; ++k)
+            {
+                sw.Reset();
+                sw.Start();
+                for (int i = 0, m = count; i < m; ++i)
+                {
+                    this.ProcessBufferContents(buffer);
+                }
+                sw.Stop();
+                var elapsed = sw.Elapsed;
+                total += elapsed;
+                Console.WriteLine("{3}: {2} iterations in {0}ms, {1}ms per iteration (average).", elapsed.TotalMilliseconds, (elapsed.TotalMilliseconds / count), count, k);
+            }
+            Console.WriteLine("Averages: {0} iterations in {1}ms, {2}ms per iteration.", count, total.TotalMilliseconds / samples, (total.TotalMilliseconds / samples) / count);
         }
     }
     internal sealed class PastebinApplication : WebApplication
