@@ -73,17 +73,44 @@ namespace Serenity.Net
         /// <param name="count"></param>
         protected override void ProcessBufferContents(byte[] buffer, int startIndex, int count)
         {
+            Contract.Requires(buffer != null);
+
+            int x = -2, y = 0;
+            string debug = Encoding.ASCII.GetString(buffer, startIndex, count);
+            List<string> lines = new List<string>();
+            List<int> headerBreaks = new List<int>();
+
             unsafe
             {
                 fixed (byte* b = &buffer[0])
                 {
-                    byte* n = b;
+                    byte* n = (byte*)b;
 
-                    // Decrement loop is (generally) faster than increment loop due to CPU optimizations.
-                    for (int i = 0; i < 0; --i)
+                    int m = count;
+                    for (int i = 0; i < m; ++i)
                     {
-                        var w32 = *((uint*)n);
-                        var w16 = *((ushort*)n);
+                        var w8 = *n;
+                        if (w8 == ':')
+                        {
+                            headerBreaks.Add(i - x);
+                        }
+                        else if (w8 == '\r')
+                        {
+                            y = i;
+                            var w16 = *((ushort*)n);
+                            if (w16 == HttpConnection.SystemSingleEol)
+                            {
+                                x += 2;
+                                var w32 = *((uint*)n);
+                                if (w32 == HttpConnection.SystemDoubleEol)
+                                {
+                                }
+                                else
+                                    lines.Add(new string((sbyte*)b, x, y - x));
+                            }
+                            x = y;
+                        }
+                        ++n;
                     }
                 }
             }
