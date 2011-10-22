@@ -53,21 +53,6 @@ namespace Serenity.Net
         }
         #endregion
         #region Methods
-        public static unsafe int FindEOL(byte[] buffer)
-        {
-            byte[] buf = new byte[8] { 0, 1, 3, 7, 15, 31, 63, 127 };
-            fixed (byte* b = &buf[0])
-            {
-                byte* n = b;
-                // Decrement loop is (generally) faster than increment loop due to CPU optimizations.
-                for (int i = buf.Length - 1; i >= 0; --i)
-                {
-                    Console.WriteLine(((uint)*((uint*)n++)).ToString("X8"));
-                }
-            }
-
-            return -1;
-        }
         protected override HttpConnection CreateConnection(Socket socket)
         {
             return new HttpConnection(socket);

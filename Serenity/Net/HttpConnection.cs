@@ -79,6 +79,7 @@ namespace Serenity.Net
             string debug = Encoding.ASCII.GetString(buffer, startIndex, count);
             List<string> lines = new List<string>();
             List<int> headerBreaks = new List<int>();
+            List<int> sectionBreaks = new List<int>();
 
             unsafe
             {
@@ -104,6 +105,8 @@ namespace Serenity.Net
                                 var w32 = *((uint*)n);
                                 if (w32 == HttpConnection.SystemDoubleEol)
                                 {
+                                    x += 2;
+                                    sectionBreaks.Add(x);
                                 }
                                 else
                                     lines.Add(new string((sbyte*)b, x, y - x));
