@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Serenity.Web;
 
 namespace Serenity.Net
 {
@@ -63,6 +64,9 @@ namespace Serenity.Net
         public event EventHandler<ResourceExecutionContextEventArgs> ContextPending;
         #endregion
         #region Properties
+        /// <summary>
+        /// Gets the default port number to bind the listener to.
+        /// </summary>
         public abstract int DefaultPort
         {
             get;
@@ -112,14 +116,20 @@ namespace Serenity.Net
         /// <returns></returns>
         public bool Initialize()
         {
+            // Repeated initializations have no effect beyond the first.
+            if (this.State >= ConnectionListenerState.Initializing)
+                return true;
+
             try
             {
+                this.State = ConnectionListenerState.Initializing;
                 this.OnInitializing(EventArgs.Empty);
-
+                this.State = ConnectionListenerState.Initialized;
                 return true;
             }
             catch (Exception ex)
             {
+                this.State = ConnectionListenerState.Faulted;
                 Console.WriteLine(ex.ToString());
                 return false;
             }
@@ -128,16 +138,35 @@ namespace Serenity.Net
         /// <summary>
         /// Directs the listener to begin listening for connections.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>true if the listener is in a <see cref="ConnectionListenerState.Started"/> state when this method returns; otherwise, false.</returns>
+        /// <remarks>
+        /// If this method returns false but the value of the <see cref="State"/>
+        /// property is something other than <see cref="ConnectionListenerState.Faulted"/>,
+        /// it indicates that the attempt to start failed because the listener
+        /// wasn't initialized and an attempt to initialize failed.
+        /// </remarks>
         public bool Start()
         {
+            // Repeated attempts to start have no effect beyond the first.
+            if (this.State >= ConnectionListenerState.Starting)
+                return true;
+
             try
             {
+                // If we're not initialized yet, try to do that first.
+                if (this.State < ConnectionListenerState.Initialized)
+                    if (!this.Initialize())
+                        return false; // Can't start because initialization failed.
+
+                this.State = ConnectionListenerState.Starting;
                 this.OnStarting(EventArgs.Empty);
+                this.State = ConnectionListenerState.Started;
+
                 return true;
             }
             catch
             {
+                this.State = ConnectionListenerState.Faulted;
                 return false;
             }
         }
@@ -171,7 +200,9 @@ namespace Serenity.Net
                 return new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             }
         }
-        
+
+        protected abstract T CreateConnection(Socket socket);
+
         /// <summary>
         /// Raises the <see cref="Initializing"/> event.
         /// </summary>
@@ -184,11 +215,9 @@ namespace Serenity.Net
             this.listenSocket = this.CreateSocket();
 
             if (this.LocalEndPoint == null)
-                this.LocalEndPoint = new IPEndPoint(IPAddress.Any, this.DefaultPort);
+                this.LocalEndPoint = new IPEndPoint(IPAddress.IPv6Any, this.DefaultPort);
 
             this.listenSocket.Bind(this.LocalEndPoint);
-
-            this.State = ConnectionListenerState.Initialized;
         }
 
         /// <summary>
@@ -200,14 +229,8 @@ namespace Serenity.Net
             if (this.Starting != null)
                 this.Starting(this, e ?? EventArgs.Empty);
 
-            if (this.State >= ConnectionListenerState.Initialized)
-            {
-                if (this.State >= ConnectionListenerState.Starting)
-                    return;
-                
-                
-                this.ListenSocket.Listen(10);
-            }
+            this.ListenSocket.Listen(10);
+            this.ListenSocket.BeginAccept(this.ListenerAcceptCallback, null);
         }
 
         /// <summary>
@@ -238,6 +261,22 @@ namespace Serenity.Net
         {
             if (this.ContextPending != null)
                 this.ContextPending(this, e);
+        }
+
+        /// <summary>
+        /// Provides a basic implementation for the listener's async socket accept callback.
+        /// </summary>
+        /// <param name="result"></param>
+        protected virtual void ListenerAcceptCallback(IAsyncResult result)
+        {
+            Contract.Requires(result != null);
+
+            var socket = this.ListenSocket.EndAccept(result);
+            var connection = this.CreateConnection(socket);
+
+            connection.Run();
+
+            this.ListenSocket.BeginAccept(this.ListenerAcceptCallback, null);
         }
         #endregion
     }

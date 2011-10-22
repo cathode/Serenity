@@ -46,7 +46,7 @@ namespace Serenity.Net
         /// </summary>
         private readonly object sync = new object();
 
-        private readonly int frameLength;
+        private int frameLength;
         #endregion
         #region Constructors
         /// <summary>
@@ -56,13 +56,22 @@ namespace Serenity.Net
         {
             this.inactiveFrames = new Queue<NetworkBufferFrame>(NetworkBuffer.DefaultFrameCount);
             this.activeFrames = new Collection<NetworkBufferFrame>();
+            this.frameLength = NetworkBuffer.DefaultFrameLength;
         }
         #endregion
         #region Properties
         public int FrameLength
         {
-            get;
-            set;
+            get
+            {
+                return this.frameLength;
+            }
+            set
+            {
+                Contract.Requires(value > 0);
+
+                this.frameLength = value;
+            }
         }
         /// <summary>
         /// Gets a value indicating the number of buffer frames associated with this
@@ -99,7 +108,7 @@ namespace Serenity.Net
             lock (this.sync)
             {
                 if (this.CheckedIn == 0)
-                    this.inactiveFrames.Enqueue(new NetworkBufferFrame(this, this.frameLength));
+                    this.inactiveFrames.Enqueue(new NetworkBufferFrame(this, this.FrameLength));
 
                 var f = this.inactiveFrames.Dequeue();
                 this.activeFrames.Add(f);
@@ -130,6 +139,12 @@ namespace Serenity.Net
             var act = (Action<NetworkBufferFrame>)result.AsyncState;
             
             act.EndInvoke(result);
+        }
+
+        [ContractInvariantMethod]
+        private void ObjectInvariants()
+        {
+            Contract.Invariant(this.FrameLength > 0);
         }
         #endregion
     }

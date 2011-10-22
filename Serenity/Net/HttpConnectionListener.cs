@@ -28,12 +28,12 @@ namespace Serenity.Net
         #endregion
         #region Constructors
         /// <summary>
-		/// Initializes a new instance of the <see href="HttpConnectionListener" /> class.
-		/// </summary>
-		public HttpConnectionListener()
+        /// Initializes a new instance of the <see href="HttpConnectionListener" /> class.
+        /// </summary>
+        public HttpConnectionListener()
         {
         }
-		
+
         public HttpConnectionListener(int port)
         {
             Contract.Requires(port >= ushort.MinValue);
@@ -53,11 +53,6 @@ namespace Serenity.Net
         }
         #endregion
         #region Methods
-        public bool AcceptCallback(SocketAsyncEventArgs e)
-        {
-            return false;
-        }
-
         public static unsafe int FindEOL(byte[] buffer)
         {
             byte[] buf = new byte[8] { 0, 1, 3, 7, 15, 31, 63, 127 };
@@ -70,14 +65,13 @@ namespace Serenity.Net
                     Console.WriteLine(((uint)*((uint*)n++)).ToString("X8"));
                 }
             }
-           
+
             return -1;
         }
-        protected virtual void AcceptAsync(SocketAsyncEventArgs e)
+        protected override HttpConnection CreateConnection(Socket socket)
         {
-
+            return new HttpConnection(socket);
         }
-
         #endregion
     }
 }

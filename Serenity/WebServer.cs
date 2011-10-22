@@ -102,12 +102,12 @@ namespace Serenity
             GC.SuppressFinalize(this);
         }
 
-        public void ProcessRequestCallback(Request request, Response response)
+        public void ProcessRequestCallback(ResourceExecutionContext e)
         {
-            Contract.Requires(request != null);
-            Contract.Requires(response != null);
-
             Trace.WriteLine("Processing request");
+
+            var request = e.Request;
+            var response = e.Response;
 
             // Obtain or create session
             if (request.Cookies.Contains("sws_session"))
@@ -192,10 +192,19 @@ namespace Serenity
             {
                 this.isRunning = true;
                 this.listener = new HttpConnectionListener(80);
+                this.listener.ContextPending += new EventHandler<ResourceExecutionContextEventArgs>(listener_ContextPending);
+                this.listener.Initialize();
                 //this.listener.ProcessRequestCallback = this.ProcessRequestCallback;
-                this.listener.Start();
-                this.waitHandle.WaitOne();
+                if (this.listener.Start())
+                    this.waitHandle.WaitOne();
+                else
+                    throw new NotImplementedException();
             }
+        }
+
+        void listener_ContextPending(object sender, ResourceExecutionContextEventArgs e)
+        {
+            this.ProcessRequestCallback(e.Context);
         }
 
         /// <summary>

@@ -71,7 +71,7 @@ namespace Serenity.Net
         /// <param name="buffer"></param>
         /// <param name="startIndex"></param>
         /// <param name="count"></param>
-        protected override void ProcessBuffer(byte[] buffer, int startIndex, int count)
+        protected override void ProcessBufferContents(byte[] buffer, int startIndex, int count)
         {
             unsafe
             {

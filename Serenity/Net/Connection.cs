@@ -45,6 +45,7 @@ namespace Serenity.Net
             Contract.Requires(socket != null);
 
             this.socket = socket;
+            this.buffer = new NetworkBuffer();
         }
         #endregion
         #region Events
@@ -79,13 +80,21 @@ namespace Serenity.Net
         public void ProcessBufferFrame(NetworkBufferFrame frame)
         {
             Contract.Requires(frame != null);
-         
-            //Contract.Requires(frame.Owner == this.buffer);
 
-            if (frame.ContentSize > 0)
-                this.ProcessBuffer(frame.Content, 0, frame.ContentSize);
+            try
+            {
+                if (frame.ContentSize > 0)
+                    this.ProcessBufferContents(frame.Content, 0, frame.ContentSize);
+            }
+            finally
+            {
+                frame.Release();
+            }
+        }
 
-            frame.Release();
+        public void Run()
+        {
+            this.BeginReceiveNextFrame();
         }
 
         /// <summary>
@@ -99,7 +108,7 @@ namespace Serenity.Net
 
             // Nothing to do with an empty buffer.
             if (buffer.Length > 0)
-                this.ProcessBuffer(buffer, 0, buffer.Length);
+                this.ProcessBufferContents(buffer, 0, buffer.Length);
         }
 
         /// <summary>
@@ -108,7 +117,7 @@ namespace Serenity.Net
         /// <param name="buffer">The array of bytes to process.</param>
         /// <param name="startIndex">The index in <paramref name="buffer"/> at which to start processing.</param>
         /// <param name="count">The number of bytes from <paramref name="buffer"/> to process.</param>
-        protected abstract void ProcessBuffer(byte[] buffer, int startIndex, int count);
+        protected abstract void ProcessBufferContents(byte[] buffer, int startIndex, int count);
 
         /// <summary>
         /// Queues a <see cref="ResourceExecutionContext"/> that is ready to be processed.
@@ -128,15 +137,30 @@ namespace Serenity.Net
         protected virtual void Dispose(bool disposing)
         {
         }
-        #endregion
-       
-    }
-    public class ResourceExecutionContextEventArgs : EventArgs
-    {
-        public ResourceExecutionContext Context
+
+        protected void BeginReceiveNextFrame()
         {
-            get;
-            set;
+            var frame = this.buffer.CheckOut();
+            var buffer = frame.Content;
+            this.socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, this.ReceiveCallback, frame);
         }
+
+        protected virtual void ReceiveCallback(IAsyncResult result)
+        {
+            Contract.Requires(result != null);
+
+            int recvd = this.socket.EndReceive(result);
+            var frame = (NetworkBufferFrame)result.AsyncState;
+            this.BeginReceiveNextFrame();
+            if (recvd > 0)
+            {
+                frame.ContentSize = recvd;
+                this.ProcessBufferFrame(frame);
+            }
+            else
+                frame.Release();
+        }
+        #endregion
+
     }
 }

@@ -83,7 +83,6 @@ namespace Serenity.Net
             }
             set
             {
-                Contract.Requires(value >= 0);
                 Contract.Requires(value <= this.Capacity);
 
                 this.contentSize = value;
@@ -99,6 +98,7 @@ namespace Serenity.Net
         /// </remarks>
         public void Release()
         {
+            this.ContentSize = 0;
             this.AutoReset.Set();
         }
 
