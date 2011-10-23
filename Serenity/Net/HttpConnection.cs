@@ -75,7 +75,7 @@ namespace Serenity.Net
         {
             Contract.Requires(buffer != null);
 
-            int x = -2, y = 0;
+            int x = -2;
             //string debug = Encoding.ASCII.GetString(buffer, startIndex, count);
             List<string> lines = new List<string>();
             List<int> headerBreaks = new List<int>();
@@ -85,8 +85,8 @@ namespace Serenity.Net
             {
                 fixed (byte* b = &buffer[0])
                 {
-                    byte* n = (byte*)b;
-
+                    byte* n = b;
+                    sbyte* s = (sbyte*)b;
                     int m = count;
                     for (int i = 0; i < m; ++i)
                     {
@@ -97,7 +97,6 @@ namespace Serenity.Net
                         }
                         else if (w8 == '\r')
                         {
-                            y = i;
                             var w16 = *((ushort*)n);
                             if (w16 == HttpConnection.SystemSingleEol)
                             {
@@ -107,14 +106,16 @@ namespace Serenity.Net
                                     sectionBreaks.Add(i);
                                 }
                                 else
-                                    lines.Add(new string((sbyte*)b, x + 2, y - x));
+                                    lines.Add(new string(s, x + 2, i - x));
                             }
-                            x = y;
+                            x = i;
                         }
                         ++n;
                     }
+                    var line0Tokens = new List<string>();
 
                 }
+                
             }
         }
         #endregion
