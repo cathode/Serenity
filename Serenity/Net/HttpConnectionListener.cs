@@ -55,6 +55,8 @@ namespace Serenity.Net
         #region Methods
         protected override HttpConnection CreateConnection(Socket socket)
         {
+            Contract.Requires(socket != null);
+
             return new HttpConnection(socket);
         }
         #endregion

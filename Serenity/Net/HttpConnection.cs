@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Serenity.Web;
 
 namespace Serenity.Net
 {
@@ -46,7 +47,7 @@ namespace Serenity.Net
         /// Holds the system-endian value of a standard HTTP End-of-Line (EOL) character sequence.
         /// </summary>
         private static readonly ushort SystemSingleEol = BitConverter.IsLittleEndian ? LittleEndianSingleEol : BigEndianSingleEol;
-        
+
         /// <summary>
         /// Holds the system-endian value of a standard HTTP double-End-of-Line (EOL) character sequence,
         /// which terminates the header block and the content block.
@@ -106,16 +107,43 @@ namespace Serenity.Net
                                     sectionBreaks.Add(i);
                                 }
                                 else
-                                    lines.Add(new string(s, x + 2, i - x));
+                                    lines.Add(new string(s, x + 2, i - x - 2));
                             }
                             x = i;
                         }
                         ++n;
                     }
-                    var line0Tokens = new List<string>();
 
                 }
-                
+                // Check if we received the whole request. The last line should be empty.
+                if (lines.Count > 0 && lines[lines.Count - 1] == "")
+                {
+                    var line0Tokens = lines[0].Split(' ');
+
+                    var context = new ResourceExecutionContext
+                    {
+                        Request = new Request
+                        {
+                            RawMethod = line0Tokens[0],
+                            RawUrl = line0Tokens[1],
+                        },
+                        Response = new Response(),
+                        Connection = this,
+                    };
+
+                    for (int i = 1; i < (lines.Count - 1); ++i)
+                        context.Request.Headers.Add(new Header(lines[i].Substring(0, headerBreaks[i - 1] -2), lines[i].Substring(headerBreaks[i - 1])));
+
+                    var urlb = new UriBuilder("http", context.Request.Headers["Host"].Value);
+                    urlb.Path = line0Tokens[1];
+                    context.Request.Url = urlb.Uri;
+
+                    this.QueueNewPendingContext(context);
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
             }
         }
         #endregion

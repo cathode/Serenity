@@ -251,6 +251,14 @@ namespace Serenity.Net
         {
             if (this.ConnectionAccepted != null)
                 this.ConnectionAccepted(this, e);
+
+            e.Connection.ContextPending += new EventHandler<ResourceExecutionContextEventArgs>(Connection_ContextPending);
+            e.Connection.Run();
+        }
+
+        void Connection_ContextPending(object sender, ResourceExecutionContextEventArgs e)
+        {
+            this.OnContextPending(e);
         }
 
         /// <summary>
@@ -272,11 +280,13 @@ namespace Serenity.Net
             Contract.Requires(result != null);
 
             var socket = this.ListenSocket.EndAccept(result);
-            var connection = this.CreateConnection(socket);
-
-            connection.Run();
-
             this.ListenSocket.BeginAccept(this.ListenerAcceptCallback, null);
+
+            var connection = this.CreateConnection(socket);
+            this.OnConnectionAccepted(new ConnectionEventArgs<T>
+            {
+                Connection = connection
+            });
         }
         #endregion
     }

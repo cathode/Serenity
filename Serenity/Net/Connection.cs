@@ -49,6 +49,7 @@ namespace Serenity.Net
         }
         #endregion
         #region Events
+        public event EventHandler<ResourceExecutionContextEventArgs> ContextPending;
         #endregion
         #region Properties
         /// <summary>
@@ -125,7 +126,18 @@ namespace Serenity.Net
         /// <param name="context">The <see cref="ResourceExecutionContext"/> to add to the pending queue.</param>
         protected void QueueNewPendingContext(ResourceExecutionContext context)
         {
-            throw new NotImplementedException();
+            Contract.Requires(context != null);
+
+            this.OnContextPending(new ResourceExecutionContextEventArgs
+            {
+                Context = context
+            });
+        }
+
+        protected virtual void OnContextPending(ResourceExecutionContextEventArgs e)
+        {
+            if (this.ContextPending != null)
+                this.ContextPending(this, e);
         }
 
         /// <summary>
