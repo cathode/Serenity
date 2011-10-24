@@ -45,6 +45,8 @@ namespace Serenity.Net
             Contract.Requires(socket != null);
 
             this.socket = socket;
+            this.socket.ReceiveTimeout = 1000;
+            this.socket.SendTimeout = 1000;
             this.buffer = new NetworkBuffer();
         }
         #endregion
@@ -154,25 +156,36 @@ namespace Serenity.Net
         {
             var frame = this.buffer.CheckOut();
             var buffer = frame.Content;
+            
             this.socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, this.ReceiveCallback, frame);
         }
 
+        /// <summary>
+        /// Callback method for socket receive operations.
+        /// </summary>
+        /// <param name="result">The async state object for the operation.</param>
         protected virtual void ReceiveCallback(IAsyncResult result)
         {
             Contract.Requires(result != null);
 
             int recvd = this.socket.EndReceive(result);
-            var frame = (NetworkBufferFrame)result.AsyncState;
-            this.BeginReceiveNextFrame();
+
             if (recvd > 0)
             {
+                var frame = (NetworkBufferFrame)result.AsyncState;
+                this.BeginReceiveNextFrame();
+
                 frame.ContentSize = recvd;
                 this.ProcessBufferFrame(frame);
+                frame.Release();
             }
             else
-                frame.Release();
+            {
+                this.socket.Close();
+                this.Dispose();
+            }
+                
         }
         #endregion
-
     }
 }
