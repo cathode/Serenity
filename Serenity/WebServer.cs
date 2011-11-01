@@ -22,7 +22,7 @@ namespace Serenity
     public class WebServer : IDisposable
     {
         #region Fields
-        private static WebServer active;
+        private static WebServer activeInstance;
         private readonly List<WebApplication> apps;
         private readonly ResourceGraph resources;
         private HttpConnectionListener listener;
@@ -50,7 +50,22 @@ namespace Serenity
         }
         #endregion
         #region Properties
-        public ReadOnlyCollection<WebApplication> LoadedWebApps
+        public static WebServer ActiveInstance
+        {
+            get
+            {
+                return WebServer.activeInstance;
+            }
+            set
+            {
+                WebServer.activeInstance = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets a collection of the web applications attached to the current web server.
+        /// </summary>
+        public ReadOnlyCollection<WebApplication> Apps
         {
             get
             {
@@ -102,22 +117,81 @@ namespace Serenity
             GC.SuppressFinalize(this);
         }
 
-        public void ProcessRequestCallback(ResourceExecutionContext e)
+        /// <summary>
+        /// Loads a <see cref="WebApplication"/> into the current web server instance.
+        /// </summary>
+        /// <param name="webApp">The <see cref="WebApplication"/> to load.</param>
+        public void LoadApplication(WebApplication webApp)
+        {
+            Contract.Requires(webApp != null);
+
+            if (this.apps.Any(a => a.Name.Equals(webApp.Name, StringComparison.OrdinalIgnoreCase)))
+                return;
+            webApp.InitializeResources();
+            this.apps.Add(webApp);
+
+            this.resources.Root.AddChild(webApp.ApplicationRoot);
+        }
+
+        /// <summary>
+        /// Unloads a <see cref="WebApplication"/> from the current web server instance.
+        /// </summary>
+        /// <param name="webApp">The <see cref="WebApplication"/> to unload.</param>
+        public void UnloadApplication(WebApplication webApp)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Starts the web server.
+        /// </summary>
+        public void Start()
+        {
+            Contract.Requires<ObjectDisposedException>(!this.IsDisposed);
+
+            if (!this.isRunning)
+            {
+                this.isRunning = true;
+                this.listener = new HttpConnectionListener(80);
+                this.listener.ContextPending += new EventHandler<ResourceExecutionContextEventArgs>(this.PendingRequestCallback);
+                this.listener.Initialize();
+                if (this.listener.Start())
+                    this.waitHandle.WaitOne();
+                else
+                    throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Stops the web server.
+        /// </summary>
+        public void Stop()
+        {
+            this.isRunning = false;
+            this.waitHandle.Set();
+        }
+
+        public virtual void AttachStaticResource(string path)
+        {
+            this.AttachStaticResource(path, true);
+        }
+
+        public virtual void AttachStaticResource(string path, bool recursive)
+        {
+
+        }
+
+        /// <summary>
+        /// Callback used to handle a pending request from a client.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected virtual void PendingRequestCallback(object sender, ResourceExecutionContextEventArgs e)
         {
             Trace.WriteLine("Processing request");
 
-            var request = e.Request;
-            var response = e.Response;
-
-            // Obtain or create session
-            if (request.Cookies.Contains("sws_session"))
-            {
-
-            }
-            else
-            {
-
-            }
+            var request = e.Context.Request;
+            var response = e.Context.Response;
 
             Resource res = null;
 
@@ -147,76 +221,6 @@ namespace Serenity
         }
 
         /// <summary>
-        /// Loads a <see cref="WebApplication"/> into the current web server instance.
-        /// </summary>
-        /// <param name="webApp">The <see cref="WebApplication"/> to load.</param>
-        public void LoadApplication(WebApplication webApp)
-        {
-            Contract.Requires(webApp != null);
-
-            if (this.apps.Any(a => a.Name.Equals(webApp.Name, StringComparison.OrdinalIgnoreCase)))
-                return;
-            webApp.InitializeResources();
-            this.apps.Add(webApp);
-
-            this.resources.Root.AddChild(webApp.ApplicationRoot);
-        }
-
-        /// <summary>
-        /// Loads 'built-in' web applications which are included in the Serenity API library.
-        /// </summary>
-        public void LoadBuiltinApplications()
-        {
-            this.LoadApplication(new Serenity.WebApps.ServerInfo.ServerInfoWebApp());
-            this.LoadApplication(new Serenity.WebApps.ServerManagement.ServerManagementWebApp());
-            this.LoadApplication(new Serenity.WebApps.UserManagement.UserManagement());
-        }
-
-        /// <summary>
-        /// Unloads a <see cref="WebApplication"/> from the current web server instance.
-        /// </summary>
-        /// <param name="webApp">The <see cref="WebApplication"/> to unload.</param>
-        public void UnloadApplication(WebApplication webApp)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Starts the web server.
-        /// </summary>
-        public void Start()
-        {
-            Contract.Requires<ObjectDisposedException>(!this.IsDisposed);
-
-            if (!this.isRunning)
-            {
-                this.isRunning = true;
-                this.listener = new HttpConnectionListener(80);
-                this.listener.ContextPending += new EventHandler<ResourceExecutionContextEventArgs>(listener_ContextPending);
-                this.listener.Initialize();
-                //this.listener.ProcessRequestCallback = this.ProcessRequestCallback;
-                if (this.listener.Start())
-                    this.waitHandle.WaitOne();
-                else
-                    throw new NotImplementedException();
-            }
-        }
-
-        void listener_ContextPending(object sender, ResourceExecutionContextEventArgs e)
-        {
-            this.ProcessRequestCallback(e.Context);
-        }
-
-        /// <summary>
-        /// Stops the web server.
-        /// </summary>
-        public void Stop()
-        {
-            this.isRunning = false;
-            this.waitHandle.Set();
-        }
-
-        /// <summary>
         /// Releases unmanaged and managed resources used by the web server.
         /// </summary>
         /// <param name="disposing">Indicates whether to release managed resources (true), or unmanaged resources only (false).</param>
@@ -232,13 +236,6 @@ namespace Serenity
                 // Release unmanaged resources.
                 this.isDisposed = true;
             }
-        }
-
-        public static void MakeActive(WebServer server)
-        {
-            Contract.Requires(server != null);
-
-            WebServer.active = server;
         }
 
         [ContractInvariantMethod]

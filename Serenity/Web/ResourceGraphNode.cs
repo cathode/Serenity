@@ -34,13 +34,8 @@ namespace Serenity.Web
         /// </summary>
         private string name;
 
-        /// <summary>
-        /// Backing field for the <see cref="ResourceGraphNode.SilentAttach"/> property.
-        /// </summary>
-        private bool invisible;
         #endregion
         #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceGraphNode"/> class.
         /// </summary>
@@ -158,24 +153,6 @@ namespace Serenity.Web
             get
             {
                 return (this.HasChildren) ? this.Name + "/" : this.Name;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the <see cref="Resource"/>
-        /// that is referenced by this graph node is made aware of the reference.
-        /// </summary>
-        public bool SilentAttach
-        {
-            get
-            {
-                return this.invisible;
-            }
-            set
-            {
-                this.invisible = value;
-                // Detach, then re-attach the resource to refresh it's reverse association.
-                this.AttachResource(this.Resource);
             }
         }
 

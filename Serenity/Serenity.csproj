@@ -105,8 +105,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
-    <Compile Include="Internal\BuiltinWebApp.cs" />
-    <Compile Include="Internal\Themes\ThemeApplication.cs" />
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Logging\LogEventID.cs" />
     <Compile Include="MimeType.cs" />
@@ -126,9 +124,6 @@
     <Compile Include="Users\UserRole.cs" />
     <Compile Include="Users\UserScope.cs" />
     <Compile Include="VirtualHost.cs" />
-    <Compile Include="WebApps\UserManagement\LoginPage.cs" />
-    <Compile Include="WebApps\UserManagement\LogoutPage.cs" />
-    <Compile Include="WebApps\UserManagement\UserManagementWebApp.cs" />
     <Compile Include="Web\IFilter.cs" />
     <Compile Include="Web\Forms\WebFormResource.cs" />
     <Compile Include="Web\RequestFilter.cs" />
@@ -137,13 +132,6 @@
     <Compile Include="Web\ResourceGraph.cs" />
     <Compile Include="Web\ResourceGraphNode.cs" />
     <Compile Include="StatusCode.cs" />
-    <Compile Include="WebApps\DynamicPage.cs" />
-    <Compile Include="WebApps\ServerInfo\DetailInfo.cs" />
-    <Compile Include="WebApps\ServerInfo\ServerInfoWebApp.cs" />
-    <Compile Include="WebApps\ServerInfo\ListApps.cs" />
-    <Compile Include="WebApps\ServerManagement\Pages\InstalledWebApps.cs" />
-    <Compile Include="WebApps\ServerManagement\ServerManagementWebApp.cs" />
-    <Compile Include="WebApps\ServerManagement\SMHomePage.cs" />
     <Compile Include="WebServer.cs" />
     <Compile Include="Web\Themes\Theme.cs" />
     <Compile Include="Data\Database.cs" />
@@ -361,7 +349,6 @@
     <Content Include="Resources\index.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebApps\UserManagement\LoginPage.html" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Legacy\Properties\AppResources.resx" />

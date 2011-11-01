@@ -6,22 +6,17 @@
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using Serenity.Web;
-using Serenity.Net;
-using System.Diagnostics;
+using Serenity;
 
-namespace Serenity.Server
+namespace Insight
 {
-    public static class Program
+    public class InsightWebApp : WebApplication
     {
-        public static void Main(string[] args)
+        public override void InitializeResources()
         {
-            Console.WriteLine("Serenity Console Mode, starting up...");
-            WebServer server = new WebServer();
-            server.Start();
-            Console.WriteLine("Server shutting down. Press any key...");
-            Console.ReadLine();
+           
         }
     }
 }

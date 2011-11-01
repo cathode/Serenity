@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serenity", "Serenity\Sereni
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerenitySvc", "SerenitySvc\SerenitySvc.csproj", "{C1E6C588-E4F8-4AEA-BCC4-A2E741C7240E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{AAD2AFC0-1A89-4026-A4ED-3BB600E84CFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insight", "Apps\Insight\Insight.csproj", "{236D8CE8-B3C3-4E45-B540-F0D837851319}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,9 +51,22 @@ Global
 		{C1E6C588-E4F8-4AEA-BCC4-A2E741C7240E}.Release|Mixed Platforms.Build.0 = Release|x86
 		{C1E6C588-E4F8-4AEA-BCC4-A2E741C7240E}.Release|x86.ActiveCfg = Release|x86
 		{C1E6C588-E4F8-4AEA-BCC4-A2E741C7240E}.Release|x86.Build.0 = Release|x86
+		{236D8CE8-B3C3-4E45-B540-F0D837851319}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{236D8CE8-B3C3-4E45-B540-F0D837851319}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{236D8CE8-B3C3-4E45-B540-F0D837851319}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{236D8CE8-B3C3-4E45-B540-F0D837851319}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{236D8CE8-B3C3-4E45-B540-F0D837851319}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{236D8CE8-B3C3-4E45-B540-F0D837851319}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{236D8CE8-B3C3-4E45-B540-F0D837851319}.Release|Any CPU.Build.0 = Release|Any CPU
+		{236D8CE8-B3C3-4E45-B540-F0D837851319}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{236D8CE8-B3C3-4E45-B540-F0D837851319}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{236D8CE8-B3C3-4E45-B540-F0D837851319}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{236D8CE8-B3C3-4E45-B540-F0D837851319} = {AAD2AFC0-1A89-4026-A4ED-3BB600E84CFD}
 	EndGlobalSection
 	GlobalSection(TextTemplating) = postSolution
 		TextTemplating = 1

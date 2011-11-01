@@ -27,7 +27,6 @@ namespace Serenity
         #endregion
         #region Methods
         public abstract void InitializeResources();
-        public abstract void ProcessRequest(Request request, Response response);
         #endregion
         #region Properties
         public ResourceGraphNode ApplicationRoot

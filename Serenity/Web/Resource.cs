@@ -51,6 +51,11 @@ namespace Serenity.Web
         /// Backing field for the <see cref="Resource.UniqueID"/> property.
         /// </summary>
         private Guid uniqueID;
+
+        /// <summary>
+        /// Backing field for the <see cref="Resource.Grouping"/> property.
+        /// </summary>
+        private ResourceGrouping grouping;
         #endregion
         #region Constructors
         /// <summary>
@@ -186,10 +191,13 @@ namespace Serenity.Web
         {
             get
             {
-                return ResourceGrouping.Unspecified;
+                Contract.Ensures(Contract.Result<ResourceGrouping>() != null);
+
+                return this.grouping ?? ResourceGrouping.Unspecified;
             }
             set
             {
+                this.grouping = value;
             }
         }
 
