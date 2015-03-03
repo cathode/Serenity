@@ -1,6 +1,6 @@
 ﻿/******************************************************************************
  * Serenity - Managed Web Application Server. ( http://gearedstudios.com/ )   *
- * Copyright © 2006-2011 William 'cathode' Shelley. All Rights Reserved.      *
+ * Copyright © 2006-2015 William 'cathode' Shelley. All Rights Reserved.      *
  * This software is released under the terms and conditions of the MIT/X11    *
  * license; see the included 'license.txt' file for the full text.            *
  *****************************************************************************/
@@ -152,7 +152,7 @@ namespace Serenity
             if (!this.isRunning)
             {
                 this.isRunning = true;
-                this.listener = new HttpConnectionListener(80);
+                this.listener = new HttpConnectionListener(8081);
                 this.listener.ContextPending += new EventHandler<ResourceExecutionContextEventArgs>(this.PendingRequestCallback);
                 this.listener.Initialize();
                 if (this.listener.Start())

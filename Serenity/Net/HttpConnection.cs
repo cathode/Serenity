@@ -1,6 +1,6 @@
 ﻿/******************************************************************************
  * Serenity - Managed Web Application Server. ( http://gearedstudios.com/ )   *
- * Copyright © 2006-2011 William 'cathode' Shelley. All Rights Reserved.      *
+ * Copyright © 2006-2015 William 'cathode' Shelley. All Rights Reserved.      *
  * This software is released under the terms and conditions of the MIT/X11    *
  * license; see the included 'license.txt' file for the full text.            *
  *****************************************************************************/
@@ -134,7 +134,18 @@ namespace Serenity.Net
                     for (int i = 1; i < (lines.Count - 1); ++i)
                         context.Request.Headers.Add(new Header(lines[i].Substring(0, headerBreaks[i - 1] -2), lines[i].Substring(headerBreaks[i - 1])));
 
-                    var urlb = new UriBuilder("http", context.Request.Headers["Host"].Value);
+                    var host = context.Request.Headers["Host"].Value;
+                    ushort port = 80;
+
+                    if (host.IndexOf(':') > 0)
+                    {
+                        var portstring = host.Substring(host.IndexOf(':') + 1);
+                        port = ushort.Parse(portstring);
+                        host = host.Substring(0, host.IndexOf(':'));
+                    }
+
+                    var urlb = new UriBuilder("http", host);
+                    urlb.Port = port;
                     urlb.Path = line0Tokens[1];
                     context.Request.Url = urlb.Uri;
 

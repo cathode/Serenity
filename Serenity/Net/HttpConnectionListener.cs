@@ -1,6 +1,6 @@
 ﻿/******************************************************************************
  * Serenity - Managed Web Application Server. ( http://gearedstudios.com/ )   *
- * Copyright © 2006-2011 William 'cathode' Shelley. All Rights Reserved.      *
+ * Copyright © 2006-2015 William 'cathode' Shelley. All Rights Reserved.      *
  * This software is released under the terms and conditions of the MIT/X11    *
  * license; see the included 'license.txt' file for the full text.            *
  *****************************************************************************/
@@ -34,22 +34,20 @@ namespace Serenity.Net
         {
         }
 
-        public HttpConnectionListener(int port)
+        public HttpConnectionListener(ushort port)
         {
             Contract.Requires(port >= ushort.MinValue);
             Contract.Requires(port <= ushort.MaxValue);
+            this.ListenPort = port;
         }
         #endregion
         #region Properties
         /// <summary>
         /// Holds the default port number used for the HTTP protocol (80).
         /// </summary>
-        public override int DefaultPort
+        public override ushort DefaultPort
         {
-            get
-            {
-                return 80;
-            }
+            get { return 80; }
         }
         #endregion
         #region Methods

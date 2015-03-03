@@ -1,6 +1,6 @@
 ﻿/******************************************************************************
  * Serenity - Managed Web Application Server. ( http://gearedstudios.com/ )   *
- * Copyright © 2006-2011 William 'cathode' Shelley. All Rights Reserved.      *
+ * Copyright © 2006-2015 William 'cathode' Shelley. All Rights Reserved.      *
  * This software is released under the terms and conditions of the MIT/X11    *
  * license; see the included 'license.txt' file for the full text.            *
  *****************************************************************************/
@@ -63,13 +63,20 @@ namespace Serenity.Net
         /// </summary>
         public event EventHandler<ResourceExecutionContextEventArgs> ContextPending;
         #endregion
+
         #region Properties
         /// <summary>
         /// Gets the default port number to bind the listener to.
         /// </summary>
-        public abstract int DefaultPort
+        public abstract ushort DefaultPort
         {
             get;
+        }
+
+        public ushort ListenPort
+        {
+            get;
+            set;
         }
 
         /// <summary>
@@ -83,6 +90,8 @@ namespace Serenity.Net
                 return this.listenSocket;
             }
         }
+
+        public TcpListener Listener { get; private set; }
 
         /// <summary>
         /// Gets or sets an <see cref="EndPoint"/> that the listener binds to
@@ -213,9 +222,10 @@ namespace Serenity.Net
                 this.Initializing(this, e ?? EventArgs.Empty);
 
             this.listenSocket = this.CreateSocket();
+            ushort port = this.ListenPort > 0 ? this.ListenPort : this.DefaultPort;
 
             if (this.LocalEndPoint == null)
-                this.LocalEndPoint = new IPEndPoint(IPAddress.IPv6Any, this.DefaultPort);
+                this.LocalEndPoint = new IPEndPoint(IPAddress.IPv6Any, port);
 
             this.listenSocket.Bind(this.LocalEndPoint);
         }
